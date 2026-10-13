@@ -11,7 +11,7 @@ namespace Sts2WD.Sts2WDCode.Characters.CharacterFour;
 
 public class CharacterFour : PlaceholderCharacterModel
 {
-    public const string CharacterId = "CharacterFour";
+    public const string CharacterId = "Erenil";
 
     public static readonly Color Color = new("9b72cf");
 
