@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
 
-namespace Sts2WD.Sts2WDCode.Characters.CharacterFour;
+namespace Sts2WD.Sts2WDCode.Characters.Erenil;
 
 public class CharacterFour : PlaceholderCharacterModel
 {
