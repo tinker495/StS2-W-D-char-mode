@@ -1,0 +1,7 @@
+<Project>
+  <Import Project="local.props" Condition="Exists('local.props')" />
+  <PropertyGroup>
+    <GodotPath Condition="'$(GodotPath)' == '' and Exists('$(MSBuildThisFileDirectory).tools/megadot/MegaDot_v4.5.1-stable_mono_win64_console.exe')">$(MSBuildThisFileDirectory).tools/megadot/MegaDot_v4.5.1-stable_mono_win64_console.exe</GodotPath>
+    <ModsPath Condition="'$(ModsPath)' == ''">$(MSBuildThisFileDirectory)artifacts/mods/</ModsPath>
+  </PropertyGroup>
+</Project>

@@ -1,0 +1,17 @@
+{
+    "id":  "Sts2WD",
+    "name":  "StS2-W\u0026D-char-mode",
+    "author":  "tinker495",
+    "description":  "Four-character mod in development. Character names, cards, and mechanics are placeholders.",
+    "version":  "v0.1.0",
+    "min_game_version":  "0.107.1",
+    "has_pck":  true,
+    "has_dll":  true,
+    "dependencies":  [
+                         {
+                             "id":  "BaseLib",
+                             "min_version":  "3.4.7"
+                         }
+                     ],
+    "affects_gameplay":  true
+}
