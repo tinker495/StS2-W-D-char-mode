@@ -1,3 +1,8 @@
 {
-
+  "STS2WD-REALTA_FLYING_GLAIVE.title": "Flying Glaive",
+  "STS2WD-REALTA_FLYING_GLAIVE.description": "Deal {Damage:diff()} damage.",
+  "STS2WD-REALTA_TEMPERING.title": "Tempering",
+  "STS2WD-REALTA_TEMPERING.description": "Gain {Block:diff()} [gold]Block[/gold].\n[gold]Refine[/gold] {Refine:diff()}.",
+  "STS2WD-REALTA_GUARD.title": "Guard",
+  "STS2WD-REALTA_GUARD.description": "Gain {Block:diff()} [gold]Block[/gold]."
 }

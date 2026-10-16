@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://baoydkqn2s1dw"
-path="res://.godot/imported/big_energy.png-c22125fe8a9e59b7e421ec10a14e5726.ctex"
+uid="uid://do8pjqduxqdef"
+path="res://.godot/imported/text_energy.png-1c7b8e33fcf9faa3c5fe8ee6beebd37b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sts2WD/images/charui/character_one/big_energy.png"
-dest_files=["res://.godot/imported/big_energy.png-c22125fe8a9e59b7e421ec10a14e5726.ctex"]
+source_file="res://Sts2WD/images/charui/realta/text_energy.png"
+dest_files=["res://.godot/imported/text_energy.png-1c7b8e33fcf9faa3c5fe8ee6beebd37b.ctex"]
 
 [params]
 
