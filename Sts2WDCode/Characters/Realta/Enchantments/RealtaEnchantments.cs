@@ -1,10 +1,14 @@
+using System.Reflection;
+using System.Reflection.Emit;
 using BaseLib.Patches.Localization;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.Runs.History;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
@@ -40,10 +44,19 @@ public static class RealtaEnchantments
 
     private static bool IsLegacy(CardModel card) => card.Keywords.Contains(RealtaKeywords.Legacy);
 
-    private static EnchantmentModel AddToComposite(CardModel card, EnchantmentModel enchantment, int amount, bool temporary)
+    // Whether a Legacy card must hold the new enchantment in a composite rather than in the plain slot.
+    private static bool NeedsComposite(CardModel card, EnchantmentModel enchantment)
+    {
+        return IsLegacy(card)
+               && (card.Enchantment is RealtaCompositeEnchantment
+                   || (card.Enchantment != null && card.Enchantment.GetType() != enchantment.GetType()));
+    }
+
+    private static EnchantmentModel AddToComposite(CardModel card, EnchantmentModel enchantment, int amount, bool temporary,
+        bool modifyCard = true)
     {
         if (card.Enchantment is RealtaCompositeEnchantment existing)
-            return existing.Add(enchantment, amount, temporary);
+            return existing.Add(enchantment, amount, temporary, modifyCard);
 
         var composite = (RealtaCompositeEnchantment)ModelDb.Enchantment<RealtaCompositeEnchantment>().ToMutable();
         if (card.Enchantment is { } previous)
@@ -51,9 +64,19 @@ public static class RealtaEnchantments
             card.ClearEnchantmentInternal();
             composite.Adopt(previous);
         }
-        EnchantmentModel result = composite.Add(enchantment, amount, temporary);
+        EnchantmentModel result = composite.Add(enchantment, amount, temporary, modifyCard);
         card.EnchantInternal(composite, 0m);
         composite.ModifyPendingEntries();
+        return result;
+    }
+
+    private static EnchantmentModel? EnchantFromComposite(RealtaCompositeEnchantment source, CardModel card)
+    {
+        EnchantmentModel? result = null;
+        foreach (EnchantmentModel copy in source.DetachedPermanentCopies())
+        {
+            if (copy.CanEnchant(card)) result = CardCmd.Enchant(copy, card, copy.Amount);
+        }
         return result;
     }
 
@@ -87,9 +110,12 @@ public static class RealtaEnchantments
     {
         private static bool Prefix(EnchantmentModel enchantment, CardModel card, decimal amount, ref EnchantmentModel? __result)
         {
-            bool needsComposite = card.Enchantment is RealtaCompositeEnchantment
-                                  || (card.Enchantment != null && card.Enchantment.GetType() != enchantment.GetType());
-            if (!needsComposite || !IsLegacy(card)) return true;
+            if (enchantment is RealtaCompositeEnchantment source)
+            {
+                __result = EnchantFromComposite(source, card);
+                return false;
+            }
+            if (!NeedsComposite(card, enchantment)) return true;
 
             enchantment.AssertMutable();
             if (!enchantment.CanEnchant(card))
@@ -103,6 +129,61 @@ public static class RealtaEnchantments
                     .Add(new CardEnchantmentHistoryEntry(card, enchantment.Id));
             }
             return false;
+        }
+    }
+
+    // The deck enchant screen previews by calling EnchantInternal on a clone, which would drop a Legacy card's
+    // existing enchantments; route the preview the same way CardCmd.Enchant is routed.
+    [HarmonyPatch(typeof(NEnchantPreview), nameof(NEnchantPreview.Init))]
+    private static class EnchantPreviewPatch
+    {
+        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+        {
+            MethodInfo enchantInternal = AccessTools.Method(typeof(CardModel), nameof(CardModel.EnchantInternal));
+            MethodInfo modifyCard = AccessTools.Method(typeof(EnchantmentModel), nameof(EnchantmentModel.ModifyCard));
+            foreach (CodeInstruction instruction in instructions)
+            {
+                if (instruction.Calls(enchantInternal))
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(EnchantPreviewPatch), nameof(PreviewEnchant)));
+                else if (instruction.Calls(modifyCard))
+                    yield return new CodeInstruction(OpCodes.Call, AccessTools.Method(typeof(EnchantPreviewPatch), nameof(PreviewModifyCard)));
+                else
+                    yield return instruction;
+            }
+        }
+
+        private static void PreviewEnchant(CardModel preview, EnchantmentModel enchantment, decimal amount)
+        {
+            if (NeedsComposite(preview, enchantment))
+            {
+                AddToComposite(preview, enchantment, (int)amount, temporary: false, modifyCard: false);
+                return;
+            }
+            if (preview.Enchantment is { } same && IsLegacy(preview))
+                amount += same.Amount; // Same enchantment stacks, as CardCmd.Enchant does.
+            preview.EnchantInternal(enchantment, amount);
+        }
+
+        // A stacked composite entry keeps the existing model, so the new one is never attached.
+        private static void PreviewModifyCard(EnchantmentModel enchantment)
+        {
+            if (enchantment.HasCard) enchantment.ModifyCard();
+        }
+    }
+
+    // NCard refreshes the slot enchantment's variables (Dexterity on Adroit's block, ...) before drawing the
+    // description; do the same for the entries a composite prints.
+    [HarmonyPatch(typeof(CardModel), nameof(CardModel.UpdateDynamicVarPreview))]
+    private static class EntryVarPreviewPatch
+    {
+        private static void Postfix(CardModel __instance, CardPreviewMode previewMode, Creature? target, DynamicVarSet dynamicVarSet)
+        {
+            if (__instance.Enchantment is not RealtaCompositeEnchantment composite || dynamicVarSet != composite.DynamicVars) return;
+            foreach (EnchantmentModel child in composite.Children)
+            {
+                child.DynamicVars.ClearPreview();
+                __instance.UpdateDynamicVarPreview(previewMode, target, child.DynamicVars);
+            }
         }
     }
 }

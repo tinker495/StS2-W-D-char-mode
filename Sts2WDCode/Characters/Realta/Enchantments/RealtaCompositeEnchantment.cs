@@ -1,6 +1,7 @@
 using System.Text;
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Enchantments;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -50,7 +51,10 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
             if (HasCard)
             {
                 foreach (Entry entry in _entries.Where(e => !e.Model.HasCard))
+                {
                     entry.Model.ApplyInternal(Card, entry.Model.Amount);
+                    entry.Model.StatusChanged += RefreshStatus;
+                }
             }
             return _entries;
         }
@@ -66,7 +70,7 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
     protected override IEnumerable<IHoverTip> ExtraHoverTips => Children.SelectMany(c => c.HoverTips);
 
     // Same enchantment + same scope stacks into one entry; anything else becomes a new entry.
-    public EnchantmentModel Add(EnchantmentModel enchantment, int amount, bool temporary)
+    public EnchantmentModel Add(EnchantmentModel enchantment, int amount, bool temporary, bool modifyCard = true)
     {
         Entry? same = _entries.FirstOrDefault(e => e.Temporary == temporary && e.Model.GetType() == enchantment.GetType());
         if (same != null)
@@ -77,7 +81,7 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
         }
 
         enchantment.Amount = amount;
-        _entries.Add(new Entry(enchantment, temporary, pendingModify: true));
+        _entries.Add(new Entry(enchantment, temporary, pendingModify: modifyCard));
         ModifyPendingEntries();
         return enchantment;
     }
@@ -86,6 +90,19 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
     public void Adopt(EnchantmentModel enchantment)
     {
         _entries.Add(new Entry(enchantment, temporary: false, pendingModify: false));
+    }
+
+    // Some base-game effects copy a whole slot enchantment onto another card (Claws' Maul). The composite itself never
+    // moves: RealtaEnchantments re-applies these copies one by one under the target card's own rules, so a normal
+    // card keeps at most one of them. Temporary entries stay with their combat copy.
+    public IEnumerable<EnchantmentModel> DetachedPermanentCopies()
+    {
+        return _entries.Where(e => !e.Temporary).Select(e => (EnchantmentModel)e.Model.ClonePreservingMutability()).ToList();
+    }
+
+    public override bool CanEnchant(CardModel card)
+    {
+        return _entries.Where(e => !e.Temporary).Any(e => e.Model.CanEnchant(card));
     }
 
     // Runs OnEnchant for entries added since the composite was put in the slot.
@@ -109,6 +126,8 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
             line.Add("AmountText", entry.Model.ShowAmount ? $" {entry.Model.DisplayAmount}" : "");
             string color = entry.Temporary ? TemporaryColor : PermanentColor;
             text.Append($"\n[{color}]{line.GetFormattedText()}[/{color}]");
+            if (entry.Model.DynamicExtraCardText is { } extraText)
+                text.Append($"\n[{color}]{extraText.GetFormattedText()}[/{color}]");
         }
         return text.ToString();
     }
@@ -121,6 +140,14 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
             entry.PendingModify = false;
             entry.Model.ModifyCard();
         }
+    }
+
+    // NCard greys out the slot enchantment when it is disabled; do so once every entry is disabled.
+    private void RefreshStatus()
+    {
+        Status = _entries.Count > 0 && _entries.All(e => e.Model.Status == EnchantmentStatus.Disabled)
+            ? EnchantmentStatus.Disabled
+            : EnchantmentStatus.Normal;
     }
 
     public override void RecalculateValues()
