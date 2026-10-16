@@ -1,0 +1,6 @@
+{
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.title": "인챈트",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.description": "이 카드에 붙은 여러 인챈트나 일시적 인챈트입니다. 각각 카드 설명에 따로 표시됩니다.",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.permanentEntry": "{Title}{AmountText}",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "일시적 {Title}{AmountText}"
+}
