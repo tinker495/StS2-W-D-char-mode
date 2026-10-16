@@ -2,14 +2,14 @@ using BaseLib.Abstracts;
 using Sts2WD.Sts2WDCode.Extensions;
 using Godot;
 
-namespace Sts2WD.Sts2WDCode.Characters.CharacterOne;
+namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public class CharacterOneCardPool : CustomCardPoolModel
+public class RealtaCardPool : CustomCardPoolModel
 {
-    public override string Title => CharacterOne.CharacterId; //This is not a display name.
+    public override string Title => Realta.CharacterId; //This is not a display name.
 
-    public override string BigEnergyIconPath => "charui/character_one/big_energy.png".ImagePath();
-    public override string TextEnergyIconPath => "charui/character_one/text_energy.png".ImagePath();
+    public override string BigEnergyIconPath => "charui/realta/big_energy.png".ImagePath();
+    public override string TextEnergyIconPath => "charui/realta/text_energy.png".ImagePath();
 
 
     /* These HSV values will determine the color of your card back.

@@ -5,13 +5,12 @@ using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
-using MegaCrit.Sts2.Core.Models.Relics;
 
-namespace Sts2WD.Sts2WDCode.Characters.CharacterOne;
+namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public class CharacterOne : PlaceholderCharacterModel
+public class Realta : PlaceholderCharacterModel
 {
-    public const string CharacterId = "CharacterOne";
+    public const string CharacterId = "Realta";
 
     public static readonly Color Color = new("e76f51");
 
@@ -19,27 +18,28 @@ public class CharacterOne : PlaceholderCharacterModel
     public override CharacterGender Gender => CharacterGender.Neutral;
     public override int StartingHp => 70;
 
+    // Strike/Defend are still the Ironclad placeholders.
     public override IEnumerable<CardModel> StartingDeck => [
         ModelDb.Card<StrikeIronclad>(),
         ModelDb.Card<StrikeIronclad>(),
         ModelDb.Card<StrikeIronclad>(),
         ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
         ModelDb.Card<DefendIronclad>(),
         ModelDb.Card<DefendIronclad>(),
         ModelDb.Card<DefendIronclad>(),
         ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>()
+        ModelDb.Card<RealtaFlyingGlaive>(),
+        ModelDb.Card<RealtaTempering>()
     ];
 
     public override IReadOnlyList<RelicModel> StartingRelics =>
     [
-        ModelDb.Relic<BurningBlood>()
+        ModelDb.Relic<RealtaKuu>()
     ];
 
-    public override CardPoolModel CardPool => ModelDb.CardPool<CharacterOneCardPool>();
-    public override RelicPoolModel RelicPool => ModelDb.RelicPool<CharacterOneRelicPool>();
-    public override PotionPoolModel PotionPool => ModelDb.PotionPool<CharacterOnePotionPool>();
+    public override CardPoolModel CardPool => ModelDb.CardPool<RealtaCardPool>();
+    public override RelicPoolModel RelicPool => ModelDb.RelicPool<RealtaRelicPool>();
+    public override PotionPoolModel PotionPool => ModelDb.PotionPool<RealtaPotionPool>();
 
     /*  PlaceholderCharacterModel will utilize placeholder basegame assets for most of your character assets until you
         override all the other methods that define those assets.
@@ -54,8 +54,8 @@ public class CharacterOne : PlaceholderCharacterModel
             return icon;
         }
     }
-    public override string CustomIconTexturePath => "character_one/character_icon.png".CharacterUiPath();
-    public override string CustomCharacterSelectIconPath => "character_one/char_select.png".CharacterUiPath();
-    public override string CustomCharacterSelectLockedIconPath => "character_one/char_select_locked.png".CharacterUiPath();
-    public override string CustomMapMarkerPath => "character_one/map_marker.png".CharacterUiPath();
+    public override string CustomIconTexturePath => "realta/character_icon.png".CharacterUiPath();
+    public override string CustomCharacterSelectIconPath => "realta/char_select.png".CharacterUiPath();
+    public override string CustomCharacterSelectLockedIconPath => "realta/char_select_locked.png".CharacterUiPath();
+    public override string CustomMapMarkerPath => "realta/map_marker.png".CharacterUiPath();
 }

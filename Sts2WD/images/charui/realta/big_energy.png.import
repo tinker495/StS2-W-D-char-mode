@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dkps8by333wn5"
-path="res://.godot/imported/char_select_locked.png-05917721ff17ae8751b36967c3c80742.ctex"
+uid="uid://baoydkqn2s1dw"
+path="res://.godot/imported/big_energy.png-49118982152742f239ca8115c6a10f2e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sts2WD/images/charui/character_one/char_select_locked.png"
-dest_files=["res://.godot/imported/char_select_locked.png-05917721ff17ae8751b36967c3c80742.ctex"]
+source_file="res://Sts2WD/images/charui/realta/big_energy.png"
+dest_files=["res://.godot/imported/big_energy.png-49118982152742f239ca8115c6a10f2e.ctex"]
 
 [params]
 

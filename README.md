@@ -5,12 +5,14 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 ## 현재 상태
 
-- `CharacterOne`, `CharacterTwo`, `CharacterThree`, `CharacterFour` 캐릭터 뼈대
+- `Realta`, `CharacterTwo`, `CharacterThree`, `CharacterFour` 캐릭터 뼈대
 - 캐릭터별 카드·유물·포션 풀과 추상 기본 클래스
 - 캐릭터별 UI 이미지 경로, 영어·한국어 캐릭터 텍스트 및 고대인 대사
 - .NET 9 / MegaDot 4.5.1 / BaseLib 기반 빌드·패키징
 
-캐릭터 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 현재는 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용합니다. 전용 보상 풀도 비어 있으므로 플레이를 완성한 모드가 아닙니다.
+`CharacterTwo`·`CharacterThree`·`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 이 셋은 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용합니다. 모든 캐릭터의 전용 보상 풀이 비어 있으므로 플레이를 완성한 모드가 아닙니다.
+
+레아르타(`Realta`)는 설계 합의([`docs/characters/realta.md`](docs/characters/realta.md))에 따라 시작 구성을 갖췄습니다. 기본 유물 쿠우(수호), 비행 글레이브(유산), 담금질(개선)을 포함하며, 시각 자료와 타격·수비는 아직 아이언클래드 것을 임시로 씁니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
 ## 이 PC에서 사용하기
 
@@ -51,7 +53,7 @@ IDE에서는 `Sts2WD.sln`을 엽니다. SDK 경로를 직접 지정해야 한다
 Sts2WDCode/
   MainFile.cs
   Characters/
-    CharacterOne/          # 캐릭터 모델, 풀, Cards/Relics/Potions 기본 클래스
+    Realta/                # 캐릭터 모델, 풀, Cards/Relics/Potions 기본 클래스
     CharacterTwo/
     CharacterThree/
     CharacterFour/
@@ -60,7 +62,7 @@ Sts2WDCode/
   Potions/
   Powers/
 Sts2WD/
-  images/charui/character_one/   # 캐릭터별 선택 아이콘, 지도 아이콘, 에너지
+  images/charui/realta/           # 캐릭터별 선택 아이콘, 지도 아이콘, 에너지
   images/charui/character_two/
   images/charui/character_three/
   images/charui/character_four/
@@ -69,9 +71,9 @@ Sts2WD/
   localization/kor/
 ```
 
-예를 들어 첫 번째 캐릭터의 카드는 `CharacterOneCard`를 상속하면 `CharacterOneCardPool`에 들어갑니다. 공유 이미지 처리가 필요해도 `Sts2WDCard`를 바로 상속하면 캐릭터 풀이 지정되지 않으므로 캐릭터별 기본 클래스를 사용합니다. 유물과 포션도 같은 방식입니다.
+예를 들어 레아르타의 카드는 `RealtaCard`를 상속하면 `RealtaCardPool`에 들어갑니다. 공유 이미지 처리가 필요해도 `Sts2WDCard`를 바로 상속하면 캐릭터 풀이 지정되지 않으므로 캐릭터별 기본 클래스를 사용합니다. 예외적으로 전투 중에만 생성되는 토큰 카드는 기본 게임처럼 `TokenCardPool`에 넣으므로 `Sts2WDCard`를 상속하고 `[Pool(typeof(TokenCardPool))]`을 붙입니다. 유물과 포션도 같은 방식입니다.
 
-BaseLib는 구체적인 캐릭터 모델을 자동 등록합니다. 모델 ID는 네임스페이스 접두사와 클래스 이름에서 만들어집니다. 예: `CharacterOne` → `STS2WD-CHARACTER_ONE`. 표시 이름은 `characters.json`의 `.title`에서 바꿉니다. 저장 데이터가 생긴 이후 모델 클래스 이름이나 모드 ID를 바꾸면 기존 저장과의 호환성에 영향을 줍니다.
+BaseLib는 구체적인 캐릭터 모델을 자동 등록합니다. 모델 ID는 네임스페이스 접두사와 클래스 이름에서 만들어집니다. 예: `Realta` → `STS2WD-REALTA`. 표시 이름은 `characters.json`의 `.title`에서 바꿉니다. 저장 데이터가 생긴 이후 모델 클래스 이름이나 모드 ID를 바꾸면 기존 저장과의 호환성에 영향을 줍니다.
 
 카드·유물·포션 클래스 이름은 캐릭터 접두사를 붙여 모드 전체에서 고유하게 유지합니다. 해당 모델의 현지화 키를 `eng`와 `kor`에 함께 추가합니다. 예제 이미지는 임시 자료이므로 출시 전에 교체합니다.
 
