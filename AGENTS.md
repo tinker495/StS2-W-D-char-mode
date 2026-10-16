@@ -1,9 +1,11 @@
+## 작업 환경
 
-<!-- Parent: ../AGENTS.md -->
+- 작업 시작 시 `.\dev.ps1 hooks`로 이 checkout의 커밋 전 빌드 검사를 활성화한다. 빌드 환경과 명령은 `README.md`를 따른다.
+- PowerShell에서 문서를 읽을 때는 `Get-Content -LiteralPath <path> -Encoding UTF8`을 사용한다.
 
 ## Code Review Rules
 
-사람/AI 리뷰어 공통 규칙이다. 포맷·린트 등 기계적 검사는 CI 소관이므로 리뷰에서 다루지 않는다.
+사람/AI 리뷰어 공통 규칙이다. 포맷·린트 등 기계적 검사는 Git hook·CI 등 자동 검증 소관이므로 리뷰에서 다루지 않는다.
 
 아래의 테스트 수정·삭제 제안과 co-migration 요구는 리뷰 판단 기준이며,
 에이전트에게 테스트 변경 권한을 부여하지 않는다.

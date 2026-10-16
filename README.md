@@ -19,6 +19,7 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은 프로젝트 안의 `.tools`에 있는 SDK를 자동으로 선택합니다.
 
 ```powershell
+.\dev.ps1 hooks              # 이 checkout의 커밋 전 빌드 검사 활성화
 .\dev.ps1 doctor             # SDK, 게임 DLL, MegaDot 경로 확인
 .\dev.ps1 build              # C# 빌드
 .\dev.ps1 publish            # DLL + PCK + manifest 생성
@@ -32,6 +33,8 @@ PowerShell의 스크립트 실행 정책 때문에 실행되지 않는다면 해
 powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 ```
 
+`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 커밋할 때마다 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 컴파일이나 기존 ModAnalyzers의 오류로 빌드가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드이므로 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
+
 `build`와 `publish` 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. `deploy`는 게임 설치 폴더에 씁니다. 게임을 닫고 실행한 뒤, 게임의 모드 설정에서 BaseLib와 이 모드를 활성화하세요.
 코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요합니다. 게임에 반영하려면 `deploy`를 사용합니다.
 
@@ -43,7 +46,7 @@ IDE에서는 `Sts2WD.sln`을 엽니다. SDK 경로를 직접 지정해야 한다
 2. [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)를 설치합니다. `global.json`은 9.0.318과 이후 9.0.3xx 패치를 허용합니다.
 3. [MegaDot 4.5.1](https://megadot.megacrit.com/)을 설치합니다. 현재 사용 버전은 `4.5.1-m.14`입니다.
 4. `local.props.example`을 `local.props`로 복사하고 게임·MegaDot 경로를 지정합니다.
-5. `.\dev.ps1 restore`와 `.\dev.ps1 publish`를 실행합니다.
+5. `.\dev.ps1 hooks`로 커밋 전 빌드 검사를 활성화하고, `.\dev.ps1 restore`와 `.\dev.ps1 publish`를 실행합니다.
 
 이 PC의 `.tools/`에는 SDK, MegaDot, NuGet 캐시, 원본 템플릿 및 참고 소스가 들어 있습니다. 이 폴더, 빌드 결과, 게임 DLL, `local.props`는 Git에 포함하지 않습니다. MegaDot은 `_sc_` 파일을 사용하여 편집기 설정도 `.tools/megadot/editor_data`에 저장합니다.
 
