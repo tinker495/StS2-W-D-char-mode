@@ -9,7 +9,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaMagicWeapon() : RealtaSpellCard(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [.. base.CanonicalKeywords, RealtaKeywords.Legacy];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move), new DynamicVar("Refine", 5m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [.. base.ExtraHoverTips, HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

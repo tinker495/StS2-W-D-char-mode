@@ -10,6 +10,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaFaerieFire() : RealtaSpellCard(1, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<VulnerablePower>(1m), new PowerVar<WeakPower>(1m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [.. base.ExtraHoverTips, HoverTipFactory.FromPower<VulnerablePower>(), HoverTipFactory.FromPower<WeakPower>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

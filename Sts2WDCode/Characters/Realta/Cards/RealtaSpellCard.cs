@@ -8,7 +8,6 @@ public abstract class RealtaSpellCard(int cost, CardType type, CardRarity rarity
     : RealtaCard(cost, type, rarity, target)
 {
     protected bool SpellActive { get; private set; }
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Spell)];
 
     internal void CaptureSpell(int energySpent) =>
