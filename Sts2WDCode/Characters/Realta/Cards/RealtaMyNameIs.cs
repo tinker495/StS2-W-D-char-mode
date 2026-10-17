@@ -17,7 +17,7 @@ public sealed class RealtaMyNameIs() : RealtaCard(1, CardType.Skill, CardRarity.
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        bool duel = !cardPlay.Target.Powers.Any(p => p.TypeForCurrentAmount == PowerType.Debuff);
+        bool duel = IsDuel(cardPlay.Target);
         await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature, DynamicVars["PlatingPower"].BaseValue, Owner.Creature, this);
         if (duel) await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }

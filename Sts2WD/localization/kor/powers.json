@@ -1,5 +1,11 @@
 {
   "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.title": "다음 턴 활력",
   "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.description": "다음 턴 시작 시 [gold]활력[/gold]을 {Amount} 얻고 이 효과를 제거합니다.",
-  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.smartDescription": "다음 턴 시작 시 [gold]활력[/gold]을 {Amount} 얻고 이 효과를 제거합니다."
+  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.smartDescription": "다음 턴 시작 시 [gold]활력[/gold]을 {Amount} 얻고 이 효과를 제거합니다.",
+  "STS2WD-REALTA_GOIBNIUS_ADVICE_POWER.title": "고브누의 조언",
+  "STS2WD-REALTA_GOIBNIUS_ADVICE_POWER.description": "내 턴 시작 시 [gold]수호[/gold] {Amount}.",
+  "STS2WD-REALTA_GOIBNIUS_ADVICE_POWER.smartDescription": "내 턴 시작 시 [gold]수호[/gold] {Amount}.",
+  "STS2WD-REALTA_FIRST_DUEL_POWER.title": "첫번째 결투",
+  "STS2WD-REALTA_FIRST_DUEL_POWER.description": "적이 [gold]힘[/gold]을 얻을 때마다, 같은 양의 [gold]힘[/gold]을 얻습니다.",
+  "STS2WD-REALTA_FIRST_DUEL_POWER.smartDescription": "적이 [gold]힘[/gold]을 얻을 때마다, {Amount:cond:>1?그 {Amount}배만큼|같은 양의} [gold]힘[/gold]을 얻습니다."
 }

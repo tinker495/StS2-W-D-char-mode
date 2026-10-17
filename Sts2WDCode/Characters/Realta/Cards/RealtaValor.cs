@@ -20,7 +20,6 @@ public sealed class RealtaValor() : RealtaCard(2, CardType.Attack, CardRarity.Un
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
     }
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource) =>
-        cardSource == this && props.IsPoweredAttack() && target != null
-        && (target.Block > 0m || target.GetPowerAmount<StrengthPower>() > 0m) ? 2m : 1m;
+        cardSource == this && props.IsPoweredAttack() && IsValor(target) ? 2m : 1m;
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
 }

@@ -68,6 +68,6 @@ internal static class RealtaCardEffects
         }
 
         private static Task PlayEnchantment(EnchantmentModel enchantment, PlayerChoiceContext context, CardPlay? play) =>
-            play?.Card is RealtaMagicBronze ? Task.CompletedTask : enchantment.OnPlay(context, play);
+            play?.Card is RealtaMasterworkCard ? Task.CompletedTask : enchantment.OnPlay(context, play);
     }
 }
