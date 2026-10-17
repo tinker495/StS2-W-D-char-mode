@@ -10,7 +10,7 @@
   "STS2WD-REALTA_MASTERWORK.title": "Masterwork",
   "STS2WD-REALTA_MASTERWORK.description": "Repeat this card's effects and enchantment effects X times, based on energy spent. Counts as playing one card. At X=0, no effects activate.",
   "STS2WD-REALTA_DUEL.title": "Duel",
-  "STS2WD-REALTA_DUEL.description": "The bonus activates if the target enemy has no debuffs.",
+  "STS2WD-REALTA_DUEL.description": "The bonus activates if the target enemy has neither [gold]Weak[/gold] nor [gold]Vulnerable[/gold].",
   "STS2WD-REALTA_VALOR.title": "Valor",
   "STS2WD-REALTA_VALOR.description": "The bonus activates if the target enemy has positive Strength or Block."
 }

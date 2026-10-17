@@ -1,7 +1,6 @@
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
-using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models.Powers;
 using Sts2WD.Sts2WDCode.Cards;
 
@@ -13,7 +12,7 @@ public abstract class RealtaCard(int cost, CardType type, CardRarity rarity, Tar
     : Sts2WDCard(cost, type, rarity, target)
 {
     protected static bool IsDuel(Creature target) =>
-        !target.Powers.Any(p => p.TypeForCurrentAmount == PowerType.Debuff);
+        !target.HasPower<WeakPower>() && !target.HasPower<VulnerablePower>();
 
     protected static bool IsValor(Creature? target) =>
         target != null && (target.Block > 0m || target.GetPowerAmount<StrengthPower>() > 0m);
