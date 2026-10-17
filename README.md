@@ -10,9 +10,9 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 - 캐릭터별 UI 이미지 경로, 영어·한국어 캐릭터 텍스트 및 고대인 대사
 - .NET 9 / MegaDot 4.5.1 / BaseLib 기반 빌드·패키징
 
-`CharacterTwo`·`CharacterThree`·`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 이 셋은 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용합니다. 모든 캐릭터의 전용 보상 풀이 비어 있으므로 플레이를 완성한 모드가 아닙니다.
+`CharacterTwo`·`CharacterThree`·`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 이 셋은 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다.
 
-레아르타(`Realta`)는 설계 합의([`docs/characters/realta.md`](docs/characters/realta.md))에 따라 시작 구성을 갖췄습니다. 기본 유물 쿠우(수호), 비행 글레이브(유산), 담금질(개선)을 포함하며, 시각 자료와 타격·수비는 아직 아이언클래드 것을 임시로 씁니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
+레아르타(`Realta`)는 설계 합의([`docs/characters/realta.md`](docs/characters/realta.md))에 따라 카드 27장(시작 카드 2장·수호 토큰 1장·보상 카드 24장)과 기본 유물 쿠우를 갖췄습니다. 수호는 카드별 방어도를 누적해서 높이고, 개선·유산·주문·역작·결투·용맹 효과를 지원합니다. 시각 자료와 타격·수비는 아직 임시 자료를 씁니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
 ## 이 PC에서 사용하기
 

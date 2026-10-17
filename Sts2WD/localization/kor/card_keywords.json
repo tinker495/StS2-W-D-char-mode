@@ -4,5 +4,13 @@
   "STS2WD-REALTA_REFINE.title": "개선",
   "STS2WD-REALTA_REFINE.description": "손의 카드 1장을 선택합니다. 이번 전투 동안 공격 카드에는 [gold]예리[/gold]를, 그 외 카드에는 [gold]숙련[/gold]을 부여합니다. 이미 인챈트가 있는 일반 카드는 선택할 수 없습니다.",
   "STS2WD-REALTA_GUARD.title": "수호",
-  "STS2WD-REALTA_GUARD.description": "이번 전투에 [gold]수호[/gold] 카드가 없으면 손에 생성합니다. 이미 있으면 그 카드의 [gold]방어도[/gold]를 높입니다."
+  "STS2WD-REALTA_GUARD.description": "소멸하지 않은 [gold]강철의 수호자[/gold]가 없으면 손에 생성합니다. 소멸한 카드를 포함한 각 강철의 수호자의 [gold]방어도[/gold]를 높입니다. 일시 복제본은 제외합니다.",
+  "STS2WD-REALTA_SPELL.title": "주문",
+  "STS2WD-REALTA_SPELL.description": "비용 지불 직후 남은 에너지가 0이면 추가 효과가 발동합니다. 모든 주문 카드는 소멸합니다.",
+  "STS2WD-REALTA_MASTERWORK.title": "역작",
+  "STS2WD-REALTA_MASTERWORK.description": "소비한 에너지 X만큼 카드와 인챈트 효과를 반복합니다. 카드를 사용한 횟수는 한 번으로 취급합니다. X가 0이면 효과도 발동하지 않습니다.",
+  "STS2WD-REALTA_DUEL.title": "결투",
+  "STS2WD-REALTA_DUEL.description": "대상 적에게 디버프가 없으면 추가 효과가 발동합니다.",
+  "STS2WD-REALTA_VALOR.title": "용맹",
+  "STS2WD-REALTA_VALOR.description": "대상 적에게 양수 힘이나 방어도가 있으면 추가 효과가 발동합니다."
 }
