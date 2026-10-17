@@ -19,7 +19,12 @@ public static class RefineCmd
         CardModel? card = (await CardSelectCmd.FromHand(choiceContext, player, prefs, CanRefine, source)).FirstOrDefault();
         if (card == null) return;
 
-        RealtaEnchantments.EnchantTemporarily(card, EnchantmentFor(card), amount);
+        Refine(card, amount);
+    }
+
+    public static void Refine(CardModel card, int amount)
+    {
+        if (CanRefine(card)) RealtaEnchantments.EnchantTemporarily(card, EnchantmentFor(card), amount);
     }
 
     private static EnchantmentModel EnchantmentFor(CardModel card) =>

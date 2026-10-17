@@ -1,3 +1,11 @@
 {
-
+  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.title": "Vigor Next Turn",
+  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.description": "At the start of your next turn, gain {Amount} [gold]Vigor[/gold], then remove this effect.",
+  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.smartDescription": "At the start of your next turn, gain {Amount} [gold]Vigor[/gold], then remove this effect.",
+  "STS2WD-REALTA_GOIBNIUS_ADVICE_POWER.title": "Goibniu's Advice",
+  "STS2WD-REALTA_GOIBNIUS_ADVICE_POWER.description": "At the start of your turn, [gold]Guard[/gold] {Amount}.",
+  "STS2WD-REALTA_GOIBNIUS_ADVICE_POWER.smartDescription": "At the start of your turn, [gold]Guard[/gold] {Amount}.",
+  "STS2WD-REALTA_FIRST_DUEL_POWER.title": "First Duel",
+  "STS2WD-REALTA_FIRST_DUEL_POWER.description": "Whenever an enemy gains [gold]Strength[/gold], gain the same amount of [gold]Strength[/gold].",
+  "STS2WD-REALTA_FIRST_DUEL_POWER.smartDescription": "Whenever an enemy gains [gold]Strength[/gold], gain {Amount:cond:>1?{Amount} times that|the same} amount of [gold]Strength[/gold]."
 }

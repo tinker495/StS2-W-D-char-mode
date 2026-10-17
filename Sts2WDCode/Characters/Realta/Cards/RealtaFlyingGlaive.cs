@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 비행 글레이브: starting 유산 attack. Upgrading adds Retain and keeps the damage.
+// 비행 글레이브: upgrading increases damage and adds Retain.
 public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
@@ -26,6 +26,7 @@ public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRa
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Damage.UpgradeValueBy(2m);
         AddKeyword(CardKeyword.Retain);
     }
 }
