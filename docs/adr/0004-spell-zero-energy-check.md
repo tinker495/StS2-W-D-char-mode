@@ -1,12 +1,12 @@
-# 주문의 추가 효과는 비용 지불 직후 남은 에너지 0으로 판정한다
+# Spell Checks for Zero Remaining Energy Immediately After Payment
 
-주문 카드의 추가 효과는 카드 비용이 0인지가 아니라 비용을 지불한 직후 플레이어의 남은 에너지가 0인지로 판정한다. 같은 카드가 낸 에너지 환급은 판정 이후에 처리하므로 판정 결과를 바꾸지 않는다. 다른 효과로 비용이 0이 되어도 같은 기준을 쓰며, 주문 테마 자체는 비용 감소를 지원하지 않는다. 마지막 에너지를 쓰는 순간에 보상을 주어 매 턴 한 번 정도는 쉽게 발동하되, 비용 감소나 0코스트 카드를 모아 주문만으로 덱을 짜는 것이 유리해지지 않게 하려는 결정이다.
+Spell's additional effect checks whether the player has zero remaining energy immediately after paying the card's cost, not whether the card costs zero. Resolve energy refunds from that card after the check so they cannot change its result. Apply the same rule when another effect reduces cost to zero; the Spell theme itself does not provide cost reduction. Rewarding the last energy spent makes activation readily available roughly once per turn without favoring a deck consisting only of Spell cards and cost reduction.
 
 ## Considered Options
 
-- **카드 비용 0 판정.** 비용 감소 효과와 결합하면 매 장 발동해 주문만으로 구성한 덱이 지나치게 강해진다. 채택하지 않았다.
-- **환급 이후 판정.** 같은 카드의 환급이 자기 발동 조건을 깨는 자기모순이 생긴다. 채택하지 않았다.
+- **Check for zero card cost.** Cost reduction could trigger every card, making an all-Spell deck too strong. Rejected.
+- **Check after refunds.** The card's own refund could invalidate its trigger condition. Rejected.
 
 ## Consequences
 
-- 0코스트 주문은 에너지 0인 상태에서 쓰면 판정 기준상 항상 발동하므로, 요정 불빛(기본 소멸, 강화 시 소멸 제거)처럼 제한적으로만 둔다.
+- A zero-cost Spell always satisfies this condition when played at zero energy. Keep such cards limited, as with 요정 불빛, which Exhausts by default and loses Exhaust when upgraded.
