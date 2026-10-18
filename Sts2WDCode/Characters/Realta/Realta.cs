@@ -4,7 +4,6 @@ using Sts2WD.Sts2WDCode.Extensions;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
@@ -18,33 +17,34 @@ public class Realta : PlaceholderCharacterModel
     public override CharacterGender Gender => CharacterGender.Neutral;
     public override int StartingHp => 70;
 
-    // Strike/Defend are still the Ironclad placeholders.
     public override IEnumerable<CardModel> StartingDeck => [
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaDefend>(),
+        ModelDb.Card<RealtaDefend>(),
+        ModelDb.Card<RealtaDefend>(),
+        ModelDb.Card<RealtaDefend>(),
         ModelDb.Card<RealtaFlyingGlaive>(),
         ModelDb.Card<RealtaTempering>()
     ];
 
     public override IReadOnlyList<RelicModel> StartingRelics =>
     [
-        ModelDb.Relic<RealtaKuu>()
+        ModelDb.Relic<RealtaBronzeWatchdog>()
     ];
 
     public override CardPoolModel CardPool => ModelDb.CardPool<RealtaCardPool>();
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<RealtaRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<RealtaPotionPool>();
 
-    /*  PlaceholderCharacterModel will utilize placeholder basegame assets for most of your character assets until you
-        override all the other methods that define those assets.
-        These are just some of the simplest assets, given some placeholders to differentiate your character with.
-        You don't have to, but you're suggested to rename these images. */
+    // Scene wrappers share one static sprite and provide each screen's layout and required nodes.
+    public override string CustomVisualPath => "res://Sts2WD/scenes/realta/combat.tscn";
+    public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/realta/rest_site.tscn";
+    public override string CustomMerchantAnimPath => "res://Sts2WD/scenes/realta/merchant.tscn";
+    public override string CustomCharacterSelectBg => "res://Sts2WD/scenes/realta/char_select_bg_realta.tscn";
+
     public override Control CustomIcon
     {
         get
@@ -55,6 +55,7 @@ public class Realta : PlaceholderCharacterModel
         }
     }
     public override string CustomIconTexturePath => "realta/character_icon.png".CharacterUiPath();
+    public override string CustomIconOutlineTexturePath => "realta/character_icon_outline.png".CharacterUiPath();
     public override string CustomCharacterSelectIconPath => "realta/char_select.png".CharacterUiPath();
     public override string CustomCharacterSelectLockedIconPath => "realta/char_select_locked.png".CharacterUiPath();
     public override string CustomMapMarkerPath => "realta/map_marker.png".CharacterUiPath();

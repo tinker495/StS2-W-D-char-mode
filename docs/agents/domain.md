@@ -1,15 +1,15 @@
-# Domain docs
+# Domain Documentation
 
-이 저장소는 단일 컨텍스트를 사용한다. 용어집은 루트 `GLOSSARY.md`, 설계 결정 기록은 `docs/adr/`에 둔다.
+This repository uses one domain context: the root `GLOSSARY.md` for terminology and `docs/adr/` for design decisions.
 
-## 코드 탐색 전
+## Before Exploring Code
 
-- `GLOSSARY.md`가 있으면 읽는다.
-- `docs/adr/`에서 작업 영역과 관련된 ADR을 읽는다.
-- 해당 문서가 없으면 그대로 진행한다. 문서 부재를 별도로 보고하거나 빈 문서 생성을 제안하지 않는다. 용어나 설계 결정이 확정될 때 `domain-modeling` 스킬이 필요한 문서를 생성한다.
+- Read `GLOSSARY.md` if it exists.
+- Read ADRs in `docs/adr/` that concern the current work.
+- Continue if these documents are absent. Do not report their absence separately or propose empty documents. The `domain-modeling` skill creates the necessary documents when terminology or design decisions are established.
 
-## 용어와 설계 결정
+## Terminology and Decisions
 
-- 이슈 제목, 리팩터링 제안, 가설 등에서 도메인 개념을 지칭할 때는 `GLOSSARY.md`의 용어를 사용한다.
-- 필요한 용어가 없으면 프로젝트에서 쓰지 않는 표현인지 먼저 확인한다. 실제 용어집의 공백이라면 `domain-modeling` 작업에 반영한다.
-- 제안이 기존 ADR과 충돌하면 해당 ADR과 충돌 이유를 명시한다.
+- Use `GLOSSARY.md` terms when referring to domain concepts in issue titles, refactoring proposals, hypotheses, and similar material.
+- If a needed term is missing, first check whether the project actually uses it. Address a genuine gap through `domain-modeling`.
+- When a proposal conflicts with an existing ADR, identify that ADR and explain the conflict.
