@@ -36,13 +36,18 @@ public static class RefineCmd
 
         int finalAmount = amount + (card.Owner?.Creature.GetPowerAmount<RealtaGoibniusForgingPower>() ?? 0);
         await ApplyRefine(choiceContext, card, finalAmount);
+    }
 
-        if (card is not RealtaMoteOfFlame && card.Owner?.PlayerCombatState is { } combatState)
+    public static int GetAmount(CardModel card)
+    {
+        IEnumerable<EnchantmentModel> enchantments = card.Enchantment switch
         {
-            var motes = combatState.Hand.Cards.OfType<RealtaMoteOfFlame>().Where(CanRefine).ToList();
-            foreach (var mote in motes)
-                await ApplyRefine(choiceContext, mote, finalAmount);
-        }
+            RealtaCompositeEnchantment composite => composite.Children,
+            { } enchantment => [enchantment],
+            _ => []
+        };
+        Type type = EnchantmentFor(card).GetType();
+        return enchantments.Where(enchantment => enchantment.GetType() == type).Sum(enchantment => enchantment.Amount);
     }
 
     public static void RefinePermanent(CardModel card, int amount)
@@ -79,14 +84,28 @@ public static class RefineCmd
     {
         if (card.Owner?.Creature is not { } owner) return;
         owner.GetPower<RealtaFaerieArtisanPower>()?.OnCardImproved(card);
+        // External CardCmd.Upgrade is synchronous: grant energy before Workshop's power-application animation yields.
+        if (owner.GetPower<RealtaHerosSilhouettePower>() is { } silhouette)
+            await silhouette.OnCardUpgraded();
         if (owner.GetPower<RealtaOldWorkshopPower>() is { } workshop)
             await workshop.OnCardImproved(choiceContext);
     }
 
     private static async Task ApplyRefine(PlayerChoiceContext choiceContext, CardModel card, int amount)
     {
+        if (amount <= 0) return;
         RealtaEnchantments.EnchantTemporarily(card, EnchantmentFor(card), amount);
+        await OnCardRefined(choiceContext, card, amount);
+    }
+
+    // Generated-card previews already carry the exact enchantment; only the chosen card publishes the improvement.
+    internal static async Task OnCardRefined(PlayerChoiceContext choiceContext, CardModel card, int amount)
+    {
+        if (amount <= 0) return;
         if (card.Owner?.Creature is not { } owner) return;
+        var motes = card is not RealtaMoteOfFlame && card.Owner.PlayerCombatState is { } state
+            ? state.Hand.Cards.OfType<RealtaMoteOfFlame>().Where(CanRefine).ToList()
+            : [];
 
         owner.GetPower<RealtaFaerieArtisanPower>()?.OnCardImproved(card);
         if (owner.GetPower<RealtaOldWorkshopPower>() is { } workshop)
@@ -95,6 +114,11 @@ public static class RefineCmd
             await armor.OnCardRefined(amount);
         if (owner.GetPower<RealtaPrimalFormPower>() is { } primal)
             await primal.OnCardRefined(amount);
+        if (owner.GetPower<RealtaHerosSilhouettePower>() is { } silhouette)
+            await silhouette.OnCardRefined(choiceContext);
+
+        foreach (var mote in motes)
+            if (CanRefine(mote)) await ApplyRefine(choiceContext, mote, amount);
     }
 
     internal static EnchantmentModel EnchantmentFor(CardModel card) =>

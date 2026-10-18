@@ -8,12 +8,12 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 담금질 (working name): block, then 개선. The block is gained even when the refine has no valid target.
+// Block is gained even when the refine has no valid target.
 public sealed class RealtaTempering() : RealtaCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     private const string RefineVar = "Refine";
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(5m, ValueProp.Move), new DynamicVar(RefineVar, 2m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(7m, ValueProp.Move), new DynamicVar(RefineVar, 3m)];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
     [

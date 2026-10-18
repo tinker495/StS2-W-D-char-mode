@@ -55,5 +55,14 @@
   "STS2WD-REALTA_STEEL_PREDATOR_POWER.smartDescription": "[gold]수호[/gold]할 때마다, 모든 아군을 같은 양만큼 [gold]수호[/gold]합니다.",
   "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.title": "천재의 영감",
   "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.description": "전투 종료 시, 덱에서 서로 다른 카드 {Amount}장을 선택해 영구적으로 [gold]개선[/gold] 5 합니다.",
-  "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.smartDescription": "전투 종료 시, 덱에서 서로 다른 카드 {Amount}장을 선택해 영구적으로 [gold]개선[/gold] 5 합니다."
+  "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.smartDescription": "전투 종료 시, 덱에서 서로 다른 카드 {Amount}장을 선택해 영구적으로 [gold]개선[/gold] 5 합니다.",
+  "STS2WD-REALTA_PERFECT_DAY_POWER.title": "완벽한 날",
+  "STS2WD-REALTA_PERFECT_DAY_POWER.description": "[gold]활력[/gold]을 10 소모할 때마다 [gold]힘[/gold]을 {Amount} 얻습니다.\n다음 발동까지 [gold]활력[/gold] {Remaining} 소모가 남았습니다.",
+  "STS2WD-REALTA_PERFECT_DAY_POWER.smartDescription": "[gold]활력[/gold]을 10 소모할 때마다 [gold]힘[/gold]을 {Amount} 얻습니다.\n다음 발동까지 [gold]활력[/gold] {Remaining} 소모가 남았습니다.",
+  "STS2WD-REALTA_PORTABLE_FORGE_POWER.title": "이동식 대장간",
+  "STS2WD-REALTA_PORTABLE_FORGE_POWER.description": "다음 사용 카드를 사용 전에 [gold]개선[/gold] {Amount} 합니다.\n개선할 수 없는 카드를 써도 이 효과는 소모됩니다.",
+  "STS2WD-REALTA_PORTABLE_FORGE_POWER.smartDescription": "다음 사용 카드를 사용 전에 [gold]개선[/gold] {Amount} 합니다.\n개선할 수 없는 카드를 써도 이 효과는 소모됩니다.",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.title": "영웅의 뒷모습",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.description": "각 턴의 첫 [gold]강화[/gold]에 에너지를 {Amount} 얻습니다.\n각 턴의 첫 [gold]개선[/gold]에 카드를 {Amount}장 뽑습니다.",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.smartDescription": "각 턴의 첫 [gold]강화[/gold]에 에너지를 {Amount} 얻습니다.\n각 턴의 첫 [gold]개선[/gold]에 카드를 {Amount}장 뽑습니다."
 }

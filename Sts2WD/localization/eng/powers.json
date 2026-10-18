@@ -55,5 +55,14 @@
   "STS2WD-REALTA_STEEL_PREDATOR_POWER.smartDescription": "Whenever you [gold]Guard[/gold], [gold]Guard[/gold] ALL allies by the same amount.",
   "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.title": "Genius Inspiration",
   "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.description": "At the end of combat, choose {Amount} distinct card(s) in your deck and permanently [gold]Refine[/gold] them 5.",
-  "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.smartDescription": "At the end of combat, choose {Amount} distinct card(s) in your deck and permanently [gold]Refine[/gold] them 5."
+  "STS2WD-REALTA_GENIUS_INSPIRATION_POWER.smartDescription": "At the end of combat, choose {Amount} distinct card(s) in your deck and permanently [gold]Refine[/gold] them 5.",
+  "STS2WD-REALTA_PERFECT_DAY_POWER.title": "Perfect Day",
+  "STS2WD-REALTA_PERFECT_DAY_POWER.description": "Whenever you spend a total of 10 [gold]Vigor[/gold], gain {Amount} [gold]Strength[/gold].\nSpend {Remaining} more [gold]Vigor[/gold] to trigger.",
+  "STS2WD-REALTA_PERFECT_DAY_POWER.smartDescription": "Whenever you spend a total of 10 [gold]Vigor[/gold], gain {Amount} [gold]Strength[/gold].\nSpend {Remaining} more [gold]Vigor[/gold] to trigger.",
+  "STS2WD-REALTA_PORTABLE_FORGE_POWER.title": "Portable Forge",
+  "STS2WD-REALTA_PORTABLE_FORGE_POWER.description": "[gold]Refine[/gold] your next card {Amount} before it is played.\nConsumed even if the card cannot be [gold]Refined[/gold].",
+  "STS2WD-REALTA_PORTABLE_FORGE_POWER.smartDescription": "[gold]Refine[/gold] your next card {Amount} before it is played.\nConsumed even if the card cannot be [gold]Refined[/gold].",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.title": "Hero's Silhouette",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.description": "The first time you [gold]Upgrade[/gold] each turn, gain {Amount} Energy.\nThe first time you [gold]Refine[/gold] each turn, draw {Amount} cards.",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.smartDescription": "The first time you [gold]Upgrade[/gold] each turn, gain {Amount} Energy.\nThe first time you [gold]Refine[/gold] each turn, draw {Amount} cards."
 }
