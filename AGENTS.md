@@ -1,4 +1,3 @@
-<!-- Parent: ../AGENTS.md -->
 
 ## Language by Audience
 
@@ -14,6 +13,7 @@ An agent-written PR or review is still human-facing and must be in Korean. A ski
 Apply this rule when creating or updating documentation. Existing language does not override the intended audience.
 
 ## Code Review Rules
+
 
 These rules apply to both human and AI reviewers. Formatting, linting, and other mechanical checks belong to CI and are outside review scope.
 

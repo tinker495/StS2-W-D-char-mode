@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [ValidateSet('doctor', 'restore', 'build', 'publish', 'deploy', 'editor')]
+    [ValidateSet('hooks', 'doctor', 'restore', 'build', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [ValidateSet('Debug', 'Release')]
     [string]$Configuration = 'Debug'
@@ -8,6 +8,13 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
+if ($Task -eq 'hooks') {
+    & git -C $projectRoot config --local core.hooksPath .githooks
+    if ($LASTEXITCODE -ne 0) { throw 'Cannot configure Git hooks.' }
+    Write-Host 'Git pre-commit build check enabled for this checkout.'
+    return
+}
+
 $toolsRoot = Join-Path $projectRoot '.tools'
 $dotnet = Join-Path $toolsRoot 'dotnet/dotnet.exe'
 if (Test-Path -LiteralPath $dotnet) {
