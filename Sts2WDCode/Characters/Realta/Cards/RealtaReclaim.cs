@@ -10,8 +10,8 @@ public sealed class RealtaReclaim() : RealtaCard(1, CardType.Skill, CardRarity.C
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromCard<RealtaFlyingGlaive>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var cards = Owner.PlayerCombatState!.AllCards.OfType<RealtaFlyingGlaive>()
-            .Where(c => c.Pile?.Type != PileType.Hand).ToList();
+        var cards = Owner.PlayerCombatState!.AllCards
+            .Where(c => c is RealtaFlyingGlaive or RealtaIordinaMacBethlehem && c.Pile?.Type != PileType.Hand).ToList();
         await CardPileCmd.Add(cards, PileType.Hand);
     }
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);

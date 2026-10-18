@@ -18,7 +18,7 @@ public sealed class RealtaHammering() : RealtaCard(1, CardType.Skill, CardRarity
         foreach (var card in drawn)
         {
             bool wasUpgraded = card.IsUpgraded;
-            if (card.IsUpgradable) CardCmd.Upgrade(card);
+            await RefineCmd.Upgrade(choiceContext, card);
             if (wasUpgraded) alreadyUpgraded++;
         }
         if (alreadyUpgraded > 0)

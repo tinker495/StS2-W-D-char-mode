@@ -2,13 +2,14 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Players;
+using MegaCrit.Sts2.Core.Models;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 // Follow Forge's creation and per-card growth rules (docs/adr/0002).
 public static class GuardCmd
 {
-    public static async Task Guard(decimal amount, Player player)
+    public static async Task Guard(decimal amount, Player player, AbstractModel? source = null)
     {
         if (CombatManager.Instance.IsOverOrEnding) return;
 
@@ -21,5 +22,8 @@ public static class GuardCmd
 
         foreach (var guard in combat.AllCards.OfType<RealtaGuard>().Where(c => !c.IsDupe))
             guard.AddBlock(amount);
+
+        if (source is not RealtaSteelPredatorPower && player.Creature.GetPower<RealtaSteelPredatorPower>() is { } predator)
+            await predator.OnOwnerGuarded(amount, player);
     }
 }

@@ -1,6 +1,6 @@
 # 판금·활력·화염과 인챈트는 기존 게임 효과를 재사용한다
 
-레아르타의 판금·활력·화염·반사는 각각 Eternal Armor의 `PlatingPower`, Regent Patter의 `VigorPower`, Ironclad Flame Barrier의 `FlameBarrierPower`, Regent Reflect의 `ReflectPower`를 그대로 사용하고, 예리·숙련·기민·안정은 기존 인챈트 `Sharp`·`Adroit`·`Nimble`·`Steady`를 사용한다. 이름이 같은 전용 파워나 인챈트를 새로 만들지 않는다. 기존 효과는 다른 캐릭터·유물·포션과의 상호작용, 툴팁, 현지화가 이미 검증되어 있으므로, 같은 개념을 모드 안에서 한 번 더 소유하면 버그와 표시 차이만 늘어난다.
+레아르타의 판금·활력·화염·반사·방어도 유지는 각각 Eternal Armor의 `PlatingPower`, Regent Patter의 `VigorPower`, Ironclad Flame Barrier의 `FlameBarrierPower`, Regent Reflect의 `ReflectPower`, Silent Blur의 `BlurPower`를 그대로 사용하고, 예리·숙련·기민·안정은 기존 인챈트 `Sharp`·`Adroit`·`Nimble`·`Steady`를 사용한다. 이름이 같은 전용 파워나 인챈트를 새로 만들지 않는다. 기존 효과는 다른 캐릭터·유물·포션과의 상호작용, 툴팁, 현지화가 이미 검증되어 있으므로, 같은 개념을 모드 안에서 한 번 더 소유하면 버그와 표시 차이만 늘어난다.
 
 ## Consequences
 

@@ -7,7 +7,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 public abstract class RealtaSpellCard(int cost, CardType type, CardRarity rarity, TargetType target)
     : RealtaCard(cost, type, rarity, target)
 {
-    protected bool SpellActive { get; private set; }
+    public bool SpellActive { get; private set; }
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Spell)];
 
     internal void CaptureSpell(int energySpent) =>

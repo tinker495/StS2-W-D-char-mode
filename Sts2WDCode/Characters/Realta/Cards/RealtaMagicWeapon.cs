@@ -16,7 +16,7 @@ public sealed class RealtaMagicWeapon() : RealtaSpellCard(1, CardType.Attack, Ca
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
-        if (SpellActive) RefineCmd.Refine(this, DynamicVars["Refine"].IntValue);
+        if (SpellActive) await RefineCmd.Refine(choiceContext, this, DynamicVars["Refine"].IntValue);
     }
     protected override void OnUpgrade()
     {

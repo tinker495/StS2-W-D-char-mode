@@ -17,8 +17,7 @@ public sealed class RealtaAnnealing() : RealtaCard(1, CardType.Skill, CardRarity
         var cards = (await CardSelectCmd.FromHandForDiscard(choiceContext, Owner, prefs, null, this)).ToList();
         if (cards.Count == 0) return;
         await CardCmd.Discard(choiceContext, cards);
-        int refine = DynamicVars["Refine"].IntValue;
-        foreach (var card in cards) RefineCmd.Refine(card, refine);
+        await RefineCmd.Refine(choiceContext, cards, DynamicVars["Refine"].IntValue);
     }
     protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(1m);
 }

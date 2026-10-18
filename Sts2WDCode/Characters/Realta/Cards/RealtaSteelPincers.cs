@@ -16,7 +16,7 @@ public sealed class RealtaSteelPincers() : RealtaCard(1, CardType.Attack, CardRa
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
         var cards = Owner.PlayerCombatState!.Hand.Cards.Where(c => c.IsUpgradable)
             .TakeRandom(DynamicVars.Cards.IntValue, Owner.RunState.Rng.CombatCardSelection).ToList();
-        foreach (var card in cards) CardCmd.Upgrade(card);
+        await RefineCmd.Upgrade(choiceContext, cards);
     }
     protected override void OnUpgrade() => DynamicVars.Cards.UpgradeValueBy(1m);
 }

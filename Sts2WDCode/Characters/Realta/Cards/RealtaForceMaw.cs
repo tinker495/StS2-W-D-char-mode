@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaForceMaw() : RealtaCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public sealed class RealtaForceMaw() : RealtaCard(1, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [

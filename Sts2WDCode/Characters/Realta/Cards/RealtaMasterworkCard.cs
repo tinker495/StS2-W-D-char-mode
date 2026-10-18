@@ -1,8 +1,10 @@
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
@@ -23,9 +25,11 @@ public abstract class RealtaMasterworkCard(CardType type, CardRarity rarity, Tar
             ? await AttackCommand.CreateContextAsync(CombatState!, choiceContext, this)
             : null;
 
+        bool executedAnyRepeat = false;
         for (int i = 0; i < repeats && !Owner.Creature.IsDead; i++)
         {
             if (CombatManager.Instance.IsOverOrEnding || cardPlay.Target is { IsDead: true }) break;
+            executedAnyRepeat = true;
             await OnRepeat(choiceContext, cardPlay);
             if (Enchantment != null && !Owner.Creature.IsDead)
             {
@@ -33,6 +37,9 @@ public abstract class RealtaMasterworkCard(CardType type, CardRarity rarity, Tar
                 Enchantment.InvokeExecutionFinished();
             }
         }
+
+        if (Type == CardType.Attack && executedAnyRepeat && !Owner.Creature.IsDead && Owner.Creature.GetPower<VigorPower>() is { Amount: > 0 } vigor)
+            await PowerCmd.ModifyAmount(choiceContext, vigor, -vigor.Amount, null, null);
     }
 
     protected abstract Task OnRepeat(PlayerChoiceContext choiceContext, CardPlay cardPlay);

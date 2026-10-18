@@ -16,8 +16,8 @@ public sealed class RealtaMagicMending() : RealtaCard(1, CardType.Skill, CardRar
         var card = (await CardSelectCmd.FromCombatPile(choiceContext, Owner.PlayerCombatState!.DiscardPile, Owner, prefs)).FirstOrDefault();
         if (card == null) return;
         await CardPileCmd.Add(card, PileType.Hand);
-        if (card.IsUpgradable) CardCmd.Upgrade(card);
-        RefineCmd.Refine(card, DynamicVars["Refine"].IntValue);
+        await RefineCmd.Upgrade(choiceContext, card);
+        await RefineCmd.Refine(choiceContext, card, DynamicVars["Refine"].IntValue);
     }
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
