@@ -34,7 +34,7 @@ public class Realta : PlaceholderCharacterModel
 
     public override IReadOnlyList<RelicModel> StartingRelics =>
     [
-        ModelDb.Relic<RealtaKuu>()
+        ModelDb.Relic<RealtaBronzeWatchdog>()
     ];
 
     public override CardPoolModel CardPool => ModelDb.CardPool<RealtaCardPool>();

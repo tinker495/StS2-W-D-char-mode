@@ -1,5 +1,17 @@
 {
+  "STS2WD-REALTA_BRONZE_WATCHDOG.title": "청동의 번견",
+  "STS2WD-REALTA_BRONZE_WATCHDOG.description": "전투 시작 시 [gold]수호[/gold] {Guard}.",
+  "STS2WD-REALTA_BRONZE_WATCHDOG.flavor": "개발용 임시 문구.",
   "STS2WD-REALTA_KUU.title": "쿠우",
-  "STS2WD-REALTA_KUU.description": "전투 시작 시 [gold]수호[/gold] {Guard}.",
-  "STS2WD-REALTA_KUU.flavor": "개발용 임시 문구."
+  "STS2WD-REALTA_KUU.description": "전투 시작 시 [gold]수호[/gold] {CombatStartGuard}.\n내 턴 종료 시 쓰지 않은 에너지가 있다면 [gold]수호[/gold] {TurnEndGuard}.",
+  "STS2WD-REALTA_KUU.flavor": "개발용 임시 문구.",
+  "STS2WD-REALTA_WITCH_POINTED_HAT.title": "마녀 고깔모자",
+  "STS2WD-REALTA_WITCH_POINTED_HAT.description": "전투 중 처음으로 [gold]주문[/gold] 효과가 발동하면, 에너지를 {Energy} 얻습니다.",
+  "STS2WD-REALTA_WITCH_POINTED_HAT.flavor": "개발용 임시 문구.",
+  "STS2WD-REALTA_DRAGON_CLOAK.title": "용의 망토",
+  "STS2WD-REALTA_DRAGON_CLOAK.description": "전투 시작 시 [gold]활력[/gold]을 {VigorPower}, [gold]화염[/gold]을 {FlameBarrierPower} 얻습니다.",
+  "STS2WD-REALTA_DRAGON_CLOAK.flavor": "개발용 임시 문구.",
+  "STS2WD-REALTA_ELDIR_GRAMR.title": "엘디르 그라므르",
+  "STS2WD-REALTA_ELDIR_GRAMR.description": "[gold]활력[/gold]을 소모할 때마다, 모든 적에게 같은 양의 피해를 줍니다.",
+  "STS2WD-REALTA_ELDIR_GRAMR.flavor": "개발용 임시 문구."
 }

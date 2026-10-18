@@ -1,5 +1,17 @@
 {
+  "STS2WD-REALTA_BRONZE_WATCHDOG.title": "Bronze Watchdog",
+  "STS2WD-REALTA_BRONZE_WATCHDOG.description": "At the start of each combat, [gold]Guard[/gold] {Guard}.",
+  "STS2WD-REALTA_BRONZE_WATCHDOG.flavor": "Development placeholder.",
   "STS2WD-REALTA_KUU.title": "Kuu",
-  "STS2WD-REALTA_KUU.description": "At the start of each combat, [gold]Guard[/gold] {Guard}.",
-  "STS2WD-REALTA_KUU.flavor": "Development placeholder."
+  "STS2WD-REALTA_KUU.description": "At the start of each combat, [gold]Guard[/gold] {CombatStartGuard}.\nAt the end of your turn, if you have any unspent Energy, [gold]Guard[/gold] {TurnEndGuard}.",
+  "STS2WD-REALTA_KUU.flavor": "Development placeholder.",
+  "STS2WD-REALTA_WITCH_POINTED_HAT.title": "Witch's Pointed Hat",
+  "STS2WD-REALTA_WITCH_POINTED_HAT.description": "The first time you trigger a [gold]Spell[/gold] effect each combat, gain {Energy} Energy.",
+  "STS2WD-REALTA_WITCH_POINTED_HAT.flavor": "Development placeholder.",
+  "STS2WD-REALTA_DRAGON_CLOAK.title": "Dragon Cloak",
+  "STS2WD-REALTA_DRAGON_CLOAK.description": "At the start of each combat, gain {VigorPower} [gold]Vigor[/gold] and {FlameBarrierPower} [gold]Flame Barrier[/gold].",
+  "STS2WD-REALTA_DRAGON_CLOAK.flavor": "Development placeholder.",
+  "STS2WD-REALTA_ELDIR_GRAMR.title": "Eldir Gramr",
+  "STS2WD-REALTA_ELDIR_GRAMR.description": "Whenever you consume [gold]Vigor[/gold], deal the same amount of damage to ALL enemies.",
+  "STS2WD-REALTA_ELDIR_GRAMR.flavor": "Development placeholder."
 }

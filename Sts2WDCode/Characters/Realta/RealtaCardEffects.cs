@@ -74,6 +74,13 @@ internal static class RealtaCardEffects
             __result[ModelDb.Card<RealtaFlyingGlaive>().Id] = ModelDb.Card<RealtaIordinaMacBethlehem>();
     }
 
+    [HarmonyPatch(typeof(TouchOfOrobas), "get_RefinementUpgrades")]
+    private static class TouchOfOrobasRefinementPatch
+    {
+        private static void Postfix(Dictionary<ModelId, RelicModel> __result) =>
+            __result[ModelDb.Relic<RealtaBronzeWatchdog>().Id] = ModelDb.Relic<RealtaKuu>();
+    }
+
     // Masterwork owns its per-repeat enchantment calls, including zero calls at X=0.
     // Replace only the wrapper's automatic invocation, leaving every enchantment implementation intact.
     [HarmonyPatch]
