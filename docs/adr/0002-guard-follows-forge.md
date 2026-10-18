@@ -1,15 +1,15 @@
-# 수호는 Forge의 생성·추적·성장 규칙을 따른다
+# Guard Follows Forge's Creation, Tracking, and Growth Rules
 
-수호는 전용 파워로 방어도를 관리하는 대신, Regent의 Forge(`ForgeCmd`와 `SovereignBlade`)처럼 전투 중 하나의 카드를 생성하고 그 카드의 수치를 누적해서 키운다. 손패 초과·소멸·복사 같은 예외도 Forge가 이미 처리하는 방식을 기준으로 삼는다. 기존 게임에서 검증된 규칙을 따르면 예외마다 새로 결정할 필요가 없고, 플레이어가 Regent에서 익힌 감각이 그대로 이어진다.
+Guard (수호) creates a card during combat and accumulates its value, following Regent's Forge (`ForgeCmd` and `SovereignBlade`), instead of storing Block in a dedicated power. Use Forge's handling of full hands, exhaustion, and copies as the baseline. Reusing established rules avoids inventing each edge case and preserves the behavior players learned with Regent.
 
 ## Consequences
 
-2026-10-16에 대조한 Forge의 처리는 다음과 같다. 수호도 같은 규칙을 따른다.
+Inspection on 2026-10-16 established these Forge rules; Guard follows them:
 
-- 소멸 더미에 있지 않은 수호 카드가 하나도 없을 때만 새 카드를 손에 생성한다. 손이 가득 차 있으면 기존 생성 카드 처리(`CardPileCmd`)대로 버린 카드 더미에 들어간다.
-- 수치 증가는 소멸한 카드를 포함한 모든 수호 카드에 적용한다. 따라서 수호 카드가 소멸한 뒤 수호를 얻으면 새 카드가 생기고, 소멸한 카드의 수치도 함께 오른다.
-- 일시 복제본(`IsDupe`, 사용 후 Limbo로 가는 복제)만 추적과 수치 증가에서 제외한다. 다른 효과로 만든 일반 복사본은 수호 카드로 취급되어 함께 성장하므로, "전투당 한 장"은 수호가 새 카드를 만드는 조건을 뜻한다.
-- 강화는 Sovereign Blade처럼 비용을 1 낮춘다. 강화를 되돌려도 누적 방어도는 유지한다.
-- 수호 카드는 전투 중 생성된 카드이므로 전투가 끝나면 사라지고, 누적 수치도 덱에 남지 않는다.
+- Create a new Guard card in hand only when no Guard card exists outside the exhaust pile. With a full hand, normal generated-card handling (`CardPileCmd`) sends it to the discard pile.
+- Apply growth to every Guard card, including exhausted cards. Gaining Guard after its card is exhausted therefore creates a new card and also increases the exhausted card's value.
+- Exclude only temporary duplicates (`IsDupe`, copies sent to Limbo after use) from tracking and growth. Ordinary copies created by other effects count as Guard cards and grow together. "One per combat" describes the condition for Guard to create a new card.
+- Upgrading reduces cost by 1, as with Sovereign Blade. Reverting the upgrade preserves accumulated Block.
+- Guard cards are generated during combat and disappear afterward; their accumulated values do not persist in the deck.
 
-이 목록과 설계 문서가 충돌하거나 Forge에서 기준을 찾을 수 없는 예외가 생기면 그때 사용자 결정을 요청한다.
+If this list conflicts with the design document, or an edge case has no Forge precedent, request a user decision for that case.

@@ -2,6 +2,7 @@ using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -9,7 +10,7 @@ using Sts2WD.Sts2WDCode.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 수호 카드: created and grown only through GuardCmd, like Regent's Sovereign Blade.
+// Each token owns its accumulated block, following Sovereign Blade's growth rules.
 // Tokens belong to the base-game TokenCardPool (as Sovereign Blade does), so this skips RealtaCard.
 [Pool(typeof(TokenCardPool))]
 public sealed class RealtaGuard() : Sts2WDCard(1, CardType.Skill, CardRarity.Token, TargetType.Self)
@@ -17,6 +18,8 @@ public sealed class RealtaGuard() : Sts2WDCard(1, CardType.Skill, CardRarity.Tok
     private decimal _currentBlock;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Guard)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(0m, ValueProp.Move)];
 
@@ -38,7 +41,6 @@ public sealed class RealtaGuard() : Sts2WDCard(1, CardType.Skill, CardRarity.Tok
         EnergyCost.UpgradeBy(-1);
     }
 
-    // Downgrading resets dynamic vars to canonical values; keep the accumulated block (as Sovereign Blade does).
     protected override void AfterDowngraded()
     {
         base.AfterDowngraded();

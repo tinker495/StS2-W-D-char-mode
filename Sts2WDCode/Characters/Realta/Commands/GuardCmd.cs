@@ -6,29 +6,24 @@ using MegaCrit.Sts2.Core.Models;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 수호 N, mirroring MegaCrit.Sts2.Core.Commands.ForgeCmd (docs/adr/0002):
-// creates a Guard card in hand when no un-exhausted one exists, then adds N block to every Guard card,
-// exhausted ones included. Dupes are neither tracked nor grown.
+// Follow Forge's creation and per-card growth rules (docs/adr/0002).
 public static class GuardCmd
 {
-    public static async Task Guard(decimal amount, Player player)
+    public static async Task Guard(decimal amount, Player player, AbstractModel? source = null)
     {
         if (CombatManager.Instance.IsOverOrEnding) return;
 
-        if (!GetGuards(player, includeExhausted: false).Any())
+        var combat = player.PlayerCombatState!;
+        if (!combat.AllCards.OfType<RealtaGuard>().Any(c => !c.IsDupe && c.Pile?.Type != PileType.Exhaust))
         {
             RealtaGuard guard = player.Creature.CombatState!.CreateCard<RealtaGuard>(player);
             await CardPileCmd.AddGeneratedCardToCombat(guard, PileType.Hand, player);
         }
 
-        foreach (RealtaGuard guard in GetGuards(player, includeExhausted: true))
+        foreach (var guard in combat.AllCards.OfType<RealtaGuard>().Where(c => !c.IsDupe))
             guard.AddBlock(amount);
-    }
 
-    private static IEnumerable<RealtaGuard> GetGuards(Player player, bool includeExhausted)
-    {
-        return player.PlayerCombatState!.AllCards
-            .Where(c => !c.IsDupe && (includeExhausted || c.Pile?.Type != PileType.Exhaust))
-            .OfType<RealtaGuard>();
+        if (source is not RealtaSteelPredatorPower && player.Creature.GetPower<RealtaSteelPredatorPower>() is { } predator)
+            await predator.OnOwnerGuarded(amount, player);
     }
 }

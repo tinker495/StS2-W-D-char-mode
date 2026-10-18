@@ -1,0 +1,5 @@
+interface:
+  display_name: "Character Asset Pipeline"
+  short_description: "Build character base and game assets from refs"
+policy:
+  allow_implicit_invocation: true
