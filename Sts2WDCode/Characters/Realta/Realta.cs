@@ -4,7 +4,6 @@ using Sts2WD.Sts2WDCode.Extensions;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Characters;
 using MegaCrit.Sts2.Core.Models;
-using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
@@ -18,16 +17,15 @@ public class Realta : PlaceholderCharacterModel
     public override CharacterGender Gender => CharacterGender.Neutral;
     public override int StartingHp => 70;
 
-    // Strike/Defend are still the Ironclad placeholders.
     public override IEnumerable<CardModel> StartingDeck => [
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaStrike>(),
+        ModelDb.Card<RealtaDefend>(),
+        ModelDb.Card<RealtaDefend>(),
+        ModelDb.Card<RealtaDefend>(),
+        ModelDb.Card<RealtaDefend>(),
         ModelDb.Card<RealtaFlyingGlaive>(),
         ModelDb.Card<RealtaTempering>()
     ];

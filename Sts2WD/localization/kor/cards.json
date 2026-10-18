@@ -1,4 +1,8 @@
 {
+  "STS2WD-REALTA_STRIKE.title": "타격",
+  "STS2WD-REALTA_STRIKE.description": "피해를 {Damage:diff()} 줍니다.",
+  "STS2WD-REALTA_DEFEND.title": "수비",
+  "STS2WD-REALTA_DEFEND.description": "[gold]방어도[/gold]를 {Block:diff()} 얻습니다.",
   "STS2WD-REALTA_FLYING_GLAIVE.title": "비행 글레이브",
   "STS2WD-REALTA_FLYING_GLAIVE.description": "피해를 {Damage:diff()} 줍니다.",
   "STS2WD-REALTA_TEMPERING.title": "담금질",
