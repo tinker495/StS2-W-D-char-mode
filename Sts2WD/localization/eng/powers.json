@@ -41,7 +41,7 @@
   "STS2WD-REALTA_GRANNS_BLESSING_POWER.title": "Grann's Blessing",
   "STS2WD-REALTA_GRANNS_BLESSING_POWER.description": "The first time you trigger a [gold]Spell[/gold] effect each turn, gain {Amount} Energy.",
   "STS2WD-REALTA_GRANNS_BLESSING_POWER.smartDescription": "The first time you trigger a [gold]Spell[/gold] effect each turn, gain {Amount} Energy.",
-  "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.title": "Goibniu's Forging",
+  "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.title": "Goibniu's Magical Reforging",
   "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.description": "Whenever you [gold]Refine[/gold], increase its amount by {Amount}.",
   "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.smartDescription": "Whenever you [gold]Refine[/gold], increase its amount by {Amount}.",
   "STS2WD-REALTA_FAERIE_ARTISAN_POWER.title": "Faerie Artisan",

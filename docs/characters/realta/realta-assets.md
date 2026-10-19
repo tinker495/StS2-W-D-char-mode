@@ -387,7 +387,7 @@ This table and section 2.2.4 cover the 81 cards in the design specification. `Re
 | 61 | `RealtaDragonsFootsteps` | 용의 발자취 | Rare / Power | `STS2WD-REALTA_DRAGONS_FOOTSTEPS` | `realta_dragons_footsteps.png` | `1000 x 760` |
 | 62 | `RealtaPrimalForm` | 원초의 형상 | Rare / Power | `STS2WD-REALTA_PRIMAL_FORM` | `realta_primal_form.png` | `1000 x 760` |
 | 63 | `RealtaGrannsBlessing` | 그란의 축복 | Rare / Power | `STS2WD-REALTA_GRANNS_BLESSING` | `realta_granns_blessing.png` | `1000 x 760` |
-| 64 | `RealtaGoibniusForging` | 고브누의 제련 | Rare / Power | `STS2WD-REALTA_GOIBNIUS_FORGING` | `realta_goibnius_forging.png` | `1000 x 760` |
+| 64 | `RealtaGoibniusForging` | 고브누의 마법 재련 | Rare / Power | `STS2WD-REALTA_GOIBNIUS_FORGING` | `realta_goibnius_forging.png` | `1000 x 760` |
 | 65 | `RealtaFaerieArtisan` | 요정 장인 | Rare / Power | `STS2WD-REALTA_FAERIE_ARTISAN` | `realta_faerie_artisan.png` | `1000 x 760` |
 | 66 | `RealtaIndomitable` | 칠전팔기 | Rare / Power | `STS2WD-REALTA_INDOMITABLE` | `realta_indomitable.png` | `1000 x 760` |
 | 67 | `RealtaAgdridsAnvil` | 아그드리드의 모루 | Rare / Power | `STS2WD-REALTA_AGDRIDS_ANVIL` | `realta_agdrids_anvil.png` | `1000 x 760` |
@@ -531,7 +531,7 @@ The cards below currently override `PortraitPath`, `CustomPortraitPath`, and `Be
 | 10 | `RealtaDragonsFootstepsPower` | 용의 발자취 | `RealtaDragonsFootsteps` (Power) | `FlameBarrierPower` | `Sts2WD/images/powers/realta_dragons_footsteps_power.png` | `Sts2WD/images/powers/big/realta_dragons_footsteps_power.png` |
 | 11 | `RealtaPrimalFormPower` | 원초의 형상 | `RealtaPrimalForm` (Power) | `FurnacePower` | `Sts2WD/images/powers/realta_primal_form_power.png` | `Sts2WD/images/powers/big/realta_primal_form_power.png` |
 | 12 | `RealtaGrannsBlessingPower` | 그란의 축복 | `RealtaGrannsBlessing` (Power) | `FurnacePower` | `Sts2WD/images/powers/realta_granns_blessing_power.png` | `Sts2WD/images/powers/big/realta_granns_blessing_power.png` |
-| 13 | `RealtaGoibniusForgingPower` | 고브누의 제련 | `RealtaGoibniusForging` (Power) | `FurnacePower` | `Sts2WD/images/powers/realta_goibnius_forging_power.png` | `Sts2WD/images/powers/big/realta_goibnius_forging_power.png` |
+| 13 | `RealtaGoibniusForgingPower` | 고브누의 마법 재련 | `RealtaGoibniusForging` (Power) | `FurnacePower` | `Sts2WD/images/powers/realta_goibnius_forging_power.png` | `Sts2WD/images/powers/big/realta_goibnius_forging_power.png` |
 | 14 | `RealtaFaerieArtisanPower` | 요정 장인 | `RealtaFaerieArtisan` (Power) | `WellLaidPlansPower` | `Sts2WD/images/powers/realta_faerie_artisan_power.png` | `Sts2WD/images/powers/big/realta_faerie_artisan_power.png` |
 | 15 | `RealtaIndomitablePower` | 칠전팔기 | `RealtaIndomitable` (Power) | `PlatingPower` | `Sts2WD/images/powers/realta_indomitable_power.png` (not `realta_industrial_power`) | `Sts2WD/images/powers/big/realta_indomitable_power.png` |
 | 16 | `RealtaSteelPredatorPower` | 강철 포식자 | `RealtaSteelPredator` (Power) | `HammerTimePower` | `Sts2WD/images/powers/realta_steel_predator_power.png` | `Sts2WD/images/powers/big/realta_steel_predator_power.png` |
