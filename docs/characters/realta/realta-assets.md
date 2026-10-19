@@ -1,6 +1,6 @@
 # Realta Asset Production and Integration Guide
 
-This guide explains production and integration for character UI, 70 card illustrations, five relic icons, and 19 power icons. Its evidence is the shared [mod code](../../../Sts2WDCode/), [runtime images](../../../Sts2WD/images/), [project dependencies](../../../Sts2WD.csproj), and the StS2 / BaseLib 3.4.7 API observations recorded below. Identify external game APIs by assembly, type, and member; private decompilation-cache paths and line numbers are not required evidence.
+This guide explains production and integration for character UI, 81 card illustrations, five relic icons, and 22 power icons. Its evidence is the shared [mod code](../../../Sts2WDCode/), [runtime images](../../../Sts2WD/images/), [project dependencies](../../../Sts2WD.csproj), and the StS2 / BaseLib 3.4.7 API observations recorded below. Identify external game APIs by assembly, type, and member; private decompilation-cache paths and line numbers are not required evidence.
 
 [realta-art.md](realta-art.md) owns appearance, palette, equipment, theme visualization, asset staging, and character prompt material. This guide owns file mappings, code/scene integration, and current runtime status. [realta-history.md](realta-history.md) records past production decisions and verification. Follow [ARTS.md](../../../ARTS.md) for shared style and chibi scope.
 
@@ -136,7 +136,7 @@ Rollback packaging completed through `dev.ps1 publish` with zero C# warnings/err
   - **Outline fallback:** If `<name>_outline.png` is missing, `PackedIconOutlinePath` returns the `RelicImagePath()` fallback `res://Sts2WD/images/relics/relic.png`, rather than `relic_outline.png`.
 - **Powers (`Sts2WDCode/Powers/Sts2WDPower.cs:14-31`, `Sts2WDCode/Characters/Realta/Powers/*.cs`):**
   - `Sts2WDPower : CustomPowerModel` provides overrides for `CustomPackedIconPath` (`PowerImagePath()`) and `CustomBigIconPath` (`BigPowerImagePath()`).
-  - **Current status:** The 19 power classes under `Sts2WDCode/Characters/Realta/Powers/` currently inherit directly from `CustomPowerModel`, not `Sts2WDPower`. Their `CustomPackedIconPath` and `CustomBigIconPath` temporarily reference vanilla icons such as `ModelDb.Power<FurnacePower>().PackedIconPath`; see section 2.4.
+  - **Current status:** The 22 power classes under `Sts2WDCode/Characters/Realta/Powers/` currently inherit directly from `CustomPowerModel`, not `Sts2WDPower`. Their `CustomPackedIconPath` and `CustomBigIconPath` temporarily reference vanilla icons such as `ModelDb.Power<FurnacePower>().PackedIconPath`; see section 2.4.
 - **Character and card/relic/potion pools (`Sts2WDCode/Characters/Realta/Realta.cs:11-61`, `RealtaCardPool.cs:7-34`, `RealtaRelicPool.cs:7-13`, `RealtaPotionPool.cs:7-14`):**
   - `Realta : PlaceholderCharacterModel` overrides the name color, portrait/outline, selection tiles, map marker, and the combat/rest/merchant/selection scenes in section 0.2. Other visuals, sounds, and animations use `PlaceholderCharacterModel` defaults.
   - `RealtaCardPool : CustomCardPoolModel` defines `BigEnergyIconPath` (`"charui/realta/big_energy.png".ImagePath()`), `TextEnergyIconPath` (`"charui/realta/text_energy.png".ImagePath()`), card-frame HSV shader parameters (`H = 0.02f, S = 1f, V = 1f`), and `DeckEntryCardColor = new("e76f51")`.
@@ -276,10 +276,10 @@ BaseLib's `PostModInitPatch.RegisterSceneConversions` (`BaseLib.dll`, `[HarmonyP
 4. **Current dual-path lookup in `Sts2WDCard.cs` and a proposed improvement:**
    - Template-derived code in `Sts2WDCode/Cards/Sts2WDCard.cs:17-25` currently overrides **both** `CustomPortraitPath` (`BigCardImagePath()` -> `images/card_portraits/big/<id>.png`) and `PortraitPath` (`CardImagePath()` -> `images/card_portraits/<id>.png`).
    - Consequences:
-     1. At startup, `ModelDb.Preload()` (`ModelDb.cs:453`) calls `allCard.AllPortraitPaths` -> virtual `Sts2WDCard.PortraitPath`, looking for `images/card_portraits/<id>.png`. Missing files produce 70 `"Could not find card image path: ..."` messages and return `images/card_portraits/card.png` (`250x190`).
+     1. At startup, `ModelDb.Preload()` (`ModelDb.cs:453`) calls `allCard.AllPortraitPaths` -> virtual `Sts2WDCard.PortraitPath`, looking for `images/card_portraits/<id>.png`. Missing files produce `"Could not find card image path: ..."` messages and return `images/card_portraits/card.png` (`250x190`). The eleven newer cards reuse the portrait properties listed in section 2.2.4.
      2. During rendering, `NCard.Reload()` (`NCard.cs:1192`) calls `Model.Portrait` -> `CustomCardPortrait` patch -> `Sts2WDCard.CustomPortraitPath`. It **loads only `images/card_portraits/big/<id>.png`**, falling back to `images/card_portraits/big/card.png` (`1000x760`). The `PortraitPath` override is not used for screen rendering.
    - **Proposed integration: automatic mapping and fallback under `Sts2WD/images/card_portraits/realta/<card_name>.png`:**
-     - To manage all 70 Realta cards (68 standard, including the `RealtaGuard` token, plus two Ancient cards) in one directory, with unfinished artwork falling back to `card.png` or `big/card.png`, adapt `StringExtensions.cs` and `RealtaCard.cs` / `RealtaGuard.cs` (or `Sts2WDCard.cs`) as follows:
+     - To manage all 81 Realta cards (79 standard, including the `RealtaGuard` token, plus two Ancient cards) in one directory, with unfinished artwork falling back to `card.png` or `big/card.png`, adapt `StringExtensions.cs` and `RealtaCard.cs` / `RealtaGuard.cs` (or `Sts2WDCard.cs`) as follows:
      ```csharp
      // Add to Sts2WDCode/Extensions/StringExtensions.cs, or adapt CardImagePath:
      public static string CharacterCardImagePath(this string path, string characterFolder)
@@ -316,10 +316,10 @@ BaseLib's `PostModInitPatch.RegisterSceneConversions` (`BaseLib.dll`, `[HarmonyP
       public override CardPoolModel VisualCardPool => ModelDb.CardPool<RealtaCardPool>();
       ```
 
-#### 2.2.3 Complete Filename Mapping for 70 Realta Cards
+#### 2.2.3 Filename Mapping for the Original 70 Realta Cards
 
-The following table lists each Realta card class, its `Id.Entry`, and the exact filename produced by `Id.Entry.RemovePrefix().ToLowerInvariant()` (70 files total).
-- Recommended resolution for the 68 standard-layout Basic, Token, Common, Uncommon, and Rare cards: **`1000 x 760`** (or `500 x 380` / `250 x 190`, ratio `25:19`).
+This table and section 2.2.4 cover the 81 cards in the design specification. `RealtaStrike` and `RealtaDefend` additionally reuse the corresponding vanilla starting-card portraits and are outside this 81-card illustration inventory.
+- Recommended resolution for the 79 standard-layout Basic, Token, Common, Uncommon, and Rare cards: **`1000 x 760`** (or `500 x 380` / `250 x 190`, ratio `25:19`).
 - Recommended resolution for the two `Ancient` cards (`realta_iordina_mac_bethlehem.png`, `realta_genius_inspiration.png`): **`606 x 852`** (full art; small-thumbnail reference `250 x 350`).
 
 | # | C# class (`Sts2WDCode/Characters/Realta/Cards/`) | Korean card name | Rarity / type | `ModelId.Entry` | Automatically mapped filename (`<card_name>.png`) | Recommended resolution |
@@ -395,6 +395,24 @@ The following table lists each Realta card class, its `Id.Entry`, and the exact 
 | 69 | `RealtaIordinaMacBethlehem` | 요르디나 막 들레헴 | **Ancient** / Attack | `STS2WD-REALTA_IORDINA_MAC_BETHLEHEM` | `realta_iordina_mac_bethlehem.png` | **`606 x 852`** |
 | 70 | `RealtaGeniusInspiration` | 천재의 영감 | **Ancient** / Power | `STS2WD-REALTA_GENIUS_INSPIRATION` | `realta_genius_inspiration.png` | **`606 x 852`** |
 
+#### 2.2.4 Additional Eleven Cards and Current Portrait Sources
+
+The cards below currently override `PortraitPath`, `CustomPortraitPath`, and `BetaPortraitPath` to reuse the listed Realta card's existing placeholder artwork. No new illustration PNGs were created for this implementation. When dedicated art is delivered, use the intended filename and restore the normal `Sts2WDCard` path resolution for that card. All eleven use the standard `1000 x 760` composition.
+
+| # | C# class | Korean card name | Rarity / type | Intended filename | Current portrait source |
+|---|---|---|---|---|---|
+| 71 | `RealtaHeroicCharge` | 영웅적인 돌격! | Common / Attack | `realta_heroic_charge.png` | `RealtaFlyingCharge` |
+| 72 | `RealtaMaterialAnalysis` | 재료 분석 | Common / Skill | `realta_material_analysis.png` | `RealtaMagicMending` |
+| 73 | `RealtaImprovisedWeapon` | 급조 무기 | Uncommon / Attack | `realta_improvised_weapon.png` | `RealtaMagicWeapon` |
+| 74 | `RealtaHeroism` | 영웅심 | Uncommon / Skill | `realta_heroism.png` | `RealtaKnightsOath` |
+| 75 | `RealtaMasterpiece` | 자신작 | Uncommon / Skill | `realta_masterpiece.png` | `RealtaAnnealing` |
+| 76 | `RealtaMakeshift` | 임시변통 | Uncommon / Skill | `realta_makeshift.png` | `RealtaSmelting` |
+| 77 | `RealtaMajestic` | 위풍당당 | Uncommon / Skill | `realta_majestic.png` | `RealtaDamageImmunity` |
+| 78 | `RealtaPerfectDay` | 완벽한 날 | Uncommon / Power | `realta_perfect_day.png` | `RealtaForgeHeat` |
+| 79 | `RealtaPortableForge` | 이동식 대장간 | Uncommon / Power | `realta_portable_forge.png` | `RealtaAgdridsAnvil` |
+| 80 | `RealtaAlmenelsBulwark` | 알메넬의 철벽 | Rare / Power | `realta_almenels_bulwark.png` | `RealtaMending` |
+| 81 | `RealtaHerosSilhouette` | 영웅의 뒷모습 | Rare / Power | `realta_heros_silhouette.png` | `RealtaHerosArmor` |
+
 ---
 
 ### 2.3 Relic Icons (`RelicModel`, `CustomRelicModel`, `Sts2WDRelic`)
@@ -444,7 +462,7 @@ The following table lists each Realta card class, its `Id.Entry`, and the exact 
   - `sts2.dll: MegaCrit.Sts2.Core.Models.PowerModel`
   - `BaseLib.dll` (`BaseLib.Abstracts.CustomPowerModel`, `BaseLib.Abstracts.ICustomPower`, `BaseLib.Abstracts.PackedIconPath`, `BaseLib.Abstracts.BigIconPath`, `BaseLib.Abstracts.BigBetaIconPath`)
   - `Sts2WDCode/Powers/Sts2WDPower.cs` (lines `14-31`)
-  - `Sts2WDCode/Characters/Realta/Powers/*.cs` (19 classes)
+  - `Sts2WDCode/Characters/Realta/Powers/*.cs` (22 classes)
 
 #### 2.4.1 Power Icon Properties and Resolutions
 
@@ -463,15 +481,15 @@ The following table lists each Realta card class, its `Id.Entry`, and the exact 
 3. **`public virtual string? CustomBigBetaIconPath => null;`** (`CustomPowerModel.cs`):
    - Secondary beta-icon path checked by `PowerModel.ResolvedBigIconPath` (`PowerModel.cs:118-140`) when `ResourceLoader.Exists` cannot find the resource specified by `CustomBigIconPath`.
 
-#### 2.4.2 Why 18 Power Cards Produce 19 `PowerModel` Classes, and How to Migrate Icons
+#### 2.4.2 Why 22 Power Cards Produce 22 `PowerModel` Classes, and How to Migrate Icons
 
 - **Reason for the count difference:**
-  - Realta has **18 cards of `CardType.Power`**.
-  - **`RealtaAgdridsAnvil` (`아그드리드의 모루`)** immediately upgrades/improves the entire draw pile and has no corresponding `PowerModel` class (`18 - 1 = 17`).
-  - The Skill cards **`RealtaUndyingLoyalty` (`불멸의 충성`)** and **`RealtaWellPrepared` (`준비만전`) / `RealtaKnightsOath` (`기사의 맹세`)** add two models for persistent/delayed effects: **`RealtaUndyingLoyaltyPower`** and **`RealtaVigorNextTurnPower` (`다음 턴 활력`)**, respectively (`17 + 2 = 19`).
-  - `Sts2WDCode/Characters/Realta/Powers/` therefore contains **19 `PowerModel` classes**, all visible buffs (`IsVisibleInternal == true`).
+  - Realta has **22 cards of `CardType.Power`**.
+  - **`RealtaAgdridsAnvil` (`아그드리드의 모루`)** immediately upgrades/improves the draw pile, and **`RealtaAlmenelsBulwark` (`알메넬의 철벽`)** immediately grants existing Plating. Neither needs a corresponding custom `PowerModel` (`22 - 2 = 20`).
+  - The Skill cards **`RealtaUndyingLoyalty` (`불멸의 충성`)** and **`RealtaWellPrepared` (`준비만전`) / `RealtaKnightsOath` (`기사의 맹세`)** add two models for persistent/delayed effects: **`RealtaUndyingLoyaltyPower`** and **`RealtaVigorNextTurnPower` (`다음 턴 활력`)**, respectively (`20 + 2 = 22`).
+  - `Sts2WDCode/Characters/Realta/Powers/` therefore contains **22 `PowerModel` classes**, all visible buffs (`IsVisibleInternal == true`).
 - **Proposed automatic path resolution with vanilla-icon fallback:**
-  - The 19 classes currently inherit directly from `CustomPowerModel` and hardcode vanilla power icons.
+  - The 22 classes currently inherit directly from `CustomPowerModel` and hardcode vanilla power icons.
   - To introduce custom icons incrementally while retaining vanilla icons (or `power.png`) for unfinished powers, inherit `Sts2WDPower` or use a shared helper such as:
   ```csharp
   // Use Sts2WD/images/powers/<power_name>.png when present; otherwise use the specified vanilla power icon.
@@ -497,7 +515,7 @@ The following table lists each Realta card class, its `Id.Entry`, and the exact 
   }
   ```
 
-#### 2.4.3 Filename and Current Fallback Mapping for 19 Realta `PowerModel` Classes
+#### 2.4.3 Filename and Current Fallback Mapping for 22 Realta `PowerModel` Classes
 
 | # | C# class (`Sts2WDCode/Characters/Realta/Powers/`) | Korean power name | Granting card | Current vanilla fallback (`ModelDb.Power<T>()`) | Small icon (`64 x 64`) | Large icon (`256 x 256`) |
 |---|---|---|---|---|---|---|
@@ -520,6 +538,9 @@ The following table lists each Realta card class, its `Id.Entry`, and the exact 
 | 17 | `RealtaGeniusInspirationPower` | 천재의 영감 | `RealtaGeniusInspiration` (Ancient Power) | `ImprovementPower` | `Sts2WD/images/powers/realta_genius_inspiration_power.png` | `Sts2WD/images/powers/big/realta_genius_inspiration_power.png` |
 | 18 | `RealtaUndyingLoyaltyPower` | 불멸의 충성 | `RealtaUndyingLoyalty` (Skill) | `OneTwoPunchPower` | `Sts2WD/images/powers/realta_undying_loyalty_power.png` | `Sts2WD/images/powers/big/realta_undying_loyalty_power.png` |
 | 19 | `RealtaVigorNextTurnPower` | 다음 턴 활력 | `RealtaWellPrepared`, `RealtaKnightsOath` (Skill) | `VigorPower` | `Sts2WD/images/powers/realta_vigor_next_turn_power.png` | `Sts2WD/images/powers/big/realta_vigor_next_turn_power.png` |
+| 20 | `RealtaPerfectDayPower` | 완벽한 날 | `RealtaPerfectDay` (Power) | `StrengthPower` | `Sts2WD/images/powers/realta_perfect_day_power.png` | `Sts2WD/images/powers/big/realta_perfect_day_power.png` |
+| 21 | `RealtaPortableForgePower` | 이동식 대장간 | `RealtaPortableForge` (Power) | `PlatingPower` | `Sts2WD/images/powers/realta_portable_forge_power.png` | `Sts2WD/images/powers/big/realta_portable_forge_power.png` |
+| 22 | `RealtaHerosSilhouettePower` | 영웅의 뒷모습 | `RealtaHerosSilhouette` (Power) | `MasterPlannerPower` | `Sts2WD/images/powers/realta_heros_silhouette_power.png` | `Sts2WD/images/powers/big/realta_heros_silhouette_power.png` |
 
 ---
 
@@ -547,14 +568,14 @@ This table covers both current deliveries and future production targets. Section
 | **Locked character-selection icon** | `Sts2WD/images/charui/realta/char_select_locked.png` | `132 x 195` | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomCharacterSelectLockedIconPath` |
 | **Map-marker icon** | `Sts2WD/images/charui/realta/map_marker.png` | `128 x 128` *(vanilla `49 x 64`)* | RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomMapMarkerPath` |
 | **Combat energy-orb counter layers (five)** | `Sts2WD/images/charui/realta/energy_orb/layer_{1..5}.png` | `256 x 256` (per layer; UI display size `128 x 128`) | RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomEnergyCounter` (or, with a `.tscn`, `Realta.CustomEnergyCounterPath`) |
-| **Standard card portraits (68)** | `Sts2WD/images/card_portraits/realta/<card_name>.png` *(current default: `card_portraits/big/<card_name>.png`)* | **`1000 x 760`** *(smaller output: `500 x 380` or `250 x 190`, ratio `25:19`)* | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDCard.CustomPortraitPath` (and `PortraitPath`) |
+| **Standard card portraits (79)** | `Sts2WD/images/card_portraits/realta/<card_name>.png` *(current default: `card_portraits/big/<card_name>.png`; newer-card aliases in section 2.2.4)* | **`1000 x 760`** *(smaller output: `500 x 380` / `250 x 190`, ratio `25:19`)* | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDCard.CustomPortraitPath` (and `PortraitPath`) |
 | **Ancient full-art card portraits (two)** | `Sts2WD/images/card_portraits/realta/<card_name>.png` (`realta_iordina_mac_bethlehem.png`, `realta_genius_inspiration.png`) | **`606 x 852`** *(smaller output: `250 x 350`)* | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDCard.CustomPortraitPath` (and `PortraitPath`) |
 | **Custom card frames (optional)** | `Sts2WD/images/cards/frame_{attack,skill,power}.png` | `598 x 844` | RGBA PNG (`CompressedTexture2D`, Lossless) | `RealtaCardPool.CustomFrame(CustomCardModel)` or `CustomCardModel.CustomFrame` |
 | **Small relic icons (five)** | `Sts2WD/images/relics/<relic_name>.png` | **`94 x 94`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDRelic.PackedIconPath` |
 | **Relic-outline icons (five)** | `Sts2WD/images/relics/<relic_name>_outline.png` | **`94 x 94`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDRelic.PackedIconOutlinePath` |
 | **Large relic icons (five)** | `Sts2WD/images/relics/big/<relic_name>.png` | **`256 x 256`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDRelic.BigIconPath` |
-| **Small power icons (19)** | `Sts2WD/images/powers/<power_name>.png` | **`64 x 64`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `CustomPowerModel.CustomPackedIconPath` (`Sts2WDPower`) |
-| **Large power icons (19)** | `Sts2WD/images/powers/big/<power_name>.png` | **`256 x 256`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `CustomPowerModel.CustomBigIconPath` (`Sts2WDPower`) |
+| **Small power icons (22)** | `Sts2WD/images/powers/<power_name>.png` | **`64 x 64`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `CustomPowerModel.CustomPackedIconPath` (`Sts2WDPower`) |
+| **Large power icons (22)** | `Sts2WD/images/powers/big/<power_name>.png` | **`256 x 256`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `CustomPowerModel.CustomBigIconPath` (`Sts2WDPower`) |
 | **Character-selection background scene** | `Sts2WD/scenes/realta/char_select_bg_realta.tscn` (+ background PNG) | `1920 x 1080` (`Control` root scene) | Godot `.tscn` + RGBA PNG | `Realta.CustomCharacterSelectBg` |
 | **Combat character visuals** | `Sts2WD/scenes/realta/combat.tscn` + `Sts2WD/images/charui/realta/combat.png` | current PNG `384 x 576`, displayed at `240 x 360`, Bounds `240 x 360` | Godot `.tscn` (`Node2D` root) or RGBA PNG | `Realta.CustomVisualPath` |
 | **Rest-site character scene** | `Sts2WD/scenes/realta/rest_site.tscn` | currently displayed at `326.4 x 489.6`, Hitbox `340 x 500` | Godot `.tscn` (`Node2D` + `ControlRoot`) | `Realta.CustomRestSiteAnimPath` |

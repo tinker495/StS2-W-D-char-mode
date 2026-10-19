@@ -7,9 +7,8 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaAuraOfVigor() : RealtaCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.AllAllies)
+public sealed class RealtaAuraOfVigor() : RealtaCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
-    public override CardMultiplayerConstraint MultiplayerConstraint => CardMultiplayerConstraint.MultiplayerOnly;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<VigorPower>(8m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromPower<VigorPower>(), HoverTipFactory.FromPower<WeakPower>()];
@@ -17,11 +16,8 @@ public sealed class RealtaAuraOfVigor() : RealtaCard(2, CardType.Skill, CardRari
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         decimal amount = DynamicVars["VigorPower"].BaseValue;
-        foreach (var ally in CombatState!.Players.Where(p => p.Creature.IsAlive).Select(p => p.Creature).ToList())
-        {
-            await PowerCmd.Apply<VigorPower>(choiceContext, ally, amount, Owner.Creature, this);
-            if (ally.HasPower<WeakPower>()) await PowerCmd.Remove<WeakPower>(ally);
-        }
+        await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        if (Owner.Creature.HasPower<WeakPower>()) await PowerCmd.Remove<WeakPower>(Owner.Creature);
     }
 
     protected override void OnUpgrade() => DynamicVars["VigorPower"].UpgradeValueBy(4m);
