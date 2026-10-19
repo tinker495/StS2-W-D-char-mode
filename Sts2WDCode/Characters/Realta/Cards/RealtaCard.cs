@@ -11,6 +11,8 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 public abstract class RealtaCard(int cost, CardType type, CardRarity rarity, TargetType target)
     : Sts2WDCard(cost, type, rarity, target)
 {
+    public override int MaxUpgradeLevel => Keywords.Contains(RealtaKeywords.Legacy) ? int.MaxValue : base.MaxUpgradeLevel;
+
     protected static bool IsDuel(Creature target) =>
         !target.HasPower<WeakPower>() && !target.HasPower<VulnerablePower>();
 

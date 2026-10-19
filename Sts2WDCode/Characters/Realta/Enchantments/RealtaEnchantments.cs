@@ -91,6 +91,20 @@ public static class RealtaEnchantments
             description += composite.EntriesText();
     }
 
+    // Keep upgrade previews and combat buffs/debuffs in the game's own colors. A value changed only by a
+    // temporary enchantment is aqua, without adding the enchantment's name to the card body.
+    [HarmonyPatch(typeof(DynamicVar), nameof(DynamicVar.ToHighlightedString))]
+    private static class TemporaryValueColorPatch
+    {
+        private static void Postfix(DynamicVar __instance, AbstractModel? ____owner, ref string __result)
+        {
+            if (__instance.WasJustUpgraded || __instance.PreviewValue != __instance.EnchantedValue ||
+                ____owner is not CardModel { Enchantment: RealtaCompositeEnchantment composite } ||
+                !composite.TemporarilyModifies(__instance)) return;
+            __result = $"[aqua]{((int)__instance.PreviewValue).ToString(System.Globalization.CultureInfo.InvariantCulture)}[/aqua]";
+        }
+    }
+
     // The base check refuses any card whose slot is taken; 유산 keeps every other base-game rule.
     [HarmonyPatch(typeof(EnchantmentModel), nameof(EnchantmentModel.CanEnchant))]
     private static class LegacyCanEnchantPatch

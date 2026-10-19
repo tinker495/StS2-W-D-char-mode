@@ -21,5 +21,5 @@ public sealed class RealtaRinnalBodbDearg() : RealtaCard(2, CardType.Skill, Card
         await PowerCmd.Apply<BlurPower>(choiceContext, Owner.Creature, 1m, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(3m);
+    protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(4m);
 }

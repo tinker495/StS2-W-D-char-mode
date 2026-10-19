@@ -11,5 +11,6 @@ Inspection on 2026-10-16 established these Forge rules; Guard follows them:
 - Exclude only temporary duplicates (`IsDupe`, copies sent to Limbo after use) from tracking and growth. Ordinary copies created by other effects count as Guard cards and grow together. "One per combat" describes the condition for Guard to create a new card.
 - Upgrading reduces cost by 1, as with Sovereign Blade. Reverting the upgrade preserves accumulated Block.
 - Guard cards are generated during combat and disappear afterward; their accumulated values do not persist in the deck.
+- Self Repair retrieves existing Guard cards before applying Guard. The user reported on 2026-10-19 that applying Guard first created a new card when the original was exhausted, then retrieved the original as well. Retrieval-first preserves Forge's general creation rule while avoiding this unwanted duplication. With no existing Guard, Self Repair still creates one through the normal Guard command; a full-hand retrieval moves the existing card to discard, where Guard can find it.
 
 If this list conflicts with the design document, or an edge case has no Forge precedent, request a user decision for that case.

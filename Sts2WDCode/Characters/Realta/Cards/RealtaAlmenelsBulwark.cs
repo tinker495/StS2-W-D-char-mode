@@ -16,7 +16,7 @@ public sealed class RealtaAlmenelsBulwark() : RealtaCard(2, CardType.Power, Card
     public override string CustomPortraitPath => ModelDb.Card<RealtaMending>().CustomPortraitPath;
     public override string BetaPortraitPath => ModelDb.Card<RealtaMending>().BetaPortraitPath;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy, CardKeyword.Retain];
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new CalculationBaseVar(5m), new CalculationExtraVar(1m),
@@ -28,5 +28,5 @@ public sealed class RealtaAlmenelsBulwark() : RealtaCard(2, CardType.Power, Card
         await PowerCmd.Apply<PlatingPower>(choiceContext, Owner.Creature,
             ((CalculatedVar)DynamicVars["Plating"]).Calculate(null), Owner.Creature, this);
 
-    protected override void OnUpgrade() => AddKeyword(CardKeyword.Retain);
+    protected override void OnUpgrade() => DynamicVars.CalculationBase.UpgradeValueBy(3m);
 }
