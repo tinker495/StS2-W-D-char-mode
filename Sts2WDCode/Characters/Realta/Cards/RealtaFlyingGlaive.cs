@@ -7,12 +7,12 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// Legacy upgrades keep adding damage; Retain is present before the first upgrade.
+// Legacy upgrades keep adding damage.
 public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy, CardKeyword.Retain];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move)];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Legacy)];
 
@@ -26,6 +26,6 @@ public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRa
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);
+        DynamicVars.Damage.UpgradeValueBy(4m);
     }
 }

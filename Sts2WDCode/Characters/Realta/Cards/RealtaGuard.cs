@@ -15,11 +15,15 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 [Pool(typeof(TokenCardPool))]
 public sealed class RealtaGuard() : Sts2WDCard(1, CardType.Skill, CardRarity.Token, TargetType.Self)
 {
-    private decimal _currentBlock;
+    // Guard growth survives downgrade; upgrade-added Block does not.
+    private decimal _guardBlock;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy, CardKeyword.Retain];
 
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Guard)];
+    public override int MaxUpgradeLevel => int.MaxValue;
+
+    protected override IEnumerable<IHoverTip> ExtraHoverTips =>
+        [HoverTipFactory.FromKeyword(RealtaKeywords.Guard), HoverTipFactory.FromKeyword(RealtaKeywords.Legacy)];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(0m, ValueProp.Move)];
 
@@ -32,18 +36,17 @@ public sealed class RealtaGuard() : Sts2WDCard(1, CardType.Skill, CardRarity.Tok
     {
         AssertMutable();
         DynamicVars.Block.BaseValue += amount;
-        _currentBlock = DynamicVars.Block.BaseValue;
+        _guardBlock += amount;
     }
 
-    // Same upgrade as Sovereign Blade (docs/adr/0002).
     protected override void OnUpgrade()
     {
-        EnergyCost.UpgradeBy(-1);
+        DynamicVars.Block.UpgradeValueBy(3m);
     }
 
     protected override void AfterDowngraded()
     {
         base.AfterDowngraded();
-        DynamicVars.Block.BaseValue = _currentBlock;
+        DynamicVars.Block.BaseValue = _guardBlock;
     }
 }

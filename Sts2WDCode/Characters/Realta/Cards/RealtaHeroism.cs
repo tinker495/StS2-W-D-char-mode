@@ -11,6 +11,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaHeroism() : RealtaSpellCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     // Reuse existing placeholder artwork until this card receives its own asset.
     public override string PortraitPath => ModelDb.Card<RealtaKnightsOath>().PortraitPath;
@@ -18,7 +19,7 @@ public sealed class RealtaHeroism() : RealtaSpellCard(1, CardType.Skill, CardRar
     public override string BetaPortraitPath => ModelDb.Card<RealtaKnightsOath>().BetaPortraitPath;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new BlockVar(6m, ValueProp.Move), new PowerVar<VigorPower>(6m)];
+        [new BlockVar(5m, ValueProp.Move)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [.. base.ExtraHoverTips, HoverTipFactory.FromPower<VigorPower>()];
 
@@ -26,12 +27,11 @@ public sealed class RealtaHeroism() : RealtaSpellCard(1, CardType.Skill, CardRar
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
         if (SpellActive)
-            await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, DynamicVars["VigorPower"].BaseValue, Owner.Creature, this);
+            await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, Owner.Creature.Block, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(2m);
-        DynamicVars["VigorPower"].UpgradeValueBy(2m);
+        DynamicVars.Block.UpgradeValueBy(3m);
     }
 }

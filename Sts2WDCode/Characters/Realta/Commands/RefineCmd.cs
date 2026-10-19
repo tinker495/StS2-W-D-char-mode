@@ -83,12 +83,18 @@ public static class RefineCmd
     internal static async Task OnCombatCardUpgraded(PlayerChoiceContext choiceContext, CardModel card)
     {
         if (card.Owner?.Creature is not { } owner) return;
+        // Snapshot before other upgrade triggers can draw or move cards. Motes never trigger each other.
+        var motes = card is not RealtaMoteOfFlame && card.Owner.PlayerCombatState is { } state
+            ? state.Hand.Cards.OfType<RealtaMoteOfFlame>().ToList()
+            : [];
         owner.GetPower<RealtaFaerieArtisanPower>()?.OnCardImproved(card);
         // External CardCmd.Upgrade is synchronous: grant energy before Workshop's power-application animation yields.
         if (owner.GetPower<RealtaHerosSilhouettePower>() is { } silhouette)
             await silhouette.OnCardUpgraded();
         if (owner.GetPower<RealtaOldWorkshopPower>() is { } workshop)
             await workshop.OnCardImproved(choiceContext);
+        foreach (var mote in motes)
+            await Upgrade(choiceContext, mote);
     }
 
     private static async Task ApplyRefine(PlayerChoiceContext choiceContext, CardModel card, int amount)

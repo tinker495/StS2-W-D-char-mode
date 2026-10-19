@@ -9,7 +9,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaMoteOfFlame() : RealtaMasterworkCard(CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy, CardKeyword.Exhaust];
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8m, ValueProp.Move)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [.. base.ExtraHoverTips, HoverTipFactory.FromKeyword(RealtaKeywords.Legacy), HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];

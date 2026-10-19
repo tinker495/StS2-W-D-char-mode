@@ -2,14 +2,15 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Enchantments;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaMagicMending() : RealtaCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Refine", 3m)];
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => HoverTipFactory.FromEnchantment<Steady>();
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var prefs = new MegaCrit.Sts2.Core.CardSelection.CardSelectorPrefs(SelectionScreenPrompt, 1);
@@ -17,7 +18,9 @@ public sealed class RealtaMagicMending() : RealtaCard(1, CardType.Skill, CardRar
         if (card == null) return;
         await CardPileCmd.Add(card, PileType.Hand);
         await RefineCmd.Upgrade(choiceContext, card);
-        await RefineCmd.Refine(choiceContext, card, DynamicVars["Refine"].IntValue);
+        Steady steady = ModelDb.Enchantment<Steady>();
+        if (!card.Keywords.Contains(CardKeyword.Retain) && steady.CanEnchant(card))
+            RealtaEnchantments.EnchantTemporarily(card, steady, 1);
     }
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
