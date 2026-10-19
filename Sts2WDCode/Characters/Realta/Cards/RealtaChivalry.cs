@@ -9,7 +9,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 public sealed class RealtaChivalry() : RealtaCard(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
     public override bool GainsBlock => true;
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(16m, ValueProp.Move), new DynamicVar("EnemyBlock", 16m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(18m, ValueProp.Move), new DynamicVar("EnemyBlock", 18m)];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
@@ -19,7 +19,7 @@ public sealed class RealtaChivalry() : RealtaCard(2, CardType.Skill, CardRarity.
     }
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(4m);
-        DynamicVars["EnemyBlock"].UpgradeValueBy(4m);
+        DynamicVars.Block.UpgradeValueBy(6m);
+        DynamicVars["EnemyBlock"].UpgradeValueBy(6m);
     }
 }

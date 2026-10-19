@@ -41,7 +41,7 @@
   "STS2WD-REALTA_GRANNS_BLESSING_POWER.title": "그란의 축복",
   "STS2WD-REALTA_GRANNS_BLESSING_POWER.description": "각 턴마다 처음으로 [gold]주문[/gold] 효과를 발동하면, 에너지를 {Amount} 얻습니다.",
   "STS2WD-REALTA_GRANNS_BLESSING_POWER.smartDescription": "각 턴마다 처음으로 [gold]주문[/gold] 효과를 발동하면, 에너지를 {Amount} 얻습니다.",
-  "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.title": "고브누의 제련",
+  "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.title": "고브누의 마법 재련",
   "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.description": "[gold]개선[/gold]할 때, 그 수치가 {Amount} 증가합니다.",
   "STS2WD-REALTA_GOIBNIUS_FORGING_POWER.smartDescription": "[gold]개선[/gold]할 때, 그 수치가 {Amount} 증가합니다.",
   "STS2WD-REALTA_FAERIE_ARTISAN_POWER.title": "요정 장인",

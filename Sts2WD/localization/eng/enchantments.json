@@ -1,6 +1,8 @@
 {
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.title": "Enchantments",
-  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.description": "Permanent enchantments show their names and effects. Temporary enchantments show only their effects in a separate color.",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.description": "This card has multiple enchantments.",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryTitle": "Temporary Enchantment",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryDescription": "An enchantment that lasts only for this combat.",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.permanentEntry": "{Title}{AmountText}",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "Temporary {Title}{AmountText}"
 }

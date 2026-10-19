@@ -5,6 +5,8 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
@@ -89,6 +91,19 @@ public static class RealtaEnchantments
     {
         if (card.Enchantment is RealtaCompositeEnchantment composite)
             description += composite.EntriesText();
+    }
+
+    // The slot may also contain permanent entries; only label it temporary when temporary effects exist.
+    [HarmonyPatch(typeof(EnchantmentModel), "get_HoverTip")]
+    private static class TemporaryHoverTipPatch
+    {
+        private static void Postfix(EnchantmentModel __instance, ref HoverTip __result)
+        {
+            if (__instance is not RealtaCompositeEnchantment { HasTemporaryEntries: true }) return;
+            __result = new HoverTip(
+                new LocString("enchantments", $"{__instance.Id.Entry}.temporaryTitle"),
+                new LocString("enchantments", $"{__instance.Id.Entry}.temporaryDescription"), __instance.Icon);
+        }
     }
 
     // Keep upgrade previews and combat buffs/debuffs in the game's own colors. A value changed only by a

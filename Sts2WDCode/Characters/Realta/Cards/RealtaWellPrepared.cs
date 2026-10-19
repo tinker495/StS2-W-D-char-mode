@@ -10,9 +10,12 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaWellPrepared() : RealtaCard(1, CardType.Skill, CardRarity.Common, TargetType.Self)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<RealtaVigorNextTurnPower>(6m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<RealtaVigorNextTurnPower>(6m), new CardsVar(1)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<VigorPower>()];
-    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay) =>
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
         await PowerCmd.Apply<RealtaVigorNextTurnPower>(choiceContext, Owner.Creature, DynamicVars["RealtaVigorNextTurnPower"].BaseValue, Owner.Creature, this);
-    protected override void OnUpgrade() => DynamicVars["RealtaVigorNextTurnPower"].UpgradeValueBy(2m);
+        await PowerCmd.Apply<DrawCardsNextTurnPower>(choiceContext, Owner.Creature, DynamicVars.Cards.BaseValue, Owner.Creature, this);
+    }
+    protected override void OnUpgrade() => DynamicVars["RealtaVigorNextTurnPower"].UpgradeValueBy(4m);
 }

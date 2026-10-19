@@ -12,7 +12,7 @@ public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRa
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(8m, ValueProp.Move)];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Legacy)];
 

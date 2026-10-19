@@ -44,6 +44,8 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
 
     public IEnumerable<EnchantmentModel> Children => AttachedEntries.Select(e => e.Model);
 
+    internal bool HasTemporaryEntries => _entries.Any(entry => entry.Temporary);
+
     // Entries are attached to the card lazily, because the composite only learns its card after the slot is set.
     private List<Entry> AttachedEntries
     {

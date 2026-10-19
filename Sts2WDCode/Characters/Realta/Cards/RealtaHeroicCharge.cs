@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaHeroicCharge() : RealtaCard(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public sealed class RealtaHeroicCharge() : RealtaCard(2, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
 
     // Reuse existing placeholder artwork until this card receives its own asset.
@@ -19,8 +19,7 @@ public sealed class RealtaHeroicCharge() : RealtaCard(2, CardType.Attack, CardRa
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState!).Execute(choiceContext);
         await CardCmd.Discard(choiceContext, Owner.PlayerCombatState!.Hand.Cards.ToList());
     }
 
