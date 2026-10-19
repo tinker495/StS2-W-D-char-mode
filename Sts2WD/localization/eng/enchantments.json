@@ -1,6 +1,6 @@
 {
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.title": "Enchantments",
-  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.description": "This card holds several enchantments, or a temporary one. Each is listed on the card.",
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.description": "Permanent enchantments show their names and effects. Temporary enchantments show only their effects in a separate color.",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.permanentEntry": "{Title}{AmountText}",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "Temporary {Title}{AmountText}"
 }

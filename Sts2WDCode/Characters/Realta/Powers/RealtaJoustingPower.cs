@@ -2,6 +2,7 @@ using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -15,12 +16,13 @@ public sealed class RealtaJoustingPower : CustomPowerModel
     public override PowerStackType StackType => PowerStackType.Counter;
     public override string CustomPackedIconPath => ModelDb.Power<DexterityPower>().PackedIconPath;
     public override string CustomBigIconPath => ModelDb.Power<DexterityPower>().ResolvedBigIconPath;
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.Static(StaticHoverTip.Block)];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<VigorPower>()];
 
-    public override async Task AfterBlockGained(Creature creature, decimal amount, ValueProp props, CardModel? cardSource)
+    public override async Task AfterDamageReceived(PlayerChoiceContext choiceContext, Creature target, DamageResult result,
+        ValueProp props, Creature? dealer, CardModel? cardSource)
     {
-        if (amount <= 0m || creature.Side == Owner.Side) return;
+        if (target != Owner || !props.IsPoweredAttack() || result.BlockedDamage <= 0) return;
         Flash();
-        await CreatureCmd.GainBlock(Owner, amount * Amount, ValueProp.Unpowered, null);
+        await PowerCmd.Apply<VigorPower>(choiceContext, Owner, result.BlockedDamage * Amount, Owner, null);
     }
 }

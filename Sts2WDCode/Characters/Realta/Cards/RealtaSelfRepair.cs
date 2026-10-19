@@ -12,10 +12,11 @@ public sealed class RealtaSelfRepair() : RealtaCard(1, CardType.Skill, CardRarit
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Guard), HoverTipFactory.FromCard<RealtaGuard>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await GuardCmd.Guard(DynamicVars["Guard"].BaseValue, Owner);
         var cards = Owner.PlayerCombatState!.AllCards.OfType<RealtaGuard>()
             .Where(c => c.Pile?.Type != PileType.Hand).ToList();
         await CardPileCmd.Add(cards, PileType.Hand);
+        // Recover exhausted Guards before Guard checks whether it needs to create a new card.
+        await GuardCmd.Guard(DynamicVars["Guard"].BaseValue, Owner);
     }
     protected override void OnUpgrade() => DynamicVars["Guard"].UpgradeValueBy(2m);
 }

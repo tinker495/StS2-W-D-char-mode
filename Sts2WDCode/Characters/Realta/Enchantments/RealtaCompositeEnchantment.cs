@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Enchantments;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Saves.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -18,7 +19,7 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
 {
     // The base game wraps enchantment card text in [purple]; temporary entries must use a different color.
     private const string PermanentColor = "purple";
-    private const string TemporaryColor = "aqua"; // Placeholder until the temporary-enchantment color is decided.
+    private const string TemporaryColor = "aqua";
 
     private sealed class Entry(EnchantmentModel model, bool temporary, bool pendingModify)
     {
@@ -121,16 +122,31 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
         StringBuilder text = new();
         foreach (Entry entry in AttachedEntries)
         {
-            LocString line = new("enchantments", $"{Id.Entry}.{(entry.Temporary ? "temporaryEntry" : "permanentEntry")}");
-            line.Add("Title", entry.Model.Title);
-            line.Add("AmountText", entry.Model.ShowAmount ? $" {entry.Model.DisplayAmount}" : "");
             string color = entry.Temporary ? TemporaryColor : PermanentColor;
-            text.Append($"\n[{color}]{line.GetFormattedText()}[/{color}]");
+            if (!entry.Temporary)
+            {
+                LocString line = new("enchantments", $"{Id.Entry}.permanentEntry");
+                line.Add("Title", entry.Model.Title);
+                line.Add("AmountText", entry.Model.ShowAmount ? $" {entry.Model.DisplayAmount}" : "");
+                text.Append($"\n[{color}]{line.GetFormattedText()}[/{color}]");
+            }
             if (entry.Model.DynamicExtraCardText is { } extraText)
                 text.Append($"\n[{color}]{extraText.GetFormattedText()}[/{color}]");
         }
         return text.ToString();
     }
+
+    internal bool TemporarilyModifies(DynamicVar variable) => AttachedEntries.Any(entry => entry.Temporary &&
+        (variable switch
+        {
+            DamageVar damage => entry.Model.EnchantDamageAdditive(variable.BaseValue, damage.Props) != 0m ||
+                                entry.Model.EnchantDamageMultiplicative(variable.BaseValue, damage.Props) != 1m,
+            CalculatedDamageVar damage => entry.Model.EnchantDamageAdditive(variable.BaseValue, damage.Props) != 0m ||
+                                          entry.Model.EnchantDamageMultiplicative(variable.BaseValue, damage.Props) != 1m,
+            BlockVar => entry.Model.EnchantBlockAdditive(variable.BaseValue) != 0m ||
+                        entry.Model.EnchantBlockMultiplicative(variable.BaseValue) != 1m,
+            _ => false
+        }));
 
     // Called on first enchant, after loading and after a downgrade reset the card: re-apply every entry.
     protected override void OnEnchant()

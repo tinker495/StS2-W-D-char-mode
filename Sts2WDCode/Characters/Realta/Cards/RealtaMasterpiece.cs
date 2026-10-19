@@ -16,7 +16,7 @@ public sealed class RealtaMasterpiece() : RealtaCard(0, CardType.Skill, CardRari
     public override string CustomPortraitPath => ModelDb.Card<RealtaAnnealing>().CustomPortraitPath;
     public override string BetaPortraitPath => ModelDb.Card<RealtaAnnealing>().BetaPortraitPath;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Refine", 3m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Refine", 9m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -27,9 +27,8 @@ public sealed class RealtaMasterpiece() : RealtaCard(0, CardType.Skill, CardRari
 
         var discarded = Owner.PlayerCombatState!.Hand.Cards.Where(card => card != selected).ToList();
         await CardCmd.Discard(choiceContext, discarded);
-        foreach (var _ in discarded)
-            await RefineCmd.Refine(choiceContext, selected, DynamicVars["Refine"].IntValue);
+        await RefineCmd.Refine(choiceContext, selected, DynamicVars["Refine"].IntValue);
     }
 
-    protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(1m);
+    protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(3m);
 }

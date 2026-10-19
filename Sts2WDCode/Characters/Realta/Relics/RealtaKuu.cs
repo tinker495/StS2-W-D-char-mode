@@ -1,4 +1,6 @@
 using MegaCrit.Sts2.Core.Combat;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -7,16 +9,15 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 쿠우: upgraded starter relic replacing 청동의 번견; 수호 10 at combat start and 수호 5 at turn end with leftover energy.
+// Replaces Bronze Watchdog: Guard 10 at combat start; retrieve Guard cards at turn end with leftover energy.
 public sealed class RealtaKuu : RealtaRelic
 {
     private const string CombatStartGuardVar = "CombatStartGuard";
-    private const string TurnEndGuardVar = "TurnEndGuard";
 
     public override RelicRarity Rarity => RelicRarity.Starter;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DynamicVar(CombatStartGuardVar, 10m), new DynamicVar(TurnEndGuardVar, 5m)];
+        [new DynamicVar(CombatStartGuardVar, 10m)];
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromKeyword(RealtaKeywords.Guard), HoverTipFactory.FromCard<RealtaGuard>()];
@@ -35,7 +36,9 @@ public sealed class RealtaKuu : RealtaRelic
         if (participants.Contains(Owner.Creature) && Owner.PlayerCombatState!.Energy > 0)
         {
             Flash();
-            await GuardCmd.Guard(DynamicVars[TurnEndGuardVar].BaseValue, Owner);
+            var cards = Owner.PlayerCombatState.AllCards.OfType<RealtaGuard>()
+                .Where(card => card.Pile?.Type != PileType.Hand).ToList();
+            await CardPileCmd.Add(cards, PileType.Hand);
         }
     }
 }

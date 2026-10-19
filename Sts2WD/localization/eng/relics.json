@@ -3,7 +3,7 @@
   "STS2WD-REALTA_BRONZE_WATCHDOG.description": "At the start of each combat, [gold]Guard[/gold] {Guard}.",
   "STS2WD-REALTA_BRONZE_WATCHDOG.flavor": "Development placeholder.",
   "STS2WD-REALTA_KUU.title": "Kuu",
-  "STS2WD-REALTA_KUU.description": "At the start of each combat, [gold]Guard[/gold] {CombatStartGuard}.\nAt the end of your turn, if you have any unspent Energy, [gold]Guard[/gold] {TurnEndGuard}.",
+  "STS2WD-REALTA_KUU.description": "At the start of each combat, [gold]Guard[/gold] {CombatStartGuard}.\nAt the end of your turn, if you have any unspent Energy, return all [gold]Steel Guardians[/gold] to your hand from anywhere.",
   "STS2WD-REALTA_KUU.flavor": "Development placeholder.",
   "STS2WD-REALTA_WITCH_POINTED_HAT.title": "Witch's Pointed Hat",
   "STS2WD-REALTA_WITCH_POINTED_HAT.description": "The first time you trigger a [gold]Spell[/gold] effect each combat, gain {Energy} Energy.",

@@ -9,15 +9,15 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaThunderBlade() : RealtaCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
+public sealed class RealtaThunderBlade() : RealtaSpellCard(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(3m, ValueProp.Move), new PowerVar<FlameBarrierPower>(3m)];
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<FlameBarrierPower>()];
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => [.. base.ExtraHoverTips, HoverTipFactory.FromPower<FlameBarrierPower>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
-        await PowerCmd.Apply<FlameBarrierPower>(choiceContext, Owner.Creature, DynamicVars["FlameBarrierPower"].BaseValue, Owner.Creature, this);
+        if (SpellActive) await PowerCmd.Apply<FlameBarrierPower>(choiceContext, Owner.Creature, DynamicVars["FlameBarrierPower"].BaseValue, Owner.Creature, this);
     }
     protected override void OnUpgrade()
     {

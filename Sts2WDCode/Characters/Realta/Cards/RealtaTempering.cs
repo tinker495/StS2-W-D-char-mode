@@ -30,6 +30,7 @@ public sealed class RealtaTempering() : RealtaCard(1, CardType.Skill, CardRarity
 
     protected override void OnUpgrade()
     {
+        DynamicVars.Block.UpgradeValueBy(2m);
         DynamicVars[RefineVar].UpgradeValueBy(1m);
     }
 }

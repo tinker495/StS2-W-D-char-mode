@@ -7,10 +7,10 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 비행 글레이브: upgrading increases damage and adds Retain.
+// Legacy upgrades keep adding damage; Retain is present before the first upgrade.
 public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy, CardKeyword.Retain];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
 
@@ -26,7 +26,6 @@ public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRa
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m);
-        AddKeyword(CardKeyword.Retain);
+        DynamicVars.Damage.UpgradeValueBy(3m);
     }
 }

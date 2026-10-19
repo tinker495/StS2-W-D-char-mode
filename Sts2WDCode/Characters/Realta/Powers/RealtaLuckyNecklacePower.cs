@@ -19,7 +19,7 @@ public sealed class RealtaLuckyNecklacePower : CustomPowerModel
     {
         if (Owner.Player is not { } player) return Task.CompletedTask;
         for (int i = 0; i < Amount; i++)
-            room.AddExtraReward(player, new CardReward(CardCreationOptions.ForRoom(player, RoomType.Boss), 3, player));
+            room.AddExtraReward(player, new CardReward(CardCreationOptions.ForRoom(player, room.RoomType), 3, player));
         return Task.CompletedTask;
     }
 }

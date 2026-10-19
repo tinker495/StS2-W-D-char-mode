@@ -3,7 +3,7 @@
   "STS2WD-REALTA_BRONZE_WATCHDOG.description": "전투 시작 시 [gold]수호[/gold] {Guard}.",
   "STS2WD-REALTA_BRONZE_WATCHDOG.flavor": "개발용 임시 문구.",
   "STS2WD-REALTA_KUU.title": "쿠우",
-  "STS2WD-REALTA_KUU.description": "전투 시작 시 [gold]수호[/gold] {CombatStartGuard}.\n내 턴 종료 시 쓰지 않은 에너지가 있다면 [gold]수호[/gold] {TurnEndGuard}.",
+  "STS2WD-REALTA_KUU.description": "전투 시작 시 [gold]수호[/gold] {CombatStartGuard}.\n내 턴 종료 시 쓰지 않은 에너지가 있다면, 어디에 있든 [gold]강철의 수호자[/gold]를 손으로 가져옵니다.",
   "STS2WD-REALTA_KUU.flavor": "개발용 임시 문구.",
   "STS2WD-REALTA_WITCH_POINTED_HAT.title": "마녀 고깔모자",
   "STS2WD-REALTA_WITCH_POINTED_HAT.description": "전투 중 처음으로 [gold]주문[/gold] 효과가 발동하면, 에너지를 {Energy} 얻습니다.",
