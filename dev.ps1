@@ -3,11 +3,15 @@ param(
     [ValidateSet('hooks', 'doctor', 'restore', 'build', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [ValidateSet('Debug', 'Release')]
-    [string]$Configuration = 'Debug'
+    [string]$Configuration = 'Debug',
+    [ValidateSet('unspecified', 'sandbox', 'escalated', 'local')]
+    [string]$ExecutionContextLabel = 'unspecified'
 )
 
 $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
+. (Join-Path $projectRoot 'scripts/dev-workflow.ps1')
+$diagnosticRoot = $null
 if ($Task -eq 'hooks') {
     & git -C $projectRoot config --local core.hooksPath .githooks
     if ($LASTEXITCODE -ne 0) { throw 'Cannot configure Git hooks.' }
@@ -29,6 +33,10 @@ $env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
 $env:DOTNET_NOLOGO = '1'
 
 function Invoke-DotNet([string[]]$Arguments) {
+    if ($diagnosticRoot) {
+        Invoke-RecordedCommand -Executable $dotnet -Arguments $Arguments -LogDirectory $diagnosticRoot -Step $Arguments[0]
+        return
+    }
     & $dotnet @Arguments
     if ($LASTEXITCODE -ne 0) { throw "dotnet failed (exit $LASTEXITCODE): $Arguments" }
 }
@@ -69,23 +77,49 @@ try {
     # Import textures before exporting a PCK on a fresh checkout.
     New-Item -ItemType Directory -Path (Join-Path $projectRoot 'artifacts') -Force | Out-Null
     New-Item -ItemType File -Path (Join-Path $projectRoot 'artifacts/.gdignore') -Force | Out-Null
-    Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
-    & $paths.GodotPath --headless --editor --path $projectRoot --import
-    if ($LASTEXITCODE -ne 0) { throw 'MegaDot asset import failed.' }
-    Invoke-DotNet @('publish', 'Sts2WD.csproj', '-c', $Configuration, '--no-restore')
-
-    $output = Join-Path $paths.ModsPath 'Sts2WD'
-    foreach ($name in @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json')) {
-        if (-not (Test-Path -LiteralPath (Join-Path $output $name))) { throw "Missing publish artifact: $name" }
+    $diagnosticRoot = Join-Path $projectRoot ('artifacts/runtime/packaging-' + [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ') + '-' + [Guid]::NewGuid().ToString('N'))
+    New-Item -ItemType Directory -Path $diagnosticRoot | Out-Null
+    Write-Host "Diagnostics: $diagnosticRoot"
+    $run = [ordered]@{
+        task = $Task
+        configuration = $Configuration
+        executionContextLabel = $ExecutionContextLabel # Caller-reported, not permission detection.
+        projectRoot = $projectRoot
+        branch = (& git branch --show-current)
+        commit = (& git rev-parse HEAD)
+        changes = @(& git status --short)
+        paths = $paths
+        startedUtc = [DateTime]::UtcNow.ToString('o')
+        finishedUtc = $null
+        exitCode = $null
+        failure = $null
+        installation = $null
     }
-    if ($Task -eq 'deploy') {
-        $destination = Join-Path $paths.Sts2Path 'mods/Sts2WD'
-        New-Item -ItemType Directory -Path $destination -Force | Out-Null
-        Get-ChildItem -LiteralPath $output -File | Where-Object { $_.Extension -in '.dll', '.pck', '.json', '.pdb' } |
-            Copy-Item -Destination $destination -Force
-        Write-Host "Installed: $destination"
-    } else {
-        Write-Host "Published: $output"
+    try {
+        Invoke-RecordedCommand -Executable $dotnet -Arguments @('--version') -LogDirectory $diagnosticRoot -Step 'dotnet-version'
+        Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--version') -LogDirectory $diagnosticRoot -Step 'megadot-version'
+        Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
+        Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--editor', '--path', $projectRoot, '--import') -LogDirectory $diagnosticRoot -Step 'import'
+        Invoke-DotNet @('publish', 'Sts2WD.csproj', '-c', $Configuration, '--no-restore')
+
+        $output = Join-Path $paths.ModsPath 'Sts2WD'
+        foreach ($name in @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')) {
+            if (-not (Test-Path -LiteralPath (Join-Path $output $name) -PathType Leaf)) { throw "Missing publish artifact: $name" }
+        }
+        if ($Task -eq 'deploy') {
+            $run.installation = Install-ModPackage -Source $output -Destination (Join-Path $paths.Sts2Path 'mods/Sts2WD') -BackupRoot (Join-Path $projectRoot 'artifacts/runtime')
+        } else {
+            Write-Host "Published: $output"
+        }
+        $run.exitCode = 0
+    } catch {
+        $run.exitCode = 1
+        $run.failure = $_.Exception.Message
+        throw
+    } finally {
+        $run.finishedUtc = [DateTime]::UtcNow.ToString('o')
+        $run | ConvertTo-Json -Depth 5 |
+            Set-Content -LiteralPath (Join-Path $diagnosticRoot 'run.json') -Encoding UTF8
     }
 } finally {
     Pop-Location
