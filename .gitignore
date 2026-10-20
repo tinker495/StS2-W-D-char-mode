@@ -1,6 +1,7 @@
 .godot/
 bin/
 obj/
+__pycache__/
 artifacts/
 publish/
 packages/

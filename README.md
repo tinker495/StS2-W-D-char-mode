@@ -30,6 +30,8 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 .\dev.ps1 hooks              # 이 checkout의 커밋 전 빌드 검사 활성화
 .\dev.ps1 doctor             # SDK, 게임 DLL, MegaDot 경로 확인
 .\dev.ps1 build              # C# 빌드
+.\dev.ps1 check              # 빌드, import, 리그 기계·인스턴스 검사
+.\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
 .\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
 .\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
 .\dev.ps1 editor             # MegaDot 편집기 열기
@@ -43,10 +45,16 @@ powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 
 `hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 커밋할 때마다 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 컴파일이나 기존 ModAnalyzers의 오류로 빌드가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드이므로 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
 
+레아르타의 반복 작업은 [애니메이션 작업 절차](docs/characters/realta/animation/reproduction.md)를 따릅니다. `anim`, `check`, `publish`, `deploy`는 [리그 기계 검사](tests/rig-checks.md)와 [인스턴스 간 상태 독립성 테스트](tests/README.md)를 실행하며, 실패하면 이후 렌더·export·설치를 중단합니다. `anim`의 패키지 모드는 이미 생성한 PCK를 독립적으로 렌더합니다.
+
+MegaDot 로그는 실행마다 `artifacts/` 아래에 따로 저장됩니다. 메모리 접근 오류 창이나 인증서 오류가 나타나면 [빌드 진단 절차](docs/agents/build-troubleshooting.md)에 따라 해당 실행의 로그와 종료 코드를 확인합니다.
+
 `build`와 `publish` 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. `deploy`는 패키징 성공과 네 파일의 존재를 확인하고 게임 실행 중에는 설치를 중단합니다. 기존 네 파일은 `artifacts/runtime/local-install-backup-<UTC 시각>-<고유 ID>/`에 백업하고, 게임의 `mods/Sts2WD`에 설치한 뒤 SHA256을 비교합니다. 다른 모드 파일은 복사 대상이 아닙니다. 설치 도중 실패하면 출력된 백업 경로와 현재 설치 파일을 확인하세요. 자동 롤백은 하지 않습니다.
 코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요합니다. 게임에 반영하려면 `deploy`를 사용합니다.
 
 `publish`와 `deploy`는 실행마다 `artifacts/runtime/packaging-<UTC 시각>-<고유 ID>/`에 진단 자료를 남깁니다. `run.json`에는 브랜치·커밋·작업 트리 변경 목록·경로·실행 결과가, 단계별 JSON에는 실행 파일·인수·작업 디렉터리·종료 코드가 저장됩니다. 단계별 UTF-8 로그와 버전 로그로 SDK 및 MegaDot 출력도 확인할 수 있습니다. 설치 성공 기록에는 백업 경로와 네 파일의 해시가 포함됩니다.
+
+리그 검사 두 단계는 같은 진단 폴더에 `*.stdout.log`, `*.stderr.log`, `*.engine.log`, `*.exitcode`를 남깁니다. 두 PASS 메시지와 종료 코드 0을 모두 확인해야 검사 성공입니다.
 
 실행 환경을 알고 있다면 `-ExecutionContextLabel local`, `sandbox`, `escalated`로 기록할 수 있습니다. 기본값은 `unspecified`이며 이 옵션은 권한을 부여하거나 자동 판별하지 않습니다. 진단 자료에는 로컬 경로와 도구 출력이 포함되므로 공유 전에 내용을 확인하세요.
 

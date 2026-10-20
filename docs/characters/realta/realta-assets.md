@@ -6,7 +6,17 @@ This guide explains production and integration for character UI, 81 card illustr
 
 ## 0. Current Application Status
 
-As of 2026-10-20, **nine Branch B runtime PNGs and a heated-iron card-body texture are applied, with the base-derived `combat.png` shared by combat, rest, and merchant scenes.** The user reverted the separate combat pose and removed the extra `standing.png`. The shared figure retains the youthful appearance, open forehead, both pauldrons, continuous collar, and upright one-handed stance of the approved base. The selection illustration retains the blade-inspection scene. The tables and conversion procedures below explain the current state without local generation masters or historical logs.
+As of 2026-10-20, the nine Branch B runtime PNGs, heated-iron card body, flame-heart combat energy counter, and dedicated power icons coexist with the four animated Realta scenes. `combat.png` remains the canonical standing still and fallback; the combat, rest, and merchant scenes use their animation resources. Sections 0.1–0.2 map the images and scenes; sections 0.6–0.7 and 3 describe the newer presentation resources.
+
+The 2026-10-20 combat/merchant rig places the weapon and ribbon in front of all body and death cels. Only the gripping hand and VFX appear above them; the released hand moves behind the weapon during death. Existing PNGs, meshes, and bone paths are preserved. The tree order and death ribbon angle are recorded in [animation/README.md](animation/README.md).
+
+Merchant `relaxed_loop` and its `idle`/`relaxed` aliases place the entire free arm behind the body. Clip keys switch the tree order of `upper_arm_r` and `forearm_r`; the wrist moves slightly outward so the glove edge remains visible beside the coat. Return-to-combat and death ordering changes occur when the arm and coat no longer overlap. Existing PNGs, meshes, and rest/selection resources are preserved. See Merchant free arm order in [animation/README.md](animation/README.md) for key timing and blend details.
+
+Merchant refinement on 2026-10-19 replaces the native eight-second `relaxed_loop` with independently authored planted-foot IK, a lower fixed shaft grip, free glove by the belt and viewer-left leg support. The same resource serves merchant autoplay/idle and combat relaxed aliases. `author_clips.py` owns the pose; `build_combat_rig.gd` owns live-phase blends to idle/death; the runtime controller suppresses phase randomization when changing loops. Alpha-only cleanup of `combat/parts/weapon-rigid.png` and `foot_l.png` preserves their canvas/offset registration and all RGB. No new paintings or rest/selection edits are part of this refinement. Reproduction and verification scope are documented in [animation/README.md](animation/README.md).
+
+As of 2026-10-19, **all four Realta scenes are animated** (combat/merchant cutout rig, seated rest mesh, animated selection painting). Their runtime files, ownership and reproduction live in [animation/README.md](animation/README.md); decisions and comparisons are in [the iteration log](realta-animation-iteration-log.md) and [the runtime dispatch research](../../research/sts2-cutout-runtime-contract.md). `combat.png` remains the canonical standing still (portrait source, fallback), but no scene references it any more. The repository build/PCK export and packaged-scene rendering were verified; in-game play was not.
+
+The 2026-10-18 standing delivery reverted the separate combat pose and removed the extra `standing.png`. The base-derived `combat.png` retains the youthful appearance, open forehead, both pauldrons, continuous collar, and upright one-handed stance of the approved base. The selection illustration retains the blade-inspection scene. The tables and conversion procedures below explain the current state without local generation masters or historical logs.
 
 ### 0.1 Canonical Base and Runtime Images
 
@@ -15,7 +25,7 @@ The canonical base is `docs/characters/realta/base.png`. Runtime PNGs share the 
 | Target / delivery file | Production basis / conversion | PNG dimensions | Applied state |
 |---|---|---|---|
 | [Canonical base.png](base.png) | Approved complete figure and transparent margins | 1152×1728 RGBA | Approved and promoted; identity input for subsequent production |
-| `combat.png` | Fit the whole approved base, including margins | 384×576 RGBA | Shared by combat, rest, and merchant scenes; original standing restored |
+| `combat.png` | Fit the whole approved base, including margins | 384×576 RGBA | Canonical standing still and fallback; animated scenes use separate resources |
 | `character_icon.png` | Generate the base's face and clothing as a chibi bust | 128×128 RGBA | Chibi portrait applied |
 | `character_icon_outline.png` | Dilate the final portrait alpha by 2 px | 128×128 RGBA | Connected with the same portrait silhouette |
 | `map_marker.png` | Dedicated face-and-hat master with the same chibi appearance | 128×128 RGBA | Fit the whole master within 110×110, then add 9 px transparent padding on each side |
@@ -29,20 +39,24 @@ The base, portrait, marker, energy icons, and standing figure have transparent b
 
 ### 0.2 Current Scene and Property Connections
 
-`Realta.cs` returns these `.tscn` paths under `res://Sts2WD/scenes/realta/`. Combat, rest, and merchant scenes all use `combat.png`.
+`Realta.cs` returns these `.tscn` paths under `res://Sts2WD/scenes/realta/`. Animated content lives under `res://Sts2WD/animations/realta/` (see [animation/README.md](animation/README.md)).
 
 | Property | Scene | Current structure / display placement |
 |---|---|---|
-| `CustomVisualPath` | `combat.tscn` | `Node2D` + `%Visuals`, `Bounds`, dialogue/intent/orb anchors, and `%FormVfx`. Sprite position `(0,-155)`, scale 0.625, displayed at 240×360 |
-| `CustomRestSiteAnimPath` | `rest_site.tscn` | `Node2D` → `ControlRoot` → `Visuals` and `%Hitbox`. Sprite position `(0,-16)`, scale 0.85, displayed at 326.4×489.6 |
-| `CustomMerchantAnimPath` | `merchant.tscn` | `Node2D` + `%Visuals`. Sprite position `(0,-155)`, scale 0.625, displayed at 240×360 |
-| `CustomCharacterSelectBg` | `char_select_bg_realta.tscn` | `Control` + FullRect `TextureRect`; ignores input and fills the screen while preserving aspect ratio |
+| `CustomVisualPath` | `combat.tscn` | `Node2D` + `%Visuals` (empty `Sprite2D` at `(0,-155)`, scale 0.625) → `Rig` instance of `realta_combat_rig.tscn` at `(-192,-288)`; `Bounds`, dialogue/intent/orb anchors and `%FormVfx` unchanged. Displayed 240×360 |
+| `CustomRestSiteAnimPath` | `rest_site.tscn` | `Node2D` → `ControlRoot` (flip/seat point) → `Visuals` (`realta_rest.gd`, position `(-258,-285)`, scale 0.4), `%Hitbox`, `%ThoughtBubbleLeft/Right` |
+| `CustomMerchantAnimPath` | `merchant.tscn` | `Node2D` + `%Visuals` → `Rig` instance of `realta_merchant_rig.tscn` (autoplay and `idle` = `relaxed_loop`) |
+| `CustomCharacterSelectBg` | `char_select_bg_realta.tscn` | `Control` (FullRect, clips, ignores input) → `Illustration` (`realta_select.gd`) covering the rect like `KEEP_ASPECT_COVERED`, using `char_select_bg.png` |
 
-Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-170,-300)~(170,200)`. `CustomIconOutlineTexturePath` connects the portrait-outline PNG. The combat energy counter uses the flame-heart treatment below; multiplayer hands and separate character animations retain their existing defaults.
+Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-195,-280)~(195,200)`. `CustomIconOutlineTexturePath` connects the portrait-outline PNG. The combat energy counter uses the flame-heart treatment below. The four scenes use the animations listed above; multiplayer hands retain their existing defaults.
 
 ### 0.3 Verification Scope and Reading Guide
 
-- Rollback verification checks that the restored `combat.png` exactly matches the former base-derived `standing.png` and that all three scenes reference `combat.png`. The extra standing PNG and its import descriptor are removed. Packaging/resource-loading results for the restored state are recorded in section 0.5. These observations are not formal tests or product acceptance; actual gameplay and other aspect ratios remain unverified.
+2026-10-19 전투/상인 리그 보완본은 가려진 관절 면, 앞/뒤 코트, 공격 전용 그립, 피격·사망 다리 동작과 착지 중간 셀을 포함한다. runtime PNG와 parts.json/meshes.json의 source mapping이 빌드 입력이며, 구체적인 파일 소유권과 재현 절차는 [animation/README.md](animation/README.md)에 있다. 7개 클립 396프레임 렌더와 publish가 완료됐고 새 PCK에서 두 장면·10개 재생 이름·추가 텍스처·행동 복귀·사망 유지·revive reset을 관찰했다. 게임 설치와 실제 게임 검증은 하지 않았으며 rest/select 원본 12개는 작업 시작 해시와 같다.
+
+The combat expression textures `Sts2WD/animations/realta/combat/parts/head-closed.png`, `head-hurt.png`, and `head-attack.png` were regenerated separately and registered by scale/translation against unchanged hair, hat and ear regions. Each remains 188×126 RGBA at source offset `(140,99)`, with alpha identical to the untouched `head.png`. One connected facial-skin mask preserves hair/hat outside the face and the original dark jaw junction. Matching 384×576 source layers place each complete runtime rectangle at `(140,99)` in `drafts/cutout-v12/parts/` for future export consistency. Three visual review passes included 8× face views on grey/dark and head-over-torso at scale 0.625. This PNG-only update did not run Godot import, packaging, installation or game verification; existing packaged assets may therefore predate these textures.
+
+- Historical rollback verification checked that the restored `combat.png` exactly matched the former base-derived `standing.png` and that all three scenes referenced `combat.png` before animation integration. The extra standing PNG and its import descriptor are removed. Packaging/resource-loading results for that restored state are recorded in section 0.5. These observations are not formal tests or product acceptance; actual gameplay and other aspect ratios remain unverified.
 - The approved `base.png` was unchanged during downstream production. Section 0.4 describes delivery conversion.
 - An approximate selection-UI overlay obscured part of the working hand behind the left description panel. The face and blade remained visible, and the selected composition was applied unchanged. This was neither a game capture nor a formal test; text and action readability still need an actual gameplay check.
 - For PNG creation/editing, read section 0.1 and the art specification. For scenes, read sections 0.2 and 2.1. For card/relic/power delivery, read sections 2.2–2.4 and 4. Historical rationale is in [realta-history.md](realta-history.md).
@@ -51,7 +65,7 @@ Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-170,-300)
 
 The game and packaging use the runtime PNGs and can build without generation intermediates. For new images, design the composition from the approved base, [art specification](realta-art.md), and original-game research for the use case. Do not reuse old deliveries or local drafts as generation inputs. The following procedures export new masters; they do not reproduce the exact pixels of unavailable historical masters.
 
-- **Shared standing figure:** Fit the whole `base.png` to 384×576, including transparent margins, without cropping. The command below reproduces `combat.png`, shared by combat/rest/merchant. The user reverted the separate combat pose; do not regenerate or reintroduce a separate runtime standing file without a new request.
+- **Canonical standing figure:** Fit the whole `base.png` to 384×576, including transparent margins, without cropping. The command below reproduces the `combat.png` still; the animated scenes use the resources in section 0.2. The user reverted the separate combat pose; do not regenerate or reintroduce a separate runtime standing file without a new request.
 - **Portrait and marker:** Generate each for a square composition. Export the whole portrait to 128×128 and dilate its final alpha by a 2 px radius for a white outline. Fit the whole marker master within 110×110, then place it at `(9,9)` on a 128×128 transparent canvas.
 - **Two selection tiles:** Fit the whole transparent face-close-up master to 132×195. Reuse its downscaled RGB and alpha `a` (0–1). Composite the normal tile as `a × figure RGB + (1−a) × #2476A6`, and the locked tile as `(1−a) × #3B3B3B` to produce a black figure silhouette. Both final outputs have alpha 255.
 - **Two energy icons:** Proportionally resize the complete flame-heart master, with an empty dark inset for the number, to 74×74 and 24×24. Keep the outside background transparent. Do not reintroduce the earlier small inner heart or bronze/blue medallion.
@@ -65,7 +79,7 @@ After export, inspect the whole image at actual display size on light and dark b
 
 ### 0.5 Standing and Combat Split
 
-The separate runtime combat pose was reverted at the user's request. The former base-derived `standing.png` now occupies `Sts2WD/images/charui/realta/combat.png`; `standing.png` and `standing.png.import` have been removed. Combat, rest, and merchant scenes all reference the restored `combat.png`, with their previous anchors and scales unchanged. No C# property changes were needed for this rollback.
+The separate runtime combat pose was reverted at the user's request. The former base-derived `standing.png` now occupies `Sts2WD/images/charui/realta/combat.png`; `standing.png` and `standing.png.import` have been removed. At that stage, combat, rest, and merchant scenes all referenced the restored `combat.png`, with their previous anchors and scales unchanged. No C# property changes were needed for this rollback. Section 0.2 describes the subsequent animation integration.
 
 The restored 384×576 RGBA image has SHA-256 `0372A0C097D3EF52CF90858889BAB0DAFE068D3B3171027902E6C0A9C1A7AE6B`, matching the former standing file exactly. This is the current character-specific delivery even though the generic Branch B workflow supports separate poses.
 
@@ -165,7 +179,7 @@ The sibling MegaLabel uses anchors 0.5/0.5 with offsets -24,-2,+30,+42: the same
   - `Sts2WDPower : CustomPowerModel` provides overrides for `CustomPackedIconPath` (`PowerImagePath()`) and `CustomBigIconPath` (`BigPowerImagePath()`).
   - **Current status:** Twenty of the 22 power classes under `Sts2WDCode/Characters/Realta/Powers/` inherit `Sts2WDPower` and use dedicated 64px/256px PNGs. `RealtaForgeHeatPower` and `RealtaUndyingLoyaltyPower` retain their native fallbacks. Three additional native powers receive presentation-only icons through `RealtaPowerPresentation`; see sections 2.4 and 3.
 - **Character and card/relic/potion pools (`Sts2WDCode/Characters/Realta/Realta.cs:11-61`, `RealtaCardPool.cs:7-34`, `RealtaRelicPool.cs:7-13`, `RealtaPotionPool.cs:7-14`):**
-  - `Realta : PlaceholderCharacterModel` overrides the name color, portrait/outline, selection tiles, map marker, and the combat/rest/merchant/selection scenes in section 0.2. Other visuals, sounds, and animations use `PlaceholderCharacterModel` defaults.
+  - `Realta : PlaceholderCharacterModel` overrides the name and energy-label outline colors, portrait/outline, selection tiles, map marker, and the combat/rest/merchant/selection scenes in section 0.2. `RealtaSceneBridge.cs` forwards rest act/light-off and non-combat game-over death to the Godot scenes. `RealtaEnergyCounterAppearance` supplies the counter treatment in section 0.7, and `RealtaCardAudio` reuses native upgrade and enchantment sounds. Other character visuals and sounds use `PlaceholderCharacterModel` defaults.
   - `RealtaCardPool : CustomCardPoolModel` defines `BigEnergyIconPath` (`"charui/realta/big_energy.png".ImagePath()`), `TextEnergyIconPath` (`"charui/realta/text_energy.png".ImagePath()`), a custom heated-iron frame with identity HSV parameters (`H = 1f, S = 1f, V = 1f`), and `DeckEntryCardColor = new("e76f51")`.
   - `RealtaRelicPool` and `RealtaPotionPool` use the same `BigEnergyIconPath`, `TextEnergyIconPath`, and `LabOutlineColor => Realta.Color`.
 
@@ -562,7 +576,7 @@ These are candidates after the current delivery, not an automatic execution sequ
 
 1. **UI, standing figure, and selection-scene revisions:** Section 0.1 describes the current delivery. If the base changes or the user requests more work, record the appearance/composition differences in the document and update only affected assets.
 2. **Cards, relics, and powers:** Check actual file mappings and fallbacks in sections 2.2–2.4, then produce the requested items. An image-update request does not itself authorize changes to path helpers or gameplay behavior.
-3. **Additional visuals:** The combat counter is connected through RealtaEnergyCounterAppearance; multiplayer hands, card trails, and additional animations remain separate scope. Static standing and selection scenes are already connected as described in section 0.2.
+3. **Additional visuals:** The combat counter is connected through `RealtaEnergyCounterAppearance`. Combat, merchant, rest, and selection animations are connected as described in section 0.2. Multiplayer hands, card trails, and additional animations remain separate scope.
 
 ---
 
@@ -589,9 +603,13 @@ This table covers both current deliveries and future production targets. Section
 | **Small power icons (22)** | `Sts2WD/images/powers/<power_name>.png` | **`64 x 64`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `CustomPowerModel.CustomPackedIconPath` (`Sts2WDPower`) |
 | **Large power icons (22)** | `Sts2WD/images/powers/big/<power_name>.png` | **`256 x 256`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `CustomPowerModel.CustomBigIconPath` (`Sts2WDPower`) |
 | **Character-selection background scene** | `Sts2WD/scenes/realta/char_select_bg_realta.tscn` (+ background PNG) | `1920 x 1080` (`Control` root scene) | Godot `.tscn` + RGBA PNG | `Realta.CustomCharacterSelectBg` |
-| **Combat character visuals** | `Sts2WD/scenes/realta/combat.tscn` + `Sts2WD/images/charui/realta/combat.png` | current PNG `384 x 576`, displayed at `240 x 360`, Bounds `240 x 360` | Godot `.tscn` (`Node2D` root) or RGBA PNG | `Realta.CustomVisualPath` |
-| **Rest-site character scene** | `Sts2WD/scenes/realta/rest_site.tscn` | currently displayed at `326.4 x 489.6`, Hitbox `340 x 500` | Godot `.tscn` (`Node2D` + `ControlRoot`) | `Realta.CustomRestSiteAnimPath` |
-| **Merchant character scene** | `Sts2WD/scenes/realta/merchant.tscn` | currently displayed at `240 x 360` (`Node2D` root) | Godot `.tscn` (`Node2D` root) | `Realta.CustomMerchantAnimPath` |
+| **Combat character visuals** | `Sts2WD/scenes/realta/combat.tscn` + `Sts2WD/animations/realta/combat/` | rig in 384×576 source px, displayed at `240 x 360`, Bounds `240 x 360` | Godot `.tscn` (`Node2D` root) with baked rig | `Realta.CustomVisualPath` |
+| **Rest-site character scene** | `Sts2WD/scenes/realta/rest_site.tscn` + `Sts2WD/animations/realta/rest/` | 1254² painting at scale 0.4 (≈ 448 x 467 figure), Hitbox `390 x 480` | Godot `.tscn` (`Node2D` + `ControlRoot`) | `Realta.CustomRestSiteAnimPath` |
+| **Merchant character scene** | `Sts2WD/scenes/realta/merchant.tscn` | same rig, displayed at `240 x 360` (`Node2D` root) | Godot `.tscn` (`Node2D` root) | `Realta.CustomMerchantAnimPath` |
 | **Multiplayer-hand textures (four, optional)** | `Sts2WD/images/charui/realta/hand_{point,rock,paper,scissors}.png` | `422 x 1200` | RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomArm{Pointing,Rock,Paper,Scissors}TexturePath` |
 
 ---
+
+### 공격 궤적 범위 (2026-10-20)
+
+공격 `Slash`는 기존 `slash-trail.png`를 유지하고, 240 Hz로 측정한 칼끝·칼날 윤곽을 사용하는 `Polygon2D`로 적용했다. `author_clips.py`, `build_combat_rig.gd`, `slash_reveal.gdshader`가 경로·메시·점진 표시를 담당한다. 전투와 상점 리그에 함께 적용하며 상세 재현 절차는 `animation/README.md`에 있다.

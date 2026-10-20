@@ -118,8 +118,15 @@
     </Target>
 
     <Target Name="GodotPublish" AfterTargets="Publish" Condition="'$(GodotPath)' != '' and Exists('$(GodotPath)') and '$(IsInnerGodotExport)' != 'true'">
-        <Message Text="Exporting Godot .pck to mods folder" Importance="high"/>
-        <Exec Command="&quot;$(GodotPath)&quot; --headless --editor --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
+        <!-- Keep direct dotnet publish safe too: MegaDot can crash while rotating
+             its default AppData log under restricted permissions. -->
+        <PropertyGroup>
+            <GodotExportLogDirectory>$(MSBuildProjectDirectory)/artifacts/godot-export-$([System.Guid]::NewGuid().ToString('N'))</GodotExportLogDirectory>
+        </PropertyGroup>
+        <MakeDir Directories="$(GodotExportLogDirectory)"/>
+        <Touch Files="$(MSBuildProjectDirectory)/artifacts/.gdignore" AlwaysCreate="true"/>
+        <Message Text="Exporting Godot .pck to mods folder; engine log: $(GodotExportLogDirectory)/engine.log" Importance="high"/>
+        <Exec Command="&quot;$(GodotPath)&quot; --log-file &quot;$(GodotExportLogDirectory)/engine.log&quot; --headless --editor --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
               EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
               ContinueOnError="false"/>
     </Target>
