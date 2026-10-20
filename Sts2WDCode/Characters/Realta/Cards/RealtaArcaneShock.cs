@@ -20,6 +20,6 @@ public sealed class RealtaArcaneShock() : RealtaCard(1, CardType.Attack, CardRar
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(2m);
-        DynamicVars["Guard"].UpgradeValueBy(1m);
+        DynamicVars["Guard"].UpgradeValueBy(2m);
     }
 }

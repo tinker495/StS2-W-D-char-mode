@@ -18,5 +18,5 @@ public sealed class RealtaSelfRepair() : RealtaCard(1, CardType.Skill, CardRarit
         // Recover exhausted Guards before Guard checks whether it needs to create a new card.
         await GuardCmd.Guard(DynamicVars["Guard"].BaseValue, Owner);
     }
-    protected override void OnUpgrade() => DynamicVars["Guard"].UpgradeValueBy(2m);
+    protected override void OnUpgrade() => DynamicVars["Guard"].UpgradeValueBy(3m);
 }
