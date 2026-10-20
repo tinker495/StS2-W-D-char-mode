@@ -63,6 +63,6 @@
   "STS2WD-REALTA_PORTABLE_FORGE_POWER.description": "[gold]Refine[/gold] your next card {Amount} before it is played.\nConsumed even if the card cannot be [gold]Refined[/gold].",
   "STS2WD-REALTA_PORTABLE_FORGE_POWER.smartDescription": "[gold]Refine[/gold] your next card {Amount} before it is played.\nConsumed even if the card cannot be [gold]Refined[/gold].",
   "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.title": "Hero's Silhouette",
-  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.description": "The first time you [gold]Upgrade[/gold] each turn, gain {Amount} Energy.\nThe first time you [gold]Refine[/gold] each turn, draw {Amount} cards.",
-  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.smartDescription": "The first time you [gold]Upgrade[/gold] each turn, gain {Amount} Energy.\nThe first time you [gold]Refine[/gold] each turn, draw {Amount} cards."
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.description": "The first time you [gold]Upgrade[/gold] each turn, gain {Amount} Energy.\nThe first time you [gold]Refine[/gold] each turn, draw {Cards} cards.",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.smartDescription": "The first time you [gold]Upgrade[/gold] each turn, gain {Amount} Energy.\nThe first time you [gold]Refine[/gold] each turn, draw {Cards} cards."
 }

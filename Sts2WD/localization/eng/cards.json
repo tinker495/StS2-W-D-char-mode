@@ -47,7 +47,7 @@
   "STS2WD-REALTA_SNATCH.title": "Snatch",
   "STS2WD-REALTA_SNATCH.description": "Gain {Block:diff()} [gold]Block[/gold].\n[gold]Guard[/gold] {Guard:diff()}.",
   "STS2WD-REALTA_MY_NAME_IS.title": "My Name Is!",
-  "STS2WD-REALTA_MY_NAME_IS.description": "Gain {VigorPower:diff()} [gold]Vigor[/gold].\n[gold]Duel[/gold]: Gain {Block:diff()} [gold]Block[/gold].",
+  "STS2WD-REALTA_MY_NAME_IS.description": "Gain {VigorPower:diff()} [gold]Vigor[/gold].\nGain {CalculatedBlock:diff()} [gold]Block[/gold], equal to ALL enemies' total [gold]Block[/gold].",
   "STS2WD-REALTA_FAERIE_FIRE.title": "Faerie Fire",
   "STS2WD-REALTA_FAERIE_FIRE.description": "Apply {VulnerablePower:diff()} [gold]Vulnerable[/gold].\n[gold]Spell[/gold]: Also apply {WeakPower:diff()} [gold]Weak[/gold].",
   "STS2WD-REALTA_FAERIE_BRONZE.title": "Faerie Bronze",
@@ -74,9 +74,9 @@
   "STS2WD-REALTA_MENDING.title": "Mending",
   "STS2WD-REALTA_MENDING.description": "Gain {PlatingPower:diff()} [gold]Plating[/gold].",
   "STS2WD-REALTA_KNIGHTS_OATH.title": "Knight's Oath",
-  "STS2WD-REALTA_KNIGHTS_OATH.description": "Gain {VigorPower:diff()} [gold]Vigor[/gold].\n[gold]Duel[/gold]: Next turn, gain {VigorPower:diff()} [gold]Vigor[/gold].",
+  "STS2WD-REALTA_KNIGHTS_OATH.description": "Gain {VigorPower:diff()} [gold]Vigor[/gold].\n[gold]Valor[/gold]: Gain {PlatingPower:diff()} [gold]Plating[/gold].",
   "STS2WD-REALTA_CHIVALRY.title": "Chivalry",
-  "STS2WD-REALTA_CHIVALRY.description": "Gain {Block:diff()} [gold]Block[/gold].\nALL enemies gain {EnemyBlock:diff()} [gold]Block[/gold].",
+  "STS2WD-REALTA_CHIVALRY.description": "Gain {PlatingPower:diff()} [gold]Plating[/gold].\nALL enemies also gain {PlatingPower:diff()} [gold]Plating[/gold].",
   "STS2WD-REALTA_SPATIAL_WARP.title": "Spatial Warp",
   "STS2WD-REALTA_SPATIAL_WARP.description": "Gain {Block:diff()} [gold]Block[/gold].\n[gold]Spell[/gold]: This turn, blocked attack damage is reflected back at the attacker.",
   "STS2WD-REALTA_SMELTING.title": "Smelting",
@@ -168,6 +168,6 @@
   "STS2WD-REALTA_ALMENELS_BULWARK.title": "Almenel's Bulwark",
   "STS2WD-REALTA_ALMENELS_BULWARK.description": "Gain {Plating:diff()} [gold]Plating[/gold].\nThis amount increases with this card's [gold]Adroit[/gold].",
   "STS2WD-REALTA_HEROS_SILHOUETTE.title": "Hero's Silhouette",
-  "STS2WD-REALTA_HEROS_SILHOUETTE.description": "The first time you [gold]Upgrade[/gold] each turn, gain [energy:1].\nThe first time you [gold]Refine[/gold] each turn, draw 1 card.",
+  "STS2WD-REALTA_HEROS_SILHOUETTE.description": "The first time you [gold]Upgrade[/gold] each turn, gain [energy:1].\nThe first time you [gold]Refine[/gold] each turn, draw {Cards:diff()} card(s).",
   "STS2WD-REALTA_MASTERPIECE.selectionScreenPrompt": "Choose a card to keep."
 }

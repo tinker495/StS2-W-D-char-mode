@@ -19,5 +19,9 @@ public sealed class RealtaShockingTouch() : RealtaSpellCard(0, CardType.Attack, 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
         if (SpellActive) await PowerCmd.Apply<WeakPower>(choiceContext, cardPlay.Target, DynamicVars["WeakPower"].BaseValue, Owner.Creature, this);
     }
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(1m);
+        DynamicVars["WeakPower"].UpgradeValueBy(1m);
+    }
 }

@@ -17,5 +17,5 @@ public sealed class RealtaWhetstone() : RealtaCard(1, CardType.Attack, CardRarit
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
         await RefineCmd.Refine(choiceContext, Owner, DynamicVars["Refine"].IntValue, this);
     }
-    protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(1m);
+    protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(2m);
 }

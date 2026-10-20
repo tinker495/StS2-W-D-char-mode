@@ -12,7 +12,7 @@ public sealed class RealtaEquipmentCare() : RealtaCard(1, CardType.Skill, CardRa
 {
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
-        new CalculationBaseVar(7m), new CalculationExtraVar(1m),
+        new CalculationBaseVar(8m), new CalculationExtraVar(1m),
         new CalculatedBlockVar(ValueProp.Move).WithMultiplier(static (card, _) =>
             card.Owner?.Creature.GetPowerAmount<PlatingPower>() ?? 0m)
     ];
@@ -23,6 +23,6 @@ public sealed class RealtaEquipmentCare() : RealtaCard(1, CardType.Skill, CardRa
     }
     protected override void OnUpgrade()
     {
-        DynamicVars.CalculationBase.UpgradeValueBy(3m);
+        DynamicVars.CalculationBase.UpgradeValueBy(4m);
     }
 }
