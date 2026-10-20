@@ -1,4 +1,4 @@
-using BaseLib.Abstracts;
+using Sts2WD.Sts2WDCode.Powers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Combat.History.Entries;
 using MegaCrit.Sts2.Core.Commands;
@@ -11,12 +11,10 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaIndomitablePower : CustomPowerModel
+public sealed class RealtaIndomitablePower : Sts2WDPower
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-    public override string CustomPackedIconPath => ModelDb.Power<PlatingPower>().PackedIconPath;
-    public override string CustomBigIconPath => ModelDb.Power<PlatingPower>().ResolvedBigIconPath;
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<PlatingPower>()];
 
     public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)

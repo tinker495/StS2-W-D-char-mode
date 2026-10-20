@@ -1,0 +1,8 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://Sts2WD/materials/realta/heated_metal.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/cold_color = Color(0.10, 0.09, 0.10, 1)
+shader_parameter/hot_color = Color(0.25, 0.17, 0.15, 1)

@@ -22,12 +22,16 @@ internal static class RealtaDiscoveryCmd
         foreach (var card in upgradedCards) CardCmd.Upgrade(card);
         var refinedCards = cards.Where(card => refinement > 0 && RefineCmd.CanRefine(card)).ToHashSet();
         foreach (var card in refinedCards)
-            RealtaEnchantments.EnchantTemporarily(card, RefineCmd.EnchantmentFor(card), refinement);
+            RealtaEnchantments.EnchantTemporarily(card, RefineCmd.EnchantmentFor(card), refinement, playSound: false);
 
         CardModel? selected = await CardSelectCmd.FromChooseACardScreen(context, cards, player, canSkip: false);
         if (selected == null) return;
         await CardPileCmd.AddGeneratedCardToCombat(selected, PileType.Hand, player);
         if (upgradedCards.Contains(selected)) await RefineCmd.OnCombatCardUpgraded(context, selected);
-        if (refinedCards.Contains(selected)) await RefineCmd.OnCardRefined(context, selected, refinement);
+        if (refinedCards.Contains(selected))
+        {
+            RealtaCardAudio.Enchant(selected);
+            await RefineCmd.OnCardRefined(context, selected, refinement);
+        }
     }
 }

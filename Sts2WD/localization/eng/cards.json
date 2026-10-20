@@ -152,7 +152,7 @@
   "STS2WD-REALTA_MATERIAL_ANALYSIS.title": "Material Analysis",
   "STS2WD-REALTA_MATERIAL_ANALYSIS.description": "Shuffle ALL [gold]Upgraded[/gold] or enchanted cards in your discard pile into your draw pile.\nDraw {Cards:diff()} cards.",
   "STS2WD-REALTA_IMPROVISED_WEAPON.title": "Improvised Weapon",
-  "STS2WD-REALTA_IMPROVISED_WEAPON.description": "Deal {Damage:diff()} damage.\nChoose 1 of 3 random {Upgraded:cond:>0?[gold]Upgraded[/gold] |}Realta Skills to add to your hand.\nIt gains [gold]Adroit[/gold] equal to this card's [gold]Sharp[/gold].",
+  "STS2WD-REALTA_IMPROVISED_WEAPON.description": "Deal {Damage:diff()} damage.\nChoose 1 of 3 random {Upgraded:cond:>0?[gold]Upgraded[/gold] |}Skills to add to your hand.\nIt gains [gold]Adroit[/gold] equal to this card's [gold]Sharp[/gold].",
   "STS2WD-REALTA_HEROISM.title": "Heroism",
   "STS2WD-REALTA_HEROISM.description": "Gain {Block:diff()} [gold]Block[/gold].\n[gold]Spell[/gold]: Gain [gold]Vigor[/gold] equal to your [gold]Block[/gold].",
   "STS2WD-REALTA_MASTERPIECE.title": "Masterpiece",
@@ -168,6 +168,6 @@
   "STS2WD-REALTA_ALMENELS_BULWARK.title": "Almenel's Bulwark",
   "STS2WD-REALTA_ALMENELS_BULWARK.description": "Gain {Plating:diff()} [gold]Plating[/gold].\nThis amount increases with this card's [gold]Adroit[/gold].",
   "STS2WD-REALTA_HEROS_SILHOUETTE.title": "Hero's Silhouette",
-  "STS2WD-REALTA_HEROS_SILHOUETTE.description": "The first time you [gold]Upgrade[/gold] each turn, gain [energy:1].\nThe first time you [gold]Refine[/gold] each turn, draw {Cards:diff()} card(s).",
+  "STS2WD-REALTA_HEROS_SILHOUETTE.description": "The first time you [gold]Upgrade[/gold] each turn, gain {energyPrefix:energyIcons(1)}.\nThe first time you [gold]Refine[/gold] each turn, draw {Cards:diff()} card(s).",
   "STS2WD-REALTA_MASTERPIECE.selectionScreenPrompt": "Choose a card to keep."
 }

@@ -1,4 +1,4 @@
-using BaseLib.Abstracts;
+using Sts2WD.Sts2WDCode.Powers;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
@@ -8,12 +8,10 @@ using MegaCrit.Sts2.Core.Runs;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaLuckyNecklacePower : CustomPowerModel
+public sealed class RealtaLuckyNecklacePower : Sts2WDPower
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-    public override string CustomPackedIconPath => ModelDb.Power<RoyaltiesPower>().PackedIconPath;
-    public override string CustomBigIconPath => ModelDb.Power<RoyaltiesPower>().ResolvedBigIconPath;
 
     public override Task AfterCombatEnd(CombatRoom room)
     {

@@ -54,6 +54,7 @@ public static class RefineCmd
     {
         if (!CanRefine(card)) return;
         CardCmd.Enchant(EnchantmentFor(card).ToMutable(), card, amount);
+        if (amount > 0) RealtaCardAudio.Enchant(card);
         CardCmd.Preview(card);
     }
 
@@ -66,6 +67,7 @@ public static class RefineCmd
     public static async Task Upgrade(PlayerChoiceContext choiceContext, CardModel card)
     {
         if (!card.IsUpgradable) return;
+        int previousLevel = card.CurrentUpgradeLevel;
         _internalUpgradeDepth++;
         try
         {
@@ -75,7 +77,8 @@ public static class RefineCmd
         {
             _internalUpgradeDepth--;
         }
-        await OnCombatCardUpgraded(choiceContext, card);
+        if (card.CurrentUpgradeLevel > previousLevel)
+            await OnCombatCardUpgraded(choiceContext, card);
     }
 
     internal static bool IsInternalUpgrade => _internalUpgradeDepth > 0;
@@ -83,6 +86,7 @@ public static class RefineCmd
     internal static async Task OnCombatCardUpgraded(PlayerChoiceContext choiceContext, CardModel card)
     {
         if (card.Owner?.Creature is not { } owner) return;
+        RealtaCardAudio.Upgrade(card);
         // Snapshot before other upgrade triggers can draw or move cards. Motes never trigger each other.
         var motes = card is not RealtaMoteOfFlame && card.Owner.PlayerCombatState is { } state
             ? state.Hand.Cards.OfType<RealtaMoteOfFlame>().ToList()

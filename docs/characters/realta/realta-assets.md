@@ -1,12 +1,12 @@
 # Realta Asset Production and Integration Guide
 
-This guide explains production and integration for character UI, 81 card illustrations, five relic icons, and 22 power icons. Its evidence is the shared [mod code](../../../Sts2WDCode/), [runtime images](../../../Sts2WD/images/), [project dependencies](../../../Sts2WD.csproj), and the StS2 / BaseLib 3.4.7 API observations recorded below. Identify external game APIs by assembly, type, and member; private decompilation-cache paths and line numbers are not required evidence.
+This guide explains production and integration for character UI, 81 card illustrations, five relic icons, and power artwork. The delivered power set contains 23 dedicated icons (20 custom powers and three native-power presentations); two additional custom powers retain native fallback art. Its evidence is the shared [mod code](../../../Sts2WDCode/), [runtime images](../../../Sts2WD/images/), [project dependencies](../../../Sts2WD.csproj), and the StS2 / BaseLib 3.4.7 API observations recorded below. Identify external game APIs by assembly, type, and member; private decompilation-cache paths and decompiler line numbers are not required evidence.
 
 [realta-art.md](realta-art.md) owns appearance, palette, equipment, theme visualization, asset staging, and character prompt material. This guide owns file mappings, code/scene integration, and current runtime status. [realta-history.md](realta-history.md) records past production decisions and verification. Follow [ARTS.md](../../../ARTS.md) for shared style and chibi scope.
 
 ## 0. Current Application Status
 
-As of 2026-10-18, **nine Branch B runtime PNGs are applied, with the base-derived `combat.png` shared by combat, rest, and merchant scenes.** The user reverted the separate combat pose and removed the extra `standing.png`. The shared figure retains the youthful appearance, open forehead, both pauldrons, continuous collar, and upright one-handed stance of the approved base. The selection illustration retains the blade-inspection scene. The tables and conversion procedures below explain the current state without local generation masters or historical logs.
+As of 2026-10-20, **nine Branch B runtime PNGs and a heated-iron card-body texture are applied, with the base-derived `combat.png` shared by combat, rest, and merchant scenes.** The user reverted the separate combat pose and removed the extra `standing.png`. The shared figure retains the youthful appearance, open forehead, both pauldrons, continuous collar, and upright one-handed stance of the approved base. The selection illustration retains the blade-inspection scene. The tables and conversion procedures below explain the current state without local generation masters or historical logs.
 
 ### 0.1 Canonical Base and Runtime Images
 
@@ -21,8 +21,8 @@ The canonical base is `docs/characters/realta/base.png`. Runtime PNGs share the 
 | `map_marker.png` | Dedicated face-and-hat master with the same chibi appearance | 128×128 RGBA | Fit the whole master within 110×110, then add 9 px transparent padding on each side |
 | `char_select.png` | Non-SD face close-up generated from the base and original-game tiles | 132×195, opaque | Fit the whole master and composite over blue |
 | `char_select_locked.png` | Reuse the same downscaled alpha | 132×195, opaque | Black figure on gray |
-| `big_energy.png` | Circular medallion using the base palette | 74×74 RGBA | Bronze ring and dark blue center applied |
-| `text_energy.png` | Same medallion master | 24×24 RGBA | Small inline-text output applied |
+| `big_energy.png` | User-selected red-orange flame-heart emblem, whole-image Fit | 74×74 RGBA | Empty dark burgundy heart inset for the cost number; no small inner heart |
+| `text_energy.png` | Same flame-heart master, whole-image Fit | 24×24 RGBA | Small inline-text output applied |
 | `char_select_bg.png` | Separately generated blade-inspection scene | 1920×1080, opaque | Fit the whole master; no post-generation crop |
 
 The base, portrait, marker, energy icons, and standing figure have transparent backgrounds. Selection tiles, the locked variant, and the selection background are opaque. Chibi scope follows the shared rule in [ARTS.md](../../../ARTS.md). Use [realta-art.md](realta-art.md) when carrying the latest approved appearance into new assets.
@@ -38,7 +38,7 @@ The base, portrait, marker, energy icons, and standing figure have transparent b
 | `CustomMerchantAnimPath` | `merchant.tscn` | `Node2D` + `%Visuals`. Sprite position `(0,-155)`, scale 0.625, displayed at 240×360 |
 | `CustomCharacterSelectBg` | `char_select_bg_realta.tscn` | `Control` + FullRect `TextureRect`; ignores input and fills the screen while preserving aspect ratio |
 
-Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-170,-300)~(170,200)`. `CustomIconOutlineTexturePath` connects the portrait-outline PNG. The combat energy counter, multiplayer hands, transitions, sounds, and separate animations retain their existing defaults.
+Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-170,-300)~(170,200)`. `CustomIconOutlineTexturePath` connects the portrait-outline PNG. The combat energy counter uses the flame-heart treatment below; multiplayer hands and separate character animations retain their existing defaults.
 
 ### 0.3 Verification Scope and Reading Guide
 
@@ -54,7 +54,7 @@ The game and packaging use the runtime PNGs and can build without generation int
 - **Shared standing figure:** Fit the whole `base.png` to 384×576, including transparent margins, without cropping. The command below reproduces `combat.png`, shared by combat/rest/merchant. The user reverted the separate combat pose; do not regenerate or reintroduce a separate runtime standing file without a new request.
 - **Portrait and marker:** Generate each for a square composition. Export the whole portrait to 128×128 and dilate its final alpha by a 2 px radius for a white outline. Fit the whole marker master within 110×110, then place it at `(9,9)` on a 128×128 transparent canvas.
 - **Two selection tiles:** Fit the whole transparent face-close-up master to 132×195. Reuse its downscaled RGB and alpha `a` (0–1). Composite the normal tile as `a × figure RGB + (1−a) × #2476A6`, and the locked tile as `(1−a) × #3B3B3B` to produce a black figure silhouette. Both final outputs have alpha 255.
-- **Two energy icons:** Proportionally resize the complete medallion master, with an empty central number area, to 74×74 and 24×24. Keep the outside background transparent.
+- **Two energy icons:** Proportionally resize the complete flame-heart master, with an empty dark inset for the number, to 74×74 and 24×24. Keep the outside background transparent. Do not reintroduce the earlier small inner heart or bronze/blue medallion.
 - **Selection background:** Generate a 16:9 scene from the start and Fit the whole image to 1920×1080. Fill edge margins caused by aspect-ratio rounding with the background's dark blue `#0C273C`; set final alpha to 255. Do not use post-generation cropping or Cover extraction.
 
 ```powershell
@@ -69,8 +69,35 @@ The separate runtime combat pose was reverted at the user's request. The former 
 
 The restored 384×576 RGBA image has SHA-256 `0372A0C097D3EF52CF90858889BAB0DAFE068D3B3171027902E6C0A9C1A7AE6B`, matching the former standing file exactly. This is the current character-specific delivery even though the generic Branch B workflow supports separate poses.
 
-Rollback packaging completed through `dev.ps1 publish` with zero C# warnings/errors and successful Godot import/PCK export. Temporary resource observations loaded nine textures and instantiated four scenes. All three character scenes resolved `combat.png`, and `ResourceLoader.exists` returned false for `standing.png`. The previously installed game package predates this rollback; this rollback has not been reinstalled or verified in gameplay.
+Rollback packaging completed through `dev.ps1 publish` with zero C# warnings/errors and successful Godot import/PCK export. Temporary resource observations loaded nine textures and instantiated four scenes. All three character scenes resolved `combat.png`, and `ResourceLoader.exists` returned false for `standing.png`. Subsequent local installations include this rollback; actual gameplay remains unverified.
+
+### 0.6 Heated-Iron Frame and Flame-Heart Energy Application
+
+The 2026-10-20 user-selected frame concept was adapted into a separate body layer, using the game's `card_frame_attack_s` layout as a composition reference. The body has no baked cost icon, title banner, or type plaque. The original complete generated body is proportionally Fit resized to 598×844; the selected flame-heart master is Fit resized to 74×74 and 24×24. No generation region is extracted or enlarged. The applied PNGs and the descriptions here are sufficient for runtime use; optional drafts are not build inputs.
+
+| Resource | Runtime path | Contract |
+|---|---|---|
+| Card body | `Sts2WD/images/cards/realta/frame.png` | 598×844 RGBA, transparent outer corners and illustration aperture, dark description panel |
+| Cost icon | `Sts2WD/images/charui/realta/big_energy.png` | 74×74 RGBA, flame outline and empty dark heart |
+| Inline icon | `Sts2WD/images/charui/realta/text_energy.png` | 24×24 RGBA, same whole-image conversion |
+| Title / portrait-border materials | Native `CardModel.BannerMaterial` | Retain rarity-dependent gray/cyan/gold materials and visible border |
+| Type material | `Sts2WD/materials/realta/card_type_plaque.tres` | Warm iron shading over the native nine-patch plaque |
+| Shared shader | `Sts2WD/materials/realta/heated_metal.gdshader` | Retains each original layer's alpha and broad luminance variation |
+
+`RealtaCardPool.CustomFrame` supplies the body; H/S/V are all 1 to preserve the painted palette. `RealtaGuard` keeps TokenCardPool ownership, overrides `VisualCardPool` for the Realta cost icon, and explicitly supplies the same custom frame because BaseLib's pool frame hook reads `Pool`, not `VisualCardPool`.
+
+`RealtaCardAppearance` runs after `NCard.Reload`. Standard Realta cards clear the body HSV material and replace only the type-plaque material; the native title banner and portrait border retain `CardModel.BannerMaterial` and visible opacity so rarity remains readable. The type label becomes ivory with a dark outline for readability on the dark plaque. Ancient cards keep the native full-art layers. `%EnergyLabel` uses offsets left/right −17/+17 and top/bottom −8/+28 (34×36px), 14–22px live autosizing, 3px outline/shadow outline, and 1px shadow offsets. The existing Korean/locale font, cost colors, and cost values are retained. The hook explicitly refreshes `MegaLabel.AdjustFontSize` because `SetTextAutoSize` skips unchanged text. For another character on a pooled node, it restores native ±23 / −26,+30 offsets, 22–32px autosizing, 16px outlines, and 2px shadows. Portrait-border opacity and type-label overrides are also restored. Existing portrait geometry, title/description positions, upgrade coloring, and rarity-dependent title outlines remain native.
+
+The 128×128 combat energy counter uses its native scene with the dedicated treatment described below; its texture is separate from card and inline energy icons. A temporary Godot renderer loaded the actual game/mod PCK resources and rendered Common/Uncommon/Rare layers with native banner/border materials, heated-iron body, and the game's Korean `gyeonggi_cheonnyeon_batang_bold_shared.tres` font. The rarity colors remain distinct and 0–3, X, 10, and ? fit the 64px emblem with the capped font/outline layout. This resource preview does not execute NCard or replace an in-game screenshot. Mod Harmony patches registered successfully and the temporary audio-path observations still passed. Packaging/installation verification is separate from actual gameplay, which remains unperformed.
+
+The final `dev.ps1 publish` completed successfully with zero C# warnings/errors. The local game installation was updated after backing up its previous four mod files. SHA256 comparisons matched for the installed DLL, PCK, JSON manifest, and PDB. This installation includes the working-tree visual changes on top of gameplay commit `5c64ff8`; it does not imply those visual changes have been committed or published to GitHub.
 ---
+
+### 0.7 Lower-Left Combat Energy Counter
+
+`RealtaEnergyCounterAppearance` runs after the native `NEnergyCounter._Ready`, scoped to a Realta player. It replaces `Layers/Layer1.Texture` with `Sts2WD/images/charui/realta/combat_energy.png`: the entire approved flame-heart painting proportionally resized to 256px, displayed inside the native 128px counter. It hides `Layers/RotationLayers`, `Layers/Layer4`, and `Layers/Layer5` so old orb decorations cannot cover or rotate the emblem. The original counter scene, current/max energy model, subscriptions, hover tip, energy-gain particle VFX, and entrance/exit animation remain active. Native RefreshLabel continues to darken the texture and turn the text red at zero energy.
+
+The sibling MegaLabel uses anchors 0.5/0.5 with offsets -24,-2,+30,+42: the same 54x44px box, optically shifted 3px right at the user's request. It uses live 16-26px autosizing, 3px outline/shadow outline, and 1px shadows. Realta overrides EnergyLabelOutlineColor with #4a160f. This keeps current/max energy inside the lower heart inset and shrinks longer values. Actual game textures/materials and the Korean locale font were rendered for 3/3, 0/3, 4/4, 10/3, 10/10, and 0/10 in a temporary resource preview. This does not claim an in-game playthrough.
 
 ## 1. Repository Asset Structure and Code Status
 
@@ -136,10 +163,10 @@ Rollback packaging completed through `dev.ps1 publish` with zero C# warnings/err
   - **Outline fallback:** If `<name>_outline.png` is missing, `PackedIconOutlinePath` returns the `RelicImagePath()` fallback `res://Sts2WD/images/relics/relic.png`, rather than `relic_outline.png`.
 - **Powers (`Sts2WDCode/Powers/Sts2WDPower.cs:14-31`, `Sts2WDCode/Characters/Realta/Powers/*.cs`):**
   - `Sts2WDPower : CustomPowerModel` provides overrides for `CustomPackedIconPath` (`PowerImagePath()`) and `CustomBigIconPath` (`BigPowerImagePath()`).
-  - **Current status:** The 22 power classes under `Sts2WDCode/Characters/Realta/Powers/` currently inherit directly from `CustomPowerModel`, not `Sts2WDPower`. Their `CustomPackedIconPath` and `CustomBigIconPath` temporarily reference vanilla icons such as `ModelDb.Power<FurnacePower>().PackedIconPath`; see section 2.4.
+  - **Current status:** Twenty of the 22 power classes under `Sts2WDCode/Characters/Realta/Powers/` inherit `Sts2WDPower` and use dedicated 64px/256px PNGs. `RealtaForgeHeatPower` and `RealtaUndyingLoyaltyPower` retain their native fallbacks. Three additional native powers receive presentation-only icons through `RealtaPowerPresentation`; see sections 2.4 and 3.
 - **Character and card/relic/potion pools (`Sts2WDCode/Characters/Realta/Realta.cs:11-61`, `RealtaCardPool.cs:7-34`, `RealtaRelicPool.cs:7-13`, `RealtaPotionPool.cs:7-14`):**
   - `Realta : PlaceholderCharacterModel` overrides the name color, portrait/outline, selection tiles, map marker, and the combat/rest/merchant/selection scenes in section 0.2. Other visuals, sounds, and animations use `PlaceholderCharacterModel` defaults.
-  - `RealtaCardPool : CustomCardPoolModel` defines `BigEnergyIconPath` (`"charui/realta/big_energy.png".ImagePath()`), `TextEnergyIconPath` (`"charui/realta/text_energy.png".ImagePath()`), card-frame HSV shader parameters (`H = 0.02f, S = 1f, V = 1f`), and `DeckEntryCardColor = new("e76f51")`.
+  - `RealtaCardPool : CustomCardPoolModel` defines `BigEnergyIconPath` (`"charui/realta/big_energy.png".ImagePath()`), `TextEnergyIconPath` (`"charui/realta/text_energy.png".ImagePath()`), a custom heated-iron frame with identity HSV parameters (`H = 1f, S = 1f, V = 1f`), and `DeckEntryCardColor = new("e76f51")`.
   - `RealtaRelicPool` and `RealtaPotionPool` use the same `BigEnergyIconPath`, `TextEnergyIconPath`, and `LabOutlineColor => Realta.Color`.
 
 ### 1.5 How to Read the Image Inventory
@@ -174,8 +201,8 @@ BaseLib applies Harmony Prefix patches to virtual and non-virtual `CharacterMode
 | **Top-bar / statistics / daily-challenge icon node** | `public virtual Control? CustomIcon { get; }` (priority 1)<br>`public virtual string? CustomIconPath { get; }` (priority 2) | `Icon` (`Control`, `NTopBarPortrait.cs:35`, `NCharacterStats.cs:124`) | `CustomIcon => null`, `CustomIconPath => "res://scenes/ui/character_icons/ironclad_icon.tscn"` | **`CustomIcon` Overridden** (`NodeFactory<Control>.CreateFromResource(CustomIconTexturePath)`) | `TextureRect` (`FullRect`) |
 | **Run-history / multiplayer-lobby / Ancient-dialogue icon texture** | `public virtual string? CustomIconTexturePath { get; }` | `IconTexturePath` -> `IconTexture` (`Texture2D`) | `res://images/ui/top_panel/character_icon_ironclad.png` | **Overridden** (`"realta/character_icon.png".CharacterUiPath()`) | Vanilla `85 x 85`, current template `128 x 128` PNG |
 | **Ancient-dialogue / multiplayer-vote icon-outline texture** | `public virtual string? CustomIconOutlineTexturePath { get; }` | `IconOutlineTexturePath` -> `IconOutlineTexture` (`Texture2D`, `NAncientDialogueLine.cs:181`, `NMultiplayerVoteContainer.cs:127`) | `res://images/ui/top_panel/character_icon_ironclad_outline.png` | **Overridden** (see section 0 for the current connection) | Vanilla `85 x 85` (or `128 x 128`, matching `CustomIconTexturePath`) PNG |
-| **Combat energy-orb counter** | `public virtual string? CustomEnergyCounterPath { get; }` (recommended)<br>`public virtual CustomEnergyCounter? CustomEnergyCounter { get; }` (generated from five PNG layers) | `EnergyCounterPath` and `NEnergyCounter.Create` (`NEnergyCounter.cs:162-171`) | `res://scenes/combat/energy_counters/ironclad_energy_counter.tscn` | Not overridden (Ironclad energy orb) | `128 x 128` `Control` scene; each layer texture is `256 x 256` PNG × 5 (`Layer1`~`Layer5`) |
-| **Combat energy-label outline color** | `public override Color EnergyLabelOutlineColor { get; }` | `CharacterModel.EnergyLabelOutlineColor` (`NEnergyCounter.cs:160, 222`) | `new Color("0000000D")` (`CharacterModel.cs:86`) | Not overridden (`OutlineColor` takes precedence when using `CustomEnergyCounter`) | `Color` (e.g. Ironclad `801212FF`, Regent `784000FF`) |
+| **Combat energy-orb counter** | `public virtual string? CustomEnergyCounterPath { get; }` (recommended)<br>`public virtual CustomEnergyCounter? CustomEnergyCounter { get; }` (generated from five PNG layers) | `EnergyCounterPath` and `NEnergyCounter.Create` (`NEnergyCounter.cs:162-171`) | `res://scenes/combat/energy_counters/ironclad_energy_counter.tscn` | Native Ironclad scene retained; RealtaEnergyCounterAppearance supplies the flame-heart texture and label layout | `128 x 128` `Control` scene; each layer texture is `256 x 256` PNG × 5 (`Layer1`~`Layer5`) |
+| **Combat energy-label outline color** | `public override Color EnergyLabelOutlineColor { get; }` | `CharacterModel.EnergyLabelOutlineColor` (`NEnergyCounter.cs:160, 222`) | `new Color("0000000D")` (`CharacterModel.cs:86`) | Overridden in Realta: dark red #4a160f | `Color` (e.g. Ironclad `801212FF`, Regent `784000FF`) |
 | **Combat character visuals (sprite / Spine / scene)** | `public virtual string? CustomVisualPath { get; }`<br>`public virtual NCreatureVisuals? CreateCustomVisuals()` | `VisualsPath` and `CreateVisuals()` (`CharacterModel.cs:104, 210-213`) | `res://scenes/creature_visuals/ironclad.tscn` | **Overridden** (see section 0 for the current connection) | `NCreatureVisuals` (`Node2D` root) or a single PNG (`NodeFactory` conversion) |
 | **Combat animation state machine** | `public virtual CreatureAnimator? SetupCustomAnimationStates(MegaSprite controller)` | `GenerateAnimator(MegaSprite)` (`CharacterModel.cs:220-241`) | `null` (`CharacterModel.GenerateAnimator` default states: `idle_loop`, `cast`, `attack`, `hurt`, `die`, `relaxed_loop`) | Not overridden | Called only for Spine animation |
 | **Non-Spine death wait time** | `public virtual float DeathAnimTime => 1.5f;` | `NCreature.StartDeathAnim` (`CustomAnimationPatch.cs:97-129`) | `1.5f` (clamped to a maximum of `5f`) | Not overridden | Applies to Godot `AnimationPlayer` / `AnimatedSprite2D` |
@@ -304,14 +331,14 @@ BaseLib's `PostModInitPatch.RegisterSceneConversions` (`BaseLib.dll`, `[HarmonyP
 #### 2.2.2 Card Frames and Energy Icons (`CustomCardPoolModel`, `RealtaCardPool.cs`)
 
 - **Card-frame color / custom textures (`RealtaCardPool.cs:19-28`, `CustomCardPoolModel.cs`, `CustomCardFrame.cs`):**
-  - Default approach: when `CardFrameMaterialPath` is `"card_frame_red"`, `CustomCardPoolMaterialPatch` generates a `ShaderUtils.GenerateHsv(H, S, V)` material (`res://shaders/hsv.gdshader`) and applies it to the vanilla attack/skill/power frames (`598 x 844`). `RealtaCardPool` currently uses `H = 0.02f, S = 1f, V = 1f`.
+  - Default approach: when `CardFrameMaterialPath` is `"card_frame_red"`, `CustomCardPoolMaterialPatch` generates a `ShaderUtils.GenerateHsv(H, S, V)` material (`res://shaders/hsv.gdshader`) and applies it to the vanilla attack/skill/power frames (`598 x 844`). Realta now supplies its own painted body texture with H/S/V all 1 and clears its frame material after reload; the default HSV route remains an alternative for other pools.
   - Custom frame images:
     - For the whole pool, override `public override Texture2D? CustomFrame(CustomCardModel card)` in `RealtaCardPool`, returning a `598 x 844` `Texture2D` for each `card.Type` (`Attack`, `Skill`, `Power`). Set `H = 1f, S = 1f, V = 1f` to avoid shader recoloring.
     - For one card, override `CustomCardModel.CustomFrame` (`Texture2D?`) or `CustomCardModel.CreateCustomFrameMaterial` (`Material?`).
     - **Exception (`CardModel.cs:179-183, 1235-1250`):** `CardRarity.Ancient` cards (`RealtaIordinaMacBethlehem`, `RealtaGeniusInspiration`) hide the regular `_frame` and use `AncientBorder` and `AncientTextBg`, so `CustomFrame` does not affect them.
   - **Token frame color: `RealtaGuard` (`CardModel.cs:252, 286, 324`):**
     - Because `RealtaGuard` belongs to `[Pool(typeof(TokenCardPool))]`, its default `VisualCardPool` is `TokenCardPool`: gray `card_frame_colorless` frame and default colorless energy icon.
-    - To display Realta's frame colors and energy icon (`big_energy.png`) on `RealtaGuard`, add this override in `RealtaGuard.cs`:
+    - The applied `RealtaGuard.VisualCardPool` override selects Realta's frame material and energy icon (`big_energy.png`):
       ```csharp
       public override CardPoolModel VisualCardPool => ModelDb.CardPool<RealtaCardPool>();
       ```
@@ -486,38 +513,13 @@ The cards below currently override `PortraitPath`, `CustomPortraitPath`, and `Be
 - **Reason for the count difference:**
   - Realta has **22 cards of `CardType.Power`**.
   - **`RealtaAgdridsAnvil` (`아그드리드의 모루`)** immediately upgrades/improves the draw pile, and **`RealtaAlmenelsBulwark` (`알메넬의 철벽`)** immediately grants existing Plating. Neither needs a corresponding custom `PowerModel` (`22 - 2 = 20`).
-  - The Skill cards **`RealtaUndyingLoyalty` (`불멸의 충성`)** and **`RealtaWellPrepared` (`준비만전`) / `RealtaKnightsOath` (`기사의 맹세`)** add two models for persistent/delayed effects: **`RealtaUndyingLoyaltyPower`** and **`RealtaVigorNextTurnPower` (`다음 턴 활력`)**, respectively (`20 + 2 = 22`).
+  - The Skill cards **`RealtaUndyingLoyalty` (`불멸의 충성`)** and **`RealtaWellPrepared` (`준비만전`)** add two models for persistent/delayed effects: **`RealtaUndyingLoyaltyPower`** and **`RealtaVigorNextTurnPower` (displayed as `준비만전`)**, respectively (`20 + 2 = 22`).
   - `Sts2WDCode/Characters/Realta/Powers/` therefore contains **22 `PowerModel` classes**, all visible buffs (`IsVisibleInternal == true`).
-- **Proposed automatic path resolution with vanilla-icon fallback:**
-  - The 22 classes currently inherit directly from `CustomPowerModel` and hardcode vanilla power icons.
-  - To introduce custom icons incrementally while retaining vanilla icons (or `power.png`) for unfinished powers, inherit `Sts2WDPower` or use a shared helper such as:
-  ```csharp
-  // Use Sts2WD/images/powers/<power_name>.png when present; otherwise use the specified vanilla power icon.
-  public abstract class RealtaPower<TFallbackPower> : Sts2WDPower where TFallbackPower : PowerModel
-  {
-      public override string CustomPackedIconPath
-      {
-          get
-          {
-              string path = Path.Join(MainFile.ResPath, "images", "powers", $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png");
-              return ResourceLoader.Exists(path) ? path : ModelDb.Power<TFallbackPower>().PackedIconPath;
-          }
-      }
+- **Current resource ownership:** Twenty delivered custom powers inherit the existing Sts2WDPower base and resolve model-ID PNG filenames through the repository's image-path helpers. The two powers without approved replacement art retain their explicit native icon overrides. No extra fallback abstraction is needed.
 
-      public override string CustomBigIconPath
-      {
-          get
-          {
-              string path = Path.Join(MainFile.ResPath, "images", "powers", "big", $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png");
-              return ResourceLoader.Exists(path) ? path : ModelDb.Power<TFallbackPower>().ResolvedBigIconPath;
-          }
-      }
-  }
-  ```
+#### 2.4.3 Filename and Original Native Icon References for 22 Realta `PowerModel` Classes
 
-#### 2.4.3 Filename and Current Fallback Mapping for 22 Realta `PowerModel` Classes
-
-| # | C# class (`Sts2WDCode/Characters/Realta/Powers/`) | Korean power name | Granting card | Current vanilla fallback (`ModelDb.Power<T>()`) | Small icon (`64 x 64`) | Large icon (`256 x 256`) |
+| # | C# class (`Sts2WDCode/Characters/Realta/Powers/`) | Korean power name | Granting card | Original native reference (active only for ForgeHeat/UndyingLoyalty) | Small icon (`64 x 64`) | Large icon (`256 x 256`) |
 |---|---|---|---|---|---|---|
 | 1 | `RealtaFathersAdvicePower` | 아버지의 조언 | `RealtaFathersAdvice` (Power) | `FurnacePower` | `Sts2WD/images/powers/realta_fathers_advice_power.png` | `Sts2WD/images/powers/big/realta_fathers_advice_power.png` |
 | 2 | `RealtaFirstDuelPower` | 첫번째 결투 | `RealtaFirstDuel` (Power) | `StrengthPower` | `Sts2WD/images/powers/realta_first_duel_power.png` | `Sts2WD/images/powers/big/realta_first_duel_power.png` |
@@ -537,20 +539,30 @@ The cards below currently override `PortraitPath`, `CustomPortraitPath`, and `Be
 | 16 | `RealtaSteelPredatorPower` | 강철 포식자 | `RealtaSteelPredator` (Power) | `HammerTimePower` | `Sts2WD/images/powers/realta_steel_predator_power.png` | `Sts2WD/images/powers/big/realta_steel_predator_power.png` |
 | 17 | `RealtaGeniusInspirationPower` | 천재의 영감 | `RealtaGeniusInspiration` (Ancient Power) | `ImprovementPower` | `Sts2WD/images/powers/realta_genius_inspiration_power.png` | `Sts2WD/images/powers/big/realta_genius_inspiration_power.png` |
 | 18 | `RealtaUndyingLoyaltyPower` | 불멸의 충성 | `RealtaUndyingLoyalty` (Skill) | `OneTwoPunchPower` | `Sts2WD/images/powers/realta_undying_loyalty_power.png` | `Sts2WD/images/powers/big/realta_undying_loyalty_power.png` |
-| 19 | `RealtaVigorNextTurnPower` | 다음 턴 활력 | `RealtaWellPrepared`, `RealtaKnightsOath` (Skill) | `VigorPower` | `Sts2WD/images/powers/realta_vigor_next_turn_power.png` | `Sts2WD/images/powers/big/realta_vigor_next_turn_power.png` |
+| 19 | `RealtaVigorNextTurnPower` | 준비만전 | `RealtaWellPrepared` (Skill) | `VigorPower` | `Sts2WD/images/powers/realta_vigor_next_turn_power.png` | `Sts2WD/images/powers/big/realta_vigor_next_turn_power.png` |
 | 20 | `RealtaPerfectDayPower` | 완벽한 날 | `RealtaPerfectDay` (Power) | `StrengthPower` | `Sts2WD/images/powers/realta_perfect_day_power.png` | `Sts2WD/images/powers/big/realta_perfect_day_power.png` |
 | 21 | `RealtaPortableForgePower` | 이동식 대장간 | `RealtaPortableForge` (Power) | `PlatingPower` | `Sts2WD/images/powers/realta_portable_forge_power.png` | `Sts2WD/images/powers/big/realta_portable_forge_power.png` |
 | 22 | `RealtaHerosSilhouettePower` | 영웅의 뒷모습 | `RealtaHerosSilhouette` (Power) | `MasterPlannerPower` | `Sts2WD/images/powers/realta_heros_silhouette_power.png` | `Sts2WD/images/powers/big/realta_heros_silhouette_power.png` |
 
 ---
 
-## 3. Follow-Up Work Candidates
+## 3. Power Display Titles and Runtime Icon Status
+
+`RealtaPowerPresentation` changes presentation while retaining native power instances, stacking, audio, and turn hooks. On Realta, applied `BlurPower` uses the canonical `RealtaRinnalBodbDearg` card title and `ReflectPower` uses `RealtaSpatialWarp`. The native power model does not preserve the granting card, so these aliases apply to those powers on Realta regardless of source; other characters keep native Blur/Reflect titles. The next-turn Vigor timer takes `RealtaWellPrepared.TitleLocString`. Its independent `DrawCardsNextTurnPower` keeps its shared functional label because other effects also use it.
+
+`FlameBarrierPower.Title` uses the mod-localized 화염 / Flame label for both applied powers and canonical hover tips, including on other characters. The original Flame Barrier card title is unchanged. Other dedicated buff titles already agree with their granting cards; Vigor, Plating, and other shared generic powers keep their existing names.
+
+The user approved runtime application of all 23 generated power icons on 2026-10-20. Complete compositions were proportionally converted with Fit to 256px/64px RGBA PNGs. Twenty custom powers reuse `Sts2WDPower`'s existing model-ID resource mapping. Native `FlameBarrierPower` uses `realta_flame_power.png` (small and `big/`), applied `BlurPower` on Realta uses `realta_rinnal_bodb_dearg_power.png`, and applied `ReflectPower` on Realta uses `realta_spatial_warp_power.png`. The prepared anvil/clock concept is mapped to `realta_vigor_next_turn_power.png`. Other characters keep native Blur/Reflect titles and art; Flame uses the renamed title and dedicated art globally, including canonical hover tips. Native power icon routing overrides `ResolvedBigIconPath` before its inherited canonical cache, so the owning character's tooltip and application VFX agree with the small icon. No power behavior or stacking was forked.
+
+The 19 named user motif references and complete title-to-motif mapping are preserved in [refs/powers](refs/powers/README.md). Runtime artwork incorporates the requested follow-up revisions: 요정 장인 uses green leaf wings and a rectangular bronze hammer without the eye-like bead or circular wing spots; 강철 포식자 shows a visibly snapped blade and steel fragments against a straight, intact wall. Their final PNGs occupy the unsuffixed runtime model filenames, so neither a local draft nor a versioned generation file is needed by the game. 대장간의 열기 and 불멸의 충성 have no generated replacement in this scope and retain their native icons. The table's original vanilla references are historical sources for the twenty migrated custom powers and active fallbacks only for those two.
+
+## 4. Follow-Up Work Candidates
 
 These are candidates after the current delivery, not an automatic execution sequence. Work only on the requested asset scope.
 
 1. **UI, standing figure, and selection-scene revisions:** Section 0.1 describes the current delivery. If the base changes or the user requests more work, record the appearance/composition differences in the document and update only affected assets.
 2. **Cards, relics, and powers:** Check actual file mappings and fallbacks in sections 2.2–2.4, then produce the requested items. An image-update request does not itself authorize changes to path helpers or gameplay behavior.
-3. **Additional visuals:** Treat the five-layer energy counter, multiplayer hands, card trails, and animations as separate scope. Static standing and selection scenes are already connected as described in section 0.2.
+3. **Additional visuals:** The combat counter is connected through RealtaEnergyCounterAppearance; multiplayer hands, card trails, and additional animations remain separate scope. Static standing and selection scenes are already connected as described in section 0.2.
 
 ---
 
@@ -567,10 +579,10 @@ This table covers both current deliveries and future production targets. Section
 | **Character-selection button icon** | `Sts2WD/images/charui/realta/char_select.png` | `132 x 195` | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomCharacterSelectIconPath` |
 | **Locked character-selection icon** | `Sts2WD/images/charui/realta/char_select_locked.png` | `132 x 195` | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomCharacterSelectLockedIconPath` |
 | **Map-marker icon** | `Sts2WD/images/charui/realta/map_marker.png` | `128 x 128` *(vanilla `49 x 64`)* | RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomMapMarkerPath` |
-| **Combat energy-orb counter layers (five)** | `Sts2WD/images/charui/realta/energy_orb/layer_{1..5}.png` | `256 x 256` (per layer; UI display size `128 x 128`) | RGBA PNG (`CompressedTexture2D`, Lossless) | `Realta.CustomEnergyCounter` (or, with a `.tscn`, `Realta.CustomEnergyCounterPath`) |
+| **Combat energy counter** | `Sts2WD/images/charui/realta/combat_energy.png` | `256 x 256` (UI display size `128 x 128`) | RGBA PNG (`CompressedTexture2D`, Lossless) | `RealtaEnergyCounterAppearance` replaces the native counter's first texture layer; native counter logic and VFX remain active |
 | **Standard card portraits (79)** | `Sts2WD/images/card_portraits/realta/<card_name>.png` *(current default: `card_portraits/big/<card_name>.png`; newer-card aliases in section 2.2.4)* | **`1000 x 760`** *(smaller output: `500 x 380` / `250 x 190`, ratio `25:19`)* | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDCard.CustomPortraitPath` (and `PortraitPath`) |
 | **Ancient full-art card portraits (two)** | `Sts2WD/images/card_portraits/realta/<card_name>.png` (`realta_iordina_mac_bethlehem.png`, `realta_genius_inspiration.png`) | **`606 x 852`** *(smaller output: `250 x 350`)* | RGB/RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDCard.CustomPortraitPath` (and `PortraitPath`) |
-| **Custom card frames (optional)** | `Sts2WD/images/cards/frame_{attack,skill,power}.png` | `598 x 844` | RGBA PNG (`CompressedTexture2D`, Lossless) | `RealtaCardPool.CustomFrame(CustomCardModel)` or `CustomCardModel.CustomFrame` |
+| **Applied shared card body** | `Sts2WD/images/cards/realta/frame.png` | `598 x 844` | RGBA PNG (`CompressedTexture2D`, Lossless) | `RealtaCardPool.CustomFrame(CustomCardModel)` or `CustomCardModel.CustomFrame` |
 | **Small relic icons (five)** | `Sts2WD/images/relics/<relic_name>.png` | **`94 x 94`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDRelic.PackedIconPath` |
 | **Relic-outline icons (five)** | `Sts2WD/images/relics/<relic_name>_outline.png` | **`94 x 94`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDRelic.PackedIconOutlinePath` |
 | **Large relic icons (five)** | `Sts2WD/images/relics/big/<relic_name>.png` | **`256 x 256`** | RGBA PNG (`CompressedTexture2D`, Lossless) | `Sts2WDRelic.BigIconPath` |
