@@ -63,6 +63,6 @@
   "STS2WD-REALTA_PORTABLE_FORGE_POWER.description": "다음 사용 카드를 사용 전에 [gold]개선[/gold] {Amount} 합니다.\n개선할 수 없는 카드를 써도 이 효과는 소모됩니다.",
   "STS2WD-REALTA_PORTABLE_FORGE_POWER.smartDescription": "다음 사용 카드를 사용 전에 [gold]개선[/gold] {Amount} 합니다.\n개선할 수 없는 카드를 써도 이 효과는 소모됩니다.",
   "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.title": "영웅의 뒷모습",
-  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.description": "각 턴의 첫 [gold]강화[/gold]에 에너지를 {Amount} 얻습니다.\n각 턴의 첫 [gold]개선[/gold]에 카드를 {Amount}장 뽑습니다.",
-  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.smartDescription": "각 턴의 첫 [gold]강화[/gold]에 에너지를 {Amount} 얻습니다.\n각 턴의 첫 [gold]개선[/gold]에 카드를 {Amount}장 뽑습니다."
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.description": "각 턴의 첫 [gold]강화[/gold]에 에너지를 {Amount} 얻습니다.\n각 턴의 첫 [gold]개선[/gold]에 카드를 {Cards}장 뽑습니다.",
+  "STS2WD-REALTA_HEROS_SILHOUETTE_POWER.smartDescription": "각 턴의 첫 [gold]강화[/gold]에 에너지를 {Amount} 얻습니다.\n각 턴의 첫 [gold]개선[/gold]에 카드를 {Cards}장 뽑습니다."
 }

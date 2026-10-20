@@ -18,6 +18,6 @@ public sealed class RealtaBarrier() : RealtaSpellCard(1, CardType.Skill, CardRar
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(2m);
-        DynamicVars["SpellBlock"].UpgradeValueBy(1m);
+        DynamicVars["SpellBlock"].UpgradeValueBy(2m);
     }
 }
