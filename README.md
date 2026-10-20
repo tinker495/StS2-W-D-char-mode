@@ -14,6 +14,10 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 레아르타(`Realta`)의 카드·유물 구성은 설계 합의([`docs/characters/realta/realta.md`](docs/characters/realta/realta.md))를 따릅니다. 타격·수비는 레아르타 전용 카드이며, 시작 덱은 타격 4장·수비 4장·비행 글레이브·담금질의 총 10장입니다. 수호는 카드별 방어도를 누적해서 높이고, 개선·유산·주문·역작·결투·용맹 효과를 지원합니다. 1단계 캐릭터 UI와 정적 전신 스탠딩은 정본 베이스([`docs/characters/realta/base.png`](docs/characters/realta/base.png))를 기준으로 적용되어 있으며, 카드·유물·파워 개별 아이콘은 순차 교체합니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
+## 소개문·대화 작성
+
+모든 모드 캐릭터의 소개문·고대 존재 대화·이벤트 문구·멀티플레이 핑·전용 유물 이야기는 [캐릭터 문장 작성 안내](docs/characters/character-text.md)를 따릅니다. `Sts2WD/character_text/`의 캐릭터별 프리셋에서 한국어·영어 원고를 함께 작성하며, 빈칸은 기존 동작을 유지합니다. 말투·가치관·관계는 [문장 설계 양식](docs/characters/character-voice-template.md)에 정리할 수 있습니다. 원고 수정 후 `publish` 또는 `deploy`와 게임 재시작이 필요합니다.
+
 ## 아트 제작
 
 공통 화풍·치비 적용 범위는 [ARTS.md](ARTS.md), `refs → base → assets` 제작 절차는 [`character-asset-pipeline`](.agents/skills/character-asset-pipeline/SKILL.md)을 따릅니다. 캐릭터별 서술은 `docs/characters/<char>/`에 둡니다. 레아르타의 외형·팔레트·연출·전용 프롬프트는 [아트 명세](docs/characters/realta/realta-art.md), 파일 규격·런타임 연결·제작 이력은 [에셋 가이드](docs/characters/realta/realta-assets.md)에서 확인합니다. 공통 근거는 [공식 출처 조사](docs/research/sts2-art-direction-sources.md)에 있습니다.
