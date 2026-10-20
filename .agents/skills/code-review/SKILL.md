@@ -65,6 +65,11 @@ Issue both sub-agent calls together, in the foreground, and aggregate the report
 - The list of standards-source files you found in step 3, **plus the smell baseline from step 3** pasted in full (the sub-agent has no other access to it).
 - The brief: "Report, per file/hunk where relevant, (a) every place the diff violates a documented standard: cite the standard (file + the rule); and (b) any baseline smell you spot: name it and quote the hunk. Distinguish hard violations from judgement calls: documented-standard breaches can be hard, but baseline smells are always judgement calls, and a documented repo standard overrides the baseline. Skip anything tooling enforces. Under 400 words."
 
+When the diff changes shared setup or reproduction procedures, also include this prerequisite check in the Standards brief:
+
+- Enumerate the inputs required to execute each changed procedure. Classify every input as a tracked file (including a file added by the reviewed change), a documented installed dependency, or a temporary file whose complete creation steps appear in the shared documentation. Use `git ls-files --error-unmatch -- <path>` or the added-file diff to verify repository inputs; existence in the current checkout alone is insufficient.
+- For installed dependencies, require their identity/version and setup reference. For temporary files, require enough instructions to recreate them without previous local outputs. Report any prerequisite that cannot be classified, citing the shared-documentation rule. Optional captures, draft artwork and caches can remain ignored; a reference to them must not be necessary to execute or understand the procedure.
+
 **Spec sub-agent prompt** should include:
 
 - The diff command and commit list.

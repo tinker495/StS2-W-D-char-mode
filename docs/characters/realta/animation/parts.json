@@ -1,0 +1,602 @@
+{
+  "head": {
+    "offset": [
+      140,
+      99
+    ],
+    "scale": 1.0,
+    "size": [
+      188,
+      126
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "head-closed": {
+    "offset": [
+      140,
+      99
+    ],
+    "scale": 1.0,
+    "size": [
+      188,
+      126
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "head-hurt": {
+    "offset": [
+      140,
+      99
+    ],
+    "scale": 1.0,
+    "size": [
+      188,
+      126
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "head-attack": {
+    "offset": [
+      140,
+      99
+    ],
+    "scale": 1.0,
+    "size": [
+      188,
+      126
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "coat": {
+    "offset": [
+      116,
+      286
+    ],
+    "scale": 1.0,
+    "size": [
+      219,
+      181
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "torso": {
+    "offset": [
+      176,
+      198
+    ],
+    "scale": 1.0,
+    "size": [
+      105,
+      124
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "upper_arm_l": {
+    "offset": [
+      168,
+      229
+    ],
+    "scale": 1.0,
+    "size": [
+      49,
+      55
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "forearm_l": {
+    "offset": [
+      126,
+      255
+    ],
+    "scale": 1.0,
+    "size": [
+      73,
+      49
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "hand_l": {
+    "offset": [
+      116,
+      260
+    ],
+    "scale": 1.0,
+    "size": [
+      34,
+      36
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "upper_arm_r": {
+    "offset": [
+      255,
+      230
+    ],
+    "scale": 1.0,
+    "size": [
+      43,
+      74
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "forearm_r": {
+    "offset": [
+      264,
+      274
+    ],
+    "scale": 1.0,
+    "size": [
+      57,
+      89
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "thigh_l": {
+    "offset": [
+      208,
+      330
+    ],
+    "scale": 1.0,
+    "size": [
+      46,
+      76
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "shin_l": {
+    "offset": [
+      196,
+      372
+    ],
+    "scale": 1.0,
+    "size": [
+      44,
+      103
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "foot_l": {
+    "offset": [
+      191,
+      448
+    ],
+    "scale": 1.0,
+    "size": [
+      41,
+      79
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "thigh_r": {
+    "offset": [
+      238,
+      322
+    ],
+    "scale": 1.0,
+    "size": [
+      54,
+      85
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "shin_r": {
+    "offset": [
+      261,
+      371
+    ],
+    "scale": 1.0,
+    "size": [
+      46,
+      103
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "foot_r": {
+    "offset": [
+      276,
+      450
+    ],
+    "scale": 1.0,
+    "size": [
+      65,
+      64
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "weapon-rigid": {
+    "offset": [
+      75,
+      33
+    ],
+    "scale": 1.0,
+    "size": [
+      125,
+      497
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "ribbon": {
+    "offset": [
+      68,
+      191
+    ],
+    "scale": 1.0,
+    "size": [
+      55,
+      99
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "death-full": {
+    "offset": [
+      8,
+      61
+    ],
+    "scale": 1.0,
+    "size": [
+      446,
+      158
+    ],
+    "canvas": [
+      460,
+      230
+    ]
+  },
+  "slash-trail": {
+    "offset": [
+      174,
+      99
+    ],
+    "scale": 0.6,
+    "size": [
+      648,
+      659
+    ],
+    "canvas": [
+      1254,
+      1254
+    ]
+  },
+  "cast-sigil": {
+    "offset": [
+      0,
+      0
+    ],
+    "scale": 0.2660016625103907,
+    "size": [
+      333,
+      334
+    ],
+    "canvas": [
+      1254,
+      1254
+    ]
+  },
+  "death-seq-04": {
+    "offset": [
+      94,
+      225
+    ],
+    "scale": 1.0,
+    "size": [
+      384,
+      316
+    ],
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-seq-05": {
+    "offset": [
+      94,
+      246
+    ],
+    "scale": 1.0,
+    "size": [
+      427,
+      298
+    ],
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-seq-06": {
+    "offset": [
+      81,
+      250
+    ],
+    "scale": 1.0,
+    "size": [
+      458,
+      297
+    ],
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-seq-07": {
+    "offset": [
+      84,
+      303
+    ],
+    "scale": 1.0,
+    "size": [
+      424,
+      250
+    ],
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-seq-08": {
+    "offset": [
+      78,
+      350
+    ],
+    "scale": 1.0,
+    "size": [
+      445,
+      198
+    ],
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-seq-start": {
+    "offset": [
+      94,
+      194
+    ],
+    "scale": 1.0,
+    "size": [
+      253,
+      337
+    ],
+    "canvas": [
+      640,
+      576
+    ]
+  },
+  "death-buckle-00": {
+    "offset": [
+      93,
+      204
+    ],
+    "size": [
+      268,
+      334
+    ],
+    "scale": 1.0,
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-buckle-01": {
+    "offset": [
+      90,
+      239
+    ],
+    "size": [
+      288,
+      299
+    ],
+    "scale": 1.0,
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "death-buckle-02": {
+    "offset": [
+      91,
+      225
+    ],
+    "size": [
+      267,
+      313
+    ],
+    "scale": 1.0,
+    "canvas": [
+      576,
+      576
+    ]
+  },
+  "shaft-core": {
+    "offset": [
+      98,
+      205
+    ],
+    "size": [
+      58,
+      195
+    ],
+    "scale": 1.0,
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "coat-front": {
+    "offset": [
+      92,
+      286
+    ],
+    "scale": 1.0,
+    "size": [
+      247,
+      179
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "pauldron-r": {
+    "offset": [
+      258,
+      223
+    ],
+    "scale": 1.0,
+    "size": [
+      38,
+      70
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "wrist-overlap": {
+    "offset": [
+      141,
+      267
+    ],
+    "scale": 1.0,
+    "size": [
+      12,
+      20
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "neck-overlap": {
+    "offset": [
+      218,
+      213
+    ],
+    "scale": 1.0,
+    "size": [
+      33,
+      18
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "hand-l-turned": {
+    "offset": [
+      116,
+      260
+    ],
+    "scale": 1.0,
+    "size": [
+      34,
+      36
+    ],
+    "canvas": [
+      384,
+      576
+    ]
+  },
+  "death-settle-00": {
+    "offset": [
+      70,
+      323
+    ],
+    "scale": 1.0,
+    "size": [
+      472,
+      211
+    ],
+    "canvas": [
+      640,
+      576
+    ]
+  },
+  "death-settle-01": {
+    "offset": [
+      75,
+      348
+    ],
+    "scale": 1.0,
+    "size": [
+      462,
+      185
+    ],
+    "canvas": [
+      640,
+      576
+    ]
+  },
+  "death-settle-02": {
+    "offset": [
+      82,
+      372
+    ],
+    "scale": 1.0,
+    "size": [
+      454,
+      160
+    ],
+    "canvas": [
+      640,
+      576
+    ]
+  }
+}

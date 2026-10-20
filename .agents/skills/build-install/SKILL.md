@@ -25,7 +25,7 @@ Check whether the game is running with `Get-Process -Name SlayTheSpire2 -ErrorAc
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
 ```
 
-Pass `-Configuration Debug` or `-Configuration Release` if the user specified a configuration. `publish` performs the C# build, MegaDot resource import, and PCK export; a separate repeated `build` is unnecessary.
+Pass `-Configuration Debug` or `-Configuration Release` if the user specified a configuration. `publish` performs the C# build, MegaDot resource import, user-requested mechanical/instance rig checks, and PCK export; a separate repeated `build` is unnecessary. Require both check PASS messages before treating the export as verified; [check scope](../../../tests/rig-checks.md) documents their limits.
 
 Proceed to installation only if the process exits with code 0 and all four files exist in the output directory `<ModsPath>/Sts2WD`. Do not substitute files left by a failed run or an older package.
 
@@ -34,11 +34,11 @@ Proceed to installation only if the process exits with code 0 and all four files
 - `Sts2WD.json`
 - `Sts2WD.pdb`
 
-Store long logs under the repository's ignored `artifacts/` directory and inspect the error section on failure. A resource-export completion message alone is not proof of success.
+For log capture, use [Build execution and diagnostics](../../../docs/agents/build-troubleshooting.md#capture-the-command-result-before-displaying-logs). It provides a complete UTF-8 execution example that records the publish exit code separately from log display; an existing local helper is not required.
 
 ### Sandbox Failures
 
-On this PC, MegaDot has reported `Failed to read the root certificate store` inside the sandbox and returned a failed export exit code. For this error or explicit access denial, retry that command once using the tool's escalation mechanism. If the retry fails, report the error and stop installation. Do not change system execution policy or certificate settings.
+For certificate-store errors or explicit access denial, follow [Sandbox access failures](../../../docs/agents/build-troubleshooting.md#sandbox-access-failures), the shared procedure for packaging and animation reproduction.
 
 ## Back Up, Then Install
 

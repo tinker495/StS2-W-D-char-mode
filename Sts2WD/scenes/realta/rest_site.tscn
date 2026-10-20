@@ -1,20 +1,41 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
-[ext_resource type="Texture2D" path="res://Sts2WD/images/charui/realta/combat.png" id="1_sprite"]
+[ext_resource type="Script" path="res://Sts2WD/animations/realta/rest/realta_rest.gd" id="1_rest"]
+[ext_resource type="Texture2D" path="res://Sts2WD/animations/realta/rest/rest_master.png" id="2_master"]
+[ext_resource type="Texture2D" path="res://Sts2WD/animations/realta/rest/rest_blink_patch.png" id="3_blink"]
 
 [node name="RealtaRestSite" type="Node2D"]
 
 [node name="ControlRoot" type="Control" parent="."]
 mouse_filter = 2
 
-[node name="Visuals" type="Sprite2D" parent="ControlRoot"]
-position = Vector2(0, -16)
-scale = Vector2(0.85, 0.85)
-texture = ExtResource("1_sprite")
+[node name="Visuals" type="Node2D" parent="ControlRoot"]
+position = Vector2(-258, -285)
+scale = Vector2(0.4, 0.4)
+script = ExtResource("1_rest")
+master = ExtResource("2_master")
+blink_patch = ExtResource("3_blink")
+blink_offset = Vector2(718, 276)
 
 [node name="Hitbox" type="Control" parent="ControlRoot"]
 unique_name_in_owner = true
-offset_left = -170.0
-offset_top = -300.0
-offset_right = 170.0
+offset_left = -195.0
+offset_top = -280.0
+offset_right = 195.0
 offset_bottom = 200.0
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = -90.0
+offset_top = -250.0
+offset_right = -90.0
+offset_bottom = -250.0
+mouse_filter = 2
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = 150.0
+offset_top = -245.0
+offset_right = 150.0
+offset_bottom = -245.0
+mouse_filter = 2

@@ -1,0 +1,156 @@
+{
+ "rest": {
+  "texture": "Sts2WD/animations/realta/rest/rest_blink_patch.png",
+  "offset": [
+   718,
+   276
+  ],
+  "size": [
+   130,
+   87
+  ],
+  "source": "docs/characters/realta/drafts/restsel-v2/rest-generated-02.png",
+  "source_crop": [
+   520,
+   180,
+   880,
+   540
+  ],
+  "registration": {
+   "scale": 1.0,
+   "offset": [
+    0,
+    0
+   ],
+   "outside_eyes_mean_abs_rgb": 3.369
+  },
+  "eye_polygons_in_crop": [
+   [
+    [
+     207,
+     105
+    ],
+    [
+     241,
+     106
+    ],
+    [
+     270,
+     119
+    ],
+    [
+     273,
+     160
+    ],
+    [
+     207,
+     154
+    ]
+   ],
+   [
+    [
+     280,
+     130
+    ],
+    [
+     302,
+     125
+    ],
+    [
+     318,
+     136
+    ],
+    [
+     315,
+     173
+    ],
+    [
+     278,
+     168
+    ]
+   ]
+  ],
+  "feather_radius": 2
+ },
+ "selection": {
+  "texture": "Sts2WD/animations/realta/select/select_blink_patch.png",
+  "offset": [
+   1287,
+   334
+  ],
+  "size": [
+   175,
+   120
+  ],
+  "source": "docs/characters/realta/drafts/restsel-v2/select-generated-01.png",
+  "source_crop": [
+   1200,
+   200,
+   1560,
+   560
+  ],
+  "registration": {
+   "scale": 1.0,
+   "offset": [
+    0,
+    0
+   ],
+   "outside_eyes_mean_abs_rgb": 3.127
+  },
+  "eye_polygons_in_crop": [
+   [
+    [
+     99,
+     181
+    ],
+    [
+     118,
+     180
+    ],
+    [
+     149,
+     195
+    ],
+    [
+     153,
+     233
+    ],
+    [
+     106,
+     244
+    ],
+    [
+     96,
+     221
+    ]
+   ],
+   [
+    [
+     175,
+     145
+    ],
+    [
+     218,
+     143
+    ],
+    [
+     249,
+     151
+    ],
+    [
+     252,
+     202
+    ],
+    [
+     222,
+     218
+    ],
+    [
+     170,
+     209
+    ]
+   ]
+  ],
+  "feather_radius": 2
+ }
+}

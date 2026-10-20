@@ -1,0 +1,20 @@
+# Cutout motion review
+
+Use this reference during the native-render review stage of [the cutout workflow](codex-cutout-rig.md). Mechanical rig checks and successful rendering establish different facts from visual quality. Review the affected action at normal speed, every native display frame, and exact event/transition neighbors at 1× and enlarged scale on light and dark backgrounds. Keep complete frames and a fixed camera; enlarged evidence is supplemental.
+
+## Review matrix
+
+| Question | Inspect | Evidence to record |
+|---|---|---|
+| Does front/back order match physical placement throughout the motion? | Follow the weapon from grip to blade, crossing the face, hat, torso and legs. Follow the whole free arm in relaxed poses. Examine incoming/outgoing blend phases and held/released glove changes, not only isolated clips. | Clip/time and the intended object in front at every crossing; a matched-pose image before/after a layer change. A valid sibling index alone does not establish plausible depth. |
+| Does the IK bend change sides through a fully extended arm? | Track shoulder, elbow and wrist through reach maximum and recovery. Compare signed bend immediately before/at/after each intended switch. The two branches must meet at extension without a pop, a frozen elbow, or an unexpected wrist kink. | Joint positions/angles at the switch and its neighbors, plus native images showing sleeve/cuff continuity. A straight-arm still alone does not prove a branch change. |
+| Does the effect cover the actual travelled cutting path? | Measure the blade/tip path in the same rig coordinates as the effect, including shaft reflection and any grip translation. Compare the effect-active interval with a same-pose render in which the effect is hidden. | Registered path overlay, effect-active frames, uncovered sections and any face-obscuring excess. A crescent of the right color is insufficient. Measurements describe the observation; they are not new acceptance thresholds. |
+| Does the cutting edge face the direction of travel? | Identify the blade edge on the original prop, then follow its orientation during anticipation, contact, follow-through and recovery. Inspect both axial-turn windows and the hand texture change. | Direction-of-motion arrows and blade orientation at contact and both sides of each turn. Check the connected shaft and hand at the same times. |
+| Does lowering the pelvis preserve the intended knee spacing and foot support? | Track hip, knees and ankles through hurt and the articulated death buckle. Check lateral drift and bend direction before the first full-body cel, then compare both sides of that cel handoff. | Overlaid joint paths and native neighboring poses; state the intended weight-bearing foot and any deliberate release. A lower hip with a wider straddle is a changed action, not just added impact. |
+| Are hidden surfaces complete and owned by the right part? | Isolate shoulders, elbows, hips, cuffs, neck, coat backing and weapon crossings at extreme poses. Look for cut edges, transparent holes, foreign pixels, duplicated armor and stretched material from unrelated bones. | Isolated complete parts and assembled extreme poses. A correct setup image or extracted visible silhouette does not establish hidden-surface completion. |
+
+## Record and decide
+
+For each applicable row, record the clip and time/phase, the native frame or measurement, the observed defect, and whether the revision resolves it. Mark a row not applicable only with a task-specific reason. Use the character's current animation contract for timing and ownership; inspect both combat and merchant when changing shared inputs.
+
+Re-render after a fix and inspect the same failing frame plus adjacent frames and transitions. Review sheets contain every captured frame; an attractive contact pose or a count of self-review passes is not completion evidence. Keep unresolved defects explicit and separate mechanical test results, visual observations, package loading, and actual gameplay/multiplayer checks in the report.

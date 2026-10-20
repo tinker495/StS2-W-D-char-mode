@@ -98,6 +98,8 @@ HEX values are project anchors for consistent color relationships with the base 
 
 ### 2.4 Face and Hair Preferences
 
+Combat expression heads retain the original head silhouette, hair, hat and alpha. Closed uses gently shut eyelids and a small relaxed closed mouth. Hurt uses tightly squeezed crinkled lids, furrowed brows, clenched teeth and faint strain blush; it must remain clearly distinct from the peaceful closed state at scale 0.625. Attack uses focused violet eyes, downward-angled brows and an open shouting mouth. Composite generated facial skin as one continuous surface bounded by the hairline, cheeks and jaw; avoid inset cheek patches and retain the original dark chin/hair junction. Skin-color selection must not leave original eye fragments in closed expressions.
+
 Raw references establish identity, not every rendering method. Official masks/skulls do not require erasing Realta's face. Adapt its information to combat size.
 
 - Keep copper-red bob, violet eyes, pointed ears, and confidence; do not replace eyes with black dots or add a mask.
@@ -113,6 +115,13 @@ Raw references establish identity, not every rendering method. Official masks/sk
 Follow [ARTS.md](../../../ARTS.md) for shared chibi scope. This specification supplies Realta's face, expression, costume, and hat silhouette within it. Section 5.2 defines chibi details; other assets retain youthful canonical anatomy. Read [shared safe zones](../../../ARTS.md#5-asset-compositions-and-safe-zones) first.
 
 ### 3.1 Combat, Rest, and Merchant Standing Art
+
+- **전투·상인 무기 앞뒤 순서:** 빗자루창 전체와 리본은 머리·모자·얼굴을 포함한 모든 신체 파츠보다 앞에 그린다. 자루를 감싸는 쥔 손과 VFX만 그 위에 둔다. 사망 시 손을 놓은 무기도 몸 앞에서 떨어져 바닥에 놓이며, 리본은 낙하 중 눈을 가리지 않도록 모자 쪽으로 흘렀다가 내려온다. 최종 칼날은 얼굴 아래에 놓인다. 트리 순서와 해제·부활 전환은 [animation/README.md](animation/README.md)가 소유한다.
+- **상점의 빈팔:** 화면 오른쪽 빈팔은 소매부터 커프·전완·장갑까지 몸통, 코트 앞뒤, 다리보다 뒤에 둔다. 코트 옆으로 전완과 장갑 가장자리만 조금 보여 손을 허리 뒤에 편히 둔 것으로 읽히게 한다. 전투 동작에서는 해당 자세의 앞쪽 순서로 돌아오며, 팔이 코트에서 벗어난 순간에 순서를 바꾼다.
+
+- **전투 리그의 연결 면과 동작:** 기존에 보이는 얼굴·의상·장비 그림을 유지하면서 가려진 소매·허벅지·무릎·발목·목·손목 면을 완성한다. 공격은 손등이 보이는 그립으로 자루를 감싸고, 피격은 작은 골반 반동, 사망 초반은 양 무릎이 전방으로 모여 접히는 자세를 사용한다. 앞 코트와 ivory fur는 허벅지 위에 놓고, 견갑은 몸통에 고정한다. 저작 입력과 좌표·가중치·클립 계약은 [animation/README.md](animation/README.md)가 소유한다.
+
+- **Merchant cutout animation:** the native `relaxed_loop` now uses a narrow planted stance with weight toward the viewer-left leg, the free glove resting by the belt/hip, and a low one-handed shaft grip. Keep the upper arm/elbow visible at full source length. The broom-glaive rests beside her with bristles just above floor support, the blade high, and its ribbon knot clearly outside the hat brim. Preserve the complete prop and fixed grip attachment. Use two restrained breaths over eight seconds with slow weight sway and small warmed spring motion; retain the youthful confident face. This animation-specific staging supersedes the old relaxed source keys, while the canonical base and standing still retain their approved composition. Technical coordinates, aliases and transition behavior are in [animation/README.md](animation/README.md).
 
 - **Shared standing image:** use the complete [base.png](base.png), including transparent margins, without regeneration. `combat.png`, 384×576 RGBA, is shared by combat, rest, and merchant scenes. There is no separate runtime `standing.png`.
 - **Current pose:** retain the base's upright, one-handed broom-glaive stance, youthful face, open forehead, paired pauldrons, and continuous collar. The separately generated two-handed combat pose was removed at the user's request. This character-specific delivery overrides the generic Branch B split until the user requests otherwise.
@@ -262,3 +271,7 @@ Normal backing is `#2476A6`; locked uses black figure `#000000` on gray `#3B3B3B
 ## 6. Decision History
 
 This specification owns current appearance and production constraints. [realta-history.md](realta-history.md) explains equipment, age, gaze, weapon-ratio, and composition decisions without requiring drafts/comparisons. Versioned originals and execution logs are optional local working material.
+
+### 공격 궤적 범위 (2026-10-20)
+
+공격 궤적은 기존 청록·아이보리 그림을 실제 칼날 경로에 맞춰 길게 펼친다. 칼끝 뒤에만 차례로 나타나며 앞쪽은 굵고 꼬리는 가늘다. 0.15초 타격을 지나 0.25초까지 경로를 유지하고 0.34초에 사라진다. 얼굴은 보이도록 두고 무기보다 위에 그린다.
