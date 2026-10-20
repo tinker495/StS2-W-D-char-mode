@@ -14,6 +14,7 @@ public class Realta : PlaceholderCharacterModel
     public static readonly Color Color = new("e76f51");
 
     public override Color NameColor => Color;
+    public override Color EnergyLabelOutlineColor => new("4a160f");
     public override CharacterGender Gender => CharacterGender.Neutral;
     public override int StartingHp => 70;
 

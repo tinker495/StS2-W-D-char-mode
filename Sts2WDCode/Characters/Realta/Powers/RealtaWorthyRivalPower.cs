@@ -1,4 +1,4 @@
-using BaseLib.Abstracts;
+using Sts2WD.Sts2WDCode.Powers;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -7,12 +7,10 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaWorthyRivalPower : CustomPowerModel
+public sealed class RealtaWorthyRivalPower : Sts2WDPower
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-    public override string CustomPackedIconPath => ModelDb.Power<MachineLearningPower>().PackedIconPath;
-    public override string CustomBigIconPath => ModelDb.Power<MachineLearningPower>().ResolvedBigIconPath;
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<StrengthPower>(), HoverTipFactory.Static(StaticHoverTip.Block)];
 
     public override decimal ModifyHandDraw(Player player, decimal count) =>

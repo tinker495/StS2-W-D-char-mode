@@ -1,10 +1,12 @@
 using BaseLib.Utils;
+using Godot;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Models.CardPools;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using Sts2WD.Sts2WDCode.Cards;
 
@@ -21,6 +23,10 @@ public sealed class RealtaGuard() : Sts2WDCard(1, CardType.Skill, CardRarity.Tok
     public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy, CardKeyword.Retain];
 
     public override int MaxUpgradeLevel => int.MaxValue;
+
+    // Token ownership stays with TokenCardPool; only its presentation belongs to Realta.
+    public override CardPoolModel VisualCardPool => ModelDb.CardPool<RealtaCardPool>();
+    public override Texture2D? CustomFrame => ModelDb.CardPool<RealtaCardPool>().CustomFrame(this);
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromKeyword(RealtaKeywords.Guard), HoverTipFactory.FromKeyword(RealtaKeywords.Legacy)];

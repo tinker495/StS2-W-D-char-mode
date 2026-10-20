@@ -1,4 +1,4 @@
-using BaseLib.Abstracts;
+using Sts2WD.Sts2WDCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -10,7 +10,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaPerfectDayPower : CustomPowerModel
+public sealed class RealtaPerfectDayPower : Sts2WDPower
 {
     private sealed class Data
     {
@@ -20,8 +20,6 @@ public sealed class RealtaPerfectDayPower : CustomPowerModel
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
     public override int DisplayAmount => DynamicVars["Remaining"].IntValue;
-    public override string CustomPackedIconPath => ModelDb.Power<StrengthPower>().PackedIconPath;
-    public override string CustomBigIconPath => ModelDb.Power<StrengthPower>().ResolvedBigIconPath;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DynamicVar("Remaining", 10m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromPower<VigorPower>(), HoverTipFactory.FromPower<StrengthPower>()];
