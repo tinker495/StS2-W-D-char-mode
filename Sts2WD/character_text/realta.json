@@ -1,0 +1,342 @@
+{
+  "characterId": "STS2WD-REALTA",
+  "characters": {
+    "title": {
+      "kor": "레아르타",
+      "eng": "The Realta"
+    },
+    "titleObject": {
+      "kor": "레아르타",
+      "eng": "The Realta"
+    },
+    "description": {
+      "kor": "마녀 기사,\n'아르달 막 모어'라는 정리되지 않은 난잡한 설정의 소꿉놀이를 하고 있는것 같은 강력한 소녀입니다.\n다만 대장장이는 설정이 아닙니다.",
+      "eng": ""
+    },
+    "pronounObject": {
+      "kor": "이몸, 아르달 막 모어를",
+      "eng": ""
+    },
+    "possessiveAdjective": {
+      "kor": "이몸의",
+      "eng": ""
+    },
+    "pronounPossessive": {
+      "kor": "이몸의 것",
+      "eng": ""
+    },
+    "pronounSubject": {
+      "kor": "기사",
+      "eng": ""
+    },
+    "unlockText": {
+      "kor": "",
+      "eng": ""
+    },
+    "goldMonologue": {
+      "kor": "[sine]아! 군자금은 언제나 중요하지![/sine]",
+      "eng": ""
+    },
+    "eventDeathPrevention": {
+      "kor": "내가 자네들을 지키지!!",
+      "eng": ""
+    },
+    "aromaPrinciple": {
+      "kor": "",
+      "eng": ""
+    },
+    "cardsModifierTitle": {
+      "kor": "레아르타 카드",
+      "eng": ""
+    },
+    "cardsModifierDescription": {
+      "kor": "",
+      "eng": ""
+    },
+    "banter.alive.endTurnPing": {
+      "kor": "기다리고 있다네!!",
+      "eng": ""
+    },
+    "banter.dead.endTurnPing": {
+      "kor": "...",
+      "eng": "..."
+    }
+  },
+  "ancients": {
+    "NEOW": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "DARV": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "OROBAS": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "PAEL": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "TEZCATARA": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "NONUPEIPE": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "TANX": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "VAKUU": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ],
+    "THE_ARCHITECT": [
+      {
+        "id": "first_meeting",
+        "visitIndex": 0,
+        "repeatable": false,
+        "startAttackers": "None",
+        "endAttackers": "Both",
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "revisit",
+        "visitIndex": 1,
+        "repeatable": false,
+        "startAttackers": "None",
+        "endAttackers": "Both",
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      },
+      {
+        "id": "repeat",
+        "visitIndex": null,
+        "repeatable": true,
+        "startAttackers": "None",
+        "endAttackers": "Both",
+        "lines": [
+          { "speaker": "ancient", "text": { "kor": "", "eng": "" }, "next": { "kor": "", "eng": "" } },
+          { "speaker": "char", "text": { "kor": "", "eng": "" } }
+        ]
+      }
+    ]
+  },
+  "relicFlavor": {
+    "STS2WD-REALTA_BRONZE_WATCHDOG": { "kor": "", "eng": "" },
+    "STS2WD-REALTA_KUU": { "kor": "", "eng": "" },
+    "STS2WD-REALTA_WITCH_POINTED_HAT": { "kor": "", "eng": "" },
+    "STS2WD-REALTA_DRAGON_CLOAK": { "kor": "", "eng": "" },
+    "STS2WD-REALTA_ELDIR_GRAMR": { "kor": "", "eng": "" }
+  },
+  "seaGlassTitle": { "kor": "", "eng": "" }
+}
