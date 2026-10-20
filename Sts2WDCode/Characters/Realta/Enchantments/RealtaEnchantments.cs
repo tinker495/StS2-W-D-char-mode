@@ -33,7 +33,8 @@ public static class RealtaEnchantments
         DescriptionOverrides.CustomizeDescriptionPost += AppendCompositeEntries;
     }
 
-    public static EnchantmentModel EnchantTemporarily(CardModel card, EnchantmentModel canonicalEnchantment, int amount)
+    public static EnchantmentModel EnchantTemporarily(CardModel card, EnchantmentModel canonicalEnchantment, int amount,
+        bool playSound = true)
     {
         EnchantmentModel enchantment = canonicalEnchantment.ToMutable();
         if (!enchantment.CanEnchant(card))
@@ -41,6 +42,7 @@ public static class RealtaEnchantments
 
         EnchantmentModel result = AddToComposite(card, enchantment, amount, temporary: true);
         card.FinalizeUpgradeInternal();
+        if (playSound && amount > 0) RealtaCardAudio.Enchant(card);
         return result;
     }
 

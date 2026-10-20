@@ -1,4 +1,4 @@
-using BaseLib.Abstracts;
+using Sts2WD.Sts2WDCode.Powers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Creatures;
@@ -12,7 +12,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaHerosSilhouettePower : CustomPowerModel
+public sealed class RealtaHerosSilhouettePower : Sts2WDPower
 {
     private sealed class Data
     {
@@ -22,8 +22,6 @@ public sealed class RealtaHerosSilhouettePower : CustomPowerModel
 
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-    public override string CustomPackedIconPath => ModelDb.Power<MasterPlannerPower>().PackedIconPath;
-    public override string CustomBigIconPath => ModelDb.Power<MasterPlannerPower>().ResolvedBigIconPath;
     protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(0)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];
     protected override object InitInternalData() => new Data();

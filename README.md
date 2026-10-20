@@ -14,6 +14,10 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 레아르타(`Realta`)의 카드·유물 구성은 설계 합의([`docs/characters/realta/realta.md`](docs/characters/realta/realta.md))를 따릅니다. 타격·수비는 레아르타 전용 카드이며, 시작 덱은 타격 4장·수비 4장·비행 글레이브·담금질의 총 10장입니다. 수호는 카드별 방어도를 누적해서 높이고, 개선·유산·주문·역작·결투·용맹 효과를 지원합니다. 1단계 캐릭터 UI와 정적 전신 스탠딩은 정본 베이스([`docs/characters/realta/base.png`](docs/characters/realta/base.png))를 기준으로 적용되어 있으며, 카드·유물·파워 개별 아이콘은 순차 교체합니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
+## 소개문·대화 작성
+
+모든 모드 캐릭터의 소개문·고대 존재 대화·이벤트 문구·멀티플레이 핑·전용 유물 이야기는 [캐릭터 문장 작성 안내](docs/characters/character-text.md)를 따릅니다. `Sts2WD/character_text/`의 캐릭터별 프리셋에서 한국어·영어 원고를 함께 작성하며, 빈칸은 기존 동작을 유지합니다. 말투·가치관·관계는 [문장 설계 양식](docs/characters/character-voice-template.md)에 정리할 수 있습니다. 원고 수정 후 `publish` 또는 `deploy`와 게임 재시작이 필요합니다.
+
 ## 아트 제작
 
 공통 화풍·치비 적용 범위는 [ARTS.md](ARTS.md), `refs → base → assets` 제작 절차는 [`character-asset-pipeline`](.agents/skills/character-asset-pipeline/SKILL.md)을 따릅니다. 캐릭터별 서술은 `docs/characters/<char>/`에 둡니다. 레아르타의 외형·팔레트·연출·전용 프롬프트는 [아트 명세](docs/characters/realta/realta-art.md), 파일 규격·런타임 연결·제작 이력은 [에셋 가이드](docs/characters/realta/realta-assets.md)에서 확인합니다. 공통 근거는 [공식 출처 조사](docs/research/sts2-art-direction-sources.md)에 있습니다.
@@ -28,8 +32,8 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 .\dev.ps1 build              # C# 빌드
 .\dev.ps1 check              # 빌드, import, 리그 기계·인스턴스 검사
 .\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
-.\dev.ps1 publish            # DLL + PCK + manifest 생성
-.\dev.ps1 deploy             # 패키징 후 게임 mods/Sts2WD에 복사
+.\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
+.\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
 .\dev.ps1 editor             # MegaDot 편집기 열기
 ```
 
@@ -41,12 +45,20 @@ powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 
 `hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 커밋할 때마다 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 컴파일이나 기존 ModAnalyzers의 오류로 빌드가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드이므로 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
 
-레아르타의 반복 작업은 [애니메이션 작업 절차](docs/characters/realta/animation/reproduction.md)를 따릅니다. `anim`, `check`, `publish`는 [리그 기계 검사](tests/rig-checks.md)와 [인스턴스 간 상태 독립성 테스트](tests/README.md)를 실행하며, 실패하면 이후 렌더·export를 중단합니다. `anim`의 패키지 모드는 이미 생성한 PCK를 독립적으로 렌더합니다.
+레아르타의 반복 작업은 [애니메이션 작업 절차](docs/characters/realta/animation/reproduction.md)를 따릅니다. `anim`, `check`, `publish`, `deploy`는 [리그 기계 검사](tests/rig-checks.md)와 [인스턴스 간 상태 독립성 테스트](tests/README.md)를 실행하며, 실패하면 이후 렌더·export·설치를 중단합니다. `anim`의 패키지 모드는 이미 생성한 PCK를 독립적으로 렌더합니다.
 
 MegaDot 로그는 실행마다 `artifacts/` 아래에 따로 저장됩니다. 메모리 접근 오류 창이나 인증서 오류가 나타나면 [빌드 진단 절차](docs/agents/build-troubleshooting.md)에 따라 해당 실행의 로그와 종료 코드를 확인합니다.
 
-`build`와 `publish` 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. `deploy`는 게임 설치 폴더에 씁니다. 게임을 닫고 실행한 뒤, 게임의 모드 설정에서 BaseLib와 이 모드를 활성화하세요.
+`build`와 `publish` 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. `deploy`는 패키징 성공과 네 파일의 존재를 확인하고 게임 실행 중에는 설치를 중단합니다. 기존 네 파일은 `artifacts/runtime/local-install-backup-<UTC 시각>-<고유 ID>/`에 백업하고, 게임의 `mods/Sts2WD`에 설치한 뒤 SHA256을 비교합니다. 다른 모드 파일은 복사 대상이 아닙니다. 설치 도중 실패하면 출력된 백업 경로와 현재 설치 파일을 확인하세요. 자동 롤백은 하지 않습니다.
 코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요합니다. 게임에 반영하려면 `deploy`를 사용합니다.
+
+`publish`와 `deploy`는 실행마다 `artifacts/runtime/packaging-<UTC 시각>-<고유 ID>/`에 진단 자료를 남깁니다. `run.json`에는 브랜치·커밋·작업 트리 변경 목록·경로·실행 결과가, 단계별 JSON에는 실행 파일·인수·작업 디렉터리·종료 코드가 저장됩니다. 단계별 UTF-8 로그와 버전 로그로 SDK 및 MegaDot 출력도 확인할 수 있습니다. 설치 성공 기록에는 백업 경로와 네 파일의 해시가 포함됩니다.
+
+리그 검사 두 단계는 같은 진단 폴더에 `*.stdout.log`, `*.stderr.log`, `*.engine.log`, `*.exitcode`를 남깁니다. 두 PASS 메시지와 종료 코드 0을 모두 확인해야 검사 성공입니다.
+
+실행 환경을 알고 있다면 `-ExecutionContextLabel local`, `sandbox`, `escalated`로 기록할 수 있습니다. 기본값은 `unspecified`이며 이 옵션은 권한을 부여하거나 자동 판별하지 않습니다. 진단 자료에는 로컬 경로와 도구 출력이 포함되므로 공유 전에 내용을 확인하세요.
+
+패키징 실패 시 해당 실행의 파일은 설치하지 않고 실패 단계 로그부터 확인합니다. 다시 성공했더라도 원인 수정이 입증된 것은 아닙니다. 작업 복구 여부와 원인 확인 여부를 구분해 기록하세요. 설치 후 게임에서 BaseLib와 이 모드를 활성화해야 하며, 파일 해시 일치는 게임 내 동작 확인을 대신하지 않습니다.
 
 IDE에서는 `Sts2WD.sln`을 엽니다. SDK 경로를 직접 지정해야 한다면 `.tools/dotnet/dotnet.exe`를 선택합니다. Godot용 솔루션은 `.sln` 형식을 유지합니다.
 

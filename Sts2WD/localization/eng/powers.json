@@ -1,5 +1,6 @@
 {
-  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.title": "Vigor Next Turn",
+  "STS2WD-REALTA_FLAME.title": "Flame",
+  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.title": "Well Prepared",
   "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.description": "At the start of your next turn, gain {Amount} [gold]Vigor[/gold], then remove this effect.",
   "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.smartDescription": "At the start of your next turn, gain {Amount} [gold]Vigor[/gold], then remove this effect.",
   "STS2WD-REALTA_FATHERS_ADVICE_POWER.title": "Father's Advice",

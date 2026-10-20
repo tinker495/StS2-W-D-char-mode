@@ -1,5 +1,6 @@
 {
-  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.title": "다음 턴 활력",
+  "STS2WD-REALTA_FLAME.title": "화염",
+  "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.title": "준비만전",
   "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.description": "다음 턴 시작 시 [gold]활력[/gold]을 {Amount} 얻고 이 효과를 제거합니다.",
   "STS2WD-REALTA_VIGOR_NEXT_TURN_POWER.smartDescription": "다음 턴 시작 시 [gold]활력[/gold]을 {Amount} 얻고 이 효과를 제거합니다.",
   "STS2WD-REALTA_FATHERS_ADVICE_POWER.title": "아버지의 조언",

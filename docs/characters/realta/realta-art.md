@@ -144,7 +144,15 @@ Common runtime directory: `Sts2WD/images/charui/realta/`.
 | `map_marker.png` | 128×128 RGBA | **Chibi head and whole hat only**, transparent | No shoulders/torso. Slightly compress crown height so face/buckle read at 48px; start with 8% / about 10px clear margin |
 | `char_select.png` | 132×195 RGBA | **Canonical non-SD close face**, opaque | New right-facing three-quarter portrait dominated by face/red bob. Hat tip/brim extremities are outside the designed camera; partial collar/shoulders below. Use whole generated image; see 3.2.1 |
 | `char_select_locked.png` | 132×195 RGBA | Same figure alpha, opaque | Identical contour: black figure on gray. Remove internal eyes/face/armor; do not generate separately |
-| `big_energy.png` / `text_energy.png` | 74×74 / 24×24 RGBA | Same 512–1024px master, transparent | Circular medallion, 88% diameter, thick faceted bronze ring and deep petrol-blue core. **Keep central 45% radius quiet for the white cost number**, without high-contrast motifs/highlights |
+| `big_energy.png` / `text_energy.png` | 74×74 / 24×24 RGBA | Same flame-heart master, transparent outside | Red-orange curling flame silhouette, orange-gold bevels, and a large dark burgundy heart-shaped inset. The inset contains no small heart or other decoration; it is reserved for the cost number |
+
+### 3.2.2 Applied Heated-Iron Card Frame and Energy Emblem
+
+The user selected the flame-heart emblem and the heated-iron card-frame concept on 2026-10-20 and requested local application. The frame starts near black/charcoal at the top, transitions through dark iron-red, and ends in bright vermilion along the lower rails and bottom bevel. Preserve broad forged planes, restrained painted texture, and a dark warm description panel. Avoid lava cracks, sparks, smoke, excessive scratches, gold filigree, or an additional decorative emblem.
+
+The applied body texture is generated for the game's existing card-body layer, with a transparent portrait aperture. It omits the cost badge, title ribbon, and type plaque because the game renders those separately. Preserve the native title-banner and portrait-border materials and opacity: their gray/cyan/gold distinction communicates Common/Uncommon/Rare. Do not replace the banner with one dark material or hide the native portrait border. The type plaque uses subdued warm iron. Existing card art, text positions, and upgrade colors remain under game control. Standard Attack/Skill/Power cards and the Guard token use the new body. Ancient cards retain their native full-art frame.
+
+The cost icon uses the complete approved flame-heart image, proportionally resized without cropping to both delivery sizes. Its dark heart is below the silhouette's geometric center. The cost label uses a centered 34×36px box shifted 8px down from the native layout, live 14–22px autosizing, and a restrained 3px text/shadow outline. Keep the original font, dynamic cost colors, and X/unknown-cost behavior. Do not reuse the native 32px maximum and 16px outline in this smaller inset. The lower-left combat counter uses the same complete master as a 256px texture displayed at 128px; current/max energy sits in a 54×44px heart-inset label with 16–26px autosizing and 3px outlines. Keep the upright flame silhouette static, the native energy-gain VFX and transitions, and native darkening/red text at zero energy. Paths, node restoration, packaging, and installation verification belong in the asset guide.
 
 ### 3.2.1 Generate Face-Centered Selection Tiles Directly
 
@@ -175,6 +183,8 @@ The current tile was generated from base identity and actual Defect/Silent face 
 
 ### 3.4 Power Icons
 
+- The 19 user-provided named symbols in [refs/powers](refs/powers/README.md) own the corresponding primary motifs. Preserve the specified symbol and arrangement while adding the shared game rendering; do not replace a user-selected symbol with an interpretation of the card name. These are new raw references, not approved runtime artwork.
+- User revisions supersede two original motifs: 요정 장인 uses green leaf-like wings around a rectangular craft hammer, with no central orb, concentric socket, or circular wing spots that suggest an eye. 강철 포식자 emphasizes a visibly broken sword and separated steel shards against a straight, thick, intact wall slab; the wall must not curve, bend, crack, or appear to give way.
 - **Two files per power:** `Sts2WD/images/powers/big/realta_<name>_power.png` at 256×256 RGBA; `Sts2WD/images/powers/realta_<name>_power.png` at 64×64, resized.
 - Use a **single persistent-state emblem**, not a miniature card scene: two or three bold shapes and two or three primary colors.
 - `Amount` overlays the bottom-right `x/y:60–100%`. Put identifying tips/eyes/clock hands/motifs central-to-upper-left, `x/y:15–80%`.
@@ -254,14 +264,14 @@ Weapon anchor (when visible): a SINGLE hybrid broom-glaive polearm — upper cur
 Proportion override (CHIBI / SD ONLY): Transform into an unmistakable super-deformed chibi style (2 to 2.5 heads tall when torso is shown). Extremely large rounded head and full cheeks, short rounded chin, large simple widely-spaced violet eyes, tiny nose and confident smiling mouth. Preserve Realta's copper-red bob, pointed ears, petrol-blue bent witch hat with brown band and bronze buckle, continuous ivory fur collar and tiny dual bronze shoulder pauldrons, simplified into bold connected cel-like planes readable at 48-128px.
 ```
 
-### 5.3 Energy Medallion
+### 5.3 Flame-Heart Energy Emblem
 
 ```text
 Use case: stylized-concept.
 Asset type: game card energy orb icon, exported to 74x74 and 24x24, square transparent icon.
-Subject & Composition: a single compact circular magical bronze medallion (88% of canvas diameter) matching Realta's bronze armor (#9D754E / #D6B06A) and petrol-blue magic (#1E5C8A / #38B6FF). Thick faceted bronze outer ring with upper-left warm highlight and lower-right dark umber shadow, enclosing a deep petrol-blue core. CRITICAL SAFE ZONE: the central 45% radius of the blue core MUST remain quiet, dark-to-mid value and free of high-contrast details because the game renders a white energy-cost number over the center.
-Style/medium: <insert ARTS.md section 7.2 [Block A]>. Only 3-4 bold shapes so it stays crisp at 24x24.
-Backdrop & Exclusions: true transparent alpha outside the medallion. No numbers, runes, stars, flames or outer glow.
+Subject & Composition: preserve the user-selected red-orange flame silhouette wrapping around a large dark burgundy heart-shaped inset. Use broad curling flame tongues, dark red bevel shadows, and selective orange-gold highlights. The inset is empty: remove the former small inner heart and keep the field quiet for a white energy numeral. Keep the complete silhouette and transparent margins when resizing.
+Style/medium: <insert ARTS.md section 7.2 [Block A]>. Broad connected shapes and restrained surface detail that survive 24x24.
+Backdrop & Exclusions: true transparent alpha outside the emblem; the heart inset stays dark and opaque. No painted numbers, inner symbols, runes, stars, particles or outer glow.
 ```
 
 ### 5.4 Selection Tile and Locked Colors

@@ -1,4 +1,4 @@
-using BaseLib.Abstracts;
+using Sts2WD.Sts2WDCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
@@ -10,12 +10,10 @@ using MegaCrit.Sts2.Core.Runs;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaPortableForgePower : CustomPowerModel
+public sealed class RealtaPortableForgePower : Sts2WDPower
 {
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
-    public override string CustomPackedIconPath => ModelDb.Power<PlatingPower>().PackedIconPath;
-    public override string CustomBigIconPath => ModelDb.Power<PlatingPower>().ResolvedBigIconPath;
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];
 
     public override async Task BeforeCardPlayed(CardPlay cardPlay)

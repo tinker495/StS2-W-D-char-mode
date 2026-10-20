@@ -7,6 +7,12 @@ description: Diagnosis loop for hard bugs and performance regressions. Use when 
 
 A discipline for hard bugs. Skip phases only when explicitly justified.
 
+## Repository Test Ownership
+
+Follow `AGENTS.md` test ownership rules throughout this workflow. Read and run existing tests. Add formal tests only when a human explicitly requests them and only within that scope; identify the requester and context in comments. Preserve existing tests, fixtures, expected values, and validation settings.
+
+Without that authorization, use temporary reproductions and observations under ignored `artifacts/` (outside formal test directories). Do not commit them or register them with CI. Propose useful regression cases with their expected behavior and supporting evidence; wait for an explicit request before adding them. A passing temporary reproduction is diagnostic evidence, not user acceptance.
+
 When exploring the codebase, read `GLOSSARY.md` (if it exists) to get a clear mental model of the relevant modules, and check ADRs in the area you're touching.
 
 ## Redact
@@ -23,7 +29,7 @@ Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give
 
 ### Ways to construct one, in roughly this order
 
-1. **Failing test** at whatever seam reaches the bug: unit, integration, e2e.
+1. **Existing failing test**, or an explicitly human-requested new test, at the seam that reaches the bug.
 2. **Curl / HTTP script** against a running dev server.
 3. **CLI invocation** with a fixture input, diffing stdout against a known-good snapshot.
 4. **Headless browser script** (Playwright / Puppeteer) that drives the UI and asserts on DOM/console/network.
@@ -79,7 +85,7 @@ Confirm:
 
 Once it's red, shrink the repro to the **smallest scenario that still goes red**. Cut inputs, callers, config, data, and steps **one at a time**, re-running the loop after each cut, and keep only what's load-bearing for the failure.
 
-Why bother: a minimal repro shrinks the hypothesis space in Phase 3 (fewer moving parts left to suspect) and becomes the clean regression test in Phase 5.
+Why bother: a minimal repro shrinks the hypothesis space in Phase 3 and supports temporary verification or a proposed regression case in Phase 5.
 
 Done when **every remaining element is load-bearing**: removing any one of them makes the loop go green.
 
@@ -111,9 +117,9 @@ Tool preference:
 
 **Perf branch.** For performance regressions, logs are usually wrong. Instead: establish a baseline measurement (timing harness, `performance.now()`, profiler, query plan), then bisect. Measure first, fix second.
 
-## Phase 5: Fix + regression test
+## Phase 5: Fix + verification
 
-Write the regression test **before the fix**, but only if there is a **correct seam** for it.
+Prepare verification **before the fix** at a **correct seam**. Use a temporary reproduction by default. Create a formal regression test only under explicit human authorization as described above.
 
 A correct seam is one where the test exercises the **real bug pattern** as it occurs at the call site. If the only available seam is too shallow (single-caller test when the bug needs multiple callers, unit test that can't replicate the chain that triggered the bug), a regression test there gives false confidence.
 
@@ -121,8 +127,8 @@ A correct seam is one where the test exercises the **real bug pattern** as it oc
 
 If a correct seam exists:
 
-1. Turn the minimised repro into a failing test at that seam.
-2. Watch it fail. If you forced the red by mutating code or a fixture, `diff` against a pristine copy to prove the mutation landed before you trust it.
+1. Run the temporary reproduction, an existing test, or an authorized new test at that seam.
+2. Observe the failure without changing protected fixtures, expected values, or validation settings.
 3. Apply the fix.
 4. Watch it pass.
 5. Re-run the Phase 1 feedback loop against the original (un-minimised) scenario.
@@ -132,7 +138,9 @@ If a correct seam exists:
 Required before declaring done:
 
 - [ ] Original repro no longer reproduces (re-run the Phase 1 loop)
-- [ ] Regression test passes (or absence of seam is documented)
+- [ ] Verification passes; report whether it used an existing test, an authorized new test, or a temporary reproduction. Document missing seams and any proposed tests awaiting authorization.
 - [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
 - [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
 - [ ] The hypothesis that turned out correct is stated in the commit / PR message, so the next debugger learns
+
+If the original command succeeds again without a causal fix, report operational recovery and unresolved cause separately. Preserve the before/after evidence; do not claim permanent remediation from successful reruns alone.
