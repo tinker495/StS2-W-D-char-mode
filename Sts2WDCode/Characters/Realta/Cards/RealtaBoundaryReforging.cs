@@ -16,7 +16,8 @@ public sealed class RealtaBoundaryReforging() : RealtaCard(1, CardType.Skill, Ca
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         CardSelectorPrefs prefs = new(SelectionScreenPrompt, 1);
-        var card = (await CardSelectCmd.FromCombatPile(choiceContext, Owner.PlayerCombatState!.ExhaustPile, Owner, prefs)).FirstOrDefault();
+        var card = (await CardSelectCmd.FromCombatPile(choiceContext, Owner.PlayerCombatState!.ExhaustPile, Owner, prefs,
+            candidate => candidate is not RealtaBoundaryReforging)).FirstOrDefault();
         if (card == null) return;
         await CardPileCmd.Add(card, PileType.Hand);
         await RefineCmd.Upgrade(choiceContext, card);
