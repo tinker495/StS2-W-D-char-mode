@@ -22,7 +22,10 @@ public sealed class RealtaAnnealing() : RealtaCard(1, CardType.Skill, CardRarity
             if (card.Keywords.Contains(CardKeyword.Unplayable))
                 await CardCmd.Exhaust(choiceContext, card);
             else
+            {
+                await RefineCmd.Upgrade(choiceContext, card);
                 await RefineCmd.Refine(choiceContext, card, DynamicVars["Refine"].IntValue);
+            }
         }
     }
     protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(2m);

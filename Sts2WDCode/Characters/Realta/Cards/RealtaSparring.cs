@@ -11,7 +11,7 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaSparring() : RealtaCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(11m, ValueProp.Move), new PowerVar<StrengthPower>(1m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(12m, ValueProp.Move), new PowerVar<StrengthPower>(1m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<StrengthPower>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

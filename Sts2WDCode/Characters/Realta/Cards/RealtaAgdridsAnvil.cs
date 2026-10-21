@@ -20,6 +20,5 @@ public sealed class RealtaAgdridsAnvil() : RealtaCard(2, CardType.Power, CardRar
     protected override void OnUpgrade()
     {
         AddKeyword(CardKeyword.Innate);
-        DynamicVars["Refine"].UpgradeValueBy(1m);
     }
 }
