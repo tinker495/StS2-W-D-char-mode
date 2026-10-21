@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public sealed class RealtaOldWorkshop() : RealtaCard(1, CardType.Power, CardRarity.Uncommon, TargetType.Self)
+public sealed class RealtaOldWorkshop() : RealtaCard(2, CardType.Power, CardRarity.Uncommon, TargetType.Self)
 {
     protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<PlatingPower>(1m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
