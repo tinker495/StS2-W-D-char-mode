@@ -1,10 +1,46 @@
-# Rebuild and inspect Realta animations
+# Inspect saved Realta Godot animations
 
-Use this workflow when changing combat/merchant authoring inputs or reviewing generated scenes. All executable tools are tracked: `dev.ps1`, the authoring/baking sources in this directory, `tools/render_clip.gd`, `tools/review_frames.py`, and the checks under `tests/`. Runtime PNGs and coordinate manifests are the production inputs. Every directory under `artifacts/` below is created by the command or explicitly selected as an optional comparison input.
+Edit the shared base scene, common Animation resources and variant-specific settings using [the Godot editing guide](godot-editing.md), then save before running these commands. Saved native `.tscn` and `.tres` files are the only editing source and packaging input. The existing combat/merchant paths remain inherited game entry scenes. All executable tools are tracked: `dev.ps1`, `tools/render_clip.gd`, `tools/review_frames.py`, and checks under `tests/`. Every directory under `artifacts/` below is created by the command or explicitly selected as an optional comparison input.
+
+## Migration observations (2026-10-22)
+
+MegaDot 4.5.1.m.14 with .NET SDK 9.0.318 loaded both native rigs. `dev.ps1 check` passed the C# build, resource import, 42,193 native mechanical samples and four instance-isolation cases. Existing tests and acceptance data were neither added nor changed. Normalizing only the presentation-property renames and removed external-authoring flag made both scene texts identical to their pre-migration versions.
+
+At 24 fps, 600 of 792 before/after frames matched directly. Merchant relaxed-loop capture can retain an already deferred random autoplay seek even after disconnecting the start signal. A temporary observation disabled phase initialization before entering the tree on both versions; all 192 remaining RGBA frames then matched exactly. For a deterministic comparison, suppress random loop entry before tree insertion, not after `_ready`. This observation did not change the tracked renderer or product motion.
+
+A temporary headless editor observation confirmed `Engine.is_editor_hint() == true`, loaded both rigs and scrubbed all seven canonical clips at 0, .15, .3 and .7 seconds (clamped to duration), without initializing random phase. Both scene paths also opened through the native headless editor command. This is script-level editor evidence; interactive mouse editing, save/reopen and actual game playback were not exercised. The sandbox reported certificate-store warnings; the temporary editor process also reported shutdown RID leaks. These are distinct from script parse/load failures.
+
+The first `publish` failed with the sandbox certificate-store error. Following [the build diagnostic procedure](../../../agents/build-troubleshooting.md), one escalated retry passed and produced the package. `dev.ps1 anim attack -Variant both -PackagePath artifacts/mods/Sts2WD/Sts2WD.pck` then mounted that package in a fresh host and rendered both variants successfully. This confirms packaged resource loading; it does not establish actual in-game dispatch. NuGet vulnerability metadata remained unavailable (NU1900 warning); restore/build and the unchanged checks completed. No game installation was performed.
+
+## Native ownership cleanup observations (2026-10-22)
+
+Following the [official-workflow comparison](../../../research/godot-native-animation-workflow.md), static polygon/UV/triangle/weight data and invariant textures were moved to node defaults; redundant animation copies and resolved visibility/order arrays were removed (749 tracks per scene). The five existing semantic composition properties now own body/cel visibility, free-arm order, weapon-sleeve order and held/released glove order. No motion keys were resampled or simplified.
+
+Both variants passed temporary save/reload observations after editing a head polygon point, UV and bone weight. All seven canonical clips retained those edited values while seeking forward/backward at 0, .7, .15 and 0 seconds, in runtime and headless editor modes. Separate semantic-state changes kept the released glove behind the weapon and the final death cel visible. No interactive mouse operation or actual game playback was exercised.
+
+All 792 before/after RGBA frames at 24 fps matched after aligning merchant loop phase. Temporary side-by-side playback observations compared visibility, modulation, transforms and root draw order across 28 transitions (two variants, two outgoing loops, seven incoming clips), each sampled for 121 steps at 240 Hz: 3,388 snapshots matched. These observations supplement the unchanged mechanical/isolation checks; they do not add acceptance cases or replace visual review.
+
+The tracked renderer now clears autoplay and selects manual processing on the observation instance before tree insertion, then disconnects the runtime phase callback. Before the requested clip, it explicitly establishes the variant's idle at time zero so incoming arm holds start from the normal outgoing pose. This prevents random autoplay seeks and startup scheduling from contaminating capture time without modifying saved scenes or reaching into private controller state. Two repeated merchant-loop captures matched all 192 frames and the fixed-phase reference. Earlier migration observations above describe the defect before this capture fix.
+
+The user subsequently explicitly requested RESET and the corresponding exact-name check change on 2026-10-22. Each variant now contains a 0.001-second nonlooping RESET with time-zero defaults for its 256 animated properties, plus `reset_on_save=true`. Static polygon/UV/triangle/weight values are excluded so mesh edits persist. The name assertion permits exactly the original ten dispatch names plus RESET, with the requester/context recorded in the test. Existing library/default/alias/transition checks still run; no other acceptance conditions were relaxed.
+
+A temporary observation waited for editor initialization, opened fresh copied scenes, edited a head polygon point, previewed die at 1.3 seconds and called the native `EditorInterface.save_scene()`. Both saved scenes reloaded with RESET's hip/default body mode while retaining the polygon edit. Initial exploratory runs raced editor tab restoration; the corrected observation verified the active scene and avoided yielding between preview and save. Headless thumbnail generation reported a dummy-texture warning and editor shutdown reported RID leaks; scene saves returned OK and their serialized values were verified. Mouse interaction and actual gameplay remain unverified.
+
+Final `check`/`publish` passed with RESET included: 42,193 mechanical samples and four instance-isolation cases, followed by PCK export. The final PCK was mounted in a fresh host and all seven clips of both variants were captured. All 792 RGBA frames matched the pre-cleanup motion at aligned loop phase. NuGet vulnerability metadata was unavailable (NU1900); compilation and package export completed. No game installation was performed.
+
+## Shared rig ownership observations (2026-10-22)
+
+The two game entry scenes now inherit `realta_rig_base.tscn`. It owns the common hierarchy, static geometry, bindings, textures and local-to-scene Slash material. Six common clips are single external Animation resources referenced by both `combat_library.tres` and `merchant_library.tres`. Only RESET/revive resources, initial pose differences and dispatch settings remain variant-specific. Combat is a five-line inherited entry; merchant contains property overrides rather than copied meshes or Animation data. `dev.ps1 editor -Variant both` opens the common base; individual variants open their inherited preview scene. The native editor command accepted only its first scene argument, so the launcher passes exactly one path rather than claiming to open several tabs.
+
+At the start of this correction, the combat file used Godot 4.7's `libraries/` serialization, which the configured MegaDot 4.5 could not instantiate as a library. It also stored manual processing. Before splitting ownership, the same saved data was read with the compatible `libraries` dictionary and normal idle processing. These compatibility adjustments changed neither keys nor mesh data; this normalized scene supplied the comparison baseline. Do not introduce an automatic converter into `check` or rewrite acceptance criteria to mask incompatible resources.
+
+Temporary observations confirmed that editing one base head point flowed into both inherited scenes and that both players referenced the same attack Animation object and observed the same key edit. RESET and revive remained different objects across variants. Both variants advanced under normal process frames with idle callback mode. Native editor save/reload of fresh temporary copies retained inheritance, the external common clip path and geometry. Thumbnail/dummy-renderer and editor shutdown warnings were logged separately from successful save results.
+
+The unchanged mechanical/isolation checks passed (42,193 samples and four isolation cases), followed by successful PCK export. The 792 source renders, all 792 renders of the final PCK mounted in a fresh host, and 3,388 transition snapshots matched the normalized pre-split scenes. Texture documentation now identifies all four head/expression paintings as 196×140 at `(134,93.99999)`, using `parts.json` and the common base's UVs as current registration evidence. No artwork or test acceptance data was changed in this correction. Actual gameplay and mouse-driven editing were not exercised; no game installation was performed.
 
 ## Setup
 
-Complete the root [development setup](../../../../README.md#새-pc에서-준비하기): .NET 9, MegaDot 4.5.1.m.14, installed game assemblies and the locked BaseLib dependency. `dev.ps1 doctor` resolves project paths; no script contains a personal checkout path. Authoring and review sheets also require Python with NumPy and Pillow. The verified environment is Python 3.12.4, NumPy 2.3.1 and Pillow 11.3.0. For a matching Python environment, install `numpy==2.3.1` and `Pillow==11.3.0` with that interpreter's `python -m pip install`.
+Complete the root [development setup](../../../../README.md#새-pc에서-준비하기): .NET 9, MegaDot 4.5.1.m.14, installed game assemblies and the locked BaseLib dependency. `dev.ps1 doctor` resolves project paths; no script contains a personal checkout path. Review sheets also require Python with Pillow. The verified environment is Python 3.12.4 and Pillow 11.3.0; install `Pillow==11.3.0` with that interpreter's `python -m pip install` if needed.
 
 Run from the repository root in PowerShell. Command examples use a process-scoped execution-policy option, preserving machine settings.
 
@@ -14,7 +50,7 @@ Run from the repository root in PowerShell. Command examples use a process-scope
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-before
 ```
 
-The source workflow performs author → import → bake → mechanical and isolation checks → native render → GIF/review sheets. Authoring writes `rig.json` and the descriptive `authoring-report.json`; baking writes both runtime scenes. Inspect those diffs after an input change. Runtime PNGs, manifests, meshes and the frozen `rig-base.json` are inputs, not destinations of draft conversion.
+The source inspection workflow performs import → mechanical and isolation checks → native game render → GIF/review sheets. It never writes editable scenes or PNG parts. Edit bones, meshes and keys with the native Godot 2D and Animation panels.
 
 `-Clip` accepts all ten dispatch names and `all` (seven distinct clips). `-Variant` accepts `combat` (default), `merchant`, or `both`. The second positional argument is the clip, so `anim attack` and `anim -Clip attack` are equivalent. Omitting `-OutputDirectory` creates a unique `artifacts/animation-*` directory. An explicit output directory must be new; the command never clears a previous run.
 
@@ -43,7 +79,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 check
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
 ```
 
-`check` builds C#, imports resources and runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md). Require exit 0 and both PASS summaries. `publish` runs the same checks after import and before exporting the PCK; failures stop export. Existing pre-commit behavior remains C# build-only. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
+`check` builds C#, imports resources and runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md). Require exit 0 and both PASS summaries. `publish` runs the same checks after import and before exporting the PCK; failures stop export. No inspection or packaging command reauthors saved scenes. Existing pre-commit behavior remains C# build-only. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
 
 For native startup crashes, certificate-store errors, access denial, or separate log-display failures, follow [Build execution and diagnostics](../../../agents/build-troubleshooting.md). It owns the shared handling procedure; certificate settings stay unchanged.
 

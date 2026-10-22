@@ -125,7 +125,14 @@ try {
     if (-not (Test-Path -LiteralPath $paths.GodotPath)) { throw 'Set GodotPath in local.props.' }
     if ($Task -eq 'editor') {
         $editorLog = Join-Path (New-ObservationDirectory 'editor') 'engine.log'
-        Start-Process -FilePath $paths.GodotPath -ArgumentList '--editor', '--path', ('"' + $projectRoot + '"'), '--log-file', ('"' + $editorLog + '"') -WorkingDirectory $projectRoot
+        $editorArguments = @('--editor', '--path', ('"' + $projectRoot + '"'), '--log-file', ('"' + $editorLog + '"'))
+        # The editor accepts one scene path. "both" edits their shared source;
+        # individual variants open their inherited scene for preview/overrides.
+        $editorScene = if ($Variant -eq 'both') { 'realta_rig_base.tscn' } else { 'realta_' + $Variant + '_rig.tscn' }
+        $scenePath = 'res://Sts2WD/animations/realta/combat/' + $editorScene
+        $editorArguments += ('"' + $scenePath + '"')
+        Start-Process -FilePath $paths.GodotPath -ArgumentList $editorArguments -WorkingDirectory $projectRoot -WindowStyle Normal
+        Write-Host "편집 씬: $scenePath"
         Write-Host "Editor log: $editorLog"
         return
     }
@@ -158,13 +165,8 @@ try {
             Copy-Item -LiteralPath $renderScript -Destination (Join-Path $renderProject 'render_clip.gd')
             $renderScript = Join-Path $renderProject 'render_clip.gd'
         } else {
-            Invoke-AnimationProcess $python @('-X', 'utf8', '-B', (Join-Path $animationSource 'author_clips.py')) `
-                (Join-Path $animationOutput 'author')
             Invoke-AnimationProcess $paths.GodotPath @('--headless', '--editor', '--path', $projectRoot, '--import', '--quit') `
                 (Join-Path $animationOutput 'import') -Engine
-            Invoke-AnimationProcess $paths.GodotPath @('--headless', '--path', $projectRoot, '--script',
-                (Join-Path $animationSource 'build_combat_rig.gd'), '--', $animationSource) `
-                (Join-Path $animationOutput 'bake') 'baked res://Sts2WD/animations/realta/combat/realta_merchant_rig.tscn -> OK' -Engine
             Invoke-RigChecks $paths.GodotPath $animationOutput
         }
         $frames = Join-Path $animationOutput 'frames'

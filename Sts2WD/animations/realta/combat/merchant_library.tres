@@ -1,0 +1,25 @@
+[gd_resource type="AnimationLibrary" load_steps=9 format=3]
+
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/merchant_reset.tres" id="1_l3j7l"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/attack.tres" id="2_m68it"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/cast.tres" id="3_u8qyn"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/die.tres" id="4_fm286"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/hurt.tres" id="5_v8qm7"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/relaxed_loop.tres" id="6_6qkkt"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/idle_loop.tres" id="7_5nspg"]
+[ext_resource type="Animation" path="res://Sts2WD/animations/realta/combat/clips/merchant_revive.tres" id="8_i3rq4"]
+
+[resource]
+_data = {
+&"RESET": ExtResource("1_l3j7l"),
+&"attack": ExtResource("2_m68it"),
+&"cast": ExtResource("3_u8qyn"),
+&"die": ExtResource("4_fm286"),
+&"hurt": ExtResource("5_v8qm7"),
+&"idle": ExtResource("6_6qkkt"),
+&"idle_loop": ExtResource("7_5nspg"),
+&"powerup": ExtResource("3_u8qyn"),
+&"relaxed": ExtResource("6_6qkkt"),
+&"relaxed_loop": ExtResource("6_6qkkt"),
+&"revive": ExtResource("8_i3rq4")
+}

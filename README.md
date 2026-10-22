@@ -22,6 +22,10 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 공통 화풍·치비 적용 범위는 [ARTS.md](ARTS.md), `refs → base → assets` 제작 절차는 [`character-asset-pipeline`](.agents/skills/character-asset-pipeline/SKILL.md)을 따릅니다. 캐릭터별 서술은 `docs/characters/<char>/`에 둡니다. 레아르타의 외형·팔레트·연출·전용 프롬프트는 [아트 명세](docs/characters/realta/realta-art.md), 파일 규격·런타임 연결·제작 이력은 [에셋 가이드](docs/characters/realta/realta-assets.md)에서 확인합니다. 공통 근거는 [공식 출처 조사](docs/research/sts2-art-direction-sources.md)에 있습니다.
 
+Realta 전투·상점 애니메이션은 **Godot 호환 MegaDot 에디터의 네이티브 씬·리소스**에서 직접 편집합니다. `.\dev.ps1 editor -Variant both`로 양쪽이 공유하는 base scene을 엽니다. 뼈대·메시·가중치는 공통 씬에서 한 번 수정하고, 공통 동작은 공유 Animation 리소스의 타임라인을 수정한 뒤 저장하세요. 개별 미리보기는 `-Variant combat` 또는 `merchant`로 엽니다. [Godot 편집 안내](docs/characters/realta/animation/godot-editing.md)에 편집 위치와 게임 반영 절차가 있습니다.
+
+저장한 `.tscn`과 `.tres`가 편집 원본이자 게임 패키징 입력입니다. `anim`은 이 리소스를 검사·렌더하며, 별도 변환이나 동작 재생성을 하지 않습니다.
+
 ## 이 PC에서 사용하기
 
 PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은 프로젝트 안의 `.tools`에 있는 SDK를 자동으로 선택합니다.
@@ -31,10 +35,10 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 .\dev.ps1 doctor             # SDK, 게임 DLL, MegaDot 경로 확인
 .\dev.ps1 build              # C# 빌드
 .\dev.ps1 check              # 빌드, import, 리그 기계·인스턴스 검사
-.\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
+.\dev.ps1 anim attack        # 저장된 씬 import → 검사 → 렌더 → 비교 시트
 .\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
 .\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
-.\dev.ps1 editor             # MegaDot 편집기 열기
+.\dev.ps1 editor -Variant both # 전투·상점 .tscn을 Godot 에디터에서 열기
 ```
 
 PowerShell의 스크립트 실행 정책 때문에 실행되지 않는다면 해당 명령만 다음처럼 실행할 수 있습니다. 시스템 정책은 변경하지 않습니다.

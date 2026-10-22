@@ -1,29 +1,38 @@
 # Realta animation sources
 
-Agent-facing production/runtime contract. Coordinates are source pixels, +X right, +Y down, positive clockwise radians. Combat/merchant display at 0.625 scale. Rest/selection sources and wrappers are separate and must remain untouched by combat iteration.
+Agent-facing authoring/runtime contract. **Native Godot scenes and Animation resources are the sole combat/merchant editing source.** Human workflow: [Godot editing guide](godot-editing.md). Decision: [ADR-0007](../../../adr/0007-native-godot-animation-authoring.md).
 
 ## Inputs and ownership
 
+Open the shared `Sts2WD/animations/realta/combat/realta_rig_base.tscn` in the repository's MegaDot 4.5.1.m.14 editor with `dev.ps1 editor -Variant both`. Individual `combat`/`merchant` selections open their inherited scene; other scenes can be opened from the editor filesystem. Edit common joints, rest transforms and Polygon2D geometry/UV/triangles/weights in the base scene only. Six common animations live once in `clips/*.tres`: idle_loop, attack, hurt, cast, die and relaxed_loop. Both native AnimationLibrary resources reference the same objects, so a common timeline edit applies to both variants. Only RESET, revive, initial pose overrides, aliases, autoplay and next/blend mappings differ. Keep dense motion keys; do not regenerate or resample them. See the [official-workflow comparison](../../../research/godot-native-animation-workflow.md).
+
+Saved `.tscn`, `.tres` and `parts/*.png` are packaged directly. There is no external editing project, export/import bridge, procedural animation generator or second live authoring model. Save modified external resources as well as scenes; do not make common clips unique in a variant. `anim`, `check`, `publish` and `deploy` consume saved resources without rewriting them. Rest and selection remain separate scope.
+
 | File | Responsibility |
 |---|---|
-| rig-base.json | Frozen hierarchy and setup; never overwritten by authoring. |
-| author_clips.py | Primary curves, foot/grip IK with signed attack elbow reach, wrist sharing, shaft reflection, complete-alpha floor support, VFX and cel timing. Writes rig.json and descriptive authoring-report.json. |
-| secondary_motion.py | Deterministic springs integrated at 240 Hz; baked onto the primary sample times. |
-| meshes.json | Original mesh vertices/triangles plus extension cells and normalized anatomical weights. Vertices/UVs use source-canvas pixels. |
-| parts.json | Runtime PNG rectangles, source offsets, full canvases and downscale. |
-| death-sequence.json | Adopted cels, explicit per-cel durations, final/settle times. |
-| death_poses.py | Canonical final-body placement. |
-| build_combat_rig.gd | Bakes combat/merchant Skeleton2D, Polygon2D, Sprite2D and AnimationPlayer resources. |
-| Sts2WD/animations/realta/combat/parts/*.png | Authoritative runtime artwork. rig_parts.canvas() reconstructs its source mapping. |
-| realta_combat_rig.gd | Lower-mode visibility, free-arm/sleeve/grip tree order and first-entry/restart loop phase handling. |
+| realta_rig_base.tscn | Sole common node hierarchy, meshes, weights, textures and per-instance Slash material; default combat presentation. |
+| realta_combat_rig.tscn / realta_merchant_rig.tscn | Inherited game entry scenes. Merchant retains only property differences and its library/dispatch settings. |
+| clips/idle_loop.tres, attack.tres, hurt.tres, cast.tres, die.tres, relaxed_loop.tres | Shared native Animation resources; edit once for both variants. |
+| clips/combat_reset.tres, combat_revive.tres, merchant_reset.tres, merchant_revive.tres | Variant-specific setup and revival resources. |
+| combat_library.tres / merchant_library.tres | Dispatch names and aliases pointing to shared or variant-specific Animation resources. |
+| Sts2WD/animations/realta/combat/parts/*.png | Textures; preserve pixel/UV registration. |
+| realta_combat_rig.gd | Shared editor/runtime presentation and runtime-only loop phase handling. |
+| tools/render_clip.gd / tools/review_frames.py | Read-only capture and review sheets. |
+| parts.json | Texture rectangles, source offsets, full canvases and scale metadata. |
+| death-sequence.json | Adopted cel timing specification read by protected checks; preserve it. |
+| blink-patches.json | Separate rest/selection blink registration metadata. |
 
-Generated scenes are realta_combat_rig.tscn and realta_merchant_rig.tscn in the runtime combat directory. Edit their inputs and rebake. Wrapper %Visuals remains an empty Sprite2D at (0,-155), scale .625, with Rig at (-192,-288); bounds and game markers are unchanged.
+Coordinates are source pixels, +X right, +Y down, positive clockwise radians. Combat/merchant display at 0.625 scale. Wrapper %Visuals remains an empty Sprite2D at (0,-155), scale .625, with Rig at (-192,-288); bounds and game markers are unchanged.
 
-The runtime controller retains only layer/visibility and loop-phase state. AnimationPlayer owns all animated transforms, textures and effects directly; no duplicate pose-name/time tracks or legacy overlay callback are generated. Runtime parts and parts.json contain only the current assembly; superseded lower-body and landing cels are absent from the package inputs.
+Keep AnimationPlayer on automatic idle processing in saved game scenes. Inspection scripts may select manual processing on their own instances. A newer ordinary Godot save was observed to serialize `libraries/`, which MegaDot 4.5 could not load; use the configured editor and require successful `check`/package import rather than assuming cross-version serialization compatibility.
 
-The baker marks the Slash ShaderMaterial as local to each scene instance. Shader code and textures may be shared, but animated `reveal` belongs to one character: playing another instance's idle must not change an active attack. Run the [instance isolation test](../../../../tests/README.md) after changing or rebaking either rig.
+The `@tool` controller derives visibility and zero-Z order from `lower_mode`, `free_arm_back`, `free_arm_depth_hold`, `weapon_arm_front` and `weapon_gripped` in both editor and game. These are the sole composition interface; no second visibility/order array exists. Edit the corresponding discrete state keys to change attachment handoffs. Editor preview ignores outgoing-arm transition holds so direct scrubbing resolves the selected pose. Runtime blending retains those holds and discrete-state correction. Random loop entry and restart phase restoration run only during playback, never editor scrubbing. Stable child order does not trigger repeated moves. See [Godot 4.5 tool-script guidance](https://docs.godotengine.org/en/4.5/tutorials/plugins/running_code_in_the_editor.html).
 
-Runtime PNGs and their tracked coordinate manifests are the production source. Authoring and baking consume those inputs directly. The one-time draft conversion/export programs have been retired; their former implementations remain in Git history. Rest/selection use their delivered runtime paintings and blink patches.
+Properties that had identical values across every key of all seven canonical clips now live once on their Polygon2D/attachment nodes: polygon, UV, triangle lists, bone weights and invariant textures. The common played value was retained as the node default before removing its redundant tracks. Only head/grip texture swaps vary and remain keyed; original motion tracks and their dense key times are unchanged. New shape-changing animation may add explicit geometry tracks when actually needed, with defaults in every clip that can interrupt it.
+
+Each variant has a nonlooping, editor-only `RESET` animation and `reset_on_save=true`. RESET contains the variant's idle time-zero values for all animated properties; static geometry/weights remain outside animation ownership. When intentionally changing an animated neutral/setup value, update its RESET key too. On 2026-10-22 the user explicitly authorized adding RESET and changing the exact-name check to allow the original ten dispatch names plus RESET; all other acceptance requirements remain intact. Do not call RESET from gameplay or change the existing autoplay/next mappings.
+
+Seven canonical clips remain authoritative: idle_loop, attack, hurt, cast, die, relaxed_loop and revive. Preserve aliases sharing Animation resources, next/blend/autoplay mappings, node paths and the per-instance Slash ShaderMaterial (`resource_local_to_scene = true`). Run the existing [instance isolation test](../../../../tests/README.md) after runtime changes. The explicitly authorized name-list assertion now permits RESET; other acceptance requirements are unchanged.
 
 ## Clips and dispatch
 
@@ -127,9 +136,9 @@ Revive holds final body/prop state during fade-out, resets all cels/reflection/h
 
 ## Rebuild and inspect
 
-Follow [the animation workflow](reproduction.md) for `dev.ps1 anim`, `check`, package rendering and comparison sheets.
+Follow [the animation workflow](reproduction.md) for `dev.ps1 anim`, `check`, package rendering and comparison sheets. `anim` renders the saved hand-edited scenes without calling the reference generators.
 
-All CanvasItems keep z_index=0 and use tree order; no top_level. In both variants, the entire weapon (shaft core, blade/bristles and ribbon) draws above every body surface, including head/hat/face, torso, both arms, coat-front, legs and all death cels. `author_clips.py` places weapon and hand_l last in the articulated order; the builder moves the Skeleton2D slot and hand_l after all death cels, before Slash/CastFx. This retains the bone hierarchy, animation paths and skin weights without a transform proxy.
+All CanvasItems keep z_index=0 and use tree order; no top_level. In both variants, the entire weapon (shaft core, blade/bristles and ribbon) draws above every body surface, including head/hat/face, torso, both arms, coat-front, legs and all death cels. The saved scenes place weapon and hand_l last in the articulated order, with the Skeleton2D slot and hand_l after all death cels and before Slash/CastFx. This retains the bone hierarchy, animation paths and skin weights without a transform proxy.
 
 The only body exception is the gripping glove `hand_l` (including its `hand-l-turned` texture): it covers the held shaft. The discrete `weapon_gripped` property defaults true in every held clip, becomes false at die .10 s and moves the released glove immediately below Skeleton2D. Revive keeps it false during death fade-out and resets it true at hidden .20 s. VFX draw above the prop and glove. Attack's separate sleeve-depth change remains below the prop at all times. Standalone native inspection, package loading and actual game verification are different evidence.
 

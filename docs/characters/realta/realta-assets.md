@@ -6,13 +6,21 @@ This guide explains production and integration for character UI, 81 card illustr
 
 ## 0. Current Application Status
 
+Native Godot scenes and resources are the sole editing source for Realta combat/merchant animation.
+`dev.ps1 editor -Variant both` opens the shared `realta_rig_base.tscn`; individual variant selections open their inherited preview scene.
+Edit bones and Polygon2D mesh/weights once in the base scene. Six common motion clips
+are shared `.tres` Animation resources; only variant setup/revive and dispatch settings remain separate.
+Saved scenes, resources and PNGs are packaged without conversion or regeneration. Other editing
+workflows and conversion tools have been removed. See the [Godot editing guide](animation/godot-editing.md)
+and [source ownership contract](animation/README.md). Rest/selection retain existing resources.
+
 As of 2026-10-20, the nine Branch B runtime PNGs, heated-iron card body, flame-heart combat energy counter, and dedicated power icons coexist with the four animated Realta scenes. `combat.png` remains the canonical standing still and fallback; the combat, rest, and merchant scenes use their animation resources. Sections 0.1–0.2 map the images and scenes; sections 0.6–0.7 and 3 describe the newer presentation resources.
 
 The 2026-10-20 combat/merchant rig places the weapon and ribbon in front of all body and death cels. Only the gripping hand and VFX appear above them; the released hand moves behind the weapon during death. Existing PNGs, meshes, and bone paths are preserved. The tree order and death ribbon angle are recorded in [animation/README.md](animation/README.md).
 
 Merchant `relaxed_loop` and its `idle`/`relaxed` aliases place the entire free arm behind the body. Clip keys switch the tree order of `upper_arm_r` and `forearm_r`; the wrist moves slightly outward so the glove edge remains visible beside the coat. Return-to-combat and death ordering changes occur when the arm and coat no longer overlap. Existing PNGs, meshes, and rest/selection resources are preserved. See Merchant free arm order in [animation/README.md](animation/README.md) for key timing and blend details.
 
-Merchant refinement on 2026-10-19 replaces the native eight-second `relaxed_loop` with independently authored planted-foot IK, a lower fixed shaft grip, free glove by the belt and viewer-left leg support. The same resource serves merchant autoplay/idle and combat relaxed aliases. `author_clips.py` owns the pose; `build_combat_rig.gd` owns live-phase blends to idle/death; the runtime controller suppresses phase randomization when changing loops. Alpha-only cleanup of `combat/parts/weapon-rigid.png` and `foot_l.png` preserves their canvas/offset registration and all RGB. No new paintings or rest/selection edits are part of this refinement. Reproduction and verification scope are documented in [animation/README.md](animation/README.md).
+Merchant refinement on 2026-10-19 replaces the native eight-second `relaxed_loop` with independently authored planted-foot IK, a lower fixed shaft grip, free glove by the belt and viewer-left leg support. The same resource serves merchant autoplay/idle and combat relaxed aliases. The retained runtime scenes contain that pose and its blends; animation edits belong to those native Godot scenes. The runtime controller suppresses phase randomization when changing loops. Alpha-only cleanup of `combat/parts/weapon-rigid.png` and `foot_l.png` preserves their canvas/offset registration and all RGB. No new paintings or rest/selection edits are part of this refinement. Reproduction and verification scope are documented in [animation/README.md](animation/README.md).
 
 As of 2026-10-19, **all four Realta scenes are animated** (combat/merchant cutout rig, seated rest mesh, animated selection painting). Their runtime files, ownership and reproduction live in [animation/README.md](animation/README.md); decisions and comparisons are in [the iteration log](realta-animation-iteration-log.md) and [the runtime dispatch research](../../research/sts2-cutout-runtime-contract.md). `combat.png` remains the canonical standing still (portrait source, fallback), but no scene references it any more. The repository build/PCK export and packaged-scene rendering were verified; in-game play was not.
 
@@ -52,9 +60,9 @@ Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-195,-280)
 
 ### 0.3 Verification Scope and Reading Guide
 
-2026-10-19 전투/상인 리그 보완본은 가려진 관절 면, 앞/뒤 코트, 공격 전용 그립, 피격·사망 다리 동작과 착지 중간 셀을 포함한다. runtime PNG와 parts.json/meshes.json의 source mapping이 빌드 입력이며, 구체적인 파일 소유권과 재현 절차는 [animation/README.md](animation/README.md)에 있다. 7개 클립 396프레임 렌더와 publish가 완료됐고 새 PCK에서 두 장면·10개 재생 이름·추가 텍스처·행동 복귀·사망 유지·revive reset을 관찰했다. 게임 설치와 실제 게임 검증은 하지 않았으며 rest/select 원본 12개는 작업 시작 해시와 같다.
+2026-10-19 전투/상인 리그 보완본은 가려진 관절 면, 앞/뒤 코트, 공격 전용 그립, 피격·사망 다리 동작과 착지 중간 셀을 포함한다. 현재 패키징 입력은 저장된 runtime 씬과 PNG이며, 파츠 좌표 명세는 parts.json에 있다.  구체적인 파일 소유권과 재현 절차는 [animation/README.md](animation/README.md)에 있다. 7개 클립 396프레임 렌더와 publish가 완료됐고 새 PCK에서 두 장면·10개 재생 이름·추가 텍스처·행동 복귀·사망 유지·revive reset을 관찰했다. 게임 설치와 실제 게임 검증은 하지 않았으며 rest/select 원본 12개는 작업 시작 해시와 같다.
 
-The combat expression textures `Sts2WD/animations/realta/combat/parts/head-closed.png`, `head-hurt.png`, and `head-attack.png` were regenerated separately and registered by scale/translation against unchanged hair, hat and ear regions. Each remains 188×126 RGBA at source offset `(140,99)`, with alpha identical to the untouched `head.png`. One connected facial-skin mask preserves hair/hat outside the face and the original dark jaw junction. Matching 384×576 source layers place each complete runtime rectangle at `(140,99)` in `drafts/cutout-v12/parts/` for future export consistency. Three visual review passes included 8× face views on grey/dark and head-over-torso at scale 0.625. This PNG-only update did not run Godot import, packaging, installation or game verification; existing packaged assets may therefore predate these textures.
+The current combat head/expression textures `Sts2WD/animations/realta/combat/parts/head.png`, `head-closed.png`, `head-hurt.png` and `head-attack.png` are all **196×140 RGBA**, registered at source offset **`(134, 93.99999)`** (approximately `(134,94)`) on the 384×576 source canvas. The authoritative rectangles and offsets are tracked in [animation/parts.json](animation/parts.json); the shared `realta_rig_base.tscn` owns their current Polygon2D/UV registration. Preserve those dimensions and registration when replacing a texture. The older 188×126 / `(140,99)` rectangles predate the padded native textures and are not current replacement specifications. Existing facial artwork and its hair/hat/jaw registration are retained; no ignored draft layers are required to reproduce the current mapping.
 
 - Historical rollback verification checked that the restored `combat.png` exactly matched the former base-derived `standing.png` and that all three scenes referenced `combat.png` before animation integration. The extra standing PNG and its import descriptor are removed. Packaging/resource-loading results for that restored state are recorded in section 0.5. These observations are not formal tests or product acceptance; actual gameplay and other aspect ratios remain unverified.
 - The approved `base.png` was unchanged during downstream production. Section 0.4 describes delivery conversion.
@@ -612,4 +620,4 @@ This table covers both current deliveries and future production targets. Section
 
 ### 공격 궤적 범위 (2026-10-20)
 
-공격 `Slash`는 기존 `slash-trail.png`를 유지하고, 240 Hz로 측정한 칼끝·칼날 윤곽을 사용하는 `Polygon2D`로 적용했다. `author_clips.py`, `build_combat_rig.gd`, `slash_reveal.gdshader`가 경로·메시·점진 표시를 담당한다. 전투와 상점 리그에 함께 적용하며 상세 재현 절차는 `animation/README.md`에 있다.
+공격 `Slash`는 기존 `slash-trail.png`를 유지하고, 240 Hz로 측정한 칼끝·칼날 윤곽을 사용하는 `Polygon2D`로 적용했다. 현재 저장된 리그 씬이 경로·메시를, `slash_reveal.gdshader`가 점진 표시를 담당한다. 전투와 상점 리그에 함께 적용하며 상세 재현 절차는 `animation/README.md`에 있다.

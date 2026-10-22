@@ -9,7 +9,12 @@ extends SceneTree
 ## Sample every authored key and interpolation quarter-point, as specified by
 ## docs/agents/codex-cutout-rig.md. This is sampled geometry, not visual approval.
 
-const NAMES := ["attack", "cast", "die", "hurt", "idle", "idle_loop", "powerup", "relaxed", "relaxed_loop", "revive"]
+## Human requester: wjdrb, 2026-10-22, explicitly instructed "RESET 추가와 해당 검사 수정 지시"
+## during the native Godot workflow improvement. Permit the editor-only RESET in
+## addition to the original ten game dispatch names so reset_on_save can restore
+## the variant's authored defaults. Keep all existing dispatch, alias, key-default,
+## transition, layer, clearance and instance-isolation requirements unchanged.
+const NAMES := ["RESET", "attack", "cast", "die", "hurt", "idle", "idle_loop", "powerup", "relaxed", "relaxed_loop", "revive"]
 const CLIPS := ["idle_loop", "attack", "hurt", "cast", "die", "relaxed_loop", "revive"]
 const ACTIONS := ["attack", "hurt", "cast", "powerup", "revive"]
 const FLOOR_Y := 527.0
@@ -88,7 +93,7 @@ func run() -> void:
 func check_library(player: AnimationPlayer, variant: String) -> void:
 	var names := Array(player.get_animation_list())
 	names.sort()
-	require(names == NAMES, variant + ": ten dispatch names", str(names))
+	require(names == NAMES, variant + ": ten dispatch names plus editor RESET", str(names))
 	var idle := "relaxed_loop" if variant == "merchant" else "idle_loop"
 	require(player.autoplay == idle, variant + ": autoplay")
 	for alias in {"idle": idle, "relaxed": "relaxed_loop", "powerup": "cast"}:

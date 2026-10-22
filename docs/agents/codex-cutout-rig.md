@@ -1,13 +1,13 @@
-# Codex Image Tool → Godot Cutout Rig
+# Character parts and native Godot animation contract
 
-Use this one-shot instruction when converting an approved standing image into a layered, articulated character. Read repository `AGENTS.md`, `ARTS.md`, the character art/asset specifications, and the `character-asset-pipeline` and `imagegen` skills first. Include this language rule in each task's shared preamble: agent instructions and implementation notes (including draft `NOTES.md`) are English; human-facing reports are Korean.
+Use this contract when preparing parts, editing native Godot scenes and inspecting integration. Godot `.tscn` is the sole combat/merchant animation source; see the [editing guide](../characters/realta/animation/godot-editing.md). Save edits directly; inspection and packaging never regenerate motion. Read repository `AGENTS.md`, `ARTS.md`, the character art/asset specifications, and the `character-asset-pipeline` and `imagegen` skills first. Include this language rule in each task's shared preamble: agent instructions and implementation notes (including draft `NOTES.md`) are English; human-facing reports are Korean.
 
 ## Inputs and output scope
 
 - `IDENTITY_IMAGE`: `docs/characters/realta/base.png`.
 - `POSE_IMAGE`: `Sts2WD/images/charui/realta/combat.png`.
 - `OUTPUT_DIRECTORY`: a fresh version under `docs/characters/realta/drafts/`.
-- Goal: transparent parts, explicit ownership and rig manifests, native Godot playback, and an evidence-backed comparison with official combat and scene variants. Resolve actual clip names from the runtime; the observed official set is `idle_loop`, `attack`, `hurt`, `cast`, `die`, and `relaxed_loop`.
+- Goal: transparent parts, native Godot scenes, explicit ownership, and a separate evidence-backed account of game runtime compatibility and official combat/scene comparisons. Resolve actual clip names from the runtime; the observed official set is `idle_loop`, `attack`, `hurt`, `cast`, `die`, and `relaxed_loop`.
 - Start with a reviewable standalone candidate. Promote assets or replace the runtime scene only when the user's requested scope authorizes application. Installation is a separate action.
 
 ## 1. Inspect the actual integration contract
@@ -59,7 +59,7 @@ Part extraction is expressly part of this workflow: extract atlas components int
 
 ## 3. Record placement and joint ownership
 
-Use a manifest in native Godot coordinates: pixels, +X right, +Y down, positive clockwise rotation in radians. Record each part's PNG, parent joint, source-pixel pivot, attachment scale, local position, and absolute draw order. Specify canvas size and ground anchor.
+Author directly in native Godot coordinates: pixels, +X right, +Y down, positive clockwise rotation in radians. Record each part's PNG, parent joint, source-pixel pivot, attachment scale, local position, and absolute draw order. Specify canvas size and ground anchor.
 
 Generated parts are redrawn approximations, not lossless segmentation. SIFT/RANSAC may suggest placements for unchanged textured regions, but cannot guarantee exact transforms, infer hidden joints, or establish occlusion reliably. Manual reviewed anchors and draw order are the default. Record any drift from the original as unresolved rather than calling it an exact reconstruction.
 
@@ -67,17 +67,21 @@ Check semantic ownership at every boundary: coat fur on a leg creates a moving w
 
 Draw by tree order, not `z_index`. Godot draws canvas items in tree order within a canvas layer, and any positive `z_index` (relative or absolute) lifts parts above sibling game UI such as health bars. Keep every part at z 0 and order the children; a weapon parented under bones draws at its `Skeleton2D`'s slot. Do not use `top_level` for a released prop: it leaves the parent's modulate/visibility chain, so game fades miss it; express the target in the bone's local space instead. Parent the weapon to a grip joint under the gripping forearm; confirm the grip through the complete animation range.
 
-## 4. Build a native Godot rig
+## 4. Preserve the Godot runtime rig contract
 
-Create a `Node2D` scene root and a `Sprite2D` compatibility child named `Visuals` where the real integration needs it. Keep `Visuals.visible = true` and its modulation opaque: hiding/modulating the parent also affects descendants. An empty texture is sufficient for the container. Attach an ordinary `Node2D` joint hierarchy and one `Sprite2D` per part. Use `Skeleton2D`/`Bone2D` only when their actual features are needed.
+The game runtime requires a `Node2D` scene root and a `Sprite2D` compatibility child named `Visuals` where the real integration needs it. Keep `Visuals.visible = true` and its modulation opaque: hiding/modulating the parent also affects descendants. An empty texture is sufficient for the container. Retain the existing game joint hierarchy, skinned `Polygon2D` parts and sprite attachments when editing native scenes.
 
-Build hip → torso → head/arms, hip → legs/coat, forearm → grip → weapon. Put source-pixel pivot offsets on the sprite, separate from the joint's parent-local transform. Use unit animation scale; rotate/translate individual joints instead of squashing the complete standing image.
+Maintain hip → torso → head/arms, hip → legs/coat, forearm → grip → weapon in the native Skeleton2D hierarchy. Preserve source-pixel pivot registration separately from the joint's parent-local transform at the runtime boundary. Use unit animation scale; rotate/translate individual joints instead of squashing the complete standing image.
 
-Use a planted foot target and two-bone solve for supported poses, then bake its result. Release the foot for intentional stepping/falling. For continuous seams use local `Polygon2D`/`Skeleton2D` weights only across anatomically connected parts. Do not infer bone connectivity from 2D proximity: a casting forearm next to the coat must not pull that coat. Restrict triangles to each texture's occupied region; a full-canvas grid duplicated for every layer wastes work. Retain topology and weights between timing edits.
+For supported poses, author planted-foot targets and two-bone IK in Godot and store the resulting motion in AnimationPlayer tracks. Release the foot for intentional stepping/falling. For continuous seams use local `Polygon2D`/`Skeleton2D` weights only across anatomically connected parts. Do not infer bone connectivity from 2D proximity: a casting forearm next to the coat must not pull that coat. Restrict triangles to each texture's occupied region; a full-canvas grid duplicated for every layer wastes work. Retain topology and weights between timing edits.
 
 Separate rigid metal/weapon shapes, flexible cloth, and pose-specific attachments. A prone drawing may solve a final silhouette but does not solve the transition into it; inspect the frames immediately before and after an attachment change. Avoid hiding a pop with a long crossfade or declaring a good final still a finished death animation.
 
-Write an `AnimationLibrary` and `AnimationPlayer`. Author setup/reset values for every animated property; include those properties in each clip so switching from hit/death cannot leave stale transforms. `idle` loops with restrained upper-body breathing and planted feet. `attack` uses anticipation, a readable swing, and recovery. `hit` recoils and returns. `die` settles into a nonlooping final pose; revival/reset is explicit. Use Godot interpolation deliberately, and distinguish a linear first draft from a finished eased animation.
+Edit native `AnimationLibrary` and `AnimationPlayer` resources in the `.tscn` scene. Author setup/reset values for every animated property; include those properties in each clip so switching from hit/death cannot leave stale transforms. `idle` loops with restrained upper-body breathing and planted feet. `attack` uses anticipation, a readable swing, and recovery. `hit` recoils and returns. `die` settles into a nonlooping final pose; revival/reset is explicit. Use Godot track interpolation deliberately; distinguish a linear first draft from a finished eased animation.
+
+Keep static polygon/UV/triangle/weight data on Polygon2D nodes. A property that is identical across all keys of every canonical clip should not be copied into every animation; keep only actual changes and their reset keys. Derive composition from one set of semantic state tracks rather than parallel resolved visibility/order arrays. Preserve dense adopted motion during ownership cleanup. See the [Godot native workflow comparison](../research/godot-native-animation-workflow.md). Use the editor-only `RESET` with `reset_on_save=true` for animated setup defaults; keep static meshes out of it. The user explicitly authorized the original ten game dispatch names plus RESET on 2026-10-22. Maintain RESET when intentionally changing animated neutral values; never route gameplay autoplay/next to RESET.
+
+Common combat/merchant hierarchy and mesh ownership belongs to `realta_rig_base.tscn`. The existing game entry paths inherit it; do not copy common node data into variants. Six common clips are external Animation resources in `clips/`, referenced by both native libraries; preserve resource identity across variants. Keep only variant RESET/revive, initial pose overrides and dispatch settings separate. Edit/save native `.tres` resources as well as scenes. Saved game AnimationPlayers must use automatic idle processing, and resources must pass the configured MegaDot version's import rather than relying on a newer ordinary Godot serializer.
 
 Let the native player own clip state and time. A script that calls `seek()` every frame can display correct previews while overriding external `Play()` calls. Bake joint motion and key any attachment-controller state/time on the same player; reserve `seek()` for scrubbing. Observe automatic return with `advance()` and the real engine clock, since seeking to a clip's end does not exercise completion. Repeated `play()` of the already-playing clip does not establish a fresh time-zero sample: stop/reset or observe accumulated time explicitly.
 
@@ -87,11 +91,9 @@ Check prop clearance numerically: transform the rigid weapon's alpha pixels by F
 
 Resolve effect time separately from clip length. The observed official characters use `AttackAnimDelay = 0.15`, while their full attack clips are much longer. Confirm Realta's actual call path, then place the strike accordingly. Offset the head, hat tip, ribbon and coat settling instead of giving every part identical key times. Merchant needs a visibly relaxed pose, rest needs its seated pose/three Act lighting variants and light-off behavior, and selection needs its own composition. Do not count renamed identical loops as completed variants.
 
-Native Godot data requires no Spine conversion. Only if importing a verified Spine schema, convert Y and rotation signs once, respecting setup-relative translation/rotation, multiplicative scale, attachment transforms, draw-order timelines and curve semantics. Record the schema/version and supported features. Negating all numbers is not a complete Spine importer; unsupported meshes, constraints or timelines must be reported.
-
 ## 5. Verify and report
 
-Use the [motion review matrix](cutout-motion-review.md) for each affected action and record evidence for every applicable row. For Realta iteration, follow the tracked [animation procedure](../characters/realta/animation/reproduction.md); its `dev.ps1 anim` command owns authoring, import, baking, capture and review-sheet creation.
+Use the [motion review matrix](cutout-motion-review.md) for each affected action and record evidence for every applicable row. Animation edits belong to the native `.tscn` bones, Polygon2D mesh/weights and AnimationPlayer tracks. For retained game-resource inspection, follow the tracked [animation procedure](../characters/realta/animation/reproduction.md): `dev.ps1 anim` imports, checks, captures and creates review sheets from saved game scenes. It reads saved scenes without generating motion. Run unchanged checks before packaging.
 
 Serialize scalar rotation key values as floating-point literals, including `0.0`. Sample actual joint properties during playback; integer-valued keys can round small rotations to zero even when clip names and durations load correctly.
 
@@ -103,7 +105,7 @@ At every verification iteration, open a relevant external primary source and con
 
 For runtime promotion, preserve markers/bounds and the verified framework dispatch, run the repository build/import/PCK workflow, and verify resources instantiate. Run gameplay checks if available. A successful C# build alone verifies neither imported textures nor event playback. For standalone draft-only work, compile/package the candidate only as necessary; installation is not implied.
 
-Prefer baking the authored rig into a `.tscn` (bones, skinned polygons, AnimationPlayer with aliases, `next` and `autoplay`) and keeping only a small controller script for state a value track cannot express. Trim fully transparent margins from part textures and record their source-canvas offsets in one manifest; downscale VFX painted far larger than displayed. Realta's implementation is the reference: [animation/README.md](../characters/realta/animation/README.md).
+The editable `.tscn` contains bones, skinned polygons and AnimationPlayer with aliases, `next` and `autoplay`, with a small controller script only for state a value track cannot express. Trim fully transparent margins from part textures and record their source-canvas offsets in one manifest; downscale VFX painted far larger than displayed. Realta's implementation is the reference: [animation/README.md](../characters/realta/animation/README.md).
 
 Raw JSON loaded by `FileAccess` needs explicit non-resource export inclusion. Dynamically constructed texture/script paths also need inclusion when exporting selected resources. Build an isolated candidate PCK and mount it in a fresh host project without the source project's import cache; render the loaded candidate and exercise the actual clip names. This demonstrates packaged resource loading, not BaseLib factory conversion or gameplay. Do not promote unused experiments, captures, or official research artwork into the package.
 

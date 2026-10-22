@@ -32,9 +32,12 @@ func capture() -> void:
 		var rig := scene.instantiate()
 		rig.position = Vector2(120, 32)
 		rig.scale = Vector2.ONE * 0.625
-		viewport.add_child(rig)
 		var player: AnimationPlayer = rig.get_node("AnimationPlayer")
+		# Configure this observation instance before entering the tree: otherwise
+		# autoplay can queue a random loop seek before we disconnect its callback.
+		player.autoplay = ""
 		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+		viewport.add_child(rig)
 		player.stop()
 		player.animation_started.disconnect(Callable(rig, "_on_animation_started"))
 		await process_frame
@@ -42,6 +45,10 @@ func capture() -> void:
 			push_error("Missing clip: " + str(clip))
 			quit(1)
 			return
+		# A held incoming arm slot depends on the outgoing pose. Establish the
+		# variant's normal idle explicitly, rather than relying on autoplay timing.
+		player.play("relaxed_loop" if args[0] == "merchant" else "idle_loop", 0)
+		player.advance(0)
 		if clip == "revive":
 			player.play("die", 0)
 			player.advance(player.get_animation("die").length)
