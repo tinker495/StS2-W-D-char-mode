@@ -349,7 +349,7 @@ def author_hurt():
         t = i / 60; j = copy.deepcopy(base)
         hx = key(t, [(0, 240), (.07, 236), (.15, 235), (.30, 238), (.48, 240), (.8, 240)])
         hy = key(t, [(0, 338), (.08, 341), (.15, 342), (.30, 339), (.48, 338), (.8, 338)])
-        torso = key(t, [(0, 0), (.05, -.2), (.12, -.13), (.22, .06), (.4, .04), (.62, -.02), (.8, 0)])
+        torso = key(t, [(0, 0), (.05, -.3), (.12, -.13), (.22, .06), (.4, .04), (.62, -.02), (.8, 0)])
         j['hip'] = {'position': [hx, hy], 'rotation': 0.0}; j['torso']['rotation'] = torso
         j['head']['rotation'] = key(t, [(0, base['head']['rotation']), (.04, -.2), (.12, .05), (.24, .14), (.45, .06), (.66, -.02), (.8, base['head']['rotation'])])
         # Tilt about the lower jaw/collar contact, preserving the painted neck overlap.
