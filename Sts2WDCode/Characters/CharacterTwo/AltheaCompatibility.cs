@@ -89,7 +89,8 @@ internal static class AltheaCompatibility
         private static void Postfix(WeakPower __instance, Creature? dealer, ValueProp props, ref decimal __result)
         {
             if (dealer == __instance.Owner && props.IsPoweredAttack()
-                && dealer.HasPower<AltheaUnrivaledBladePower>()) __result = 2m - __result;
+                && dealer.GetPower<AltheaUnrivaledBladePower>() is { } power)
+                __result = power.ReverseWeakMultiplier(__result);
         }
     }
     [HarmonyPatch(typeof(VulnerablePower), nameof(VulnerablePower.ModifyDamageMultiplicative))]

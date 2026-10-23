@@ -36,6 +36,7 @@ internal static class AltheaRules
         internal readonly HashSet<PowerModel> EnemyEffects = [];
         internal readonly Dictionary<CardModel, PileType> ReformAfterPlay = [];
         internal readonly HashSet<CardModel> ReformedThisTurn = [];
+        internal readonly HashSet<CardModel> Reformed = [];
     }
     private static readonly ConditionalWeakTable<PlayerCombatState, State> States = new();
     internal static State For(Player player) => States.GetValue(player.PlayerCombatState!, _ => new State());
@@ -49,8 +50,16 @@ internal static class AltheaRules
     internal static bool Clash(Player? player) => player?.Creature.CombatState is { } combat &&
         (player.Creature.CurrentHp * 2 <= player.Creature.MaxHp ||
          combat.HittableEnemies.Any(e => e.CurrentHp * 2 <= e.MaxHp));
+    internal static bool IsHarmful(PowerModel power, bool appliedByEnemy) =>
+        power is WeakPower or VulnerablePower or FrailPower || appliedByEnemy;
+
+    // Debuff reductions are not applications; enemy-applied negative Strength (a Buff) still is.
+    internal static bool IsHarmfulApplication(PowerModel power, decimal amount, Creature? applier) =>
+        amount != 0 && (power.Type != PowerType.Debuff || amount > 0)
+        && IsHarmful(power, applier?.Side == CombatSide.Enemy);
+
     internal static int HarmfulCount(Player player) => player.Creature.Powers.Where(p =>
-        p.Type == PowerType.Debuff || p is WeakPower or VulnerablePower or FrailPower || For(player).EnemyEffects.Contains(p))
+        IsHarmful(p, For(player).EnemyEffects.Contains(p)))
         .Select(p => p.Id).Distinct().Count();
     internal static async Task Unfading(PlayerChoiceContext context, CardModel source)
     {
@@ -83,9 +92,30 @@ internal static class AltheaRules
         replacement.DeckVersion = source.DeckVersion;
         await CardCmd.Transform(source, replacement);
         For(source.Owner).ReformedThisTurn.Add(replacement);
+        For(source.Owner).Reformed.Add(replacement);
         if (destination == PileType.Exhaust) await CardCmd.Exhaust(context, replacement);
         else if (destination.HasValue) await CardPileCmd.Add(replacement, destination.Value, CardPilePosition.Top);
         return replacement;
+    }
+
+    internal static async Task TakeCombatCard(CardModel card, Player recipient)
+    {
+        var previousOwner = card.Owner;
+        var combat = recipient.Creature.CombatState!;
+        bool reformed = For(previousOwner).Reformed.Remove(card);
+        bool reformedThisTurn = For(previousOwner).ReformedThisTurn.Remove(card);
+        // Resolve any visible hand/draw-pile movement with the native command before changing ownership.
+        await CardPileCmd.Add(card, PileType.Discard);
+        card.RemoveFromCurrentPile();
+        combat.RemoveCard(card);
+        combat.AddCard(card, recipient);
+        if (reformed) For(recipient).Reformed.Add(card);
+        if (reformedThisTurn) For(recipient).ReformedThisTurn.Add(card);
+        // This is the same combat instance, not a newly generated card or another combat entry.
+        var discard = recipient.PlayerCombatState!.DiscardPile;
+        discard.AddInternal(card);
+        await Hook.AfterCardChangedPiles(recipient.RunState, combat, card, PileType.Discard, null);
+        discard.InvokeCardAddFinished();
     }
 
     internal static decimal DisplayDamage(CardModel card)

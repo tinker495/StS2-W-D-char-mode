@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Models.Relics;
 
 namespace Sts2WD.Sts2WDCode.Characters.CharacterTwo;
 
+// Keep the model type/ID stable for existing saves; the character's file and display name are Althea.
 public partial class CharacterTwo : PlaceholderCharacterModel
 {
     public const string CharacterId = "CharacterTwo";

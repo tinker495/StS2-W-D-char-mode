@@ -132,7 +132,7 @@ internal static class AltheaCardEffects
                 selected = (await CardSelectCmd.FromCombatPile(context, piles.DrawPile, owner, new CardSelectorPrefs(card.ChoicePrompt, 1))).FirstOrDefault();
                 if (selected != null) await CardPileCmd.Add(selected, PileType.Hand); break;
             case AltheaCardKind.FleetFoot:
-                await CardPileCmd.Draw(context, count, owner); await SelfPower<AltheaFleetFootPower>(count); break;
+                await SelfPower<AltheaFleetFootPower>(count); await CardPileCmd.Draw(context, count, owner); break;
             case AltheaCardKind.InstinctiveDefense:
                 int repeats = self.HasPower<FrailPower>() ? 2 : 1;
                 for (int i = 0; i < repeats; i++) await Block(block); break;
@@ -158,7 +158,7 @@ internal static class AltheaCardEffects
                 var attacks = piles.Hand.Cards.Where(c => c != card && c.Type == CardType.Attack).ToList();
                 decimal total = attacks.Sum(AltheaRules.DisplayDamage);
                 await CardCmd.Discard(context, attacks); await Attack(all: true, value: total, copied: true); break;
-            case AltheaCardKind.GenMorfiClad: await Attack(hits: 1 + AltheaRules.HarmfulCount(owner)); break;
+            case AltheaCardKind.GenMorfiClad: await Attack(random: true, hits: 1 + AltheaRules.HarmfulCount(owner)); break;
             case AltheaCardKind.CrushingStrike:
                 await Attack();
                 if (play.Target?.IsAlive == true) await PowerCmd.Apply<WeakPower>(context, play.Target, amount, self, card);
@@ -217,6 +217,20 @@ internal static class AltheaCardEffects
             case AltheaCardKind.ArchipelagoArts: await SelfPower<AltheaArchipelagoArtsPower>(amount); break;
             case AltheaCardKind.SeaWarrior: await SelfPower<AltheaSeaWarriorPower>(amount); break;
             case AltheaCardKind.ErosionCurse: await SelfPower<AltheaErosionCursePower>(amount); break;
+            case AltheaCardKind.SoulVeil:
+                foreach (var player in combat.Players.Where(p => p.Creature.IsAlive && p.PlayerCombatState != null))
+                    for (int i = 0; i < amount; i++)
+                        await CardPileCmd.AddGeneratedCardToCombat(combat.CreateCard<AltheaWraith>(player), PileType.Hand, owner);
+                break;
+            case AltheaCardKind.SeaParting: await Attack(all: true); break;
+            case AltheaCardKind.CurseDominion:
+                var curses = combat.Players.Where(p => p != owner && p.PlayerCombatState != null)
+                    .SelectMany(p => new[] { p.PlayerCombatState!.Hand, p.PlayerCombatState.DrawPile, p.PlayerCombatState.DiscardPile })
+                    .SelectMany(pile => pile.Cards).Where(AltheaRules.IsCurse).ToList();
+                foreach (var curse in curses) await AltheaRules.TakeCombatCard(curse, owner);
+                break;
+            case AltheaCardKind.FinalBlow: await Attack(); break;
+            case AltheaCardKind.FightersForm: await SelfPower<AltheaFightersFormPower>(amount); break;
             default: throw new InvalidOperationException($"Missing Althea card effect: {card.Kind}");
         }
     }

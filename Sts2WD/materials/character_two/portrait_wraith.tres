@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://Sts2WD/materials/character_two/portrait_palette.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/shadow_color = Color(0.025, 0.004, 0.012, 1)
+shader_parameter/middle_color = Color(0.48, 0.025, 0.065, 1)
+shader_parameter/light_color = Color(0.98, 0.35, 0.32, 1)
+shader_parameter/shadow_hold = 0.02
+shader_parameter/middle_point = 0.55

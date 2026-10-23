@@ -16,7 +16,7 @@
   "STS2WD-ALTHEA_REFORM.title": "재편",
   "STS2WD-ALTHEA_REFORM.description": "원래 타입에 맞는 토큰으로 이번 전투 동안 변형합니다. 강화와 적용 가능한 인챈트를 계승합니다.",
   "STS2WD-ALTHEA_CLASH.title": "격전",
-  "STS2WD-ALTHEA_CLASH.description": "효과 실행 직전 자신 또는 살아 있는 적의 체력이 절반 이하이면 발동합니다.",
+  "STS2WD-ALTHEA_CLASH.description": "자신 또는 적의 체력이 절반 이하면 발동합니다.",
   "STS2WD-ALTHEA_UNFADING.title": "불실",
   "STS2WD-ALTHEA_UNFADING.description": "소멸·재편되면 덱 원본의 강화·인챈트를 가진 복사본을 손에 추가합니다. 생성 카드는 강화 여부만 반영합니다.",
   "STS2WD-ALTHEA_FRENZY.title": "광란",

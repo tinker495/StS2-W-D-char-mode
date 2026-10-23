@@ -9,7 +9,7 @@
 | 대상 | 실제 작성 파일 | 게임 모델 ID |
 |---|---|---|
 | 레아르타 | [realta.json](../../Sts2WD/character_text/realta.json) | `STS2WD-REALTA` |
-| 캐릭터 2 | [character_two.json](../../Sts2WD/character_text/character_two.json) | `STS2WD-CHARACTER_TWO` |
+| Althea | [althea.json](../../Sts2WD/character_text/althea.json) | `STS2WD-CHARACTER_TWO` |
 | 캐릭터 3 | [character_three.json](../../Sts2WD/character_text/character_three.json) | `STS2WD-CHARACTER_THREE` |
 | 캐릭터 4 | [character_four.json](../../Sts2WD/character_text/character_four.json) | `STS2WD-CHARACTER_FOUR` |
 | 새 캐릭터용 복사본 | [_template.json](../../Sts2WD/character_text/_template.json) | 복사 후 실제 모델 ID로 변경 |

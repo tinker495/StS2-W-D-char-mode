@@ -27,7 +27,8 @@ public partial class CharacterTwo
     public override Task AfterPowerAmountChanged(PlayerChoiceContext context, PowerModel power, decimal amount,
         Creature? applier, CardModel? source)
     {
-        if (power.Owner.Player is { } player && AltheaRules.Applies(player) && applier?.Side == CombatSide.Enemy && amount != 0)
+        if (power.Owner.Player is { } player && AltheaRules.Applies(player) && applier?.Side == CombatSide.Enemy
+            && AltheaRules.IsHarmfulApplication(power, amount, applier))
             AltheaRules.For(player).EnemyEffects.Add(power);
         return Task.CompletedTask;
     }
@@ -35,7 +36,6 @@ public partial class CharacterTwo
     {
         if (!AltheaRules.Applies(card.Owner)) return;
         if (AltheaRules.IsCurse(card)) AltheaRules.For(card.Owner).CursesExhausted++;
-        if (card is AltheaWraith) await CardPileCmd.Draw(context, 1, card.Owner);
         await AltheaRules.Unfading(context, card);
     }
     public override Task AfterShuffle(PlayerChoiceContext context, Player player)
@@ -48,16 +48,5 @@ public partial class CharacterTwo
                     .Where(c => c.Kind is AltheaCardKind.Feint or AltheaCardKind.Regroup)) card.EnergyCost.AddThisCombat(1);
         }
         return Task.CompletedTask;
-    }
-    public override (PileType, CardPilePosition) ModifyCardPlayResultPileTypeAndPosition(CardModel card, bool isAutoPlay,
-        ResourceInfo resources, PileType pile, CardPilePosition position)
-    {
-        if (AltheaRules.Applies(card.Owner) && AltheaRules.For(card.Owner).CardsPlayed == 0
-            && card.Owner.Creature.HasPower<AltheaPathToGreatnessPower>())
-        {
-            AltheaRules.For(card.Owner).ReformAfterPlay[card] = pile;
-            return (PileType.Discard, position);
-        }
-        return (pile, position);
     }
 }

@@ -20,7 +20,7 @@ internal static class AltheaPortraitAppearance
             // Reload clears visible portraits and assigns blur to undiscovered cards.
             // Leave that blur intact; native Reload/pool reset also clears this palette on reuse.
             if (portrait.Material != null) return;
-            string palette = card.Rarity switch
+            string palette = card.Kind == AltheaCardKind.Wraith ? "wraith" : card.Rarity switch
             {
                 CardRarity.Uncommon => "uncommon",
                 CardRarity.Rare => "rare",

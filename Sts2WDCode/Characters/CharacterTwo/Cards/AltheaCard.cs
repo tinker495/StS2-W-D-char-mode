@@ -1,6 +1,7 @@
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
@@ -23,10 +24,13 @@ public abstract class AltheaCard(AltheaCardKind kind) : CharacterTwoCard(
     public override int MaxUpgradeLevel => Kind == AltheaCardKind.Wraith ? 0 : base.MaxUpgradeLevel;
     public override bool CanBeGeneratedInCombat => Definition.Rarity is not (CardRarity.Token or CardRarity.Ancient or CardRarity.Basic);
     public override bool CanBeGeneratedByModifiers => CanBeGeneratedInCombat;
+    public override CardMultiplayerConstraint MultiplayerConstraint =>
+        Kind is AltheaCardKind.SoulVeil or AltheaCardKind.CurseDominion or AltheaCardKind.FinalBlow
+            ? CardMultiplayerConstraint.MultiplayerOnly : base.MultiplayerConstraint;
     protected override bool IsPlayable => Kind != AltheaCardKind.DoggedStrike || Owner.PlayerCombatState?.Hand.Cards
-        .Any(AltheaRules.IsCurse) == true;
+        .Any(card => card != this && AltheaRules.IsCurse(card)) == true;
     public override bool GainsBlock => Definition.Block > 0 || Kind is AltheaCardKind.Deflect or AltheaCardKind.SelfDiscipline;
-    private CardModel Art => Definition.Type switch
+    private CardModel Art => Kind == AltheaCardKind.Wraith ? ModelDb.Card<Soul>() : Definition.Type switch
     {
         CardType.Attack => ModelDb.Card<StrikeIronclad>(),
         CardType.Power => ModelDb.Card<Inflame>(),
@@ -63,7 +67,9 @@ public abstract class AltheaCard(AltheaCardKind kind) : CharacterTwoCard(
     protected override IEnumerable<DynamicVar> CanonicalVars =>
     [
         new DamageVar(Definition.Damage, ValueProp.Move), new BlockVar(Definition.Block, ValueProp.Move),
-        new DynamicVar("Amount", Definition.Amount), new CardsVar(Definition.Cards),
+        Kind is AltheaCardKind.PureWill or AltheaCardKind.FightingSpirit or AltheaCardKind.FightersForm
+            ? new EnergyVar("Amount", Definition.Amount) : new DynamicVar("Amount", Definition.Amount),
+        new CardsVar(Definition.Cards),
         new RepeatVar(Definition.Repeat), new DynamicVar("Upgraded", 0)
     ];
     protected override void OnUpgrade()
@@ -85,6 +91,20 @@ public abstract class AltheaCard(AltheaCardKind kind) : CharacterTwoCard(
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource) => cardSource == this && Kind == AltheaCardKind.DeathStrike
             && (Pile?.Type == PileType.Play ? ClashAtPlay : AltheaRules.Clash(Owner)) ? 2m : 1m;
+    public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
+    {
+        modifiedCost = originalCost;
+        if (card != this) return false;
+        int discount;
+        if (Kind == AltheaCardKind.SeaParting && Owner.PlayerCombatState is { } state)
+            discount = state.DiscardPile.Cards.Concat(state.ExhaustPile.Cards).Count(AltheaRules.IsCurse);
+        else if (Kind == AltheaCardKind.FinalBlow)
+            discount = CombatManager.Instance.History.CardPlaysStarted.Count(entry =>
+                entry.CardPlay.Card.Type == CardType.Attack && entry.HappenedThisTurn(CombatState));
+        else return false;
+        modifiedCost = Math.Max(0, originalCost - discount);
+        return modifiedCost != originalCost;
+    }
     public override async Task AfterCardChangedPiles(CardModel card, PileType oldPileType, AbstractModel? clonedBy)
     {
         if (card != this || Pile?.Type != PileType.Deck || oldPileType == PileType.Deck) return;
@@ -93,6 +113,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : CharacterTwoCard(
     }
     private static TargetType TargetFor(AltheaCardKind kind)
     {
+        if (kind is AltheaCardKind.SoulVeil or AltheaCardKind.CurseDominion) return TargetType.AllAllies;
         var def = AltheaCardDefinitions.All[kind];
         if (def.Type != CardType.Attack) return TargetType.Self;
         return def.Flags.Contains('A') || def.Flags.Contains('R') ? TargetType.AllEnemies : TargetType.AnyEnemy;
