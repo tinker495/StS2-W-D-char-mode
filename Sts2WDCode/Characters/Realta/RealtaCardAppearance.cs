@@ -23,23 +23,34 @@ internal static class RealtaCardAppearance
             var portraitBorder = __instance.GetNode<TextureRect>("%PortraitBorder");
             var typeLabel = __instance.GetNode<Label>("%TypeLabel");
             bool isRealta = model.VisualCardPool is RealtaCardPool;
+            bool isAlthea = model.VisualCardPool is CharacterTwo.CharacterTwoCardPool;
+            bool customCost = isRealta || isAlthea;
             // Preserve live cost autosizing, including X, ?, and multi-digit modified costs.
-            energyLabel.MinFontSize = isRealta ? 14 : 22;
-            energyLabel.MaxFontSize = isRealta ? 22 : 32;
+            energyLabel.MinFontSize = isRealta ? 14 : isAlthea ? 18 : 22;
+            energyLabel.MaxFontSize = isRealta ? 22 : isAlthea ? 26 : 32;
             energyLabel.OffsetLeft = isRealta ? -17f : -23f;
             energyLabel.OffsetRight = isRealta ? 17f : 23f;
             energyLabel.OffsetTop = isRealta ? -8f : -26f;
             energyLabel.OffsetBottom = isRealta ? 28f : 30f;
-            energyLabel.AddThemeConstantOverride("outline_size", isRealta ? 3 : 16);
-            energyLabel.AddThemeConstantOverride("shadow_outline_size", isRealta ? 3 : 16);
-            energyLabel.AddThemeConstantOverride("shadow_offset_x", isRealta ? 1 : 2);
-            energyLabel.AddThemeConstantOverride("shadow_offset_y", isRealta ? 1 : 2);
+            energyLabel.AddThemeConstantOverride("outline_size", customCost ? 3 : 16);
+            energyLabel.AddThemeConstantOverride("shadow_outline_size", customCost ? 3 : 16);
+            energyLabel.AddThemeConstantOverride("shadow_offset_x", customCost ? 1 : 2);
+            energyLabel.AddThemeConstantOverride("shadow_offset_y", customCost ? 1 : 2);
             // SetTextAutoSize does nothing when the text is unchanged on a pooled node.
             energyLabel.Call("AdjustFontSize");
             portraitBorder.SelfModulate = Colors.White;
             typeLabel.AddThemeColorOverride("font_color", new Color(0f, 0f, 0f, 0.752941f));
             typeLabel.RemoveThemeColorOverride("font_outline_color");
             typeLabel.RemoveThemeConstantOverride("outline_size");
+            if (isAlthea && model.Rarity != CardRarity.Ancient)
+            {
+                __instance.GetNode<TextureRect>("%Frame").Material = null;
+                __instance.GetNode<NinePatchRect>("%TypePlaque").Material =
+                    PreloadManager.Cache.GetMaterial("res://Sts2WD/materials/character_two/type_plaque.tres");
+                typeLabel.AddThemeColorOverride("font_color", new Color("eee4e4"));
+                typeLabel.AddThemeColorOverride("font_outline_color", new Color("101629"));
+                typeLabel.AddThemeConstantOverride("outline_size", 2);
+            }
             if (!isRealta) return;
 
             // Ancient cards have their own full-art frame and animation layers.

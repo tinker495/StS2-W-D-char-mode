@@ -9,32 +9,32 @@ using MegaCrit.Sts2.Core.Models.Relics;
 
 namespace Sts2WD.Sts2WDCode.Characters.CharacterTwo;
 
-public class CharacterTwo : PlaceholderCharacterModel
+public partial class CharacterTwo : PlaceholderCharacterModel
 {
     public const string CharacterId = "CharacterTwo";
 
-    public static readonly Color Color = new("2a9d8f");
+    public static readonly Color Color = new("a91f30");
 
     public override Color NameColor => Color;
     public override CharacterGender Gender => CharacterGender.Neutral;
-    public override int StartingHp => 70;
+    public override int StartingHp => 80;
 
     public override IEnumerable<CardModel> StartingDeck => [
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<StrikeIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>(),
-        ModelDb.Card<DefendIronclad>()
+        ModelDb.Card<AltheaRageStrike>(),
+        ModelDb.Card<AltheaStrike>(),
+        ModelDb.Card<AltheaStrike>(),
+        ModelDb.Card<AltheaStrike>(),
+        ModelDb.Card<AltheaStrike>(),
+        ModelDb.Card<AltheaStrike>(),
+        ModelDb.Card<AltheaDefend>(),
+        ModelDb.Card<AltheaDefend>(),
+        ModelDb.Card<AltheaDefend>(),
+        ModelDb.Card<AltheaDefend>()
     ];
 
     public override IReadOnlyList<RelicModel> StartingRelics =>
     [
-        ModelDb.Relic<BurningBlood>()
+        ModelDb.Relic<AltheaWyrd>()
     ];
 
     public override CardPoolModel CardPool => ModelDb.CardPool<CharacterTwoCardPool>();

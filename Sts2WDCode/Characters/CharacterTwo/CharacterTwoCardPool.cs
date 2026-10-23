@@ -1,6 +1,7 @@
 using BaseLib.Abstracts;
 using Sts2WD.Sts2WDCode.Extensions;
 using Godot;
+using MegaCrit.Sts2.Core.Assets;
 
 namespace Sts2WD.Sts2WDCode.Characters.CharacterTwo;
 
@@ -16,7 +17,7 @@ public class CharacterTwoCardPool : CustomCardPoolModel
     They are applied as a shader onto an already colored image,
     so it may take some experimentation to find a color you like.
     Generally they should be values between 0 and 1. */
-    public override float H => 0.45f; //Hue; changes the color.
+    public override float H => 1f;
     public override float S => 1f; //Saturation
     public override float V => 1f; //Brightness
 
@@ -28,7 +29,9 @@ public class CharacterTwoCardPool : CustomCardPoolModel
     }*/
 
     //Color of small card icons
-    public override Color DeckEntryCardColor => new("2a9d8f");
+    public override Color DeckEntryCardColor => CharacterTwo.Color;
+    public override Texture2D CustomFrame(CustomCardModel card) =>
+        PreloadManager.Cache.GetTexture2D("cards/character_two/frame.png".ImagePath());
 
     public override bool IsColorless => false;
 }
