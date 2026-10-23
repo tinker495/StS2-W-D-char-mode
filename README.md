@@ -5,14 +5,16 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 ## 현재 상태
 
-- `Realta`, `CharacterTwo`, `CharacterThree`, `CharacterFour` 캐릭터 뼈대
+- `Realta`, `Althea`, `CharacterThree`, `CharacterFour` 캐릭터 뼈대
 - 캐릭터별 카드·유물·포션 풀과 추상 기본 클래스
 - 캐릭터별 UI 이미지 경로, 영어·한국어 캐릭터 텍스트 및 고대인 대사
 - .NET 9 / MegaDot 4.5.1 / BaseLib 기반 빌드·패키징
 
-`CharacterTwo`·`CharacterThree`·`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 이 셋은 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다.
+`CharacterThree`·`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 이 둘은 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다.
 
 레아르타(`Realta`)의 카드·유물 구성은 설계 합의([`docs/characters/realta/realta.md`](docs/characters/realta/realta.md))를 따릅니다. 타격·수비는 레아르타 전용 카드이며, 시작 덱은 타격 4장·수비 4장·비행 글레이브·담금질의 총 10장입니다. 수호는 카드별 방어도를 누적해서 높이고, 개선·유산·주문·역작·결투·용맹 효과를 지원합니다. 1단계 캐릭터 UI와 정적 전신 스탠딩은 정본 베이스([`docs/characters/realta/base.png`](docs/characters/realta/base.png))를 기준으로 적용되어 있으며, 카드·유물·파워 개별 아이콘은 순차 교체합니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
+
+Althea의 카드·유물 구성과 내부 식별자 결정은 설계 합의([`docs/characters/althea/althea.md`](docs/characters/althea/althea.md))를 따릅니다.
 
 ## 소개문·대화 작성
 
@@ -79,7 +81,7 @@ Sts2WDCode/
   MainFile.cs
   Characters/
     Realta/                # 캐릭터 모델, 풀, Cards/Relics/Potions 기본 클래스
-    CharacterTwo/
+    Althea/
     CharacterThree/
     CharacterFour/
   Cards/                   # 공통 카드 이미지 경로 처리
@@ -88,7 +90,7 @@ Sts2WDCode/
   Powers/
 Sts2WD/
   images/charui/realta/           # 캐릭터별 선택 아이콘, 지도 아이콘, 에너지
-  images/charui/character_two/
+  images/charui/althea/
   images/charui/character_three/
   images/charui/character_four/
   images/card_portraits/        # 공통 카드 이미지, big/은 큰 이미지

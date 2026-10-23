@@ -13,5 +13,20 @@
   "STS2WD-REALTA_DRAGON_CLOAK.flavor": "개발용 임시 문구.",
   "STS2WD-REALTA_ELDIR_GRAMR.title": "엘디르 그라므르",
   "STS2WD-REALTA_ELDIR_GRAMR.description": "[gold]활력[/gold]을 소모할 때마다, 모든 적에게 같은 양의 피해를 줍니다.",
-  "STS2WD-REALTA_ELDIR_GRAMR.flavor": "개발용 임시 문구."
+  "STS2WD-REALTA_ELDIR_GRAMR.flavor": "개발용 임시 문구.",
+  "STS2WD-ALTHEA_WYRD.title": "윌드",
+  "STS2WD-ALTHEA_WYRD.description": "모든 타격 카드를 저주로도 취급하며 보존합니다.",
+  "STS2WD-ALTHEA_WYRD.flavor": "",
+  "STS2WD-ALTHEA_BLOOD_FRENZY.title": "피의 광란",
+  "STS2WD-ALTHEA_BLOOD_FRENZY.description": "모든 공격 카드를 저주로도 취급하며 보존합니다.",
+  "STS2WD-ALTHEA_BLOOD_FRENZY.flavor": "",
+  "STS2WD-ALTHEA_FIGHTERS_BRACER.title": "투사의 완갑",
+  "STS2WD-ALTHEA_FIGHTERS_BRACER.description": "턴 종료 시 방어도 6. 덱을 재셔플하면 이번 전투 동안 비활성화됩니다.",
+  "STS2WD-ALTHEA_FIGHTERS_BRACER.flavor": "",
+  "STS2WD-ALTHEA_ANCESTORS_RECOGNITION.title": "선조의 인정",
+  "STS2WD-ALTHEA_ANCESTORS_RECOGNITION.description": "전투 첫 드로우 전에 뽑을 더미의 저주를 버린 더미로 보냅니다.",
+  "STS2WD-ALTHEA_ANCESTORS_RECOGNITION.flavor": "",
+  "STS2WD-ALTHEA_CREKIN_MAC_DUBH.title": "크레킨 막 두브",
+  "STS2WD-ALTHEA_CREKIN_MAC_DUBH.description": "자신의 취약은 추가 피해 20%, 손상은 방어도 감소 20%로 완화됩니다.",
+  "STS2WD-ALTHEA_CREKIN_MAC_DUBH.flavor": ""
 }

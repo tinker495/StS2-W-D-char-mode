@@ -12,5 +12,13 @@
   "STS2WD-REALTA_DUEL.title": "Duel",
   "STS2WD-REALTA_DUEL.description": "The bonus activates if the target enemy has neither [gold]Weak[/gold] nor [gold]Vulnerable[/gold].",
   "STS2WD-REALTA_VALOR.title": "Valor",
-  "STS2WD-REALTA_VALOR.description": "The bonus activates if the target enemy has Strength or Block."
+  "STS2WD-REALTA_VALOR.description": "The bonus activates if the target enemy has Strength or Block.",
+  "STS2WD-ALTHEA_REFORM.title": "Reform",
+  "STS2WD-ALTHEA_REFORM.description": "Transform into the token for its original type this combat, retaining upgraded status and compatible enchantments.",
+  "STS2WD-ALTHEA_CLASH.title": "Clash",
+  "STS2WD-ALTHEA_CLASH.description": "Active if you or a living enemy is at or below half HP immediately before the effect.",
+  "STS2WD-ALTHEA_UNFADING.title": "Unfading",
+  "STS2WD-ALTHEA_UNFADING.description": "When Exhausted or transformed, return a copy using deck-original upgrades and enchantments. Generated cards retain only upgraded status.",
+  "STS2WD-ALTHEA_FRENZY.title": "Frenzy",
+  "STS2WD-ALTHEA_FRENZY.description": "When an adjacent hand card is played, automatically play this next, spending up to its normal cost from remaining Energy."
 }

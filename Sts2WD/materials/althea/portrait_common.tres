@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://Sts2WD/materials/althea/portrait_palette.gdshader" id="1"]
+
+[resource]
+shader = ExtResource("1")
+shader_parameter/shadow_color = Color(0.015, 0.015, 0.015, 1)
+shader_parameter/middle_color = Color(0.48, 0.48, 0.48, 1)
+shader_parameter/light_color = Color(0.98, 0.98, 0.98, 1)
