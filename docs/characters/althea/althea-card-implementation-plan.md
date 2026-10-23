@@ -84,7 +84,7 @@
 
 ## 구현 위치와 유지보수
 
-`Sts2WDCode/Characters/Althea/`가 Althea 규칙을 소유한다. `Cards/AltheaCards.cs`는 안정적인 카드 모델 ID와 수치, `AltheaCard.cs`는 공통 표시·강화, `AltheaCardEffects.cs`는 카드 효과를 담당한다. `AltheaRules.cs`의 전투별 상태와 실행 경계에서 광란·재편·불실을 연결하며, `AltheaCombatHooks.cs`가 공통 전투 이벤트를 받는다. `Powers/AltheaPower.cs`는 공통 아이콘·파워 기본값만 정의하고, 각 `Althea*Power.cs`가 해당 효과의 훅과 상태를 소유한다. `Relics/AltheaRelics.cs`는 전용 유물, `AltheaCompatibility.cs`는 기본 게임의 저주 검사·변형·오로바스·디버프 배율에 연결한다.
+`Sts2WDCode/Characters/Althea/`가 Althea 규칙을 소유한다. 카드 모델은 `Cards/<모델명>.cs`에 하나씩 두어 안정적인 모델 ID를 정하고, `AltheaCardKind.cs`·`AltheaCardDefinitions.cs`는 카드 종류와 수치, `AltheaCard.cs`는 공통 표시·강화, `AltheaCardEffects.cs`는 카드 효과를 담당한다. `AltheaRules.cs`의 전투별 상태와 실행 경계에서 광란·재편·불실을 연결하며, `AltheaCombatHooks.cs`가 공통 전투 이벤트를 받는다. `Powers/AltheaPower.cs`는 공통 아이콘·파워 기본값만 정의하고, 각 `Althea*Power.cs`가 해당 효과의 훅과 상태를 소유한다. `Relics/AltheaRelics.cs`는 전용 유물, `AltheaCompatibility.cs`는 기본 게임의 저주 검사·변형·오로바스·디버프 배율에 연결한다.
 
 쉼없는 광기는 `AfterCombatEnd`에서 손·뽑을 더미·버린 더미의 저주를 집계해 회복한다. 기본 게임의 `CombatManager.EndCombatInternal`은 이 훅 다음에 `Player.AfterCombatEnd`로 파워를 제거하고 전투 더미를 비운 뒤 `AfterCombatVictory`를 호출하므로, 회복을 승리 훅에 두면 실행되지 않는다. 소멸 더미는 제외하며 유물로 저주 취급되는 타격 카드도 포함한다.
 

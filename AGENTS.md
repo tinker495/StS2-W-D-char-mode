@@ -89,7 +89,7 @@ Name every character-owned path and identifier after the character's decided Eng
 | Area | Layout (`<Char>` = `Realta`, `<char>` = `realta`) |
 |---|---|
 | Code | `Sts2WDCode/Characters/<Char>/`, namespace `Sts2WD.Sts2WDCode.Characters.<Char>`, subfolders `Cards/`, `Relics/`, `Potions/`, `Powers/` |
-| Types | Model `<Char>`; pools `<Char>CardPool`, `<Char>RelicPool`, `<Char>PotionPool`; pool bases `<Char>Card`, `<Char>Relic`, `<Char>Potion` carry `[Pool]`; every other type is `<Char>`-prefixed and its file name matches its main type |
+| Types | Model `<Char>`; pools `<Char>CardPool`, `<Char>RelicPool`, `<Char>PotionPool`; pool bases `<Char>Card`, `<Char>Relic`, `<Char>Potion` carry `[Pool]`; every other type is `<Char>`-prefixed. One top-level type per file, named after that type: each card, relic, potion and power model gets its own `<Type>.cs` and `.cs.uid`, and a class stays in one file (no `partial` split) |
 | Assets | `Sts2WD/images/charui/<char>/`, `Sts2WD/images/cards/<char>/`, `Sts2WD/materials/<char>/`, `Sts2WD/character_text/<char>.json` |
 | Docs | `docs/characters/<char>/`: design `<char>.md`, plus `<char>-art.md`, `<char>-assets.md`, `<char>-history.md` |
 
