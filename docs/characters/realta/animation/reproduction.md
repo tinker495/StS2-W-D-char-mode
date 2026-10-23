@@ -39,11 +39,11 @@ Review at normal speed and by frame using [the motion review matrix](../../../ag
 ## Mechanical checks and publishing
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 check
+powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim <clip>
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
 ```
 
-`check` builds C#, imports resources and runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md). Require exit 0 and both PASS summaries. `publish` runs the same checks after import and before exporting the PCK; failures stop export. Existing pre-commit behavior remains C# build-only. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
+`anim` runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md) after bake; require exit 0 and both PASS summaries before treating a rig change as checked. `check`, `publish` and `deploy` skip these animation checks; `publish` still imports resources before exporting the PCK. Existing pre-commit behavior remains C# build-only. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
 
 For native startup crashes, certificate-store errors, access denial, or separate log-display failures, follow [Build execution and diagnostics](../../../agents/build-troubleshooting.md). It owns the shared handling procedure; certificate settings stay unchanged.
 

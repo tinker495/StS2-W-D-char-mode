@@ -13,6 +13,4 @@
 
 지면과 레이어 검사는 각 클립의 모든 키 시각 및 키 사이 1/4·1/2·3/4 지점을 관찰한다. 연속 시간 전체나 실제 게임의 모든 전이를 수학적으로 증명하는 검사는 아니다. 그림의 깊이감, 날 방향, IK 동작의 설득력, 숨은 면의 완성도는 [동작 검토 기준표](../docs/agents/cutout-motion-review.md)에 따라 별도로 검토한다.
 
-저장소 루트에서 `powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 check`를 실행한다. C# 빌드와 import 후 기계 검사 및 기존 인스턴스 독립성 검사를 실행한다. 종료 코드 0과 두 PASS 메시지를 모두 확인한다. 각 프로세스 종료 코드와 로그는 새 `artifacts/rig-check-*` 폴더에 저장한다.
-
-`dev.ps1 anim`은 bake 후, `dev.ps1 publish`와 `deploy`는 PCK export 전에 같은 검사를 실행한다. 검사 실패 시 이후 단계는 실행하지 않는다. 게임 DLL과 MegaDot이 필요한 로컬 검사이며, CI 연결은 포함하지 않는다.
+사용자 wjdrb의 2026-10-23 요청에 따라 이 검사와 기존 인스턴스 독립성 검사는 `dev.ps1 anim`의 bake 뒤에서만 실행한다. `check`, `publish`, `deploy`는 실행하지 않는다. 종료 코드 0과 두 PASS 메시지를 모두 확인하며, 검사 실패 시 이후 렌더는 실행하지 않는다. 각 프로세스 종료 코드와 로그는 `anim` 출력 폴더에 저장한다. 게임 DLL과 MegaDot이 필요한 로컬 검사이며, CI 연결은 포함하지 않는다.
