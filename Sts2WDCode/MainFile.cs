@@ -26,5 +26,6 @@ public partial class MainFile : Node
         harmony.PatchAll(assembly);
 
         Characters.Realta.RealtaEnchantments.Initialize();
+        Characters.Althea.AltheaRules.Initialize();
     }
 }

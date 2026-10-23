@@ -13,5 +13,20 @@
   "STS2WD-REALTA_DRAGON_CLOAK.flavor": "Development placeholder.",
   "STS2WD-REALTA_ELDIR_GRAMR.title": "Eldir Gramr",
   "STS2WD-REALTA_ELDIR_GRAMR.description": "Whenever you consume [gold]Vigor[/gold], deal the same amount of damage to ALL enemies.",
-  "STS2WD-REALTA_ELDIR_GRAMR.flavor": "Development placeholder."
+  "STS2WD-REALTA_ELDIR_GRAMR.flavor": "Development placeholder.",
+  "STS2WD-ALTHEA_WYRD.title": "Wyrd",
+  "STS2WD-ALTHEA_WYRD.description": "Your Strikes also count as Curses and have Retain.",
+  "STS2WD-ALTHEA_WYRD.flavor": "",
+  "STS2WD-ALTHEA_BLOOD_FRENZY.title": "Blood Frenzy",
+  "STS2WD-ALTHEA_BLOOD_FRENZY.description": "All your Attacks also count as Curses and have Retain.",
+  "STS2WD-ALTHEA_BLOOD_FRENZY.flavor": "",
+  "STS2WD-ALTHEA_FIGHTERS_BRACER.title": "Fighters Bracer",
+  "STS2WD-ALTHEA_FIGHTERS_BRACER.description": "Gain 6 Block at turn end until you reshuffle this combat.",
+  "STS2WD-ALTHEA_FIGHTERS_BRACER.flavor": "",
+  "STS2WD-ALTHEA_ANCESTORS_RECOGNITION.title": "Ancestors Recognition",
+  "STS2WD-ALTHEA_ANCESTORS_RECOGNITION.description": "Before the initial draw, move Curses from your draw pile to your discard pile.",
+  "STS2WD-ALTHEA_ANCESTORS_RECOGNITION.flavor": "",
+  "STS2WD-ALTHEA_CREKIN_MAC_DUBH.title": "Crekin Mac Dubh",
+  "STS2WD-ALTHEA_CREKIN_MAC_DUBH.description": "Vulnerable increases your damage taken by 20%, and Frail reduces your Block by 20%.",
+  "STS2WD-ALTHEA_CREKIN_MAC_DUBH.flavor": ""
 }

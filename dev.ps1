@@ -83,8 +83,8 @@ function Invoke-AnimationProcess([string]$Executable, [string[]]$Arguments, [str
 }
 
 function Invoke-RigChecks([string]$GodotExecutable, [string]$LogDirectory) {
-    # Human requester: wjdrb, 2026-10-20 retrospective item 2: add the mechanical
-    # rig check before publish. Keep the already authorized isolation test intact.
+    # Human requester: wjdrb, 2026-10-20 retrospective item 2 added the mechanical rig check;
+    # on 2026-10-23 they limited it to the `anim` workflow. Keep the authorized isolation test intact.
     foreach ($check in @(
         @('check_rig.gd', 'PASS: Realta rig checks'),
         @('realta_instance_isolation.gd', 'PASS: Realta instance isolation (4 cases)')
@@ -187,12 +187,9 @@ try {
     New-Item -ItemType Directory -Path (Join-Path $projectRoot 'artifacts') -Force | Out-Null
     New-Item -ItemType File -Path (Join-Path $projectRoot 'artifacts/.gdignore') -Force | Out-Null
     if ($Task -eq 'check') {
+        # Human requester: wjdrb, 2026-10-23: animation import and rig checks run only through `anim`.
         Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
-        $checkOutput = New-ObservationDirectory 'rig-check'
-        Invoke-AnimationProcess $paths.GodotPath @('--headless', '--editor', '--path', $projectRoot, '--import', '--quit') `
-            (Join-Path $checkOutput 'import') -Engine
-        Invoke-RigChecks $paths.GodotPath $checkOutput
-        Write-Host "Build, import and rig checks passed: $checkOutput"
+        Write-Host 'Build check passed.'
         return
     }
 
@@ -224,7 +221,6 @@ try {
         if ($importLog -match 'SCRIPT ERROR:|Parse Error:|Failed (?:to load script|loading resource)') {
             throw "Resource import failed; read $diagnosticRoot/import.log"
         }
-        Invoke-RigChecks $paths.GodotPath $diagnosticRoot
         Invoke-DotNet @('publish', 'Sts2WD.csproj', '-c', $Configuration, '--no-restore')
 
         $output = Join-Path $paths.ModsPath 'Sts2WD'
