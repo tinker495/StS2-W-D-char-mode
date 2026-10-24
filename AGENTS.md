@@ -82,6 +82,19 @@ Distinguish the scope and results of tests actually run, verification not perfor
 
 Write shared documentation so it remains understandable without local drafts, generation logs, or personal caches. State the rules, rationale, current behavior, and procedures needed to reproduce the work in the document itself. Do not rely on "same as the previous version" or descriptions that require opening Git-ignored files. Drafts, prompts, and comparison images do not all need to be tracked. Track product files and necessary specifications. Identify external evidence through public sources or versions, types, and members, together with observations summarized in the document.
 
+## Character Naming
+
+Name every character-owned path and identifier after the character's decided English name, following the Realta and Althea layouts. `CharacterN` / `character_n` placeholders remain only for characters whose name is undecided (currently `CharacterThree` and `CharacterFour`); rename them to this layout once the name is decided.
+
+| Area | Layout (`<Char>` = `Realta`, `<char>` = `realta`) |
+|---|---|
+| Code | `Sts2WDCode/Characters/<Char>/`, namespace `Sts2WD.Sts2WDCode.Characters.<Char>`, subfolders `Cards/`, `Relics/`, `Potions/`, `Powers/` |
+| Types | Model `<Char>`; pools `<Char>CardPool`, `<Char>RelicPool`, `<Char>PotionPool`; pool bases `<Char>Card`, `<Char>Relic`, `<Char>Potion` carry `[Pool]`; every other type is `<Char>`-prefixed. One top-level type per file, named after that type: each card, relic, potion and power model gets its own `<Type>.cs` and `.cs.uid`, and a class stays in one file (no `partial` split) |
+| Assets | `Sts2WD/images/charui/<char>/`, `Sts2WD/images/cards/<char>/`, `Sts2WD/materials/<char>/`, `Sts2WD/character_text/<char>.json` |
+| Docs | `docs/characters/<char>/`: design `<char>.md`, plus `<char>-art.md`, `<char>-assets.md`, `<char>-history.md` |
+
+Model IDs are `STS2WD-` plus the UPPER_SNAKE class name, so renaming a model class changes its saved ID; folders and namespaces leave IDs untouched. A model rename also carries the `STS2WD-<CHAR>.*` keys in `Sts2WD/localization/*/characters.json` and `ancients.json` and the preset's `characterId`. Moving a texture rewrites its `.import` `source_file` and the `.ctex` hash, which is the MD5 of the `res://` source path. Record the save-compatibility outcome in the character's design doc.
+
 ## Agent Skills
 
 ### Issue Tracker

@@ -23,7 +23,7 @@ internal static class RealtaCardAppearance
             var portraitBorder = __instance.GetNode<TextureRect>("%PortraitBorder");
             var typeLabel = __instance.GetNode<Label>("%TypeLabel");
             bool isRealta = model.VisualCardPool is RealtaCardPool;
-            bool isAlthea = model.VisualCardPool is CharacterTwo.CharacterTwoCardPool;
+            bool isAlthea = model.VisualCardPool is Althea.AltheaCardPool;
             bool customCost = isRealta || isAlthea;
             // Preserve live cost autosizing, including X, ?, and multi-digit modified costs.
             energyLabel.MinFontSize = isRealta ? 14 : isAlthea ? 18 : 22;
@@ -46,7 +46,7 @@ internal static class RealtaCardAppearance
             {
                 __instance.GetNode<TextureRect>("%Frame").Material = null;
                 __instance.GetNode<NinePatchRect>("%TypePlaque").Material =
-                    PreloadManager.Cache.GetMaterial("res://Sts2WD/materials/character_two/type_plaque.tres");
+                    PreloadManager.Cache.GetMaterial("res://Sts2WD/materials/althea/type_plaque.tres");
                 typeLabel.AddThemeColorOverride("font_color", new Color("eee4e4"));
                 typeLabel.AddThemeColorOverride("font_outline_color", new Color("101629"));
                 typeLabel.AddThemeConstantOverride("outline_size", 2);

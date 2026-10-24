@@ -35,7 +35,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./dev.ps1 deploy -ExecutionC
 
 Use `-Configuration` only when requested. Set `-ExecutionContextLabel` to the actual invocation context: `sandbox`, `escalated`, or `local`. This label records the caller's knowledge; it does not grant or detect permissions. Omit it if unknown.
 
-`publish` and `deploy` perform the C# build, MegaDot resource import, user-requested mechanical/instance rig checks, and PCK export. Require both check PASS messages before treating the export as verified; [check scope](../../../tests/rig-checks.md) documents their limits.
+`publish` and `deploy` perform the C# build, MegaDot resource import, and PCK export. Animation rig checks run only through `dev.ps1 anim`; [check scope](../../../tests/rig-checks.md) documents them.
 
 `deploy` packages first, checks the four package files and game process, backs up existing files, installs only the package, and compares SHA256 hashes. Apply required sandbox permission to the command. An installation request authorizes replacing the mod files; do not ask for the same confirmation again. Avoid separate copy commands or a redundant build/publish before deploy.
 
