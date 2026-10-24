@@ -91,7 +91,7 @@ public class Althea : PlaceholderCharacterModel
     {
         if (!AltheaRules.Applies(card.Owner)) return;
         if (AltheaRules.IsCurse(card)) AltheaRules.For(card.Owner).CursesExhausted++;
-        await AltheaRules.Unfading(context, card);
+        await AltheaRules.Unfading(context, card, exhausted: true);
     }
     public override Task AfterShuffle(PlayerChoiceContext context, Player player)
     {

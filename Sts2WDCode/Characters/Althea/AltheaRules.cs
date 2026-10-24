@@ -61,17 +61,22 @@ internal static class AltheaRules
     internal static int HarmfulCount(Player player) => player.Creature.Powers.Where(p =>
         IsHarmful(p, For(player).EnemyEffects.Contains(p)))
         .Select(p => p.Id).Distinct().Count();
-    internal static async Task Unfading(PlayerChoiceContext context, CardModel source)
+    internal static async Task Unfading(PlayerChoiceContext context, CardModel source, bool exhausted = false)
     {
         if (!source.Keywords.Contains(AltheaKeywords.Unfading) || source.Owner.Creature.CombatState is not { } combat
             || CombatManager.Instance.IsOverOrEnding) return;
         CardModel? original = source.DeckVersion;
+        bool growingBlade = source is AltheaCursedBladeFate;
         var copy = combat.CreateCard(ModelDb.GetById<CardModel>((original ?? source).Id), source.Owner);
-        int upgrades = original?.CurrentUpgradeLevel ?? (source.IsUpgraded ? 1 : 0);
-        for (int i = 0; i < upgrades && copy.IsUpgradable; i++) CardCmd.Upgrade(copy);
-        if (original?.Enchantment is { } enchantment && enchantment.CanEnchant(copy))
+        int upgrades = growingBlade ? source.CurrentUpgradeLevel : original?.CurrentUpgradeLevel ?? (source.IsUpgraded ? 1 : 0);
+        // Reconstruct existing state without treating it as a new gameplay upgrade.
+        for (int i = 0; i < upgrades && copy.IsUpgradable; i++) copy.UpgradeInternal();
+        copy.FinalizeUpgradeInternal();
+        if ((growingBlade ? source : original)?.Enchantment is { } enchantment && enchantment.CanEnchant(copy))
             CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), copy, enchantment.Amount);
         copy.DeckVersion = original;
+        // The real new upgrade belongs to the returning card, so relic rewards survive.
+        if (growingBlade && exhausted && copy.IsUpgradable) CardCmd.Upgrade(copy);
         await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, source.Owner);
     }
 
@@ -86,7 +91,11 @@ internal static class AltheaRules
         var replacement = combat.CreateCard(token, source.Owner);
         if (For(source.Owner).ReformAfterPlay.Remove(source, out var result))
             destination = result == PileType.Exhaust ? PileType.Exhaust : PileType.Draw;
-        if (source.IsUpgraded) CardCmd.Upgrade(replacement);
+        if (source.IsUpgraded)
+        {
+            replacement.UpgradeInternal();
+            replacement.FinalizeUpgradeInternal();
+        }
         if (source.Enchantment is { } enchantment && enchantment.CanEnchant(replacement))
             CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), replacement, enchantment.Amount);
         replacement.DeckVersion = source.DeckVersion;
