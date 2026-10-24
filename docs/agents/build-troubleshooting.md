@@ -10,7 +10,8 @@ The complete PowerShell example below runs `dev.ps1 publish` from the repository
 
 ```powershell
 $ErrorActionPreference = 'Stop'
-$buildOutput = Join-Path (Get-Location).ProviderPath ('artifacts/publish-' + [Guid]::NewGuid().ToString('N'))
+$buildArtifacts = Join-Path (Get-Location).ProviderPath 'artifacts'
+$buildOutput = Join-Path $buildArtifacts ('publish-' + [Guid]::NewGuid().ToString('N'))
 New-Item -ItemType Directory -Path $buildOutput | Out-Null
 New-Item -ItemType File -Path (Join-Path $buildOutput '.gdignore') | Out-Null
 
@@ -21,7 +22,7 @@ from pathlib import Path
 
 repo = Path.cwd()
 output = Path(sys.argv[1])
-log_path = output / "publish.log"
+log_path = output / "publish-output.txt"
 command = [
     "powershell", "-NoProfile", "-ExecutionPolicy", "Bypass",
     "-File", str(repo / "dev.ps1"), "publish",
@@ -66,7 +67,7 @@ Use a new writable engine log for each process:
 - `dev.ps1 anim` and `check` keep stage-specific `*.engine.log` files in their fresh observation directory.
 - `dev.ps1 editor` creates `artifacts/editor-<id>/engine.log` and prints the path.
 - The `GodotPublish` target creates `artifacts/godot-export-<id>/engine.log`, including when invoked by direct `dotnet publish`.
-- For an ad hoc native command, create a fresh directory under `artifacts/` and pass its absolute `engine.log` path through `--log-file`. Retain the engine crash handler and capture stdout, stderr and the actual process exit separately.
+- For an ad hoc native command, create a fresh directory under `artifacts/` and pass its absolute `artifacts/<run>/engine.log` path through `--log-file`. Retain the engine crash handler and capture stdout, stderr and the actual process exit separately.
 
 Run the affected `dev.ps1` command again and require both its normal completion markers and exit 0. Preserve earlier crash logs for comparison. This avoids the failing default-log path without changing editor settings or the engine binary. The startup diagnosis does not establish the cause of a crash with a different backtrace.
 

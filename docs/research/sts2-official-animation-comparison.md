@@ -12,9 +12,9 @@
 | Necrobinder/Osty 영상 | [2025년 10월 공식 글](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/), [원본 GIF](https://www.megacrit.com/images/osty_poke3.gif) | 700×432, 130프레임, 각 30ms, 전체 3.90초. 카드 선택·공격·피격 효과가 함께 들어간 화면이며 클립 단독 길이가 아님 |
 | 공식 선택 화면 | [공식 PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [공식 press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | Necrobinder와 Osty의 대형 구도, UI와의 관계. 정지 화면으로 애니메이션 길이나 변형 방식은 판단하지 않음 |
 | 설치판 코드·애니메이션 | `Slay the Spire 2/release_info.json`, `sts2.dll`의 아래 형식·멤버, `SlayTheSpire2.pck`의 아래 리소스 | 메타데이터 직접 확인: **v0.107.1, commit 59260271**, 배포 날짜 `2026-06-18T15:43:56-07:00`. 코드 재생 계약, Spine 리소스의 클립 길이, Ironclad/Silent의 씬별 표본 렌더 확인. 최신 공개판 여부와 완성된 게임 화면 재생은 별개 |
-| Realta v1 | [시도 보고서](../characters/realta/realta-cutout-trial.md), `drafts/cutout-v1/rig.json`, `build_trial.py`, `animation-preview.gif` | manifest와 프리뷰 프레임 직접 확인. 104개 인코딩 프레임, 전체 5.25초. 원래 생성기의 105개 입력 프레임 중 동일 프레임 병합으로 한 프레임이 100ms가 됨. Godot 실시간 녹화가 아닌 별도 합성 프리뷰 |
+| Realta v1 | [시도 보고서](../characters/realta/realta-cutout-trial.md)의 관절 manifest·전용 조립 변환·합성 GIF | manifest와 프리뷰 프레임 직접 확인. 104개 인코딩 프레임, 전체 5.25초. 원래 생성기의 105개 입력 프레임 중 동일 프레임 병합으로 한 프레임이 100ms가 됨. Godot 실시간 녹화가 아닌 별도 합성 프리뷰 |
 
-공개 GIF의 저장본·해시는 [출처 목록](sts2-style-refs/README.md)에 있다. 이번 관찰용 contact sheet는 각 GIF를 Pillow로 순회하며 누적 `duration`을 기록하고 6프레임 간격으로 **전체 프레임**을 축소해 배치했다. 공식 파일을 고치거나 가려진 부위를 생성하지 않았다. 로컬 시트는 `docs/characters/realta/drafts/research/`에 있으며, 공유 문서의 판단 근거는 아래에 시간과 관찰로 남겼다. 설치판 원본 자산을 새로 배포하지 않았다.
+공개 GIF의 저장본·해시는 [출처 목록](sts2-style-refs/README.md)에 있다. 이번 관찰용 contact sheet는 각 GIF를 Pillow로 순회하며 누적 `duration`을 기록하고 6프레임 간격으로 **전체 프레임**을 축소해 배치했다. 공식 파일을 고치거나 가려진 부위를 생성하지 않았다. 로컬 비교 시트는 선택적 작업 자료이며, 공유 문서의 판단 근거는 아래에 시간과 관찰로 남겼다. 설치판 원본 자산을 새로 배포하지 않았다.
 
 ## 2. 공개 영상에서 보이는 차이
 
@@ -58,7 +58,7 @@
 
 ### 설치판을 직접 렌더한 씬 비교
 
-**재현 절차:** 설치판의 `libspine_godot.windows.template_release.x86_64.dll`을 로컬 GDExtension으로 로드하고 `ProjectSettings.load_resource_pack`으로 PCK를 읽었다. MegaDot `4.5.1.m.14.mono.custom_build`, OpenGL compatibility renderer를 사용했다. 각 SpineSprite에 원본 skeleton data를 연결한 뒤 해당 애니메이션을 nonloop 상태로 설정하고 `update_skeleton(t)`로 시간을 진행했다. 표본 시간은 `0, 0.2D, 0.4D, 0.6D, 0.8D, D−0.001`이며 D는 원본 클립 길이다. 그 다음 time scale을 0으로 고정했다. 여섯 표본의 bounds 합집합을 640×640 viewport에 맞춰 **같은 클립의 카메라를 고정**했다. 2회 process frame을 기다리고 `RenderingServer.force_draw()` 후 PNG로 저장했다.
+**재현 절차:** 설치판의 Windows x86_64 template-release용 `libspine_godot` DLL을 로컬 GDExtension으로 로드하고 `ProjectSettings.load_resource_pack`으로 PCK를 읽었다. MegaDot `4.5.1.m.14.mono.custom_build`, OpenGL compatibility renderer를 사용했다. 각 SpineSprite에 원본 skeleton data를 연결한 뒤 해당 애니메이션을 nonloop 상태로 설정하고 `update_skeleton(t)`로 시간을 진행했다. 표본 시간은 `0, 0.2D, 0.4D, 0.6D, 0.8D, D−0.001`이며 D는 원본 클립 길이다. 그 다음 time scale을 0으로 고정했다. 여섯 표본의 bounds 합집합을 640×640 viewport에 맞춰 **같은 클립의 카메라를 고정**했다. 2회 process frame을 기다리고 `RenderingServer.force_draw()` 후 PNG로 저장했다.
 
 표본 120개와 두 contact sheet를 직접 확인했다. 씬 배경·UI·외부 VFX 스크립트는 로드하지 않았다. 회색은 관찰용 배경이다. 클립끼리는 bounds가 달라 표시 배율도 다르므로 절대 크기를 비교하면 안 된다. 특히 Ironclad 공격의 하얀 궤적은 외부 VFX 재질을 적용하지 않은 원본 attachment이며 최종 게임의 효과 색깔로 해석하지 않는다. 실행 시 OS 인증서 저장소 오류가 출력되었지만 모든 이미지 저장은 `OK(0)`를 반환했다.
 

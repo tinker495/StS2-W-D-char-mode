@@ -72,6 +72,6 @@ MegaDot `4.5.1.m.14.mono.custom_build`에서 PNG import와 씬 인스턴스화�
 
 ## 로컬 결과물
 
-Git에서 제외되는 `drafts/cutout-v1/`에 `parts-atlas.png`, `parts/*.png`, `rig.json`, `cutout.tscn`, `project.godot`, `assembled.png`, `comparison.png`, `animation-preview.gif`, `generation-prompt.txt`를 저장했다. `build_trial.py`는 이번 시트 전용 추출·조립 변환이며 범용 자동 분해기가 아니다. `check_scene.gd`는 임시 관찰 스크립트다.
+파츠 atlas와 개별 PNG, 관절 manifest, 독립 Godot 씬·프로젝트, 조립 결과·비교 이미지·GIF, 생성 프롬프트는 Git에서 제외되는 선택적 작업 자료로 남겼다. 추출·조립 변환은 이번 시트 전용이며 범용 자동 분해기가 아니다. 씬 로딩을 확인한 스크립트도 임시 관찰용이다.
 
 이 초안 폴더 없이도 입력과 절차를 이해할 수 있도록 필요한 규칙은 위 에이전트 지침과 이 문서에 기록했다. 확률적 이미지 생성이므로 같은 프롬프트로 동일 픽셀이나 배치를 재현할 수는 없다.

@@ -289,7 +289,7 @@ Normal backing is `#2476A6`; locked uses black figure `#000000` on gray `#3B3B3B
 
 ## 6. Decision History
 
-This specification owns current appearance and production constraints. [realta-history.md](realta-history.md) explains equipment, age, gaze, weapon-ratio, and composition decisions without requiring drafts/comparisons. Versioned originals and execution logs are optional local working material.
+This specification owns current appearance and production constraints. [realta-history.md](realta-history.md) explains equipment, age, gaze, weapon-ratio, and composition decisions without requiring drafts or comparisons. Versioned originals and execution logs are optional local working material.
 
 ### 공격 궤적 범위 (2026-10-20)
 
