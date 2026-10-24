@@ -112,6 +112,14 @@ Raw references establish identity, not every rendering method. Official masks/sk
 
 ## 3. Realta Staging by Asset
 
+### Relic refresh brief (2026-10-24)
+
+The user requested new relic artwork in the original game's isolated-object style. The later starter-reference correction supersedes the initial weapon-based brief: **Bronze Watchdog** is a frontal bronze canine-head relief based on the right-hand green Celtic head reference, while **Kuu** is a more imposing three-quarter snarling metal wolf head based on the left-hand armored-wolf reference. Do not use the broom-glaive for either starter relic. Preserve the family relationship through warm bronze raised planes and deep brown recesses; Kuu adds a layered cheek/mane silhouette, visible teeth and a restrained orange-red eye. Simplify knotwork to a few broad raised bands. Exclude the source images' green line color, full body, circular border and background.
+
+The three exclusive relics use the user's other references: Witch Pointed Hat has a teal/indigo curled cone and broad brim with sparse gold celestial arcs; Eldir Gramr is a straight red/orange incandescent sword with a dark burgundy grip and steel crossguard; Dragon Cloak is a burgundy royal mantle with ivory ermine trim and a few broad gold motifs. No wearer, mannequin or crown belongs in the cloak icon.
+
+Generate each complete object directly in a square transparent composition. Use thick dark contours, two or three connected value families and restrained painted edges, guided by the original relic/potion reference sheet listed in ARTS.md. Avoid fine engraving, dense embroidery and individual hairs. The five new candidates have been reviewed at 94 px and 48 px but are not selected runtime artwork yet; paths and application status belong to the asset guide.
+
 Follow [ARTS.md](../../../ARTS.md) for shared chibi scope. This specification supplies Realta's face, expression, costume, and hat silhouette within it. Section 5.2 defines chibi details; other assets retain youthful canonical anatomy. Read [shared safe zones](../../../ARTS.md#5-asset-compositions-and-safe-zones) first.
 
 ### 3.1 Combat, Rest, and Merchant Standing Art

@@ -415,5 +415,9 @@
   "STS2WD-ALTHEA_FINAL_BLOW.selectionScreenPrompt": "Choose a card.",
   "STS2WD-ALTHEA_FIGHTERS_FORM.title": "Fighter's Form",
   "STS2WD-ALTHEA_FIGHTERS_FORM.description": "At the start of each turn, gain {Amount:energyIcons()}. Increase this Energy gain by {Amount:energyIcons()} each turn until you shuffle your deck.",
-  "STS2WD-ALTHEA_FIGHTERS_FORM.selectionScreenPrompt": "Choose a card."
+  "STS2WD-ALTHEA_FIGHTERS_FORM.selectionScreenPrompt": "Choose a card.",
+  "STS2WD-ASELIGE_SHINING_LEAF.description": "Gain {Energy:energyIcons()}.",
+  "STS2WD-ASELIGE_SHINING_LEAF.title": "Shining Leaf",
+  "STS2WD-ASELIGE_VERDANT_DRAGON_ADVENT.description": "A placeholder card with no effect.",
+  "STS2WD-ASELIGE_VERDANT_DRAGON_ADVENT.title": "Verdant Dragon Advent"
 }

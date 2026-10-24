@@ -1,5 +1,21 @@
 # Character Two Asset Status
 
+## Relic Candidates (2026-10-24)
+
+Five new Althea relic candidates are staged in `relic-candidates/2026-10-24/` beside this guide. Each slug below has a 94 x 94 `<slug>.png`, a white 2 px alpha-derived `<slug>_outline.png`, and a 256 x 256 `big/<slug>.png`: 15 delivery PNGs total. `overview.png` shows all five whole compositions with 94/48 px light/dark previews. All were generated separately with the built-in image tool. Large exports proportionally fit the whole original canvas; small exports fit it to 90 x 90, centered with 2 px transparent padding in the 94 px canvas before outline generation. No crop or region extraction was used.
+
+| Model | Korean title | Candidate slug |
+|---|---|---|
+| AltheaWyrd | 윌드 | `althea_wyrd` |
+| AltheaBloodFrenzy | 피의 광란 | `althea_blood_frenzy` |
+| AltheaFightersBracer | 투사의 완갑 | `althea_fighters_bracer` |
+| AltheaCrekinMacDubh | 크레킨 막 두브 | `althea_crekin_mac_dubh` |
+| AltheaAncestorsRecognition | 선조의 인정 | `althea_ancestors_recognition` |
+
+The user photos establish the sword, bracer and black-cuirass subjects. The accepted crimson energy master supplies the Rare relic's hexagonal rim/circular-center shape with a new blue treatment. The original-game relic/potion reference supplies broad values and contour density only. Physical descriptions and exclusions are recorded in the art guide; optional generation masters/prompts are under `drafts/relic-refresh/`.
+
+This is a candidate-only delivery: runtime PNGs, code, installed game and PCK remain unchanged. `AltheaRelic` currently overrides all three icon paths with native Burning Blood art. After the user selects candidates for application, remove those presentation overrides so the inherited `Sts2WDRelic` model-filename paths resolve the 15 delivered exports; retain all gameplay hooks and saved IDs. Build and resource-load verification belong to that application step. No build or gameplay test was run for candidate artwork.
+
 ## Energy Icon Draft
 
 The runtime uses the accepted crimson variant at `Sts2WD/images/charui/character_two/big_energy.png` and `text_energy.png`. `CharacterTwoCardPool`, `CharacterTwoRelicPool`, and `CharacterTwoPotionPool` point to these shared files. These cover card-cost and inline energy textures. The combat energy counter still uses the placeholder character's native presentation.
