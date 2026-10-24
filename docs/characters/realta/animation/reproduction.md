@@ -28,7 +28,7 @@ The baseline is optional and is produced by the first command; there is no depen
 
 Each run contains:
 
-- Per-stage `.stdout.log`, `.stderr.log`, `.exitcode` and engine logs. Native process results are recorded before decoding output as UTF-8; Python runs with `-X utf8 -B`.
+- Per-stage `*.stdout.log`, `*.stderr.log`, `*.exitcode` and engine logs. Native process results are recorded before decoding output as UTF-8; Python runs with `-X utf8 -B`.
 - `frames/<variant>/<clip>/0000.png` onward, with `capture.json` describing the engine, camera, timing and frame count.
 - `review/<variant>/<clip>/playback.gif` and numbered `dark-*.png` / `light-*.png` sheets. Sheets include every captured frame at native resolution, with before/after pairs when requested. Whole frames are retained without cropping.
 
@@ -43,7 +43,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim <clip>
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
 ```
 
-`anim` runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md) after bake; require exit 0 and both PASS summaries before treating a rig change as checked. `check`, `publish` and `deploy` skip these animation checks; `publish` still imports resources before exporting the PCK. Existing pre-commit behavior remains C# build-only. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
+`anim` runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md) after bake; require exit 0 and both PASS summaries before treating a rig change as checked. `check`, `publish` and `deploy` skip these animation checks; `publish` still imports resources before exporting the PCK. Pre-commit runs the tracked-reference validator followed by the C# build through `dev.ps1 build`; `dev.ps1 verify` runs only the reference validator. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
 
 For native startup crashes, certificate-store errors, access denial, or separate log-display failures, follow [Build execution and diagnostics](../../../agents/build-troubleshooting.md). It owns the shared handling procedure; certificate settings stay unchanged.
 

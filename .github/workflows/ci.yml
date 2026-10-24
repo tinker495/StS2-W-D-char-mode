@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tracked-references:
+    name: Tracked references
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Human requester: wjdrb, 2026-10-24: enforce the same full-repository
+      # tracked-reference validation in pre-commit and CI, without game DLLs.
+      - name: Check tracked references
+        run: pwsh -NoProfile -File ./scripts/check-tracked-references.ps1

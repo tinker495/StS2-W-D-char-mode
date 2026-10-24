@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position=0)]
-    [ValidateSet('hooks', 'doctor', 'restore', 'build', 'check', 'anim', 'publish', 'deploy', 'editor')]
+    [ValidateSet('hooks', 'doctor', 'restore', 'verify', 'build', 'check', 'anim', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [Parameter(Position=1)]
     [ValidateSet('all', 'idle', 'idle_loop', 'attack', 'hurt', 'cast', 'powerup', 'die', 'relaxed', 'relaxed_loop', 'revive')]
@@ -26,6 +26,13 @@ if ($Task -eq 'hooks') {
     if ($LASTEXITCODE -ne 0) { throw 'Cannot configure Git hooks.' }
     Write-Host 'Git pre-commit build check enabled for this checkout.'
     return
+}
+
+# Human requester: wjdrb, 2026-10-24: run the full tracked-reference validator
+# in pre-commit (through build), check, and the SDK/game-independent verify task.
+if ($Task -in @('verify', 'build', 'check')) {
+    & (Join-Path $projectRoot 'scripts/check-tracked-references.ps1')
+    if ($Task -eq 'verify') { return }
 }
 
 $toolsRoot = Join-Path $projectRoot '.tools'

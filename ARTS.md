@@ -196,7 +196,7 @@ Compare the original, previous candidate, and new candidate at the same display 
 
 ## 8. Production Records and Verification
 
-Shared documents must explain production criteria without drafts, prompts, or comparison images. State current appearance and constraints in the art specification, dimensions/conversion/status in the asset guide, and decision rationale in history. Do not substitute version IDs or "same as the previous image." Share the base, runtime assets, and necessary specifications; optionally keep drafts/logs in Git-ignored `drafts/`. Tracking every intermediate is unnecessary.
+Shared documents must explain production criteria without drafts, prompts, or comparison images. State current appearance and constraints in the art specification, dimensions/conversion/status in the asset guide, and decision rationale in history. Do not substitute version IDs or "same as the previous image." Share the base, runtime assets, and necessary specifications; optionally keep drafts and logs in Git-ignored `drafts/`. Tracking every intermediate is unnecessary.
 
 Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards use whole paintings at a common scale and may remain local observations. State their conclusions and visual reasons directly in shared documents.
 

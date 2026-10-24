@@ -29,10 +29,11 @@ Althea의 카드·유물 구성과 내부 식별자 결정은 설계 합의([`do
 PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은 프로젝트 안의 `.tools`에 있는 SDK를 자동으로 선택합니다.
 
 ```powershell
-.\dev.ps1 hooks              # 이 checkout의 커밋 전 빌드 검사 활성화
+.\dev.ps1 hooks              # 이 checkout의 커밋 전 참조·빌드 검사 활성화
 .\dev.ps1 doctor             # SDK, 게임 DLL, MegaDot 경로 확인
-.\dev.ps1 build              # C# 빌드
-.\dev.ps1 check              # 잠긴 패키지 복원으로 C# 빌드
+.\dev.ps1 verify             # Git 추적 파일의 로컬 참조 검사 (SDK·게임 DLL 불필요)
+.\dev.ps1 build              # 로컬 참조 검사 후 C# 빌드
+.\dev.ps1 check              # 로컬 참조 검사 후 잠긴 패키지 복원으로 C# 빌드
 .\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
 .\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
 .\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
@@ -45,7 +46,13 @@ PowerShell의 스크립트 실행 정책 때문에 실행되지 않는다면 해
 powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 ```
 
-`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 커밋할 때마다 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 컴파일이나 기존 ModAnalyzers의 오류로 빌드가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드이므로 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
+`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 커밋할 때마다 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 로컬 참조 검사나 C# 컴파일·기존 ModAnalyzers가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드는 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
+
+`verify`는 [검사 스크립트](scripts/check-tracked-references.ps1)로 Git index의 추적 파일 전체를 매번 확인합니다. Markdown 링크·이미지는 추적 파일이나 그 상위 디렉터리를 가리켜야 합니다. 문서와 코드의 구체적인 초안·개인 캐시·미추적 파일 참조, 로컬 절대 경로, 누락된 저장소 소유 `res://` 리소스와 `.import` 원본도 검사합니다. 삭제된 파일은 대상 집합에서 빼므로 참조 문서를 수정하지 않은 삭제도 잡습니다. 새 입력 파일은 `git add` 후 검사하세요. 오류에는 파일·행·대상·사유가 표시됩니다.
+
+폴더 관례와 자리표시자·와일드카드, 표준 로컬 도구 경로, 고정 빌드 출력 경로는 문서에서 사용할 수 있습니다. 외부 출처 식별용 `sts2.dll`, `BaseLib.dll`, `SlayTheSpire2.pck` 파일명도 허용하지만, 같은 위치에 실제 미추적 파일이 있거나 경로가 붙으면 검사합니다. 구체적인 로컬 결과물 대신 규격·관찰·재현 절차를 공유 문서에 남깁니다. 인프라 파일의 도구·출력·개인 설정 경로도 허용하지만, 설치 경로 기본값은 환경변수나 저장소 기준 경로로 작성합니다. GitHub Actions는 push와 pull request마다 게임 DLL 없이 같은 검사를 실행합니다.
+
+스킬 원문은 유지합니다. `.agents/skills/`의 Markdown은 일반 예시 경로의 존재·ignore 추정만 제외합니다. 실제 링크·이미지, 명시적 저장소 경로, 구체적인 초안·임시 결과·개인 캐시·절대 경로는 계속 검사하며, 스킬의 실행 스크립트에도 코드 검사 규칙을 적용합니다.
 
 레아르타의 반복 작업은 [애니메이션 작업 절차](docs/characters/realta/animation/reproduction.md)를 따릅니다. `anim`은 bake 후 [리그 기계 검사](tests/rig-checks.md)와 [인스턴스 간 상태 독립성 테스트](tests/README.md)를 실행하며, 실패하면 이후 렌더를 중단합니다. `check`, `publish`, `deploy`는 이 애니메이션 검사를 실행하지 않습니다. `anim`의 패키지 모드는 이미 생성한 PCK를 독립적으로 렌더합니다.
 
@@ -69,10 +76,10 @@ IDE에서는 `Sts2WD.sln`을 엽니다. SDK 경로를 직접 지정해야 한다
 1. Slay the Spire 2와 [BaseLib Workshop 모드](https://steamcommunity.com/sharedfiles/filedetails/?id=3737335127)를 설치합니다.
 2. [.NET 9 SDK](https://dotnet.microsoft.com/download/dotnet/9.0)를 설치합니다. `global.json`은 9.0.318과 이후 9.0.3xx 패치를 허용합니다.
 3. [MegaDot 4.5.1](https://megadot.megacrit.com/)을 설치합니다. 현재 사용 버전은 `4.5.1-m.14`입니다.
-4. `local.props.example`을 `local.props`로 복사하고 게임·MegaDot 경로를 지정합니다.
-5. `.\dev.ps1 hooks`로 커밋 전 빌드 검사를 활성화하고, `.\dev.ps1 restore`와 `.\dev.ps1 publish`를 실행합니다.
+4. [`local.props.example`](local.props.example)을 복사해 `.example` 확장자를 제거하고 게임·MegaDot 경로를 지정합니다. 기본 게임 경로는 `SystemDrive` 환경변수, MegaDot 경로는 저장소의 도구 폴더를 기준으로 합니다.
+5. `.\dev.ps1 hooks`로 커밋 전 참조·빌드 검사를 활성화하고, `.\dev.ps1 restore`와 `.\dev.ps1 publish`를 실행합니다.
 
-이 PC의 `.tools/`에는 SDK, MegaDot, NuGet 캐시, 원본 템플릿 및 참고 소스가 들어 있습니다. 이 폴더, 빌드 결과, 게임 DLL, `local.props`는 Git에 포함하지 않습니다. MegaDot은 `_sc_` 파일을 사용하여 편집기 설정도 `.tools/megadot/editor_data`에 저장합니다.
+이 PC의 `.tools/`에는 SDK, MegaDot, NuGet 캐시, 원본 템플릿 및 참고 소스가 들어 있습니다. 이 폴더, 빌드 결과, 게임 DLL, 복사한 개인 경로 설정 파일은 Git에 포함하지 않습니다. MegaDot은 `_sc_` 파일을 사용하여 편집기 설정도 `.tools/megadot/editor_data`에 저장합니다.
 
 ## 캐릭터 작업 위치
 

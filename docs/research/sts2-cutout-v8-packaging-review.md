@@ -7,7 +7,7 @@ Audience: agents preparing a later authorized runtime candidate. Reviewed 2026-1
 - Game: Slay the Spire 2 `v0.107.1`, commit `59260271`, release metadata timestamp `2026-06-18T15:43:56-07:00`.
 - BaseLib dependency: `Alchyr.Sts2.BaseLib 3.4.7`; inspected source commit `c070755d11ec062f6c97c4dda1a205d975ed066a`. [Primary source tree](https://github.com/Alchyr/BaseLib-StS2/tree/c070755d11ec062f6c97c4dda1a205d975ed066a).
 - Engine: MegaDot `4.5.1.m.14.mono.custom_build`; project SDK `Godot.NET.Sdk/4.5.1`.
-- Candidate: `docs/characters/realta/drafts/cutout-v8/rig.gd`, `death_body.gd`, `combat_candidate.tscn`, `merchant_candidate.tscn`, three JSON files, and texture imports. The body uses fourteen textured meshes plus a rigid weapon and ribbon; the alternate death body loads `fall.png`.
+- Candidate: a local v8 prototype comprising `rig.gd`, `death_body.gd`, `combat_candidate.tscn`, `merchant_candidate.tscn`, three JSON files, and texture imports. The body uses fourteen textured meshes plus a rigid weapon and ribbon; the alternate death body loads `fall.png`. The findings below record its behavior without requiring the untracked prototype.
 - The candidate's six source clips are `idle_loop` 2.6 s, `attack` 1.05 s, `hurt` 0.8 s, `cast` 1.3 s, `die` 2.2 s, and `relaxed_loop` 8 s. Existing logs exercise direct AnimationPlayer calls and explicit idle reset. They do not establish BaseLib factory conversion, packaged resource loading, or actual revive dispatch.
 
 ## Required before packaging
@@ -29,7 +29,7 @@ The main project has both `docs/.gdignore` and an export exclusion for `docs/*`.
 
 The candidate already uses `load(asset_path(...))` for textures and the death-body GDScript, which is appropriate for Godot's imported-resource remapping. Keep that resource-loading approach. Do not replace it with raw PNG reads merely because the source files are visible in the editor. Preserve the folder layout, including `parts/`, when relocating. `asset_path` derives its base from `get_script().resource_path`; it is independent of the wrapper's reparenting.
 
-The existing standalone import descriptors identify sources such as `res://fall.png` and `res://parts/torso.png`. Those paths will be wrong after a runtime relocation. Run the main project's import/publish workflow for the new location; do not treat a copied standalone `.godot/` cache as the runtime import result. The unused standalone `project.godot`, preview, render scripts, logs, and capture images are not runtime dependencies.
+The existing standalone import descriptors identify sources such as `res://fall.png` and `res://parts/torso.png`. Those paths will be wrong after a runtime relocation. Run the main project's import/publish workflow for the new location; do not treat a copied standalone Godot import cache as the runtime import result. The unused standalone `project.godot`, preview, render scripts, logs, and capture images are not runtime dependencies.
 
 The current `all_resources` policy makes dynamically selected imported textures and GDScript eligible once they are in an included runtime folder. If a future export changes to selected-scene dependencies, dynamically constructed string paths require separate inclusion evidence. This review did not produce a PCK inventory or a clean packaged load.
 

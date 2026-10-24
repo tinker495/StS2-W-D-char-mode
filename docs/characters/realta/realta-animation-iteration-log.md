@@ -75,7 +75,7 @@ BaseLib 3.4.7은 비-Spine 전투 트리거에서 첫 `AnimationPlayer`를 찾�
 
 ## 로컬 검토 자료와 재현
 
-`docs/characters/realta/drafts/`는 Git에서 제외되는 작업 자료다. `animation-review.html`에서 공식 두 캐릭터와 Realta(v6·v8·v10·v12)의 같은 시각을 24fps 표본으로 비교하고 씬별 GIF를 볼 수 있다. `cutout-v11/`, `cutout-v12/`, `blink-v1/`에 이번 반복의 스크립트·생성 원본·프롬프트가 있다. 공식 추출 원본은 연구용이며 배포 에셋에 포함하지 않는다.
+공식 두 캐릭터와 Realta(v6·v8·v10·v12)는 같은 시각의 24fps 표본과 씬별 GIF로 비교했다. 당시 검토 페이지·중간 스크립트·생성 원본·프롬프트는 Git에서 제외되는 선택적 작업 자료이며, 관찰과 판단은 위 반복 이력에 기록했다. 공식 추출 원본은 연구용이며 배포 에셋에 포함하지 않는다.
 
 런타임 재현은 추적되는 [animation/README.md](animation/README.md)가 소유한다. `rig-base.json`과 런타임 파츠·`parts.json`만으로 `author_clips.py` → `build_combat_rig.gd` bake → `dev.ps1 publish`를 반복할 수 있어, 이전 후보 간 참조를 하나의 입력 manifest로 정리하는 과제를 해결했다. 생성 원화는 확률적이므로 프롬프트만으로 같은 픽셀을 재현할 수 없고, 채택한 결과는 파츠 파일 자체가 기록이다.
 

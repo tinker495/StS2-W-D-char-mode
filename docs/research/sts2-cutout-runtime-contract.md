@@ -17,7 +17,7 @@ Realta의 `Sprite2D`·`AnimationPlayer` 경로는 `MegaSprite`나 `CreatureAnima
 | 렌더러·SDK | MegaDot `4.5.1.m.14.mono.custom_build`, `Godot.NET.Sdk/4.5.1`, `net9.0` | 프로젝트 SDK와 실행 로그 |
 | 현재 모델 | `Realta : PlaceholderCharacterModel : CustomCharacterModel` | [Realta.cs](../../Sts2WDCode/Characters/Realta/Realta.cs) |
 
-아래 게임 API의 namespace는 `MegaCrit.Sts2.Core` 기준이다. 로컬 분석 소스는 `.tools/sts2-decompiled/<namespace>/<type>.cs`, BaseLib 소스는 `.tools/BaseLib-StS2/`에 있었다. 이 캐시가 없어도 표의 버전, 타입, 멤버 및 PCK 리소스 경로로 같은 관찰을 재현할 수 있다. 설치된 BaseLib DLL의 바이너리와 조사 소스의 완전 일치까지 검증한 것은 아니므로 실제 패키지 로딩 시 의존성 버전도 다시 확인해야 한다.
+아래 게임 API의 namespace는 `MegaCrit.Sts2.Core` 기준이다. 설치판 DLL의 디컴파일 결과와 위 commit의 BaseLib 소스를 조사했다. 개인 캐시가 없어도 표의 버전, 타입, 멤버 및 PCK 리소스 경로로 같은 관찰을 재현할 수 있다. 설치된 BaseLib DLL의 바이너리와 조사 소스의 완전 일치까지 검증한 것은 아니므로 실제 패키지 로딩 시 의존성 버전도 다시 확인해야 한다.
 
 ## 전투: 서로 다른 두 실행 경로
 
@@ -113,7 +113,7 @@ Godot의 PCK 방식은 리소스·스크립트 묶음을 로드할 수 있지만
 2. BaseLib 변환 전후 노드 구조와 AnimationPlayer 검색 대상을 관찰한다. root script 보존을 가정하지 않는다. 이미지 생성 없이 alias·전이·노드 배치로 해결할 문제다.
 3. 휴식 act 0/1/2와 불빛 끄기를 각각 호출하고 호흡 위상 유지·좌우 flip·thought anchor를 확인한다. 상점 relaxed 시작·게임오버 die, 휴식 게임오버의 새 combat visuals를 별개 항목으로 둔다.
 4. 선택 장면은 실제 UI 가림, 16:9와 좁은 화면, 반복 진입·제거를 관찰한다. 공식 전체 장면의 입자와 본체 motion을 함께 비교한다.
-5. 승인된 적용 범위에서만 저장소 publish/import/PCK 로딩을 진행하고 실제 게임 이벤트를 확인한다. 이 문서 작성에서는 빌드·설치·게임 조작을 하지 않았다.
+5. 승인된 적용 범위에서만 저장소 publish, import, PCK 로딩을 진행하고 실제 게임 이벤트를 확인한다. 이 문서 작성에서는 빌드·설치·게임 조작을 하지 않았다.
 
 이번 검토는 BaseLib·게임 소스 읽기, 기존 선택 원화 열람, 공식 PCK 두 선택 씬의 읽기 전용 구조 조사, Godot 4.5의 네 문서 비교로 수행했다. 이미지 생성 0회, runtime 편집 0회, 테스트 변경·실행 0회다. 외부 유사 구현에서 채택한 것은 native AnimationPlayer의 autoplay·완료 전이·언어 간 경계이며, 전체 리그를 Spine API처럼 가장하는 어댑터는 class 검사와 중복 state machine 비용 때문에 채택하지 않았다. 다음 검토에서는 사용한 외부 근거, 발견 결함, 채택/기각 기법, 변경한 모듈 수, 생성·렌더·패키징 횟수, 실제 해결 범위를 함께 기록한다. 이 관찰 절차는 사용자 소유 acceptance test나 공식 수준 인증을 대체하지 않는다.
 
@@ -121,7 +121,7 @@ Godot의 PCK 방식은 리소스·스크립트 묶음을 로드할 수 있지만
 
 위 계약을 따라 네 씬을 런타임에 적용했다. 구조와 재현은 [animation/README.md](../characters/realta/animation/README.md)에 있다. 전투·상점 rig는 `Visuals/Rig` 아래에 있고, 휴식 Act·`HideFlameGlow`·전투/상점 외 게임오버 `die`는 `Sts2WDCode/Characters/Realta/RealtaSceneBridge.cs`의 Harmony postfix가 연결한다.
 
-`artifacts/realta-factory-observation/`의 독립 C# 호스트로 실제 `BaseLib.dll` 3.4.7(패키지 파일과 SHA256 일치)과 설치판 `sts2.dll`을 불러, 배포 PCK(`artifacts/mods/Sts2WD/Sts2WD.pck`)만 mount한 상태에서 관찰했다. `BaseLibMain.Initialize`는 호출하지 않았다.
+임시 독립 C# 호스트로 실제 `BaseLib.dll` 3.4.7(패키지 파일과 SHA256 일치)과 설치판 `sts2.dll`을 불러, 배포 PCK(`artifacts/mods/Sts2WD/Sts2WD.pck`)만 mount한 상태에서 관찰했다. `BaseLibMain.Initialize`는 호출하지 않았다. 호스트는 로컬 탐색 도구이며 아래 관찰의 재현에 필요한 버전·진입점·로딩 조건은 이 문서에 기록한다.
 
 | 항목 | 관찰 |
 |---|---|
