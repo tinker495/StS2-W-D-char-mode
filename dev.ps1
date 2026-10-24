@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position=0)]
-    [ValidateSet('hooks', 'doctor', 'restore', 'verify', 'build', 'check', 'anim', 'publish', 'deploy', 'editor')]
+    [ValidateSet('hooks', 'doctor', 'restore', 'verify', 'build', 'check', 'rebase', 'anim', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [Parameter(Position=1)]
     [ValidateSet('all', 'idle', 'idle_loop', 'attack', 'hurt', 'cast', 'powerup', 'die', 'relaxed', 'relaxed_loop', 'revive')]
@@ -13,6 +13,7 @@ param(
     [string]$OutputDirectory,
     [string]$Baseline,
     [string]$PackagePath,
+    [string]$Upstream = 'origin/main',
     [ValidateSet('unspecified', 'sandbox', 'escalated', 'local')]
     [string]$ExecutionContextLabel = 'unspecified'
 )
@@ -28,6 +29,14 @@ if ($Task -eq 'hooks') {
     return
 }
 
+if ($Task -eq 'rebase') {
+    & (Join-Path $projectRoot 'scripts/rebase.ps1') -Upstream $Upstream
+    if ($LASTEXITCODE -ne 0) {
+        throw 'Rebase or final validation did not complete. Follow the Git diagnostics, resolve the failure, then run git rebase --continue.'
+    }
+    return
+}
+
 # Human requester: wjdrb, 2026-10-24: run the full tracked-reference validator
 # in pre-commit (through build), check, and the SDK/game-independent verify task.
 if ($Task -in @('verify', 'build', 'check')) {
@@ -35,18 +44,7 @@ if ($Task -in @('verify', 'build', 'check')) {
     if ($Task -eq 'verify') { return }
 }
 
-$toolsRoot = Join-Path $projectRoot '.tools'
-$dotnet = Join-Path $toolsRoot 'dotnet/dotnet.exe'
-if (Test-Path -LiteralPath $dotnet) {
-    $env:DOTNET_ROOT = Split-Path $dotnet
-    $env:DOTNET_CLI_HOME = Join-Path $toolsRoot 'dotnet-home'
-    $env:NUGET_PACKAGES = Join-Path $toolsRoot 'nuget-packages'
-    $env:PATH = "$env:DOTNET_ROOT;$env:PATH"
-} else {
-    $dotnet = (Get-Command dotnet -ErrorAction Stop).Source
-}
-$env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
-$env:DOTNET_NOLOGO = '1'
+$dotnet = Initialize-DevelopmentDotNet $projectRoot
 
 function Invoke-DotNet([string[]]$Arguments) {
     if ($diagnosticRoot) {
@@ -113,9 +111,7 @@ try {
         return
     }
 
-    $propertyJson = & $dotnet msbuild Sts2WD.csproj '-getProperty:Sts2Path,Sts2DataDir,GodotPath,ModsPath'
-    if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve project paths. Run the restore task first.' }
-    $paths = ($propertyJson -join "`n" | ConvertFrom-Json).Properties
+    $paths = Get-DevelopmentPaths $projectRoot $dotnet
 
     if ($Task -eq 'doctor') {
         Invoke-DotNet @('--version')

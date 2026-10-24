@@ -15,7 +15,7 @@ The five approved Althea relic illustrations are preserved in `relic-candidates/
 | AltheaCrekinMacDubh | 크레킨 막 두브 | `althea_crekin_mac_dubh` |
 | AltheaAncestorsRecognition | 선조의 인정 | `althea_ancestors_recognition` |
 
-The user photos establish the sword, bracer and black-cuirass subjects. The accepted crimson energy master supplies the Rare relic's hexagonal rim/circular-center shape with a new blue treatment. The original-game relic/potion reference supplies broad values and contour density only. Physical descriptions and exclusions are recorded in the art guide; optional generation masters/prompts are under `drafts/relic-refresh/`.
+The user photos establish the sword, bracer and black-cuirass subjects. The accepted crimson energy master supplies the Rare relic's hexagonal rim/circular-center shape with a new blue treatment. The original-game relic/potion reference supplies broad values and contour density only. Physical descriptions and exclusions are recorded in the art guide; the tracked delivery PNGs and conversion procedure above define the applied artwork.
 
 All five selections are applied to the runtime paths. AltheaRelic inherits the Sts2WDRelic filename mapping; the old Burning Blood presentation overrides are removed. The installed package and verification record below own deployment status.
 
@@ -32,7 +32,7 @@ All five selections are applied to the runtime paths. AltheaRelic inherits the S
 | Review scope | Reviewed via `326 × 490` light/dark whole-image previews and `240 × 360` `IndividualFit` comparison with Defect and Silent. Promotion verified by identical SHA-256 hashes. |
 | Runtime | Branch B applies this base to combat/merchant/rest and adds selected UI and selection artwork; see the delivery section. Game-folder installation and gameplay verification remain unperformed. |
 
-The tracked collaboration artifact is `base.png`; appearance and preservation rules are in [althea-art.md](althea-art.md). Optional source and review records remain under `drafts/base-20261024-new/`; they are not required to use the adopted base.
+The tracked collaboration artifact is `base.png`; appearance and preservation rules are in [althea-art.md](althea-art.md). The selection provenance and review observations above describe the adopted base without requiring local production records.
 
 ## Energy Icon Draft
 
@@ -68,9 +68,7 @@ The native source is `res://images/atlases/card_atlas.sprites/token/soul.tres` i
 
 ## Local installation and final verification (2026-10-24)
 
-The latest card balance, three new Althea cards, both characters' five relic illustrations, Retain highlighting and Aselige encounter are installed together. Branch: feat/aselige-relics-althea-update, based on origin/main f48f6da. Deployment completed with exit code 0; Sts2WD.dll, Sts2WD.pck, Sts2WD.json and Sts2WD.pdb all matched SHA-256. Destination: Steam/steamapps/common/Slay the Spire 2/mods/Sts2WD. Backup: C:\Users\binib\Desktop\GODOT\StS2-W-D-char-mode\artifacts\runtime\local-install-backup-20261024T121703508Z-38fe34c2a34b4106a0e19d354cba0529. Diagnostics: artifacts/runtime/packaging-20261024T121529526Z-e71ee6b6a0074c31b9c65786d100bba6/.
-
-Temporary native observations passed 51 latest-card cases, 82 Aselige behavior cases and 25 localization/source checks. The installed PCK loaded 72 relic textures, both speaker icons, 34 dialogue lines per language and the complete Ancient painting at three viewport sizes. The C# build had zero warnings/errors. These observations are not formal acceptance tests. No formal tests or validation settings were changed; inherited main changes remain unchanged. The game was not launched and interactive multiplayer was not exercised. The current main workflow intentionally runs animation checks only through dev.ps1 anim; this deployment did not rerun them because no animation was changed here.
+Package installation and shared verification for the card/relic/Aselige release are recorded in [deployment status](../../deployment-status.md). The standing, UI and selection artwork in Branch B Delivery below has separate application and installation status.
 
 ## Branch B Delivery — 2026-10-24
 
@@ -97,6 +95,6 @@ UI export procedure: Fit the square 1254×1254 portrait and marker masters to 12
 
 The user selected high-angle candidate C and the new fully sheathed pre-draw background after the UI overlap was reported. The tile preserves a concentrated upward gaze under lowered brows. The background shows a lowered left-facing head, hilt hand, bracing hand and curse currents gathering at the scabbard throat. It replaces the earlier drawn-sword painting. The normal/locked pair shares the same complete-image Fit alpha; the background uses whole-image Fit with an opaque navy backing. Current runtime files, not ignored drafts, are the shared visual source of truth.
 
-Full-image previews and a 132×195 comparison with native Silent/Defect tiles were opened. An approximate selection UI composite keeps the face and both hands clear; the ascension panel overlaps the bottom of the crossguard. This known composition tradeoff was disclosed before the user requested application. It is not a live-game observation. Optional local masters are under `drafts/select-revision-20261024/`.
+Full-image previews and a 132×195 comparison with native Silent/Defect tiles were opened. An approximate selection UI composite keeps the face and both hands clear; the ascension panel overlaps the bottom of the crossguard. This known composition tradeoff was disclosed before the user requested application. It is not a live-game observation. The selected composition is preserved in the runtime textures listed above.
 
 Portrait, marker, energy, shared standing and scene wiring remain as previously approved. The base hash remains unchanged. Runtime selection textures are 132×195, 132×195 and 1920×1080, all opaque. Earlier publish attempts reported MSBuild Exec -1 after savepack and succeeded outside the sandbox. The logs contain `EXEC : error : Failed to read the root certificate store.`; this was output parsing, not evidence of an engine crash. After separating that environmental diagnostic from real errors and requiring savepack completion, one sandbox publish completed successfully without escalation or retry. A separate clean engine mounted the resulting PCK, loaded all nine Althea textures and four scenes, and observed the selection dimensions and Fit mode 5; it exited 0. Local game installation and live gameplay verification were not performed. No tests or acceptance assets were added or changed.

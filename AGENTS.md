@@ -97,6 +97,10 @@ Model IDs are `STS2WD-` plus the UPPER_SNAKE class name, so renaming a model cla
 
 ## Agent Skills
 
+### Repository Workflow
+
+Before repository exploration or rebasing, read [docs/agents/workflow.md](docs/agents/workflow.md) for bounded file reads and the rebase completion check. Use its shared-record ownership rules when updating deployment documentation.
+
 ### Issue Tracker
 
 Issues and specifications are managed in GitHub Issues for `tinker495/StS2-W-D-char-mode`. Read `docs/agents/issue-tracker.md` before reading, publishing, or editing them.

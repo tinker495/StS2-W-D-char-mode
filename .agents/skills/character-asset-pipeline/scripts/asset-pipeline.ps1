@@ -27,7 +27,7 @@ param(
     [ValidateSet('SharedScale', 'IndividualFit', 'SubjectFit')]
     [string]$CompareMode = 'SharedScale',
     [string]$GodotPath,
-    [string]$GamePath = 'C:/Program Files (x86)/Steam/steamapps/common/Slay the Spire 2'
+    [string]$GamePath
 )
 
 $ErrorActionPreference = 'Stop'
@@ -470,9 +470,16 @@ switch ($Command) {
 
     'official-poses' {
         if (-not $OutPath) { throw 'Specify -OutPath <directory> [-GodotPath <MegaDot console exe>] [-GamePath <Slay the Spire 2 folder>].' }
-        if (-not $GodotPath) {
-            $GodotPath = Join-Path $PSScriptRoot '../../../../.tools/megadot/MegaDot_v4.5.1-stable_mono_win64_console.exe'
+        if (-not $GodotPath -or -not $GamePath) {
+            $projectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../..'))
+            . (Join-Path $projectRoot 'scripts/dev-workflow.ps1')
+            $dotnet = Initialize-DevelopmentDotNet $projectRoot
+            $developmentPaths = Get-DevelopmentPaths $projectRoot $dotnet
+            if (-not $GodotPath) { $GodotPath = $developmentPaths.GodotPath }
+            if (-not $GamePath) { $GamePath = $developmentPaths.Sts2Path }
         }
+        if (-not $GodotPath) { throw 'Set GodotPath in local.props or pass -GodotPath.' }
+        if (-not $GamePath) { throw 'Set Sts2Path in local.props or pass -GamePath.' }
         $resolvedGodot = (Resolve-Path -LiteralPath $GodotPath).Path
         $pck = Join-Path $GamePath 'SlayTheSpire2.pck'
         $spine = Join-Path $GamePath 'libspine_godot.windows.template_release.x86_64.dll'

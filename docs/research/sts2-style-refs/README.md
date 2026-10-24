@@ -17,7 +17,7 @@ Mega Crit public material downloaded on 2026-10-18. Originals are retained; only
 | `necro-combat-crop.png` | `official-combat-2.png` rectangle `(110,320,320,500)`; Osty and other figures overlap below |
 | `silent-combat-crop.png` | Silent frame 40 rectangle `(130,50,340,410)` |
 
-Installed-build Spine renders of all five characters' combat and merchant poses are not stored here. Regenerate them locally with `asset-pipeline.ps1 official-poses` into Git-ignored `drafts/spine-poses/`; procedure and observations are in [combat-style study section 7](../sts2-combat-style-study.md#7-installed-build-spine-renders-2026-10-24). The crops above remain the public, tracked fallback.
+Installed-build Spine renders of all five characters' combat and merchant poses are not stored here. Regenerate them locally with `asset-pipeline.ps1 official-poses` into a temporary output directory; procedure and observations are in [combat-style study section 7](../sts2-combat-style-study.md#7-installed-build-spine-renders-2026-10-24). The crops above remain the public, tracked fallback.
 
 Related pages: [official press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/), [2024 art direction](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/), [2025 Necrobinder introduction](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/).
 

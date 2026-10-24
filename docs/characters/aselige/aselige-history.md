@@ -140,7 +140,7 @@ On 2026-10-23, `dev.ps1 publish` completed successfully, including the C# build 
 
 `docs/characters/aselige/aselige-dialogue-head-candidate.png` is a 1254 x 1254 RGBA head painting: dark-green scales, one pair of branching chestnut-brown horns and blue irises. It has not been selected for application by the current relic approval. The original Pael run-history/dialogue icon and outline were inspected at 85 x 85. Native `NAncientDialogueLine.SetAncientAsSpeaker` reads `RunHistoryIcon` and `RunHistoryIconOutline`, rather than the map marker.
 
-The complete candidate was inspected in an 85 px Fit preview on light/dark backgrounds; both horn tips and head remain visible. Optional local `drafts/dialogue/` contains the 85 px icon and its 1 px white alpha-derived outline. Future application should use `CustomRunHistoryIconPath` and `CustomRunHistoryIconOutlinePath`, preserving the complete painting. No dialogue-head runtime connection or in-game verification has been performed.
+The complete candidate was inspected in an 85 px Fit preview on light/dark backgrounds; both horn tips and head remain visible. The review exports were an 85 px icon and its 1 px white alpha-derived outline. Future application should use `CustomRunHistoryIconPath` and `CustomRunHistoryIconOutlinePath`, preserving the complete painting. No dialogue-head runtime connection or in-game verification has been performed.
 
 ## Serpentine main-illustration candidate
 
@@ -148,13 +148,13 @@ On 2026-10-23 the user supplied a slender green-dragon reference and requested a
 
 Prompt summary: preserve the attached reference's elongated S-curving green dragon, spread wings and claw resting on overgrown monumental ruins; add exactly two branching dark-brown horns and blue irises, emphasize serpentine elegance and a calm ancient presence, use a wide full-scene composition without text or UI. A second generation pulled the camera back to include both outer wing tips, full upper crest/horns and the curling tail. This was a generated framing revision, not cropping or extracted-region fitting.
 
-The complete painting and a same-scale framing comparison were inspected. The user then preferred the first close composition because wing tips extending outside the frame communicate immense scale. The named candidate now preserves that first painting unchanged; the expanded framing is retained only in optional `drafts/main-redesign/expanded-framing.png`. The earlier Fit preview depicts the expanded version and is not the selected composition. Suitability under the actual Ancient UI remains unverified. No runtime image replacement, package rebuild or installation was performed for this candidate request.
+The complete painting and a same-scale framing comparison were inspected. The user then preferred the first close composition because wing tips extending outside the frame communicate immense scale. The named candidate now preserves that first painting unchanged; the expanded framing was not selected. The earlier Fit preview depicts the expanded version and is not the selected composition. Suitability under the actual Ancient UI remains unverified. No runtime image replacement, package rebuild or installation was performed for this candidate request.
 
 ## Forest-background-only candidate
 
 The user rejected the coiled-stump pose and requested retaining the original dragon composition while changing only the background. The current new candidate is `docs/characters/aselige/aselige-main-forest-candidate.png`, a 1875 x 839 opaque RGB PNG generated with the built-in image tool from the original stone-sanctuary candidate as the sole edit target. Its brief locks the spread wings, S-neck, head, branching brown horn pair, blue eye, body, tail, foreclaw positions and camera, and replaces stone architecture with ancient forest and a mossy stump beneath the existing claw. The environment is adapted around the original pose.
 
-The full painting, 960 x 450 Fit preview and same-scale original/new comparison were inspected. The original pose and close framing are retained visually; the claw rests on the new stump edge and the architectural background is replaced by forest. No cropping, compositing script or runtime replacement was used. Optional `drafts/forest-background/` contains the comparison, preview and prompt. `aselige-main-stump-candidate.png` is the rejected coiled-pose intermediate and must not be used as the new pose anchor. Approved base/runtime artwork remains unchanged pending selection.
+The full painting, 960 x 450 Fit preview and same-scale original/new comparison were inspected. The original pose and close framing are retained visually; the claw rests on the new stump edge and the architectural background is replaced by forest. No cropping, compositing script or runtime replacement was used. `aselige-main-stump-candidate.png` is the rejected coiled-pose intermediate and must not be used as the new pose anchor. Approved base/runtime artwork remains unchanged pending selection.
 
 ## Wing repair and slight posture refinement
 
@@ -162,7 +162,7 @@ The user requested filling the apparent wing holes and slightly adjusting the aw
 
 Prompt summary: fill all enclosed oval wing-membrane openings with matching green membrane, retain the natural scalloped outer edge, refine the neck/shoulder flow and relax the nearer elbow/wrist so the forepaw rests on the stump. Preserve identity, spread wings, close camera, forest/stump and lighting; avoid a new coiled pose. The forepaw shifts slightly right, the neck/head bend is gentler and the enclosed blue-gray wing spots are gone. These are visual observations, not exact pixel-preservation claims.
 
-The complete output and full-frame same-scale before/after comparison were inspected; the original is retained. No post-generation cropping or repainting was used. Optional `drafts/forest-refined/` holds the Fit preview, comparison and prompt. No approved base/runtime artwork, package or installed game files were replaced for this candidate request.
+The complete output and full-frame same-scale before/after comparison were inspected; the original is retained. No post-generation cropping or repainting was used. No approved base/runtime artwork, package or installed game files were replaced for this candidate request.
 
 ## Cute dialogue icon matching the refined main painting
 
@@ -170,4 +170,4 @@ The user requested a small cute dialogue icon from the refined forest dragon. `d
 
 Prompt summary: a new chibi head composition, warm smile, large blue eyes, green/olive leaf-like scale masses, exactly two compact branching chestnut horns, transparent background, no torso, wings, scene or frame. The result has more scale facets than the sparse-detail brief, but the 85 px preview retains the smiling muzzle, blue eyes and branching brown horn pair. All horn tips remain inside the canvas.
 
-Full-frame Fit exports are `drafts/dialogue-cute/aselige.png` (85 x 85) and `aselige-256.png` (256 x 256). `aselige_outline.png` is a 1 px white maximum-alpha outline derived from the final 85 px icon. The complete painting and `preview-85.png` were inspected on light/dark backgrounds. No extraction from the large scene, cropping or post-generation painting was performed. These files are ready for selection; no runtime model/icon path, package or installed game file was changed for this creation request.
+Full-frame Fit exports were made at 85 x 85 and 256 x 256. A 1 px white maximum-alpha outline was derived from the final 85 px icon. The complete painting and an 85 px preview were inspected on light/dark backgrounds. No extraction from the large scene, cropping or post-generation painting was performed. These exports were ready for selection; no runtime model/icon path, package or installed game file was changed for this creation request.

@@ -67,7 +67,7 @@ These values are project starting points. Check actual paths, dimensions, scales
 
 Reinvestigated on 2026-10-18; combat anchors updated 2026-10-24. Do not put only a game name in the prompt. Open the **actual pixels** and use images for the same asset purpose. Originals belong to Mega Crit and are for research/comparison, not mod runtime delivery. Public sources, frames, and crops are listed in the [image index](docs/research/sts2-style-refs/README.md); detailed observations are in the [combat-style study](docs/research/sts2-combat-style-study.md).
 
-**Primary combat and merchant anchors** are installed-build Spine renders: alpha-clean, unoccluded and undithered. Generate them locally with `asset-pipeline.ps1 official-poses` ([pipeline section 3](.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools)) into Git-ignored `docs/research/sts2-style-refs/drafts/spine-poses/`; they are never committed. Use the public crops only when the game is not installed, and do not read their dithering, overlapping figures or scene background as style.
+**Primary combat and merchant anchors** are installed-build Spine renders: alpha-clean, unoccluded and undithered. Generate fresh renders locally with `asset-pipeline.ps1 official-poses` ([pipeline section 3](.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools)) into a temporary output directory; they are never committed. Use the public crops only when the game is not installed, and do not read their dithering, overlapping figures or scene background as style.
 
 | Priority/use | Image | Observe | Do not import |
 |---|---|---|---|
