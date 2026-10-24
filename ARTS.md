@@ -38,13 +38,14 @@ Read the target art specification and asset guide before creating or revising a 
 
 ### 2.1 Target Direction
 
-A game name alone can produce muddy colors, uniform black contours, or excessive brush texture. Translate Mega Crit's Playful, Crisp, Liveliness, Cinematic, and Colorfuler goals, together with restrained painterly treatment, into the following rules. These are project interpretations, not quotations of internal production specifications. [Evidence](docs/research/sts2-art-direction-sources.md)
+A game name alone can produce muddy colors, uniform black contours, or excessive brush texture. Translate Mega Crit's Playful, Crisp, Liveliness, Cinematic, and Colorfuler goals into the concrete rules below, combining official combat silhouette/readability observations ([study section 7](docs/research/sts2-combat-style-study.md#7-installed-build-spine-renders-2026-10-24)) with the crisp, clean 2D character rendering established in approved character bases (`docs/characters/althea/base.png`, `docs/characters/realta/base.png`). These are project rules, not quotations of internal production specifications. [Evidence](docs/research/sts2-art-direction-sources.md)
 
-- **Major forms and value families:** establish volume through base color, main shadow, and selective light. Two or three dominant families do not require exactly three flat colors.
-- **Edge hierarchy:** separate forms through color, value, and overlap. Use dark, material-colored lines at deep joints and selected contours, not equally weighted lines around every fold.
-- **Silhouette and connections:** combine long C/S curves with selected angles. Explain body/tool masses, joints, grounding, and actual hand contact before ornaments.
-- **Color-temperature contrast:** distinguish dominant, accent, and neutral linking roles. Specific colors belong to the character specification.
-- **Low surface noise:** allow low-contrast brush variation and short soft transitions inside broad planes. Avoid high-contrast white flecks, dense hatching, needless polygon fragmentation, and compression dithering.
+- **Crisp, clean 2D cel-plus-soft-form shading:** build each mass from a clear base color, one distinct shadow family, and selective light planes with smooth, clean transitions. Avoid muddy or chalky dry-brush blotches, heavy canvas grain, or dirty over-textured surfaces that make characters look clunky or weathered when their design calls for clean fabric and polished steel.
+- **Readable material values:** keep light materials clean and distinct (crisp warm ivory/cream for white cloth, bright silver-gray for polished steel, luminous silver-white for hair) without blowing out into flat pure-white `#FFFFFF` fill or crushing everything into dull mid-gray/pewter. Contrast concentrates on the face, silhouette, action, and hand contacts.
+- **Edge hierarchy:** use fine, crisp, dark material-colored linework to keep facial features, fingers, and overlapping plates sharp and legible, while letting internal cloth and armor planes turn cleanly by value. Avoid thick, uniform black comic outlines or rough, sketchy contour teeth.
+- **Silhouette and connections:** long C/S curves, turning at structural joints. Explain body/tool masses, joints, grounding, and actual hand contact before ornaments.
+- **Color-temperature contrast:** distinguish dominant, accent, and neutral linking roles; even neutrals carry a temperature. Specific colors belong to the character specification.
+- **Clean surfaces and trim:** keep surface shading smooth and intentional so armor facets, gold trim, and emblems read crisply at both full and combat sizes without visual noise.
 
 ### 2.2 Color, Line, and Detail Budgets by Display Size
 
@@ -64,30 +65,30 @@ These values are project starting points. Check actual paths, dimensions, scales
 
 ### 2.3 Actual Official Image Anchors and Priority
 
-Reinvestigated on 2026-10-18. Do not put only a game name in the prompt. Open the **actual downloaded pixels** and use images for the same asset purpose. Originals belong to Mega Crit and are for research/comparison, not mod runtime delivery. Sources, frames, and crops are listed in the [image index](docs/research/sts2-style-refs/README.md); detailed observations are in the [combat-style study](docs/research/sts2-combat-style-study.md).
+Reinvestigated on 2026-10-18; combat anchors updated 2026-10-24. Do not put only a game name in the prompt. Open the **actual pixels** and use images for the same asset purpose. Originals belong to Mega Crit and are for research/comparison, not mod runtime delivery. Public sources, frames, and crops are listed in the [image index](docs/research/sts2-style-refs/README.md); detailed observations are in the [combat-style study](docs/research/sts2-combat-style-study.md).
 
-| Priority/use | Actual local image | Observe | Do not import |
+**Primary combat and merchant anchors** are installed-build Spine renders: alpha-clean, unoccluded and undithered. Generate fresh renders locally with `asset-pipeline.ps1 official-poses` ([pipeline section 3](.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools)) into a temporary output directory; they are never committed. Use the public crops only when the game is not installed, and do not read their dithering, overlapping figures or scene background as style.
+
+| Priority/use | Image | Observe | Do not import |
 |---|---|---|---|
-| Primary combat materials/values | [Defect crop](docs/research/sts2-style-refs/defect-combat-crop.png), [official full frame](docs/research/sts2-style-refs/official-combat.png) | Large armor plates, subtle metal-plane changes, broad cloth flow, joints joined through planes | Robot body, golden costume, claws, orbs |
-| Humanoid armor support | [Ironclad crop](docs/research/sts2-style-refs/ironclad-combat-crop.png), [co-op full frame](docs/research/sts2-style-refs/official-combat-2.png) | Simple shoulder/forearm/shin plates, large connected masses, selective bright ridges | Mask, head ornament, bulky physique, overlapping arms/swords from other characters |
-| Cloth and pose support | [Silent crop](docs/research/sts2-style-refs/silent-combat-crop.png), [official animation frame 40](docs/research/sts2-style-refs/official-silent-anim-frame40.png) | Long S/C curves, wedge-shaped hems, broad folds, hand/weapon spacing | Skull mask, horns, two daggers, concealed head |
+| Primary combat stance, camera, grounding | Local renders `<c>-combat-idle_loop-00.png` for Ironclad, Silent, Defect, Necrobinder, Regent | Grounded combat stance, camera angle, silhouette separation, readable negative space around weapons/limbs | Each character's mask, skull, robot body, costume, weapons, companion, soft ground shadow, or rough/gritty monster-like surface texture and squat proportions when the character canon is sleek and clean |
+| Merchant/rest relaxed poses | Local renders `<c>-merchant-relaxed_loop-00.png` | Relaxed weight, grounded posture | Character identity, as above |
+| Public fallback: armor/materials | [Defect crop](docs/research/sts2-style-refs/defect-combat-crop.png), [Ironclad crop](docs/research/sts2-style-refs/ironclad-combat-crop.png) | Large armor plates, broad cloth flow | Overlapping arms/swords from other characters, scene background |
+| Public fallback: cloth and pose | [Silent crop](docs/research/sts2-style-refs/silent-combat-crop.png), [official animation frame 40](docs/research/sts2-style-refs/official-silent-anim-frame40.png) | Long S/C curves, wedge-shaped hems, hand/weapon spacing | GIF dithering, green background, skull mask, horns, daggers |
 | Standing-art simplification | [Necrobinder combat frame](docs/research/sts2-style-refs/official-necro-anim-frame0.png) | Small head, narrow connections, broad costume masses, minimal hands/bones | Lich face, levitation, scythe, companion hand |
 | Selection/background illustration only | [Necrobinder selection screen](docs/research/sts2-style-refs/official-select.png) | Large color contrasts, stronger contours, paper/brush texture, theatrical rim light | Applying the same line weight, texture density, or violet rim to combat sprites |
-
-![Official Defect combat materials](docs/research/sts2-style-refs/defect-combat-crop.png)
-![Official Silent combat forms](docs/research/sts2-style-refs/silent-combat-crop.png)
 
 Official URLs can serve replacement files. At investigation time, `steam_screenshot1_new.png` showed Defect combat rather than the Ironclad described in older notes. **Inspect the new file before reusing an old description.** Separate blog fan art, covers, and unused concepts from actual combat references. [Official press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/), [2024 art-direction article](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/)
 
 ### 2.4 Shape, Face, and Proportions
 
-Read the silhouette, tool direction, and gaps between limbs first. Use selected angles within rounded volume; do not inflate or triangulate every surface. Keep armor planes broad and turn values at structural ridges/overlaps.
+Read the silhouette, tool direction, and gaps between limbs first. Build clean volumes that turn at structural joints, ridges, and overlaps, with broad, well-defined armor and cloth planes between them.
 
-Follow character canon for body ratio, apparent age, eye size, hair part, ears, and expression. Simplify eyelids, nose shadow, and mouth without importing another character's mask, skeleton, or proportions. Use the shared chibi scope and character-specific treatment within it. Non-SD does not mean adult.
+Follow character canon and raw character references for body ratio, apparent age, facial beauty/sharpness, eye shape, hair flow, and expression. Preserve the character's sleek, balanced canonical proportions (typically 7–7.5 heads for full-body knight/adventurer characters such as Althea unless the character specification states otherwise); do not forcibly compress characters into squat, chunky, or thick-limbed 6-head proportions, which make elegant character designs look clumsy and coarse. Keep hands, boots, and armor rims well-proportioned to the character's frame while maintaining clear silhouette gaps so the figure reads cleanly at `240 × 360`. Simplify micro-noise (stray hair threads, tiny rivets, noisy scratches) without coarsening facial features or importing another character's mask, skeleton, or heavy build. Use the shared chibi scope and character-specific treatment within it. Non-SD does not mean adult.
 
 ### 2.5 Light, Edges, and Texture
 
-Keep silhouettes/overlaps firm, use limited soft transitions on rounded volumes, and allow nearby light planes to meet without outlines. Focus contrast on face, action, and contact points rather than repeating reflections along every edge. "Less painterly" does not mean pure vector, textureless, or blurred.
+Give the outer silhouette and crossing forms a clear value break, let clean cel-plus-soft-form transitions carry rounded volumes, and use crisp, refined contour lines where needed for facial and structural clarity. Focus contrast on face, action, and contact points rather than repeating noisy highlights along every edge. Keep surfaces clean and purposeful—avoid heavy gouache blotches, muddy midtones, or blurred edges.
 
 ## 3. Character Art Specification Contract
 
@@ -106,11 +107,11 @@ Do not change identity while applying the shared style. If a new character has n
 
 | Material | Preserve | Reduce |
 |---|---|---|
-| Cloth | Long force/gravity-driven flow, major shadows, restrained transitions | Equal-size triangular fragments, tiny folds, noise |
-| Metal | Broad base/reflection/shadow planes and selected structural ridges | Gem-like facets, bright borders on every plate |
-| Fur, hair, fibers | Large connected masses with selected separated tips | Uniform teeth, high-contrast individual strands |
-| Wood/leather | Dull material-appropriate values and sparse directional grain | Plastic gloss, crack webs, excessive stitching |
-| Face | Canonical shape/age with simple eyes, nose, mouth | Excess iris sparkle, skin gloss, identity-changing omission |
+| Cloth | Long force/gravity-driven flow, crisp base value (including clean warm ivory/cream for white cloth), clear shadow shapes, clean gold/colored trim | Equal-size triangular fragments, tiny folds, muddy gray/brown staining on white fabric |
+| Metal | Clean faceted steel/gold planes with crisp light/shadow separation and a controlled edge highlight on primary ridges | Mirror chrome noise, dirty pewter muddiness, overly thick/clunky plate rims, random scratches |
+| Fur, hair, fibers | Large connected flowing masses with clean tapered locks and readable volume (including bright silver-white hair when canonical) | Hundreds of fine single-pixel strands, or dull ash/muddy gray discoloration |
+| Wood/leather | Clean material-appropriate values and sparse directional grain | Plastic gloss, crack webs, excessive stitching |
+| Face | Crisp canonical facial structure, clean anime/illustrative eye and lash linework, nose shadow, and composed mouth | Over-rendered photorealistic pores/lips, or coarse blotchy gouache simplification that ruins facial appeal |
 
 HEX values, alloys, fabrics, ornament combinations, and local exceptions belong in character specifications.
 
@@ -120,9 +121,9 @@ These are production starting points, checked against actual UI/frames and chara
 
 ### 5.1 Combat, Rest, and Merchant Standing Art
 
-Branch B delivers ordinary standing art and separate combat art. Use the complete approved `base.png` directly for ordinary standing, with proportional Fit conversion. Generate the combat pose anew from the base and original-game combat references: weapon-appropriate readiness, grounded feet, intentional weight, and credible hand contact. Preserve canonical identity and rendering in both. Character guides own filenames, dimensions, and separate scene mappings; do not assume combat and rest/merchant share one PNG.
+Branch B first inspects the approved base's actual pose. Use the complete `base.png` with proportional Fit conversion for ordinary standing. If it already depicts a suitable combat-ready stance, reuse that export for combat by default. Generate a separate combat pose only when the base is a noncombat/everyday pose or the user requests a distinct combat pose; use the base and original-game combat references for weapon readiness, grounding, weight and credible hand contacts. Preserve canonical identity and rendering. Character guides own filenames, dimensions and shared or separate scene mappings.
 
-Include the entire character and tool, planning roughly 3–5% transparent margins at the extremities. Distinguish combat-forward from camera-facing. Preserve the approved face instead of turning it into a strong profile to achieve forward gaze. Specify head rotation and eye direction separately. Character-specific face, pose, and direction belong in the target specification.
+Include the entire character and tool, planning roughly 3–5% transparent margins at the extremities. Distinguish combat-forward from camera-facing. Preserve facial anatomy, apparent age, and identifying features while deriving rotation from original-game references for the requested use case. Facial identity does not require a frontal head or two fully visible eyes. Orientation prompt fields are defined in [Recipe 1](.agents/skills/character-asset-pipeline/PROMPT-RECIPES.md#recipe-1-new-canonical-art-and-local-edits). Character-specific face, pose, and direction belong in the target specification.
 
 The character asset guide owns display size, ground line, sprite scale/position, dialogue/hit/health anchors. Do not fix those placements here.
 
@@ -173,7 +174,7 @@ Branch from a clean approved candidate and change one axis at a time. Separate l
 #### [Block A] Shared Rendering
 
 ```text
-Style/medium: use the target-appropriate OFFICIAL Slay the Spire 2 references for rendering and composition, and the approved character base for identity. Broad connected silhouettes, flowing C/S curves with selected angular folds, quiet interiors and a few dominant value families rather than a strict color count. Combine firm overlaps with restrained soft transitions on rounded forms. Separate shapes through color, value and overlap; use selective dark material-colored contours. Retain subtle low-contrast directional brush variation while suppressing high-contrast flecks, fine hatching and unnecessary surface fragmentation. Preserve the approved facial anatomy, age appearance, proportions and material hierarchy. Do not copy another character's identity, costume or compression dithering. Match detail density to the actual asset display size; adapt scene depth to its purpose.
+Style/medium: crisp, clean hand-painted 2D game character art (clean cel-plus-soft-form shading), anchored to the approved character base and raw character references for facial appeal, proportions, and clean surface finish, while using official Slay the Spire 2 references for grounded combat silhouette and display-size readability. Build forms from large, well-organized masses with long C/S curves, clean base values, one clear shadow family, and smooth, controlled plane transitions. Keep light materials clean and true to palette (warm ivory/cream cloth, bright silver-gray steel, luminous silver-white hair) without muddy gray/brown dulling or flat pure-white blowouts. Use fine, crisp, dark material-colored contours for facial clarity, fingers, and armor overlaps. Preserve the character's sleek canonical proportions and sharp facial features; do not make limbs chunky, squat, or rough-textured. Match detail density to the actual asset display size; adapt scene depth to its purpose.
 ```
 
 #### [Block B] Character Anchor Slot
@@ -187,7 +188,7 @@ Fill `<CHARACTER_ANCHOR>` with visible face, appearance, and equipment details f
 #### [Block D] Surface Cleanup
 
 ```text
-Rendering cleanup only: preserve identity, equipment construction, pose, proportions and framing. Consolidate tiny fragmented marks into connected value families while retaining restrained soft transitions and low-contrast brush variation appropriate to each material. Remove high-contrast flecks, scratches, hatching and unnecessary contour teeth. Preserve the existing palette, material roughness and light direction. Do not blur the image, change its design or turn it into glossy cel shading, pure vector art or uniformly faceted shapes.
+Rendering cleanup only: preserve identity, equipment construction, pose, proportions, crisp facial features, and framing. Consolidate tiny fragmented marks or stray hair threads into clean connected value families while retaining smooth cel-plus-soft-form transitions and crisp edges appropriate to each material. Remove high-contrast flecks, scratches, muddy blotches, hatching, and unnecessary contour teeth. Preserve the existing clean palette and light direction. Do not blur the image, dull the colors, or change its design.
 ```
 
 ### 7.3 Comparison and Records
@@ -198,6 +199,6 @@ Compare the original, previous candidate, and new candidate at the same display 
 
 Shared documents must explain production criteria without drafts, prompts, or comparison images. State current appearance and constraints in the art specification, dimensions/conversion/status in the asset guide, and decision rationale in history. Do not substitute version IDs or "same as the previous image." Share the base, runtime assets, and necessary specifications; optionally keep drafts and logs in Git-ignored `drafts/`. Tracking every intermediate is unnecessary.
 
-Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards use whole paintings at a common scale and may remain local observations. State their conclusions and visual reasons directly in shared documents.
+Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards preserve whole paintings; choose shared-scale preservation, individual-Fit, or equal-subject-height style comparisons through the [pipeline observation tools](.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools). Boards may remain local observations. State their conclusions and visual reasons directly in shared documents.
 
 Distinguish file dimensions, conversions, and PCK-loading observations from actual game verification. Packaging/installation follow the [pipeline](.agents/skills/character-asset-pipeline/SKILL.md) scope; tests and validation assets follow [AGENTS.md](AGENTS.md).

@@ -1,4 +1,31 @@
-# Internal helpers for dev.ps1 packaging diagnostics and local installation.
+# Shared development paths, packaging diagnostics and local installation.
+
+function Initialize-DevelopmentDotNet([string]$ProjectRoot) {
+    $toolsRoot = Join-Path $ProjectRoot '.tools'
+    $dotnet = Join-Path $toolsRoot 'dotnet/dotnet.exe'
+    if (Test-Path -LiteralPath $dotnet) {
+        $env:DOTNET_ROOT = Split-Path $dotnet
+        $env:DOTNET_CLI_HOME = Join-Path $toolsRoot 'dotnet-home'
+        $env:NUGET_PACKAGES = Join-Path $toolsRoot 'nuget-packages'
+        $env:PATH = "$env:DOTNET_ROOT;$env:PATH"
+    } else {
+        $dotnet = (Get-Command dotnet -ErrorAction Stop).Source
+    }
+    $env:DOTNET_CLI_TELEMETRY_OPTOUT = '1'
+    $env:DOTNET_NOLOGO = '1'
+    return $dotnet
+}
+
+function Get-DevelopmentPaths([string]$ProjectRoot, [string]$DotNet) {
+    Push-Location -LiteralPath $ProjectRoot
+    try {
+        $propertyJson = & $DotNet msbuild Sts2WD.csproj '-getProperty:Sts2Path,Sts2DataDir,GodotPath,ModsPath'
+        if ($LASTEXITCODE -ne 0) { throw 'Cannot resolve project paths. Run the restore task first.' }
+        return ($propertyJson -join "`n" | ConvertFrom-Json).Properties
+    } finally {
+        Pop-Location
+    }
+}
 
 function Invoke-RecordedCommand {
     param(

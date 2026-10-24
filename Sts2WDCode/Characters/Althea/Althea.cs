@@ -47,10 +47,12 @@ public class Althea : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<AltheaRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<AltheaPotionPool>();
 
-    /*  PlaceholderCharacterModel will utilize placeholder basegame assets for most of your character assets until you
-        override all the other methods that define those assets.
-        These are just some of the simplest assets, given some placeholders to differentiate your character with.
-        You don't have to, but you're suggested to rename these images. */
+    // The user selected the unchanged base painting for all three standing contexts.
+    public override string CustomVisualPath => "res://Sts2WD/scenes/althea/combat.tscn";
+    public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/althea/rest_site.tscn";
+    public override string CustomMerchantAnimPath => "res://Sts2WD/scenes/althea/merchant.tscn";
+    public override string CustomCharacterSelectBg => "res://Sts2WD/scenes/althea/char_select_bg_althea.tscn";
+
     public override Control CustomIcon
     {
         get
@@ -61,6 +63,7 @@ public class Althea : PlaceholderCharacterModel
         }
     }
     public override string CustomIconTexturePath => "althea/character_icon.png".CharacterUiPath();
+    public override string CustomIconOutlineTexturePath => "althea/character_icon_outline.png".CharacterUiPath();
     public override string CustomCharacterSelectIconPath => "althea/char_select.png".CharacterUiPath();
     public override string CustomCharacterSelectLockedIconPath => "althea/char_select_locked.png".CharacterUiPath();
     public override string CustomMapMarkerPath => "althea/map_marker.png".CharacterUiPath();

@@ -104,7 +104,32 @@ This is an art-observation sequence, not new tests or acceptance thresholds.
 6. Preserve identity/expression. Similarity does not require copying an official mask or skull face.
 7. Specify the main observed differences for the next revision. Do not merely repeat "StS2 style" or keep editing rejected candidates.
 
-## 7. Limitations
+## 7. Installed-Build Spine Renders (2026-10-24)
+
+Scope differs from sections 1–6: these are renders of the locally installed game (`release_info.json`: v0.107.1, commit `59260271`), not public press material. They are observations only; the rendered PNGs are not redistributed. Regenerate them in a temporary output directory using the procedure below; no saved local render is required.
+
+**Procedure:** `asset-pipeline.ps1 official-poses` ([pipeline section 3](../../.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools)) loads the game's own `libspine_godot` extension in MegaDot 4.5.1 (OpenGL compatibility renderer), mounts `SlayTheSpire2.pck`, and renders time 0 of `idle_loop` from `res://animations/characters/<c>/<c>_skel_data.tres` and `relaxed_loop` from `res://animations/merchant/<c>/<c>_merchant_skel_data.tres` for Ironclad, Silent, Defect, Necrobinder and Regent. Each frame is rendered on a transparent viewport, converted from the viewport's premultiplied color to straight alpha, then framed to its rendered alpha bounds plus a uniform margin of 5% of the longer side. That framing only trims empty transparent canvas for research use ([ARTS.md 1.3](../../ARTS.md#13-composition-principles-for-all-assets) item 4); nothing is repainted, scaled after capture, or removed. Each skeleton includes its own soft ground-shadow attachment, below alpha 128 in every render; `SubjectFit` measures subjects above that alpha so the shadow does not count as height.
+
+Compared with the press-kit crops, these have no other characters overlapping, no GIF dithering, no scene background, and true alpha, so `compare -CompareMode SubjectFit` can equalize subject heights.
+
+**Measured values** (opaque pixels, alpha > 200; luminance `0.2126R + 0.7152G + 0.0722B`; observations, not thresholds):
+
+| Combat idle frame 0 | Max luminance | Pixels ≥ 200 | Median saturation `(max−min)/max` |
+|---|---|---|---|
+| Ironclad | 202 | 0.4% | 0.54 |
+| Silent | 231 | 3.1% | 0.38 |
+| Defect | 232 | 7.1% | 0.58 |
+| Necrobinder | 245 | 6.3% | 0.40 |
+| Regent | 243 | 0.1% | 0.11 |
+
+**Image observations** at equal subject height:
+
+- **Paint handling in official monsters/masked heroes vs. project character sprites:** the five official Spine renders use matte, opaque brushstrokes and dungeon-compressed values suited to masked, hooded, or non-human designs (Ironclad, Silent, Defect, Necrobinder, Regent). However, applying heavy dry-brush gouache texture, muted pewter/ash value compression, or squat 6-head proportions directly to unmasked human character sprites makes them look clunky and rough. Use these renders to judge **grounded stance, silhouette separation, negative space, and display-size readability**, while keeping clean cel-plus-soft-form 2D shading, crisp facial linework, and sleek canonical proportions from [ARTS.md section 2.1](../../ARTS.md#21-target-direction).
+- **Material values in official Spine renders:** in the five official skeletons, light surfaces sit in an upper-middle band (max luminance 202–245). For mod characters with canonical white cloth or silver hair (such as Althea), preserve clean warm ivory/cream cloth and bright silver-white hair without muddy gray/pewter tinting, while still avoiding flat `#FFFFFF` blowouts that erase internal folds.
+- **Proportions:** official skeletons vary widely by character concept (crouched masked rogues, floating liches, bulky armor). Do not force sleek human knight/mage designs into squat 6–6.5-head proportions or oversized boots/gauntlets; preserve the character's canonical 7–7.5-head silhouette and judge readability through clear limb/weapon spacing at `240 × 360`.
+- **Trim and ornament:** consolidate micro-noise into clean, readable color bands and sharp emblem shapes that survive downscaling.
+
+## 8. Limitations
 
 - Public sources do not establish internal brushes, layer structure, texture resolution, rigs, exact color counts, or outline thickness.
 - Official GIFs are development-era combat material, not proof of identical frames in all released versions.

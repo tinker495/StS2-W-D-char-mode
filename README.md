@@ -34,6 +34,7 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 .\dev.ps1 verify             # Git 추적 파일의 로컬 참조 검사 (SDK·게임 DLL 불필요)
 .\dev.ps1 build              # 로컬 참조 검사 후 C# 빌드
 .\dev.ps1 check              # 로컬 참조 검사 후 잠긴 패키지 복원으로 C# 빌드
+.\dev.ps1 rebase             # origin/main 위로 리베이스한 뒤 기존 프리커밋 검사
 .\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
 .\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
 .\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
@@ -46,7 +47,13 @@ PowerShell의 스크립트 실행 정책 때문에 실행되지 않는다면 해
 powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 ```
 
-`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 커밋할 때마다 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 로컬 참조 검사나 C# 컴파일·기존 ModAnalyzers가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드는 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
+`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 일반 `git commit`을 실행할 때 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 로컬 참조 검사나 C# 컴파일·기존 ModAnalyzers가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드는 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
+
+리베이스는 작업 트리를 정리하고 `git fetch origin`으로 원격 정보를 갱신한 뒤 `.\dev.ps1 rebase`로 시작합니다. 다른 기준은 `-Upstream <대상>`으로 지정합니다. 이 명령은 커밋 순서를 유지하고 Git 작업 목록 끝에 저장소의 기존 `pre-commit` 검사를 넣습니다. 변경할 커밋이 없어도 검사하며, 충돌을 해결한 뒤 `git rebase --continue`로 이어가도 마지막에 같은 검사가 실행됩니다. 검사 실패 시 리베이스가 멈추고, 수정 사항을 해당 커밋에 반영한 뒤 다시 `git rebase --continue`하면 검사를 재실행합니다. 중간 커밋이 이미 생성될 수 있지만, 검사를 통과해야 전체 작업이 성공으로 끝납니다. 자동 fetch·stash·push는 수행하지 않습니다.
+
+일반 `git rebase`로 이미 시작한 작업에는 이 검사가 추가되지 않습니다. 그런 경우 리베이스 후 `git -c core.hooksPath=.githooks hook run pre-commit`으로 직접 검사하세요. 훅별 실행 시점은 [Git 공식 문서](https://git-scm.com/docs/githooks)에 설명되어 있습니다.
+
+캐릭터 공통 패키지·설치·검증 이력은 [배포 상태](docs/deployment-status.md)에서 관리합니다. 각 캐릭터 에셋 문서에는 해당 에셋의 연결과 적용 상태를 기록합니다.
 
 `verify`는 [검사 스크립트](scripts/check-tracked-references.ps1)로 Git index의 추적 파일 전체를 매번 확인합니다. Markdown 링크·이미지는 추적 파일이나 그 상위 디렉터리를 가리켜야 합니다. 문서와 코드의 구체적인 초안·개인 캐시·미추적 파일 참조, 로컬 절대 경로, 누락된 저장소 소유 `res://` 리소스와 `.import` 원본도 검사합니다. 삭제된 파일은 대상 집합에서 빼므로 참조 문서를 수정하지 않은 삭제도 잡습니다. 새 입력 파일은 `git add` 후 검사하세요. 오류에는 파일·행·대상·사유가 표시됩니다.
 
@@ -62,6 +69,8 @@ MegaDot 로그는 실행마다 `artifacts/` 아래에 따로 저장됩니다. �
 코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요합니다. 게임에 반영하려면 `deploy`를 사용합니다.
 
 `publish`와 `deploy`는 실행마다 `artifacts/runtime/packaging-<UTC 시각>-<고유 ID>/`에 진단 자료를 남깁니다. `run.json`에는 브랜치·커밋·작업 트리 변경 목록·경로·실행 결과가, 단계별 JSON에는 실행 파일·인수·작업 디렉터리·종료 코드가 저장됩니다. 단계별 UTF-8 로그와 버전 로그로 SDK 및 MegaDot 출력도 확인할 수 있습니다. 설치 성공 기록에는 백업 경로와 네 파일의 해시가 포함됩니다.
+
+Godot 내보내기는 실제 종료 코드와 오류 메시지를 구분합니다. 샌드박스의 `Failed to read the root certificate store.` 메시지는 로그에 남기되 내보내기 실패로 판정하지 않습니다. 그 외 `ERROR:`, 스크립트·파싱 오류와 비정상 종료는 계속 실패로 처리하며, `dev.ps1`은 `savepack` 완료 메시지도 확인합니다. MSBuild 기본 `Exec`는 프로세스가 0으로 종료해도 출력에서 오류를 인식하면 -1을 보고할 수 있으므로, -1만으로 엔진 충돌을 단정하지 마세요. [MSBuild Exec 공식 문서](https://learn.microsoft.com/en-us/visualstudio/msbuild/exec-task)
 
 리그 검사 두 단계는 같은 진단 폴더에 `*.stdout.log`, `*.stderr.log`, `*.engine.log`, `*.exitcode`를 남깁니다. 두 PASS 메시지와 종료 코드 0을 모두 확인해야 검사 성공입니다.
 

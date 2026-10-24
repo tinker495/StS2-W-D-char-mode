@@ -15,10 +15,24 @@ The five approved Althea relic illustrations are preserved in `relic-candidates/
 | AltheaCrekinMacDubh | 크레킨 막 두브 | `althea_crekin_mac_dubh` |
 | AltheaAncestorsRecognition | 선조의 인정 | `althea_ancestors_recognition` |
 
-The user photos establish the sword, bracer and black-cuirass subjects. The accepted crimson energy master supplies the Rare relic's hexagonal rim/circular-center shape with a new blue treatment. The original-game relic/potion reference supplies broad values and contour density only. Physical descriptions and exclusions are recorded in the art guide; optional generation masters/prompts are under `drafts/relic-refresh/`.
+The user photos establish the sword, bracer and black-cuirass subjects. The accepted crimson energy master supplies the Rare relic's hexagonal rim/circular-center shape with a new blue treatment. The original-game relic/potion reference supplies broad values and contour density only. Physical descriptions and exclusions are recorded in the art guide; the tracked delivery PNGs and conversion procedure above define the applied artwork.
 
 All five selections are applied to the runtime paths. AltheaRelic inherits the Sts2WDRelic filename mapping; the old Burning Blood presentation overrides are removed. The installed package and verification record below own deployment status.
 
+
+## Full-Body Base — Current Status (2026-10-24)
+
+| Item | Status |
+|---|---|
+| Adopted draft base | `base.png`, explicitly selected by the user as the preferred draft and style anchor. Final design lock and runtime promotion remain open. |
+| Appearance | Bright silver-white half-tied long hair in clean flowing locks, calm blue eyes, clean silver plate armor, white split tabard with gold trim and red cross, navy lining, and graceful young-adult proportions. Right-facing three-quarter head and grounded drawn-sword stance; opposite hand supports empty sheath. |
+| Selection provenance | Generated with `refs/ref1.jpg` passed directly as an image input alongside official combat references (Defect/Ironclad combat crops and Silent frame 40). The user explicitly confirmed preference for this clean 2D style and rejected the subsequent `style-pure` (compact-proportion / compressed-pewter) experiment as too crude and clunky (`투박함`). |
+| Known characteristics | Right sword-tip clearance is `12px` (`1.2%` of width) in the unedited `1024 × 1536` master. Preserve `base.png` unchanged unless a local edit or transparent padding is explicitly requested. |
+| File and promotion | `1024 × 1536` RGBA; corner alpha all zero; observed bounds `(67,148)–(1011,1417)`. Byte-for-byte copy of the user-selected candidate, with no crop, padding, resizing, repainting, or alpha cleanup. |
+| Review scope | Reviewed via `326 × 490` light/dark whole-image previews and `240 × 360` `IndividualFit` comparison with Defect and Silent. Promotion verified by identical SHA-256 hashes. |
+| Runtime | Branch B applies this base to combat/merchant/rest and adds selected UI and selection artwork; see the delivery section. Game-folder installation and gameplay verification remain unperformed. |
+
+The tracked collaboration artifact is `base.png`; appearance and preservation rules are in [althea-art.md](althea-art.md). The selection provenance and review observations above describe the adopted base without requiring local production records.
 
 ## Energy Icon Draft
 
@@ -54,6 +68,33 @@ The native source is `res://images/atlases/card_atlas.sprites/token/soul.tres` i
 
 ## Local installation and final verification (2026-10-24)
 
-The latest card balance, three new Althea cards, both characters' five relic illustrations, Retain highlighting and Aselige encounter are installed together. Branch: feat/aselige-relics-althea-update, based on origin/main f48f6da. Deployment completed with exit code 0; Sts2WD.dll, Sts2WD.pck, Sts2WD.json and Sts2WD.pdb all matched SHA-256. Destination: Steam/steamapps/common/Slay the Spire 2/mods/Sts2WD. Backup: C:\Users\binib\Desktop\GODOT\StS2-W-D-char-mode\artifacts\runtime\local-install-backup-20261024T121703508Z-38fe34c2a34b4106a0e19d354cba0529. Diagnostics: artifacts/runtime/packaging-20261024T121529526Z-e71ee6b6a0074c31b9c65786d100bba6/.
+Package installation and shared verification for the card/relic/Aselige release are recorded in [deployment status](../../deployment-status.md). The standing, UI and selection artwork in Branch B Delivery below has separate application and installation status.
 
-Temporary native observations passed 51 latest-card cases, 82 Aselige behavior cases and 25 localization/source checks. The installed PCK loaded 72 relic textures, both speaker icons, 34 dialogue lines per language and the complete Ancient painting at three viewport sizes. The C# build had zero warnings/errors. These observations are not formal acceptance tests. No formal tests or validation settings were changed; inherited main changes remain unchanged. The game was not launched and interactive multiplayer was not exercised. The current main workflow intentionally runs animation checks only through dev.ps1 anim; this deployment did not rerun them because no animation was changed here.
+## Branch B Delivery — 2026-10-24
+
+| Family | File under `Sts2WD/images/charui/althea/` | Dimensions | Status |
+|---|---|---|---|
+| Shared standing | `standing.png` | 384×576 RGBA | Applied from the complete adopted base by Fit only; shared by combat, merchant and rest per explicit user instruction |
+| Selection illustration | `char_select_bg.png` | 1920×1080 | Applied from the user-selected fully sheathed pre-draw illustration; whole-image Fit, no crop |
+| Portrait / outline | `character_icon.png`, `character_icon_outline.png` | 128×128 each | User approved; applied, including `CustomIconOutlineTexturePath` |
+| Map marker | `map_marker.png` | 128×128 | User approved; applied |
+| Normal / locked tiles | `char_select.png`, `char_select_locked.png` | 132×195 each | User selected high-angle C; applied from shared alpha |
+| Energy | `big_energy.png`, `text_energy.png` | 74×74, 24×24 | Existing accepted textures retained unchanged |
+
+### Conversion and Connection Contract
+
+`base.png` stays 1024×1536, SHA-256 `51DB2A49CD46AC74BF97F7BF692BE6A00300B8BD1D9FA956C5973B5D3F144B22`. `standing.png` is a complete-image Fit to 384×576; no added padding or crop. Do not ship a separately generated combat painting. Combat and merchant show this texture at scale 0.625 (240×360 canvas); rest uses 0.85 (326.4×489.6). Canvas scale is not opaque subject height. The base's narrow sword-tip margin remains intentional preservation.
+
+The selected illustration master is 1672×941 RGB. Whole-image Fit into 1920×1080 preserves the complete painting, with the approximately 1px Fit margin and resampling edge backed by opaque navy `#101321`; no image pixels are cropped. The runtime selection `TextureRect` uses `KEEP_ASPECT_CENTERED` (`stretch_mode = 5`), not Cover. The sheathed sword extends toward the lower-right illustration boundary; no post-generation crop is performed.
+
+`Althea.CustomVisualPath`, `CustomMerchantAnimPath`, `CustomRestSiteAnimPath` and `CustomCharacterSelectBg` point to `Sts2WD/scenes/althea/combat.tscn`, `merchant.tscn`, `rest_site.tscn` and `char_select_bg_althea.tscn`. Combat exposes `Visuals`, `Bounds`, `CenterPos`, `OrbPos`, `TalkPos` and `FormVfx`; merchant exposes `Visuals`; rest exposes `ControlRoot/Visuals`, `Hitbox` and thought-bubble anchors. These are static sprites, with no new animation or event bridge. Character selection uses a full-rect Control/TextureRect.
+
+UI export procedure: Fit the square 1254×1254 portrait and marker masters to 128×128. Derive the white 2px dilated portrait silhouette from final alpha. Fit the 1032×1524 high-angle face master to 132×195; composite the same alpha over navy for normal and black over gray for locked. No threshold-based background extraction, cropping or separate locked generation. Existing `CustomIconTexturePath`, select icon paths and `CustomMapMarkerPath` already name the intended runtime files. `CustomIconOutlineTexturePath` now points to `althea/character_icon_outline.png`.
+
+### Selection Revision — Approved and Applied
+
+The user selected high-angle candidate C and the new fully sheathed pre-draw background after the UI overlap was reported. The tile preserves a concentrated upward gaze under lowered brows. The background shows a lowered left-facing head, hilt hand, bracing hand and curse currents gathering at the scabbard throat. It replaces the earlier drawn-sword painting. The normal/locked pair shares the same complete-image Fit alpha; the background uses whole-image Fit with an opaque navy backing. Current runtime files, not ignored drafts, are the shared visual source of truth.
+
+Full-image previews and a 132×195 comparison with native Silent/Defect tiles were opened. An approximate selection UI composite keeps the face and both hands clear; the ascension panel overlaps the bottom of the crossguard. This known composition tradeoff was disclosed before the user requested application. It is not a live-game observation. The selected composition is preserved in the runtime textures listed above.
+
+Portrait, marker, energy, shared standing and scene wiring remain as previously approved. The base hash remains unchanged. Runtime selection textures are 132×195, 132×195 and 1920×1080, all opaque. Earlier publish attempts reported MSBuild Exec -1 after savepack and succeeded outside the sandbox. The logs contain `EXEC : error : Failed to read the root certificate store.`; this was output parsing, not evidence of an engine crash. After separating that environmental diagnostic from real errors and requiring savepack completion, one sandbox publish completed successfully without escalation or retry. A separate clean engine mounted the resulting PCK, loaded all nine Althea textures and four scenes, and observed the selection dimensions and Fit mode 5; it exited 0. Local game installation and live gameplay verification were not performed. No tests or acceptance assets were added or changed.
