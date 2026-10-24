@@ -11,6 +11,7 @@ public sealed class AltheaWarriorsCreedPower : AltheaPower
     {
         if (Owner.Player != shuffler) return;
         await PowerCmd.Apply<StrengthPower>(context, Owner, -Amount, Owner, null);
+        await PowerCmd.Apply<DexterityPower>(context, Owner, -Amount, Owner, null);
         await PowerCmd.Remove(this);
     }
 }

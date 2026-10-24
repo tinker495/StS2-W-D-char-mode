@@ -1,5 +1,25 @@
 # Althea Asset Status
 
+The user approved all five relic candidates on 2026-10-24. All 15 PNGs now occupy Sts2WD/images/relics/ and big/ under their althea_* model filenames. The native Burning Blood path overrides were removed from AltheaRelic; it now inherits the existing Sts2WDRelic path mapping. The complete review overview remains available beside the runtime mapping.
+
+
+## Applied Relic Artwork (2026-10-24)
+
+The five approved Althea relic illustrations are preserved in `relic-candidates/2026-10-24/` beside this guide. Each slug below has a 94 x 94 `<slug>.png`, a white 2 px alpha-derived `<slug>_outline.png`, and a 256 x 256 `big/<slug>.png`: 15 delivery PNGs total. `overview.png` shows all five whole compositions with 94/48 px light/dark previews. All were generated separately with the built-in image tool. Large exports proportionally fit the whole original canvas; small exports fit it to 90 x 90, centered with 2 px transparent padding in the 94 px canvas before outline generation. No crop or region extraction was used.
+
+| Model | Korean title | Runtime filename slug |
+|---|---|---|
+| AltheaWyrd | 윌드 | `althea_wyrd` |
+| AltheaBloodFrenzy | 피의 광란 | `althea_blood_frenzy` |
+| AltheaFightersBracer | 투사의 완갑 | `althea_fighters_bracer` |
+| AltheaCrekinMacDubh | 크레킨 막 두브 | `althea_crekin_mac_dubh` |
+| AltheaAncestorsRecognition | 선조의 인정 | `althea_ancestors_recognition` |
+
+The user photos establish the sword, bracer and black-cuirass subjects. The accepted crimson energy master supplies the Rare relic's hexagonal rim/circular-center shape with a new blue treatment. The original-game relic/potion reference supplies broad values and contour density only. Physical descriptions and exclusions are recorded in the art guide; optional generation masters/prompts are under `drafts/relic-refresh/`.
+
+All five selections are applied to the runtime paths. AltheaRelic inherits the Sts2WDRelic filename mapping; the old Burning Blood presentation overrides are removed. The installed package and verification record below own deployment status.
+
+
 ## Energy Icon Draft
 
 The runtime uses the accepted crimson variant at `Sts2WD/images/charui/althea/big_energy.png` and `text_energy.png`. `AltheaCardPool`, `AltheaRelicPool`, and `AltheaPotionPool` point to these shared files. These cover card-cost and inline energy textures. The combat energy counter still uses the placeholder character's native presentation.
@@ -31,3 +51,9 @@ A 840×520 comparison was rendered using complete native Ironclad Strike and Def
 `AltheaCard.Art` selects the native `Soul` model for `AltheaWraith`; all other placeholder source selections remain as above. `AltheaPortraitAppearance` selects `portrait_wraith.tres` before applying generic rarity palettes. This material shares `portrait_palette.gdshader` and maps luminance to shadow RGB `(0.025, 0.004, 0.012)`, middle `(0.48, 0.025, 0.065)`, and light `(0.98, 0.35, 0.32)`, with shadow hold `0.02` and middle point `0.55`. Native undiscovered-card blur and pooled-node reset are preserved.
 
 The native source is `res://images/atlases/card_atlas.sprites/token/soul.tres` in the installed Slay the Spire 2 PCK, observed at 250×190. Runtime references the original resource and applies the shader; no extracted native image is shipped. A 560×245 side-by-side preview rendered both complete portraits at 250×190 confirmed preserved composition with dark burgundy background and readable red spirit/hand silhouettes. The source and preview are optional local observations. `dev.ps1 publish -ExecutionContextLabel escalated` completed with exit code 0 and both existing rig checks passing. A separate engine loaded all four portrait materials, including Wraith, from the published PCK; a temporary native-model observation confirmed Wraith's `PortraitPath` points to Soul. Local game installation and live card-node visual review remain unperformed.
+
+## Local installation and final verification (2026-10-24)
+
+The latest card balance, three new Althea cards, both characters' five relic illustrations, Retain highlighting and Aselige encounter are installed together. Branch: feat/aselige-relics-althea-update, based on origin/main f48f6da. Deployment completed with exit code 0; Sts2WD.dll, Sts2WD.pck, Sts2WD.json and Sts2WD.pdb all matched SHA-256. Destination: Steam/steamapps/common/Slay the Spire 2/mods/Sts2WD. Backup: C:\Users\binib\Desktop\GODOT\StS2-W-D-char-mode\artifacts\runtime\local-install-backup-20261024T121703508Z-38fe34c2a34b4106a0e19d354cba0529. Diagnostics: artifacts/runtime/packaging-20261024T121529526Z-e71ee6b6a0074c31b9c65786d100bba6/.
+
+Temporary native observations passed 51 latest-card cases, 82 Aselige behavior cases and 25 localization/source checks. The installed PCK loaded 72 relic textures, both speaker icons, 34 dialogue lines per language and the complete Ancient painting at three viewport sizes. The C# build had zero warnings/errors. These observations are not formal acceptance tests. No formal tests or validation settings were changed; inherited main changes remain unchanged. The game was not launched and interactive multiplayer was not exercised. The current main workflow intentionally runs animation checks only through dev.ps1 anim; this deployment did not rerun them because no animation was changed here.
