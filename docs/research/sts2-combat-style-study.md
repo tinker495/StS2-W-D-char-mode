@@ -124,13 +124,10 @@ Compared with the press-kit crops, these have no other characters overlapping, n
 
 **Image observations** at equal subject height:
 
-- **Paint handling:** matte, opaque strokes stay visible inside some large masses (Silent's cloak streaks, Ironclad's trousers), while armor plates and cloth groups remain broad and readable at `240 × 360`.
-- **Character-specific value ranges:** Ironclad's steel blade uses two mid-grays and Silent's skull and wrappings use warm bone/parchment; these reflect those characters' dark/muted palettes.
-- **Chromatic neutrals:** "gray" and "white" materials in the five base-game characters carry temperature (warm bone, slate, pewter); Regent's dark stone keeps a median saturation of 0.11.
-- **Character-specific builds:** the base-game roster includes bulky or crouching figures (Ironclad's heavy armor, Defect's wide mechanical torso, Silent's crouched hunch). Exact head counts are unmeasurable because the poses crouch and heads are masked or hooded.
-- **Trim and ornament:** few, readable bands of color rather than noisy surface clutter.
-
-**Project judgment (updated 2026-10-24 after user feedback):** do not generalize Ironclad/Defect/Silent's bulky or compact builds (`6–6.5` heads, chunky hands/boots) or their dark, muted luminance ranges into a universal rule for mod characters. When a character reference establishes graceful young-adult proportions and a bright silver-white/ivory palette (such as Althea), forcing compact proportions, rough gouache brushwork, or compressed pewter values makes the sprite look crude and clunky (`투박함`). Use the installed-build renders for combat camera, grounded stance, and clean plane grouping at `240 × 360`, while preserving the character reference's facial appeal, natural proportions, and clean palette brightness.
+- **Paint handling in official monsters/masked heroes vs. project character sprites:** the five official Spine renders use matte, opaque brushstrokes and dungeon-compressed values suited to masked, hooded, or non-human designs (Ironclad, Silent, Defect, Necrobinder, Regent). However, applying heavy dry-brush gouache texture, muted pewter/ash value compression, or squat 6-head proportions directly to unmasked human character sprites makes them look clunky and rough. Use these renders to judge **grounded stance, silhouette separation, negative space, and display-size readability**, while keeping clean cel-plus-soft-form 2D shading, crisp facial linework, and sleek canonical proportions from [ARTS.md section 2.1](../../ARTS.md#21-target-direction).
+- **Material values in official Spine renders:** in the five official skeletons, light surfaces sit in an upper-middle band (max luminance 202–245). For mod characters with canonical white cloth or silver hair (such as Althea), preserve clean warm ivory/cream cloth and bright silver-white hair without muddy gray/pewter tinting, while still avoiding flat `#FFFFFF` blowouts that erase internal folds.
+- **Proportions:** official skeletons vary widely by character concept (crouched masked rogues, floating liches, bulky armor). Do not force sleek human knight/mage designs into squat 6–6.5-head proportions or oversized boots/gauntlets; preserve the character's canonical 7–7.5-head silhouette and judge readability through clear limb/weapon spacing at `240 × 360`.
+- **Trim and ornament:** consolidate micro-noise into clean, readable color bands and sharp emblem shapes that survive downscaling.
 
 ## 8. Limitations
 

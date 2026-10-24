@@ -128,6 +128,8 @@
         <Message Text="Exporting Godot .pck to mods folder; engine log: $(GodotExportLogDirectory)/engine.log" Importance="high"/>
         <Exec Command="&quot;$(GodotPath)&quot; --log-file &quot;$(GodotExportLogDirectory)/engine.log&quot; --headless --editor --export-pack &quot;BasicExport&quot; &quot;$(ModsPath)$(MSBuildProjectName)/$(MSBuildProjectName).pck&quot;"
               EnvironmentVariables="IsInnerGodotExport=true;MSBUILDDISABLENODEREUSE=1"
+              IgnoreStandardErrorWarningFormat="true"
+              CustomErrorRegularExpression="(?i)(?:SCRIPT ERROR:|Parse Error:|ERROR:\s*(?!Failed to read the root certificate store\.)\S)"
               ContinueOnError="false"/>
     </Target>
 </Project>

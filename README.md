@@ -63,6 +63,8 @@ MegaDot 로그는 실행마다 `artifacts/` 아래에 따로 저장됩니다. �
 
 `publish`와 `deploy`는 실행마다 `artifacts/runtime/packaging-<UTC 시각>-<고유 ID>/`에 진단 자료를 남깁니다. `run.json`에는 브랜치·커밋·작업 트리 변경 목록·경로·실행 결과가, 단계별 JSON에는 실행 파일·인수·작업 디렉터리·종료 코드가 저장됩니다. 단계별 UTF-8 로그와 버전 로그로 SDK 및 MegaDot 출력도 확인할 수 있습니다. 설치 성공 기록에는 백업 경로와 네 파일의 해시가 포함됩니다.
 
+Godot 내보내기는 실제 종료 코드와 오류 메시지를 구분합니다. 샌드박스의 `Failed to read the root certificate store.` 메시지는 로그에 남기되 내보내기 실패로 판정하지 않습니다. 그 외 `ERROR:`, 스크립트·파싱 오류와 비정상 종료는 계속 실패로 처리하며, `dev.ps1`은 `savepack` 완료 메시지도 확인합니다. MSBuild 기본 `Exec`는 프로세스가 0으로 종료해도 출력에서 오류를 인식하면 -1을 보고할 수 있으므로, -1만으로 엔진 충돌을 단정하지 마세요. [MSBuild Exec 공식 문서](https://learn.microsoft.com/en-us/visualstudio/msbuild/exec-task)
+
 리그 검사 두 단계는 같은 진단 폴더에 `*.stdout.log`, `*.stderr.log`, `*.engine.log`, `*.exitcode`를 남깁니다. 두 PASS 메시지와 종료 코드 0을 모두 확인해야 검사 성공입니다.
 
 실행 환경을 알고 있다면 `-ExecutionContextLabel local`, `sandbox`, `escalated`로 기록할 수 있습니다. 기본값은 `unspecified`이며 이 옵션은 권한을 부여하거나 자동 판별하지 않습니다. 진단 자료에는 로컬 경로와 도구 출력이 포함되므로 공유 전에 내용을 확인하세요.

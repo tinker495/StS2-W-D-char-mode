@@ -1,6 +1,6 @@
 # Althea Art Direction
 
-The user selected `base.png` as the draft visual base on 2026-10-24. It owns the current appearance and equipment for further work; this is draft adoption, not final design lock or runtime approval. The domain draft is [althea.md](althea.md). Do not infer body, costume, or equipment from the energy symbol's shape or color. Current candidate status is in [althea-assets.md](althea-assets.md); the reasons behind past choices are in [althea-history.md](althea-history.md).
+The user selected `base.png` as the draft visual base on 2026-10-24. It owns the current appearance and equipment for further work; this is draft adoption, not final design lock. Branch B runtime scope is recorded below. The domain draft is [althea.md](althea.md). Do not infer body, costume, or equipment from the energy symbol's shape or color. Current candidate status is in [althea-assets.md](althea-assets.md); the reasons behind past choices are in [althea-history.md](althea-history.md).
 
 Labels *user-confirmed*, *reference-observed* and *provisional* follow [Recipe 1's source labels](../../../.agents/skills/character-asset-pipeline/PROMPT-RECIPES.md#recipe-1-new-canonical-art-and-local-edits).
 
@@ -14,7 +14,7 @@ Use `base.png` directly as the image input anchor for identity, facial appeal, p
 
 | Input | Adopted | Excluded or unconfirmed |
 |---|---|---|
-| `base.png` (user-selected draft base, generated with `refs/ref1.jpg` as direct image input) | User-confirmed visual anchor: graceful young-adult proportions, facial appeal, calm resolute blue eyes, bright silver-white half-tied hair in clean flowing locks, dark cross earring, navy collar with gold clasp, clean silver plate armor, white split tabard with red cross and gold trim, right-facing three-quarter combat stance, drawn sword and supported empty scabbard | Do not replace with text-only (`style-pure`) transcription, compact `6–6.5`-head proportions, or muted ash/pewter recoloring |
+| `base.png` (user-selected draft base, generated with `refs/ref1.jpg` as direct image input) | User-confirmed visual anchor: graceful young-adult proportions, facial appeal, calm resolute blue eyes, bright silver-white half-tied hair in clean flowing locks, dark cross earring, navy collar with gold clasp, clean silver plate armor, white split tabard with red cross and gold trim | Do not replace with text-only (`style-pure`) transcription, compact `6–6.5`-head proportions, or muted ash/pewter recoloring |
 | `refs/ref1.jpg` (user-supplied semi-realistic painted bust) | Supporting reference for upper-body identity cues (face, blue eyes, diagonal fringe, half-tied silver-white hair, dark cross earring, high navy collar, gold clasp, silver pauldrons, white tabard with red cross) | Photorealistic individual hair strands, noisy micro-speculars, dark vignette background, and lower-left signature |
 | Official combat references ([ARTS.md 2.3](../../../ARTS.md#23-actual-official-image-anchors-and-priority)) | Three-quarter combat camera, grounded stance, and grouping high-frequency surface noise into clean 2D planes | Each official character's robot/warrior build, stocky proportions, dark/muted palette, masks, skulls, horns, weapons, and ground shadow |
 
@@ -45,7 +45,7 @@ Always pass `base.png` (and `refs/ref1.jpg` when referencing raw bust details) *
 
 `<CHARACTER_ANCHOR>`: Althea, a graceful young adult woman knight with fair skin and calm, resolute blue eyes. Long, bright silver-white hair in clean flowing locks swept back and half-tied at the crown, a fringe falling diagonally across her forehead, and a small dark cross-shaped earring. High navy collar with a gold cross-shaped clasp, clean silver plate armor over a white split tabard with gold trim and a dark red cross emblem on the left chest, navy inner lining and trousers. One straight sword with a gold crossguard and a dark waist scabbard with gold fittings.
 
-`<PALETTE>`, `<MATERIALS>`: section 3. Orientation fields and weapon state: section 2.
+`<PALETTE>`, `<MATERIALS>`: section 3. For standing exports only, preserve section 2 staging. For newly generated assets, read camera, body/head direction, gaze, hand contacts and weapon state from the asset-specific brief below; the common identity anchor supplies equipment construction, not its current use.
 
 ## Relic Candidates (2026-10-24)
 
@@ -61,6 +61,7 @@ All five candidates use bold near-black contours, two or three broad connected v
 
 
 ## Energy Icon
+
 
 The user selected the base-game Necrobinder energy icon as the exact shape reference and requested only a dark crimson color change on 2026-10-22. Preserve its faceted hexagonal metal rim, circular inner light, bevel arrangement, orientation, proportions, transparent margins, and number inset. Shift the pink/magenta body to blackened burgundy and blood red, retaining enough separation between rim, center, and highlights for white cost digits.
 
@@ -90,3 +91,15 @@ The user requested the base-game Necrobinder Soul token portrait with only a dar
 ## Relic application approval (2026-10-24)
 
 The user approved applying all five relic illustrations and installing them locally. The described candidate forms are now the selected relic artwork; earlier pending-selection wording records only the previous review stage. Runtime uses the existing model filenames; gameplay behavior was not changed by the image promotion.
+
+## Branch B Direction — 2026-10-24
+
+**User-confirmed standing reuse:** combat, merchant and rest use the complete adopted `base.png` painting. Its existing combat-ready stance supports the shared Branch B reuse rule, and the user explicitly selected this reuse. Preserve the source pose, equipment, original margins and pixels; only whole-image proportional Fit resizing is authorized. The runtime uses one `standing.png` for all three scenes. The base remains unchanged.
+
+**Selection revision approved and applied:** Selection cameras are independent of the standing/combat facing direction. Explore four face-tile compositions: left-facing eye-level, right-facing eye-level, high camera looking down, and low camera looking up. Preserve adult facial proportions and a face-dominant frame. Original Silent and Defect tiles demonstrate distinct head angles and gaze directions; do not enforce right-facing UI. The user selected candidate C: the high-angle face tile with a concentrated expression. Its near-frontal face still turns slightly right, while the downward camera is clearly distinct. The candidate retains more fine hair/face detail than the native stylized tiles.
+
+The requested background action is the held breath immediately before drawing: one hand grips the sword hilt, the other braces its scabbard, with no exposed steel. Black-crimson curse currents gather around the closed scabbard throat. Stage a nearly frontal coiled torso on the right, head lowered toward screen left, flowing hair and cloth, and a quiet left information area. The new candidate follows this action; its face and both hands remain visible in an approximate UI overlay, but the ascension panel reaches the lower crossguard. After this overlap was reported, the user explicitly requested applying C and this background. Preserve the selected composition, including this known UI tradeoff. Base owns identity and rendering; original Silent and Regent selection illustrations guide varied orientation and action staging. The fully sheathed pre-draw illustration replaces the earlier drawn-sword selection painting. This request supersedes its preservation-only direction for new background production; standing art remains unchanged.
+
+**User-approved UI, applied:** head-dominant chibi portrait with small silver shoulder/navy collar cues; separately composed chibi head-only map marker; non-chibi close-face selection tile. All preserve silver-white half-tied hair, blue eyes and dark cross earring. Normal tile background is navy `#24354B`; locked tile is a black silhouette over gray `#777777`, derived from the same resized alpha. Portrait outline is white with radius 2px at 128×128. The user approved the complete UI set for application. These UI adaptations do not modify the base. Existing approved crimson energy textures remain unchanged.
+
+Input roles: base owns identity/rendering for every new image. Official topbar/map screenshots guide small-size readability; native Silent/Defect tiles guide the revised tile; Silent/Regent selection art guides the revised background, with the complete Necrobinder screen informing approximate UI placement. No prior mod asset or rejected candidate was a generation input. Rejected combat candidates are excluded by the user's standing override.

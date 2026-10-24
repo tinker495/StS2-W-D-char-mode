@@ -1,13 +1,19 @@
 ﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet('inspect', 'preview', 'compare', 'export', 'outline', 'official-poses')]
+    [ValidateSet('inspect', 'preview', 'compare', 'export', 'outline', 'official-poses', 'tile-pair', 'ui-preview')]
     [string]$Command,
 
     [string]$Path,
     [string]$Source,
     [string]$Target,
     [string]$OutPath,
+    [string]$LockedTarget,
+    [string]$BackgroundColor,
+    [string]$LockedBackgroundColor,
+    [string]$LayoutPath = (Join-Path $PSScriptRoot 'character-select-layout.json'),
+    # Legacy compatibility: inspect now always returns a PSCustomObject.
+    [switch]$AsObject,
     [int]$Width = 0,
     [int]$Height = 0,
     [int]$DisplayWidth = 0,
@@ -138,6 +144,60 @@ function New-ResizedBitmap([System.Drawing.Bitmap]$src, [int]$targetW, [int]$tar
 }
 
 switch ($Command) {
+    'tile-pair' {
+        if (-not $Source -or -not $Target -or -not $LockedTarget -or $Width -le 0 -or $Height -le 0 -or -not $BackgroundColor -or -not $LockedBackgroundColor) {
+            throw 'Specify -Source -Target -LockedTarget -Width -Height -BackgroundColor -LockedBackgroundColor.'
+        }
+        if ([IO.Path]::GetFullPath($Target) -eq [IO.Path]::GetFullPath($LockedTarget)) { throw 'Normal and locked targets must differ.' }
+        $src = [Drawing.Bitmap]::FromFile((Resolve-Path -LiteralPath $Source).Path)
+        try { $alpha = New-ResizedBitmap $src $Width $Height 'Fit' } finally { $src.Dispose() }
+        try {
+            foreach ($locked in @($false, $true)) {
+                $output = if ($locked) { $LockedTarget } else { $Target }
+                $parent = Split-Path -Parent $output
+                if ($parent) { New-Item -ItemType Directory -Force -Path $parent | Out-Null }
+                $canvas = New-Object Drawing.Bitmap $Width,$Height
+                $g = [Drawing.Graphics]::FromImage($canvas)
+                try {
+                    $bg = if ($locked) { $LockedBackgroundColor } else { $BackgroundColor }
+                    $g.Clear([Drawing.ColorTranslator]::FromHtml($bg))
+                    if ($locked) {
+                        # Preserve the exact resized alpha; only RGB changes for the silhouette.
+                        for ($y = 0; $y -lt $Height; $y++) { for ($x = 0; $x -lt $Width; $x++) {
+                            $alpha.SetPixel($x,$y,[Drawing.Color]::FromArgb($alpha.GetPixel($x,$y).A,0,0,0))
+                        }}
+                    }
+                    $g.DrawImageUnscaled($alpha,0,0)
+                    $canvas.Save($output,[Drawing.Imaging.ImageFormat]::Png)
+                } finally { $g.Dispose(); $canvas.Dispose() }
+            }
+        } finally { $alpha.Dispose() }
+    }
+
+    'ui-preview' {
+        if (-not $Source -or -not $OutPath -or -not $LayoutPath) { throw 'Specify -Source -OutPath -LayoutPath <json>.' }
+        # Layout coordinates belong to a supplied screen observation, not character-specific code.
+        $layout = Get-Content -Raw -Encoding UTF8 -LiteralPath $LayoutPath | ConvertFrom-Json
+        if ($layout.width -le 0 -or $layout.height -le 0 -or -not $layout.regions) { throw 'Layout needs positive width/height and regions.' }
+        $src = [Drawing.Bitmap]::FromFile((Resolve-Path -LiteralPath $Source).Path)
+        try { $canvas = New-ResizedBitmap $src $layout.width $layout.height 'Fit' } finally { $src.Dispose() }
+        $g = [Drawing.Graphics]::FromImage($canvas)
+        $panel = New-Object Drawing.SolidBrush ([Drawing.Color]::FromArgb(170,15,14,25))
+        $font = New-Object Drawing.Font 'Malgun Gothic',18
+        try {
+            foreach ($region in $layout.regions) {
+                if ($region.width -le 0 -or $region.height -le 0) { throw 'Each region needs positive width/height.' }
+                $g.FillRectangle($panel,[int]$region.x,[int]$region.y,[int]$region.width,[int]$region.height)
+                $g.DrawRectangle([Drawing.Pens]::Gold,[int]$region.x,[int]$region.y,[int]$region.width,[int]$region.height)
+                $g.DrawString([string]$region.label,$font,[Drawing.Brushes]::WhiteSmoke,[float]($region.x+8),[float]($region.y+8))
+            }
+            $g.DrawString('UI 배치 확인용 합성 · 실제 게임 화면 아님',$font,[Drawing.Brushes]::WhiteSmoke,20,20)
+            $parent = Split-Path -Parent $OutPath
+            if ($parent) { New-Item -ItemType Directory -Force -Path $parent | Out-Null }
+            $canvas.Save($OutPath,[Drawing.Imaging.ImageFormat]::Png)
+        } finally { $font.Dispose(); $panel.Dispose(); $g.Dispose(); $canvas.Dispose() }
+    }
+
     'compare' {
         if ($Paths.Count -lt 2 -or -not $OutPath -or $DisplayWidth -le 0 -or $DisplayHeight -le 0) {
             throw 'Specify -Paths @(<png>, <png>, ...) -OutPath <png> -DisplayWidth <int> -DisplayHeight <int> [-Labels @(<label>, ...)].'
@@ -278,7 +338,7 @@ switch ($Command) {
         $bmp = New-Object System.Drawing.Bitmap($resolved)
         try {
             $info = Get-AlphaBounds $bmp
-            $info | Format-List
+            $info
         } finally {
             $bmp.Dispose()
         }
@@ -286,7 +346,7 @@ switch ($Command) {
 
     'export' {
         if (-not $Source -or -not $Target -or $Width -le 0 -or $Height -le 0) {
-            throw 'Specify -Source <png> -Target <png> -Width <int> -Height <int> [-CropMode Fit|Cover|Stretch].'
+            throw 'Specify -Source <png> -Target <png> -Width <int> -Height <int> [-CropMode Fit|Cover|Stretch] [-BackgroundColor <hex>].'
         }
         $resolvedSrc = (Resolve-Path -LiteralPath $Source).Path
         $targetDir = Split-Path -Parent $Target
@@ -297,7 +357,17 @@ switch ($Command) {
         try {
             $dstBmp = New-ResizedBitmap $srcBmp $Width $Height $CropMode
             try {
-                $dstBmp.Save($Target, [System.Drawing.Imaging.ImageFormat]::Png)
+                if ($BackgroundColor) {
+                    $backing = New-Object System.Drawing.Bitmap($Width, $Height)
+                    $graphics = [System.Drawing.Graphics]::FromImage($backing)
+                    try {
+                        $graphics.Clear([System.Drawing.ColorTranslator]::FromHtml($BackgroundColor))
+                        $graphics.DrawImageUnscaled($dstBmp, 0, 0)
+                        $backing.Save($Target, [System.Drawing.Imaging.ImageFormat]::Png)
+                    } finally { $graphics.Dispose(); $backing.Dispose() }
+                } else {
+                    $dstBmp.Save($Target, [System.Drawing.Imaging.ImageFormat]::Png)
+                }
                 Write-Host "Exported: $Target (${Width}x${Height}, Mode=$CropMode)"
             } finally {
                 $dstBmp.Dispose()

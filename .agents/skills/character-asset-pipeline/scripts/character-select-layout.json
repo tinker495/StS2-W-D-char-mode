@@ -1,0 +1,10 @@
+{
+  "width": 1920,
+  "height": 1080,
+  "regions": [
+    { "x": 220, "y": 330, "width": 660, "height": 370, "label": "Information" },
+    { "x": 650, "y": 740, "width": 610, "height": 110, "label": "Ascension" },
+    { "x": 650, "y": 880, "width": 602, "height": 136, "label": "Tiles" },
+    { "x": 1750, "y": 740, "width": 150, "height": 100, "label": "Confirm" }
+  ]
+}

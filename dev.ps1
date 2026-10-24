@@ -229,6 +229,16 @@ try {
             throw "Resource import failed; read $diagnosticRoot/import.log"
         }
         Invoke-DotNet @('publish', 'Sts2WD.csproj', '-c', $Configuration, '--no-restore')
+        # Exec preserves real nonzero exits. Independently require export completion;
+        # an environmental certificate diagnostic alone does not invalidate a PCK.
+        $publishLog = Get-Content -LiteralPath (Join-Path $diagnosticRoot 'publish.log') -Encoding UTF8 -Raw
+        $plainPublishLog = $publishLog -replace '\x1B\[[0-?]*[ -/]*[@-~]', ''
+        if ($plainPublishLog -notmatch '\[\s*DONE\s*\]\s*savepack') {
+            throw "Package export did not report completed savepack; read $diagnosticRoot/publish.log"
+        }
+        if ($plainPublishLog -match 'SCRIPT ERROR:|Parse Error:|Failed (?:to load script|loading resource)') {
+            throw "Package export reported a resource error; read $diagnosticRoot/publish.log"
+        }
 
         $output = Join-Path $paths.ModsPath 'Sts2WD'
         foreach ($name in @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')) {

@@ -20,7 +20,7 @@ Use headings to select bounded reads; if output is truncated, retrieve the missi
 
 | Branch | Recipe sections to read in `PROMPT-RECIPES.md` |
 |---|---|
-| A: new base | Shared Input Slots, Recipe 1 introduction, 1-A; 1-B only for selected-image edits; 2 only for cleanup |
+| A: new base | Shared Input Slots, Recipe 1 introduction, 1-A; 1-B only for selected-image edits; 2 for surface cleanup |
 | B: UI/standing/selection | Shared Input Slots and the requested recipes from 1-C, 3 and 4 |
 | C: relics/powers/cards | Shared Input Slots and the requested recipes from 5–8 |
 | D: review/edit/conversion | 1-B for edits, 2 for cleanup; section 3 below for observation/conversion |
@@ -52,23 +52,25 @@ For new or replacement UI, selection backgrounds, cards, relics, and powers, des
 
 Before generation, record each actual input's role and check that no previous asset is included. For selection backgrounds, proceed from original-game research to one characteristic action sentence, then a new camera, major shapes, and UI layout. Changing only a face or colors in an old background is not new scene production.
 
+Separate invariant identity (face, anatomy, costume, equipment construction, palette and rendering) from asset staging (camera, body/head direction, gaze, hand contacts and equipment state). Read staging from the requested asset's brief. A selected base pose belongs to standing exports; it does not establish the pose or drawn/sheathed state of new UI and selection scenes.
+
 A portrait or object-family master newly created in the same production run may anchor related assets. Size conversion, alpha outlines, and locked variants from the same master remain valid. When the user explicitly selects an existing image for a partial edit, specify the scope and use Branch D/Recipe 1-B.
 
 ### Branch A: `refs → base`
 
 1. Open all raw references. Record adopted and excluded features in the target art specification with [Recipe 1's source labels](PROMPT-RECIPES.md#recipe-1-new-canonical-art-and-local-edits). For revisions, separate preserved features from the requested change axis.
-2. Generate with Recipe 1-A for a new standing master or composition, passing the character reference (`refs/`) directly as an image input alongside the official use-case images. Use Recipe 1-B for a local edit to a selected image.
-3. Starting with the first candidate, run `inspect` and open a `compare` sheet of the complete candidate beside same-use-case official renders at the intended display size (section 3; `SubjectFit` for style, `SharedScale` for preservation). Review in this order: (a) camera, body direction, head angle and gaze; (b) action and weapon/equipment state; (c) silhouette, grounding, margins and hand/equipment connections; (d) materials, value range and detail density. **Completion criterion:** the sheet is opened, the principal differences are recorded, every Recipe 1-A after-generation observation is filled, drift is recorded as unresolved, and `MinMarginRatio` is checked against ARTS.md 5.1. Resolve composition or use-case mismatches before surface cleanup or recommending a candidate. File measurements do not establish visual agreement. Branch from clean references or a selected source rather than repeatedly editing a rejected result.
-4. If accumulated edits or surface noise are visible, consider Recipe 2's cleanup pass before promotion. If the user requests applying the final painting unchanged, preserve it without additional generation.
+2. Generate with Recipe 1-A for a new standing master or composition, passing the raw character reference directly as an image input so facial appeal, sleek proportions, and costume construction stay faithful while translating surface micro-noise into clean 2D game art. Use Recipe 1-B for a local edit to a selected image.
+3. Starting with the first candidate, run `inspect` and open a `compare` sheet of the complete candidate beside same-use-case references at the intended display size (section 3; `SubjectFit` for style/silhouette, `SharedScale` for preservation). Review in this order: (a) camera, body direction, head angle and gaze; (b) action and weapon/equipment state; (c) silhouette, grounding, margins and hand/equipment connections; (d) clean 2D rendering, facial appeal, sleek proportions, and detail density. **Completion criterion:** the sheet is opened, the principal differences are recorded, every Recipe 1-A after-generation observation is filled, drift is recorded as unresolved, and `MinMarginRatio` is checked against ARTS.md 5.1. Resolve composition or use-case mismatches before surface cleanup or recommending a candidate. File measurements do not establish visual agreement. Branch from clean references or a selected source rather than repeatedly editing a rejected result.
+4. If accumulated edits or surface noise are visible, consider Recipe 2-A's cleanup pass before promotion. If the user requests applying the final painting unchanged, preserve it without additional generation.
 5. Promote the approved painting to the requested `base.png` and update the current-status table. Describe appearance changes, runtime coverage, and remaining differences. Record dimensions, procedure, and observed pixel changes for delivery conversions such as transparent padding. Export runtime standing art only if requested.
 
 ### Branch B: `base → UI, Standing Art, Selection Illustration`
 
 1. Open the approved `base.png` as the primary identity/equipment input. Follow ARTS.md's common chibi scope; obtain proportion details, visible parts, expressions, and backgrounds from the target art specification.
-2. Produce **two distinct full-body assets**. Ordinary standing art uses the complete approved `base.png` directly, with only proportional Fit resizing and necessary transparent padding. Combat art is newly generated from that base in a combat-appropriate pose; use Recipe 1-C and original-game combat references. Preserve identity, equipment, and rendering while designing a grounded stance, weight distribution, usable grip, and forward attention. A static PNG may depict a combat-ready idle pose; animation is not required. Inspect the base's actual pose and design the separate combat asset for its use case. The target asset guide owns filenames and the separate combat versus rest/merchant scene mapping.
+2. Inspect the base's actual stance, grounding and hand/equipment contacts before choosing reuse or generation, following [ARTS.md 5.1](../../../ARTS.md#51-combat-rest-and-merchant-standing-art). Export the complete base by proportional Fit for ordinary standing and reuse it for combat when already combat-ready. Use Recipe 1-C only for a noncombat/everyday base or a user-requested distinct combat pose. Record the decision and shared or separate scene mappings in the target asset guide. A static combat-ready PNG is sufficient; animation is not required.
 3. Design portrait and marker cameras/margins separately. For selection tiles, read the [normal/locked tile study](../../../docs/research/sts2-character-select-tile-study.md) and actual originals, then generate a new face-focused master.
 4. Where possible, derive normal/locked tiles and portrait outlines from the same final alpha. Resize both energy sizes from one master. Do not copy another character's colors, outline thickness, or proportions.
-5. A complete Branch B request includes UI, outline, **ordinary standing art, separate combat art**, and the selection illustration. Follow the shared input rule and [Recipe 4-D](PROMPT-RECIPES.md#4-d-char_select_bgpng-1920--1080-selection-illustration) to design a new scene from original-game research.
+5. A complete Branch B request includes UI, outline, standing/combat coverage according to step 2, and the selection illustration. Coverage can use a shared standing export; it does not require an extra generation. Follow the shared input rule and [Recipe 4-D](PROMPT-RECIPES.md#4-d-char_select_bgpng-1920--1080-selection-illustration) to design a new scene from original-game research.
 6. Follow the asset guide's model-property and scene contracts. Use an appropriate UI structure such as Control/TextureRect for selection backgrounds. Confirm all requested files and necessary references are connected. For a partial request, produce only that scope. Generating a new combat candidate does not approve its runtime promotion.
 
 ### Branch C: `base → Relics, Powers, Cards`
@@ -79,7 +81,7 @@ A portrait or object-family master newly created in the same production run may 
 
 ### Branch D: Review, Cleanup, and Conversion
 
-Use `inspect` and `preview` to examine the master and actual display size first. Use Recipe 1-B for selected-image edits, Recipe 2 for surface cleanup, and export/outline for delivery. For comparison-only requests, choose the `compare` mode in section 3 for the question being investigated.
+Use `inspect` and `preview` to examine the master and actual display size first. Use Recipe 1-B for selected-image edits, Recipe 2-A for surface cleanup, and export/outline for delivery. For comparison-only requests, choose the `compare` mode in section 3 for the question being investigated.
 
 ## 3. Observation and Conversion Tools
 
@@ -113,6 +115,8 @@ Official comparison inputs come from the installed game. `official-poses` render
 
 Returned scale and display dimensions are observations, not quality scores.
 
+`inspect -Path <png>` always returns structured measurements; `-AsObject` remains a compatibility no-op. Pipe to `Format-List` only at the display boundary. Use `tile-pair`, `export -BackgroundColor <hex>` for opaque Fit margins, and `ui-preview` for repeatable conversion/layout observations instead of copying draft-script fragments. Their arguments and default layout are documented in [conversion-tools.md](scripts/conversion-tools.md).
+
 - Are canonical identity, equipment, proportions, and the selected change axis preserved?
 - Do major values, silhouette, expression, and action read at actual size?
 - Are unintended halos, residue, or clipping absent on light/dark backgrounds?
@@ -123,6 +127,8 @@ Tool measurements and comparisons are observations, not formal tests, fixtures, 
 ## 4. Delivery and Completion Records
 
 After applying a base or asset, update current appearance and adopted constraints in `<char>-art.md`; update technical mapping, dimensions, conversion procedures, delivery paths, and status in `<char>-assets.md`. Keep only decision rationale needed for future work in `<char>-history.md`. Explain adopted forms and forms to avoid directly. Full generation calls and version-by-version experiments are optional local records, not prerequisites for understanding the documents.
+
+Before editing shared guidance after long-running generation or packaging, reread the current target sections and apply scoped patches. Preserve intervening edits; an earlier in-memory copy is not a safe replacement for the current file.
 
 Keep one current status per asset family, including the latest candidate, unresolved differences, approval and runtime coverage. Replace superseded status paragraphs rather than accumulating multiple "current" candidates. Summarize historical decisions and their reasons in `<char>-history.md`; leave per-attempt measurements and execution logs in optional drafts. Link history from current status without requiring history to understand today's specification.
 

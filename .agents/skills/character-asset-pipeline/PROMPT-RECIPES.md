@@ -32,7 +32,9 @@ For character orientation, write body direction, head angle, and gaze as separat
 
 Read each reference's adopted/excluded roles in the art specification. If a base exists, distinguish preserved identity from the newly designed composition.
 
-Before drafting the prompt, assign an input owner for each axis: identity/equipment, facial appeal/proportions/palette, camera, pose/direction, and plane simplification. Pass the character reference (`refs/`) directly as an image input so the generator preserves its facial appeal, hair flow, clean palette brightness, and natural proportions; do not withhold the character reference in favor of text-only transcription, which produces generic, clunky cartoon faces and stiff shapes. Use original-game images for the requested use case to establish camera, grounded stance, and grouping high-frequency surface noise (photorealistic individual strands, noisy specular flecks) into clean 2D masses and crisp bevels—without importing the official characters' bulky builds or dark palettes. A bust reference supplies appearance, not a default full-body camera. Branch A establishes a canonical base; its name does not prescribe a frontal or relaxed pose.
+Before drafting the prompt, assign an input owner for each axis: identity/equipment, camera, pose/direction, and rendering. Pass the raw character reference directly as an image input for identity, facial appeal, proportions, and costume construction; use approved character bases (such as `docs/characters/realta/base.png` or `docs/characters/althea/base.png`) or official sprites as needed for clean 2D game-sprite readability and grounded combat framing. Do not withhold the character reference (`style-pure` text-only generation) or force a rough gouache/chunky-proportion conversion that degrades the character's facial appeal, sleek build, or clean palette. Resolve conflicts between inputs in this assignment (for example, expanding a bust reference into a full-body combat stance), then make the prompt follow it. A bust reference supplies appearance, not a default full-body camera. Branch A establishes a canonical base; its name does not prescribe a frontal or relaxed pose.
+
+Record the actual image-input list in the before/after notes.
 
 Keep a short before/after record in optional draft notes. Define concrete items before generation; after generation inspect those same items in the comparison sheet and fill every observation. List equipment dimensions and hand contacts as separate items.
 
@@ -47,15 +49,15 @@ Rewrite the prompt around the current objective instead of appending another pri
 ```text
 Use case: stylized-concept / identity-preserve.
 Asset type: full-body standing master for <CHARACTER>.
-Input owners: identity/facial appeal/proportions/palette = <character reference or approved base>; camera/stance/plane organization = <same-use-case official images>. Image inputs: <actual list>. <Adopted/excluded features; preserve approved identity/rendering when present>.
-Rendering target: <clean 2D game-sprite plane organization and material treatment using STYLE for the target display size; simplify photoreal surface noise into clean flowing masses and crisp bevels without crudeness or muddy values>.
-Subject: <CHARACTER_ANCHOR>. Preserve the character-specific facial appeal and apparent age.
+Input owners: identity/equipment/proportions = <raw character reference and CHARACTER_ANCHOR>; camera/pose/direction = <requested stance and same-use-case reference>; rendering = <clean 2D cel-plus-soft-form sprite style from ARTS.md Block A>. Image inputs: <actual list>. <Adopted/excluded features; preserve approved identity/rendering when present>.
+Rendering target: <clean 2D cel-plus-soft-form shading, crisp dark material-colored contours, smooth faceted metal, and clean fabric/hair values from ARTS.md Block A for the target display size>.
+Subject: <CHARACTER_ANCHOR>. Preserve the character-specific apparent age, sharp facial appeal, and sleek canonical proportions.
 Materials and palette: <MATERIALS, PALETTE>. Preserve: <confirmed visible features>. Provisional: <unconfirmed design choices>.
 Composition: <FRAMING, battle direction, grounded stance, tool placement and clear margins>. Design the entire final canvas directly, with all required extremities inside it.
 Body direction: <torso and pelvis orientation relative to the camera and target>.
 Head angle: <visible facial planes and near/far eye visibility>. Preserve the approved facial anatomy and apparent age.
 Gaze: <pupil direction and attention target, independent of head rotation>.
-Proportions: <natural non-SD character and equipment proportions supported by the character reference and user choices; avoid stocky/chunky distortion>.
+Proportions: <sleek canonical body proportions from the character specification and ARTS.md 2.4; equipment proportions supported by the references and user choices>.
 Output: <OUTPUT_CONTRACT>; transparent background where required. No floor shadow, scenery, glow, UI, text, frame or watermark.
 ```
 
@@ -83,7 +85,7 @@ After generation, open the selected source and new result side by side with `com
 
 ### 1-C. `base → Combat Pose` for Branch B
 
-Ordinary standing art is a whole-image Fit export of the approved base and needs no generation call. Generate combat art separately, using the approved base for identity and original-game combat sprites for stance/readability. The new pose belongs to this production run; previous delivered combat sprites are not generation inputs.
+First apply the reuse decision in [ARTS.md 5.1](../../../ARTS.md#51-combat-rest-and-merchant-standing-art). A combat-ready base supplies both standing and combat through whole-image Fit, without generation. Use this recipe only for a noncombat/everyday base or a user-requested distinct combat pose. Then use the approved base for identity and original-game combat sprites for stance/readability. The new pose belongs to this production run; previous delivered combat sprites are not generation inputs.
 
 ```text
 Use case: stylized-concept.
@@ -101,14 +103,18 @@ Output: <OUTPUT_CONTRACT>, true transparent alpha. No environment, ground shadow
 
 Compare the new combat pose against the ordinary standing export at the same display size. Inspect balance, both hands, equipment continuity, silhouette, margins, face identity, and gaze on light/dark backgrounds. Save candidates separately; runtime promotion follows the user's approval scope.
 
-## Recipe 2: Surface Cleanup Pass
+## Recipe 2: Surface Passes
 
-Use when surface noise is visible at actual size. Do not generate again when the user requests applying the selected painting unchanged.
+Do not generate again when the user requests applying the selected painting unchanged.
+
+### 2-A. Surface Cleanup
+
+Use when surface noise is visible at actual size.
 
 ```text
 Use case: identity-preserve / rendering-cleanup.
-Edit target: <ASSET>. Preserve identity, facial appeal, equipment construction, pose, proportions, framing and transparency.
-Rendering cleanup only: <ARTS.md7.2 Block D>. Consolidate unnecessary fragments while preserving material-specific light/shadow transitions, clean palette brightness and proportions. Do not redesign equipment, change facial anatomy, blur or sharpen the image.
+Edit target: <ASSET>. Preserve identity, equipment construction, pose, proportions, crisp facial features, framing and transparency.
+Rendering cleanup only: <ARTS.md 7.2 Block D>. Consolidate unnecessary fragments while preserving clean cel-plus-soft-form transitions, crisp contours, and palette clarity. Do not redesign equipment, coarsen facial anatomy, dull colors, blur, or over-sharpen the image.
 ```
 
 ## Recipe 3: `base → Chibi UI`
@@ -145,6 +151,8 @@ Exclude: shoulders, torso, hands, weapons, pin/badge borders, text and drop shad
 
 Inputs are the approved base and [actual base-game tiles](../../../docs/research/sts2-style-refs/character-select-tiles/README.md). The base owns identity; originals guide face occupancy, camera, and information density. Read the [tile study](../../../docs/research/sts2-character-select-tile-study.md) and [ARTS.md section 5.2.1](../../../ARTS.md#521-selection-tiles).
 
+When the camera is undecided, explore distinct camera/head-angle candidates before choosing one. Select contrasting directions or elevations from the native examples; the number follows the requested scope, not a fixed quota. Open a whole-image comparison at 132×195 with native tiles, then record the recommended candidate and its visual tradeoffs. An already selected composition needs no new variation round.
+
 ```text
 Use case: identity-preserve / stylized-concept.
 Asset type: newly painted character-select FACE portrait for <OUTPUT_CONTRACT>.
@@ -177,7 +185,9 @@ Style: <STYLE>. Transparent outside the icon. No painted cost number, text, fram
 1. Follow the [Branch B/C input rule](SKILL.md#branch-b-and-c-start-with-new-artwork). Select only the approved base and actual originals from the [selection-composition study](../../../docs/research/sts2-character-select-composition-study.md), recording input roles. Exclude previous backgrounds and generation drafts.
 2. Write a new scene sentence from the character's distinctive action and equipment/power relationship. Do not copy descriptions of the old background's pose or camera.
 3. Connect face, active hand, and a second major shape from a new camera. Extend that movement or ability into the background.
-4. Compare with the previous delivery only after the new painting exists. Output the whole painting with Fit and inspect an approximate UI overlay. Resolve conflicts by changing the generated composition.
+4. Compare with the previous delivery only after the new painting exists. Output the whole painting with Fit and inspect an approximate UI overlay. Identify the action-defining contact (for example, fingers/thumb on a grip or a weapon meeting its sheath). Keep the face and active grip clear of the information panel and bottom tiles; judge whether the action remains readable, not whether every equipment pixel avoids every panel. Natural anatomy takes priority over completely clearing the translucent ascension panel: a supporting equipment tip, lower crossguard or lower arm may pass partly behind it when the action still reads. Preserve credible shoulder/elbow/wrist connections and natural sheath height rather than lifting the assembly to chest level just to clear the panel. Record these tradeoffs; regenerate when essential expression or action becomes unreadable, unless the user explicitly selects that composition.
+
+The bundled 1920×1080 layout is an approximate observation: information x=220..880, y=330..700; ascension x=650..1260, y=740..850; tiles y=880..1016. Use it as a preview starting point, not a universal exclusion mask; replace it with the actual target-screen geometry when available.
 
 ```text
 Use case: identity-preserve / stylized-concept.
@@ -185,7 +195,7 @@ Asset type: full-screen selection illustration using the approved non-chibi prop
 Input: approved base.png owns identity/materials; actual official selection references guide visual language. This is a newly composed scene from these inputs.
 Scene: <SCENE_SENTENCE>. Subject: <CHARACTER_ANCHOR adapted to visible parts and action>.
 Composition: connect face, active hand and equipment/power through a clear directional flow. Use a characteristic foreground object, cloth or ability shape as the second major mass. Paint the camera/perspective directly in the final canvas.
-UI overlap: keep eyes, fingers and bright action contact clear of text/tile/confirm controls. Low-contrast character-specific shapes may extend behind UI; do not leave an arbitrary empty rectangle.
+UI overlap: keep eyes and active grip/action readable and clear of information text, tiles and confirm controls. Preserve natural anatomy and equipment height; lower supporting forms may pass behind the translucent ascension panel if the action stays readable. Low-contrast character-specific shapes may extend behind UI; do not leave an arbitrary empty rectangle.
 Style: <STYLE adapted to selection-scene depth>. Background: <PALETTE and character-specific motifs related to the action>.
 Exclude: painted UI, words, numbers, frames, watermark and other characters' identity details.
 ```

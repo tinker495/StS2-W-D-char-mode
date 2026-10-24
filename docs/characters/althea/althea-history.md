@@ -30,3 +30,12 @@ The user explicitly rejected that `style-pure` candidate and the guidelines that
 - **Retained observation tooling.** The non-destructive observation improvements from the retrospective remain active: `inspect` reports `MarginsPx` and `MinMarginRatio` immediately after generation, `compare` supports `SharedScale`, `IndividualFit`, and `SubjectFit`, and `official-poses` renders unoccluded Spine poses from the installed game for camera and stance reference.
 
 The user-preferred painting was promoted unchanged to `base.png` as the canonical draft base. Runtime assets were not changed.
+## 2026-10-24 — Branch B User Selections
+
+The user instructed combat to use the existing standing base unchanged, rejecting the need for a separate combat painting. All three standing contexts therefore share a whole-image Fit export. The user also selected the natural selection-scene pose with the empty sheath supported at the waist, preferring it to a high sheath guard generated to clear lower UI. Preserve that selected painting; record possible ascension-panel overlap instead of silently regenerating it.
+
+The user subsequently approved the complete chibi portrait/outline, map marker and normal/locked tile set for application. All are now connected; the accepted energy pair was retained without modification.
+
+## Selection composition replacement — 2026-10-24
+
+The user requested varied tile cameras and a fully sheathed sword just before drawing, with curse currents gathering around it. They selected high-angle candidate C and the new left/down-facing background for application after the lower-crossguard overlap with the approximate ascension panel was disclosed. This supersedes the earlier drawn-sword selection painting; the approved base and shared standing remain unchanged. Normal and locked tiles derive from the same resized alpha.
