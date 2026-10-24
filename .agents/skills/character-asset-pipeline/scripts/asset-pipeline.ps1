@@ -1,7 +1,7 @@
-[CmdletBinding()]
+﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet('inspect', 'preview', 'compare', 'export', 'outline')]
+    [ValidateSet('inspect', 'preview', 'compare', 'export', 'outline', 'official-poses')]
     [string]$Command,
 
     [string]$Path,
@@ -17,28 +17,54 @@ param(
     [int]$Radius = 2,
     [string]$Color = '#FFFFFF',
     [string[]]$Paths,
-    [string[]]$Labels
+    [string[]]$Labels,
+    [ValidateSet('SharedScale', 'IndividualFit', 'SubjectFit')]
+    [string]$CompareMode = 'SharedScale',
+    [string]$GodotPath,
+    [string]$GamePath = 'C:/Program Files (x86)/Steam/steamapps/common/Slay the Spire 2'
 )
 
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
 
-function Get-AlphaBounds([System.Drawing.Bitmap]$bmp) {
+function Get-AlphaBytes([System.Drawing.Bitmap]$bmp) {
+    $rect = New-Object System.Drawing.Rectangle(0, 0, $bmp.Width, $bmp.Height)
+    $data = $bmp.LockBits($rect, [System.Drawing.Imaging.ImageLockMode]::ReadOnly, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
+    try {
+        $bytes = New-Object byte[] ($data.Stride * $bmp.Height)
+        [System.Runtime.InteropServices.Marshal]::Copy($data.Scan0, $bytes, 0, $bytes.Length)
+        return [pscustomobject]@{ Bytes = $bytes; Stride = $data.Stride }
+    } finally {
+        $bmp.UnlockBits($data)
+    }
+}
+
+function Get-AlphaBounds([System.Drawing.Bitmap]$bmp, [int]$alphaThreshold = 8) {
+    $alpha = Get-AlphaBytes $bmp
+    $bytes = $alpha.Bytes
+    $stride = $alpha.Stride
     $minX = $bmp.Width
     $minY = $bmp.Height
     $maxX = -1
     $maxY = -1
     $nonZero = 0
     for ($y = 0; $y -lt $bmp.Height; $y++) {
+        $row = $y * $stride
+        $rowMin = -1
+        $rowMax = -1
         for ($x = 0; $x -lt $bmp.Width; $x++) {
-            $c = $bmp.GetPixel($x, $y)
-            if ($c.A -gt 8) {
+            # Format32bppArgb is stored as BGRA; alpha is the fourth byte.
+            if ($bytes[$row + ($x * 4) + 3] -gt $alphaThreshold) {
                 $nonZero++
-                if ($x -lt $minX) { $minX = $x }
-                if ($x -gt $maxX) { $maxX = $x }
-                if ($y -lt $minY) { $minY = $y }
-                if ($y -gt $maxY) { $maxY = $y }
+                if ($rowMin -lt 0) { $rowMin = $x }
+                $rowMax = $x
             }
+        }
+        if ($rowMin -ge 0) {
+            if ($rowMin -lt $minX) { $minX = $rowMin }
+            if ($rowMax -gt $maxX) { $maxX = $rowMax }
+            if ($y -lt $minY) { $minY = $y }
+            $maxY = $y
         }
     }
     $corners = @(
@@ -50,6 +76,14 @@ function Get-AlphaBounds([System.Drawing.Bitmap]$bmp) {
     $total = $bmp.Width * $bmp.Height
     $bboxW = if ($maxX -ge $minX) { $maxX - $minX + 1 } else { 0 }
     $bboxH = if ($maxY -ge $minY) { $maxY - $minY + 1 } else { 0 }
+    $margins = if ($bboxW -gt 0) {
+        [pscustomobject]@{ Left = $minX; Top = $minY; Right = $bmp.Width - 1 - $maxX; Bottom = $bmp.Height - 1 - $maxY }
+    } else { $null }
+    # Horizontal margins are relative to width and vertical margins to height.
+    $minMarginRatio = if ($margins) {
+        [math]::Round(([math]::Min([math]::Min($margins.Left, $margins.Right) / [double]$bmp.Width,
+                [math]::Min($margins.Top, $margins.Bottom) / [double]$bmp.Height)) * 100, 1)
+    } else { $null }
     return [pscustomobject]@{
         Width            = $bmp.Width
         Height           = $bmp.Height
@@ -57,8 +91,14 @@ function Get-AlphaBounds([System.Drawing.Bitmap]$bmp) {
         CornerAlpha      = ($corners -join ',')
         CornersTransparent = (($corners | Measure-Object -Maximum).Maximum -eq 0)
         BoundingBox      = "${minX},${minY} -> ${maxX},${maxY} (${bboxW}x${bboxH})"
+        BBoxX            = $minX
+        BBoxY            = $minY
+        BBoxWidth        = $bboxW
+        BBoxHeight       = $bboxH
         BBoxWidthRatio   = [math]::Round(($bboxW / [double]$bmp.Width) * 100, 1)
         BBoxHeightRatio  = [math]::Round(($bboxH / [double]$bmp.Height) * 100, 1)
+        MarginsPx        = $margins
+        MinMarginRatio   = $minMarginRatio
         OpaquePixelRatio = [math]::Round(($nonZero / [double]$total) * 100, 1)
     }
 }
@@ -122,16 +162,28 @@ switch ($Command) {
             for ($i = 0; $i -lt $resolvedSources.Count; $i++) {
                 $bitmap = New-Object System.Drawing.Bitmap($resolvedSources[$i])
                 $label = if ($Labels.Count -gt 0) { $Labels[$i] } else { [System.IO.Path]::GetFileName($resolvedSources[$i]) }
-                $images += [pscustomobject]@{ Path = $resolvedSources[$i]; Label = $label; Bitmap = $bitmap }
+                # Official Spine renders carry a soft ground shadow below alpha 128; measure the body above it.
+                $bounds = if ($CompareMode -eq 'SubjectFit') { Get-AlphaBounds $bitmap 128 } else { $null }
+                if ($bounds -and $bounds.BBoxWidth -eq 0) {
+                    throw "SubjectFit found no visible pixels in $($resolvedSources[$i])."
+                }
+                $images += [pscustomobject]@{ Path = $resolvedSources[$i]; Label = $label; Bitmap = $bitmap; Bounds = $bounds }
             }
 
-            # One scale for every complete canvas; do not normalize subjects or alpha bounds.
+            # SharedScale preserves relative canvas sizes; IndividualFit fits each full canvas;
+            # SubjectFit fits each alpha bounding box and aligns its bottom to one baseline.
             $maxWidth = ($images | ForEach-Object { $_.Bitmap.Width } | Measure-Object -Maximum).Maximum
             $maxHeight = ($images | ForEach-Object { $_.Bitmap.Height } | Measure-Object -Maximum).Maximum
             $scale = [math]::Min($DisplayWidth / [double]$maxWidth, $DisplayHeight / [double]$maxHeight)
             $pad = 24
-            $headerHeight = 64
+            $headerHeight = 84
             $cellWidth = [math]::Max(160, $DisplayWidth)
+            if ($CompareMode -eq 'SubjectFit') {
+                # Every subject gets the same drawn height; cells widen for wide poses instead of shrinking them.
+                $subjectHeight = $DisplayHeight * 0.9
+                $widest = ($images | ForEach-Object { $_.Bounds.BBoxWidth * $subjectHeight / $_.Bounds.BBoxHeight } | Measure-Object -Maximum).Maximum
+                $cellWidth = [math]::Max($cellWidth, [int][math]::Ceiling($widest / 0.9))
+            }
             $sheetW = ($cellWidth * $images.Count) + ($pad * ($images.Count + 1))
             $sheetH = ($DisplayHeight * 2) + $headerHeight + ($pad * 3)
             $sheet = New-Object System.Drawing.Bitmap($sheetW, $sheetH, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
@@ -150,30 +202,51 @@ switch ($Command) {
 
             $placements = for ($i = 0; $i -lt $images.Count; $i++) {
                 $entry = $images[$i]
+                $bounds = $entry.Bounds
+                $imageScale = switch ($CompareMode) {
+                    'IndividualFit' { [math]::Min($DisplayWidth / [double]$entry.Bitmap.Width, $DisplayHeight / [double]$entry.Bitmap.Height) }
+                    'SubjectFit' { $subjectHeight / $bounds.BBoxHeight }
+                    default { $scale }
+                }
                 $left = $pad + ($i * ($cellWidth + $pad))
                 $darkTop = $pad + $headerHeight
                 $lightTop = $darkTop + $DisplayHeight + $pad
                 $labelRect = New-Object System.Drawing.RectangleF($left, $pad, $cellWidth, 40)
                 $g.DrawString($entry.Label, $labelFont, [System.Drawing.Brushes]::White, $labelRect, $textFormat)
-                $metaRect = New-Object System.Drawing.RectangleF($left, ($pad + 42), $cellWidth, 18)
-                $g.DrawString(("{0} x {1}" -f $entry.Bitmap.Width, $entry.Bitmap.Height), $metaFont, [System.Drawing.Brushes]::LightGray, $metaRect, $textFormat)
+                $metaRect = New-Object System.Drawing.RectangleF($left, ($pad + 42), $cellWidth, 38)
+                $modeLabel = switch ($CompareMode) { 'IndividualFit' { '개별 Fit' } 'SubjectFit' { '인물 Fit' } default { '공통 배율' } }
+                $metadata = "원본 {0} x {1}`n{2}: x{3:0.####}" -f $entry.Bitmap.Width, $entry.Bitmap.Height, $modeLabel, $imageScale
+                $g.DrawString($metadata, $metaFont, [System.Drawing.Brushes]::LightGray, $metaRect, $textFormat)
                 $g.FillRectangle($lightBrush, $left, $lightTop, $cellWidth, $DisplayHeight)
 
-                $drawW = [math]::Max(1, [int][math]::Round($entry.Bitmap.Width * $scale))
-                $drawH = [math]::Max(1, [int][math]::Round($entry.Bitmap.Height * $scale))
-                $x = $left + [int][math]::Floor(($cellWidth - $drawW) / 2.0)
-                $yOffset = [int][math]::Floor(($DisplayHeight - $drawH) / 2.0)
+                $drawW = [math]::Max(1, [int][math]::Round($entry.Bitmap.Width * $imageScale))
+                $drawH = [math]::Max(1, [int][math]::Round($entry.Bitmap.Height * $imageScale))
+                if ($CompareMode -eq 'SubjectFit') {
+                    # Center the subject horizontally and place its lowest visible pixel 5% above the cell bottom.
+                    $x = $left + [int][math]::Round(($cellWidth / 2.0) - (($bounds.BBoxX + ($bounds.BBoxWidth / 2.0)) * $imageScale))
+                    $yOffset = [int][math]::Round(($DisplayHeight * 0.95) - (($bounds.BBoxY + $bounds.BBoxHeight) * $imageScale))
+                } else {
+                    $x = $left + [int][math]::Floor(($cellWidth - $drawW) / 2.0)
+                    $yOffset = [int][math]::Floor(($DisplayHeight - $drawH) / 2.0)
+                }
                 foreach ($top in @($darkTop, $lightTop)) {
+                    # Only SubjectFit can extend transparent canvas beyond the cell; the subject stays inside.
+                    $g.SetClip((New-Object System.Drawing.Rectangle($left, $top, $cellWidth, $DisplayHeight)))
                     $destination = New-Object System.Drawing.Rectangle($x, ($top + $yOffset), $drawW, $drawH)
                     $g.DrawImage($entry.Bitmap, $destination)
+                    $g.ResetClip()
                 }
                 [pscustomobject]@{
                     Path = $entry.Path
                     Label = $entry.Label
                     SourceWidth = $entry.Bitmap.Width
                     SourceHeight = $entry.Bitmap.Height
+                    Scale = $imageScale
                     DrawWidth = $drawW
                     DrawHeight = $drawH
+                    SubjectBox = $(if ($bounds) { $bounds.BoundingBox } else { $null })
+                    SubjectDrawHeight = $(if ($bounds) { [int][math]::Round($bounds.BBoxHeight * $imageScale) } else { $null })
+                    SubjectIsFullCanvas = $(if ($bounds) { $bounds.BBoxWidth -eq $entry.Bitmap.Width -and $bounds.BBoxHeight -eq $entry.Bitmap.Height } else { $null })
                 }
             }
             $outDir = Split-Path -Parent $resolvedOutput
@@ -183,7 +256,8 @@ switch ($Command) {
             $sheet.Save($resolvedOutput, [System.Drawing.Imaging.ImageFormat]::Png)
             [pscustomobject]@{
                 OutputPath = $resolvedOutput
-                Scale = $scale
+                CompareMode = $CompareMode
+                Scale = $(if ($CompareMode -eq 'SharedScale') { $scale } else { $null })
                 DisplayWidth = $DisplayWidth
                 DisplayHeight = $DisplayHeight
                 SheetWidth = $sheetW
@@ -321,6 +395,45 @@ switch ($Command) {
             }
         } finally {
             $srcBmp.Dispose()
+        }
+    }
+
+    'official-poses' {
+        if (-not $OutPath) { throw 'Specify -OutPath <directory> [-GodotPath <MegaDot console exe>] [-GamePath <Slay the Spire 2 folder>].' }
+        if (-not $GodotPath) {
+            $GodotPath = Join-Path $PSScriptRoot '../../../../.tools/megadot/MegaDot_v4.5.1-stable_mono_win64_console.exe'
+        }
+        $resolvedGodot = (Resolve-Path -LiteralPath $GodotPath).Path
+        $pck = Join-Path $GamePath 'SlayTheSpire2.pck'
+        $spine = Join-Path $GamePath 'libspine_godot.windows.template_release.x86_64.dll'
+        foreach ($required in @($pck, $spine)) {
+            if (-not (Test-Path -LiteralPath $required)) { throw "Missing installed game file: $required" }
+        }
+        $resolvedOut = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutPath)
+        $hostProject = Join-Path $resolvedOut '_host'
+        New-Item -ItemType Directory -Path $hostProject -Force | Out-Null
+        $logs = @{ Engine = Join-Path $resolvedOut 'render.engine.log'; Out = Join-Path $resolvedOut 'render.stdout.log'; Err = Join-Path $resolvedOut 'render.stderr.log' }
+        try {
+            # The installed game's Spine extension renders its own skeleton resources; nothing is copied from the PCK.
+            $spinePath = $spine -replace '\\', '/'
+            [System.IO.File]::WriteAllText((Join-Path $hostProject 'project.godot'), "config_version=5`n")
+            [System.IO.File]::WriteAllText((Join-Path $hostProject 'local_spine.gdextension'),
+                "[configuration]`nentry_symbol=`"spine_godot_library_init`"`ncompatibility_minimum=`"4.1`"`n[libraries]`nwindows.x86_64=`"$spinePath`"`n")
+            Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'render-official-poses.gd') -Destination $hostProject -Force
+            # Like dev.ps1, pass a fresh --log-file and redirect streams so engine stderr cannot abort PowerShell.
+            $arguments = @('--log-file', "`"$($logs.Engine)`"", '--path', "`"$hostProject`"", '--rendering-method', 'gl_compatibility',
+                '--resolution', '64x64', '--position', '-10000,-10000', '--script', 'render-official-poses.gd', '--', "`"$pck`"", "`"$resolvedOut`"")
+            $process = Start-Process -FilePath $resolvedGodot -ArgumentList $arguments -WorkingDirectory $hostProject -WindowStyle Hidden -Wait -PassThru `
+                -RedirectStandardOutput $logs.Out -RedirectStandardError $logs.Err
+            $output = @(Get-Content -LiteralPath $logs.Out -Encoding UTF8)
+            $errors = Get-Content -LiteralPath $logs.Err -Encoding UTF8 -Raw
+            $output | Where-Object { $_ -match '^CAPTURE' } | Write-Host
+            if ($process.ExitCode -ne 0 -or "$($output -join "`n")`n$errors" -match 'SCRIPT ERROR:|Parse Error:' -or
+                -not ($output -match '^CAPTURE_COMPLETE failures=0')) {
+                throw "Official pose rendering failed (exit $($process.ExitCode)); see $($logs.Out), $($logs.Err) and $($logs.Engine)."
+            }
+        } finally {
+            Remove-Item -LiteralPath $hostProject -Recurse -Force -ErrorAction SilentlyContinue
         }
     }
 }
