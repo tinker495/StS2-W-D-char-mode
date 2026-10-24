@@ -209,9 +209,18 @@ internal static class AltheaCardEffects
                 if (selected != null) await AltheaRules.Reform(context, selected);
                 await SelfPower<AltheaReformEchoPower>(1); break;
             case AltheaCardKind.WarriorsCreed:
-                await SelfPower<StrengthPower>(amount); await SelfPower<AltheaWarriorsCreedPower>(amount);
+                await SelfPower<StrengthPower>(amount); await SelfPower<DexterityPower>(amount);
+                await SelfPower<AltheaWarriorsCreedPower>(amount);
                 await CardPileCmd.Add(card, PileType.Draw, CardPilePosition.Random); break;
-            case AltheaCardKind.InnerReserve: await SelfPower<AltheaInnerReservePower>(amount); break;
+            case AltheaCardKind.InnerReserve:
+                await SelfPower<AltheaInnerReservePower>(amount);
+                await PowerCmd.Remove<VulnerablePower>(self); await PowerCmd.Remove<FrailPower>(self); break;
+            case AltheaCardKind.DesperateEffort:
+                if (!self.HasPower<AltheaSkipHandDrawPower>()) await SelfPower<AltheaSkipHandDrawPower>(1);
+                await PlayerCmd.GainEnergy(amount, owner);
+                await CardPileCmd.Draw(context, count, owner); break;
+            case AltheaCardKind.FadedCrest: await SelfPower<AltheaFadedCrestPower>(amount); break;
+            case AltheaCardKind.Resolve: await SelfPower<AltheaResolvePower>(amount); break;
             case AltheaCardKind.UnrivaledBlade: await SelfPower<AltheaUnrivaledBladePower>(amount); break;
             case AltheaCardKind.SoulLegion: await SelfPower<AltheaSoulLegionPower>(amount); break;
             case AltheaCardKind.ArchipelagoArts: await SelfPower<AltheaArchipelagoArtsPower>(amount); break;

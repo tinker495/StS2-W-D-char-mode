@@ -61,13 +61,15 @@ internal static class AltheaRules
     internal static int HarmfulCount(Player player) => player.Creature.Powers.Where(p =>
         IsHarmful(p, For(player).EnemyEffects.Contains(p)))
         .Select(p => p.Id).Distinct().Count();
-    internal static async Task Unfading(PlayerChoiceContext context, CardModel source)
+    internal static async Task Unfading(PlayerChoiceContext context, CardModel source, bool exhausted = false)
     {
         if (!source.Keywords.Contains(AltheaKeywords.Unfading) || source.Owner.Creature.CombatState is not { } combat
             || CombatManager.Instance.IsOverOrEnding) return;
         CardModel? original = source.DeckVersion;
+        bool growingBlade = source is AltheaCursedBladeFate;
+        if (growingBlade && exhausted && source.IsUpgradable) CardCmd.Upgrade(source);
         var copy = combat.CreateCard(ModelDb.GetById<CardModel>((original ?? source).Id), source.Owner);
-        int upgrades = original?.CurrentUpgradeLevel ?? (source.IsUpgraded ? 1 : 0);
+        int upgrades = growingBlade ? source.CurrentUpgradeLevel : original?.CurrentUpgradeLevel ?? (source.IsUpgraded ? 1 : 0);
         for (int i = 0; i < upgrades && copy.IsUpgradable; i++) CardCmd.Upgrade(copy);
         if (original?.Enchantment is { } enchantment && enchantment.CanEnchant(copy))
             CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), copy, enchantment.Amount);

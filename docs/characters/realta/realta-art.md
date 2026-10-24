@@ -118,7 +118,7 @@ The user requested new relic artwork in the original game's isolated-object styl
 
 The three exclusive relics use the user's other references: Witch Pointed Hat has a teal/indigo curled cone and broad brim with sparse gold celestial arcs; Eldir Gramr is a straight red/orange incandescent sword with a dark burgundy grip and steel crossguard; Dragon Cloak is a burgundy royal mantle with ivory ermine trim and a few broad gold motifs. No wearer, mannequin or crown belongs in the cloak icon.
 
-Generate each complete object directly in a square transparent composition. Use thick dark contours, two or three connected value families and restrained painted edges, guided by the original relic/potion reference sheet listed in ARTS.md. Avoid fine engraving, dense embroidery and individual hairs. The five new candidates have been reviewed at 94 px and 48 px but are not selected runtime artwork yet; paths and application status belong to the asset guide.
+Generate each complete object directly in a square transparent composition. Use thick dark contours, two or three connected value families and restrained painted edges, guided by the original relic/potion reference sheet listed in ARTS.md. Avoid fine engraving, dense embroidery and individual hairs. The five illustrations were reviewed at 94 px and 48 px and selected for runtime application; paths and installation status belong to the asset guide.
 
 Follow [ARTS.md](../../../ARTS.md) for shared chibi scope. This specification supplies Realta's face, expression, costume, and hat silhouette within it. Section 5.2 defines chibi details; other assets retain youthful canonical anatomy. Read [shared safe zones](../../../ARTS.md#5-asset-compositions-and-safe-zones) first.
 
@@ -294,3 +294,8 @@ This specification owns current appearance and production constraints. [realta-h
 ### 공격 궤적 범위 (2026-10-20)
 
 공격 궤적은 기존 청록·아이보리 그림을 실제 칼날 경로에 맞춰 길게 펼친다. 칼끝 뒤에만 차례로 나타나며 앞쪽은 굵고 꼬리는 가늘다. 0.15초 타격을 지나 0.25초까지 경로를 유지하고 0.34초에 사라진다. 얼굴은 보이도록 두고 무기보다 위에 그린다.
+
+
+## Relic application approval (2026-10-24)
+
+The user approved applying all five relic illustrations and installing them locally. The described candidate forms are now the selected relic artwork; earlier pending-selection wording records only the previous review stage. Runtime uses the existing model filenames; gameplay behavior was not changed by the image promotion.

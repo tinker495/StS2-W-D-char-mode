@@ -25,7 +25,12 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
     internal bool ClashAtPlay { get; private set; }
     internal LocString ChoicePrompt => SelectionScreenPrompt;
     protected override bool HasEnergyCostX => Kind == AltheaCardKind.VesselOfDelusion;
-    public override int MaxUpgradeLevel => Kind == AltheaCardKind.Wraith ? 0 : base.MaxUpgradeLevel;
+    public override int MaxUpgradeLevel => Kind switch
+    {
+        AltheaCardKind.Wraith => 0,
+        AltheaCardKind.CursedBladeFate => int.MaxValue,
+        _ => base.MaxUpgradeLevel
+    };
     public override bool CanBeGeneratedInCombat => Definition.Rarity is not (CardRarity.Token or CardRarity.Ancient or CardRarity.Basic);
     public override bool CanBeGeneratedByModifiers => CanBeGeneratedInCombat;
     public override CardMultiplayerConstraint MultiplayerConstraint =>
@@ -62,6 +67,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
     {
         get
         {
+            if (Kind == AltheaCardKind.FadedCrest) yield return HoverTipFactory.FromCard<Folly>();
             if (Kind is AltheaCardKind.WarriorStrike or AltheaCardKind.RationalWill or AltheaCardKind.PathToGreatness
                 or AltheaCardKind.ResoluteWill or AltheaCardKind.Liberation)
                 yield return HoverTipFactory.FromKeyword(AltheaKeywords.Reform);
@@ -72,6 +78,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
     [
         new DamageVar(Definition.Damage, ValueProp.Move), new BlockVar(Definition.Block, ValueProp.Move),
         Kind is AltheaCardKind.PureWill or AltheaCardKind.FightingSpirit or AltheaCardKind.FightersForm
+            or AltheaCardKind.DesperateEffort or AltheaCardKind.InnerReserve or AltheaCardKind.FadedCrest
             ? new EnergyVar("Amount", Definition.Amount) : new DynamicVar("Amount", Definition.Amount),
         new CardsVar(Definition.Cards),
         new RepeatVar(Definition.Repeat), new DynamicVar("Upgraded", 0)
@@ -114,6 +121,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
         if (card != this || Pile?.Type != PileType.Deck || oldPileType == PileType.Deck) return;
         if (Kind == AltheaCardKind.HeavyStrike) await CardPileCmd.AddCurseToDeck<Doubt>(Owner);
         if (Kind == AltheaCardKind.KarmicMadness) await CardPileCmd.AddCurseToDeck<Shame>(Owner);
+        if (Kind == AltheaCardKind.FadedCrest) await CardPileCmd.AddCurseToDeck<Folly>(Owner);
     }
     private static TargetType TargetFor(AltheaCardKind kind)
     {

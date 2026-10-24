@@ -3,7 +3,7 @@ using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Models.Characters;
 using Sts2WD.Sts2WDCode.Characters.CharacterFour;
 using Sts2WD.Sts2WDCode.Characters.CharacterThree;
-using Sts2WD.Sts2WDCode.Characters.CharacterTwo;
+using Sts2WD.Sts2WDCode.Characters.Althea;
 using Sts2WD.Sts2WDCode.Characters.Realta;
 
 namespace Sts2WD.Sts2WDCode.Ancients.Aselige;
@@ -16,7 +16,7 @@ internal static class AseligeRules
         actIndex == 0 && party.Any(IsModCharacter);
 
     private static bool IsModCharacter(CharacterModel character) =>
-        character is Realta or CharacterTwo or CharacterThree or CharacterFour;
+        character is Realta or Sts2WD.Sts2WDCode.Characters.Althea.Althea or CharacterThree or CharacterFour;
 
     // The three pools are independent. The recipient's eligibility, rather
     // than another party member's character, controls the exclusive flute.

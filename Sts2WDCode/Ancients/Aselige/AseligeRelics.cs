@@ -16,7 +16,7 @@ using MegaCrit.Sts2.Core.Rewards;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.Saves.Runs;
-using Sts2WD.Sts2WDCode.Characters.CharacterTwo;
+using Sts2WD.Sts2WDCode.Characters.Althea;
 using Sts2WD.Sts2WDCode.Relics;
 
 namespace Sts2WD.Sts2WDCode.Ancients.Aselige;
