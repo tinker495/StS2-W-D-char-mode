@@ -62,7 +62,7 @@
     "STS2WD-ASELIGE_PURIFYING_BREATH.description":  "After your first reshuffle each combat, Exhaust all Status and Curse cards in your Draw Pile and gain 1 Energy.",
     "STS2WD-ASELIGE_PURIFYING_BREATH.flavor":  "",
     "STS2WD-ASELIGE_PURIFYING_BREATH.title":  "Purifying Breath",
-    "STS2WD-ASELIGE_REGENERATION_GRACE.description":  "Unknown rooms may become Rest Sites instead of Shops, normal enemies, or Events: 0% at full HP, 100% at half HP or less, and 50% otherwise.",
+    "STS2WD-ASELIGE_REGENERATION_GRACE.description":  "You may discover Rest Sites in ? rooms. The lower your HP, the more likely you are to find one.",
     "STS2WD-ASELIGE_REGENERATION_GRACE.flavor":  "",
     "STS2WD-ASELIGE_REGENERATION_GRACE.title":  "Regeneration Grace",
     "STS2WD-ASELIGE_SHINING_FILM.description":  "Upon pickup, Enchant 2 random cards in your Deck with Sown 1.",
