@@ -2,6 +2,25 @@
 
 2026-10-23, [공유 카드 시트](https://docs.google.com/spreadsheets/d/1rwlbeGbN32cwy-rOZWJzCIR_Rhyx5rmiezInGhioEq0/edit)의 `Althea` 탭과 [설계 합의](althea.md)를 바탕으로 초기 카드 구성을 구현했다. 기준은 2026-10-23에 다시 읽은 시트와 같은 날 사용자가 확정한 이름·효과 해석이다. 이후 시트 변경은 다시 비교해야 한다.
 
+## 2026-10-25 Self-Reform Visual Lifecycle — Agent Reference
+
+The reported Warrior Strike failure leaves its original card visible after Siarcun reaches the discard pile. Other cards and turn completion remain usable. The minimal native-scene observation reproduced this with only BaseLib and this mod loaded: the original model was removed from combat, the replacement was Siarcun in Discard, and one visible original `NCard` remained in `NCombatUi.PlayContainer`.
+
+Native evidence comes from installed `sts2.dll` product version `0.1.0+59260271157f76a2896f0eab5bc6ea1245d8b314` (Steam build `23811903`):
+
+- `CardCmd.Transform(IEnumerable<CardTransformation>, Rng?, CardPreviewStyle)` removes the original from its pile and eventually calls `RemoveFromState`. Hand transformations update the original node through `NCardTransformShineVfx`; other piles receive an independent transformation preview without disposing the original play-pile node.
+- `CardModel.OnPlayWrapper` moves the original card to its result pile only while that original still belongs to Play. Self-Reform removes it before this condition is evaluated, so the usual `CardPileCmd.Add` visual cleanup is skipped.
+- `CardPileCmd.RemoveFromCombat` can remove a visible card through the native lifecycle, but requires the original to belong to a combat pile. Calling it after Transform is invalid; calling it first would invalidate Transform's required source pile.
+- `GodotTreeExtensions.QueueFreeSafely` detaches a pooled `NCard` and returns it through `NodePool.Free`. `NCard.OnFreedToPool` releases model subscriptions and its play tween. A successful removal therefore need not destroy the Godot object: it must leave the scene tree and return to the pool.
+
+`AltheaRules.Reform` fills only this native presentation gap. Capture the original `NCard` before Transform, and only when the source is in Play. After native Transform removes the source from state, return that captured node with `QueueFreeSafely` if it still displays the same source. Do not delay Reform until after play, move the original between piles first, replace native Transform, or add a global transformation patch. Native effect timing, upgrade/enchantment inheritance, transformation hooks, and destination handling remain in their existing flow. Hand and discard transformations do not acquire an original play node through this branch.
+
+To reconstruct the temporary observation, mount the installed game PCK, BaseLib 3.4.7 PCK, and the mod resources in MegaDot 4.5.1.m.14 with the current mod DLL. Initialize native models and `NCard.InitPool`, use `SaveManager` with `MockGodotFileIo`, and isolate BaseLib's direct config writes inside the observation directory. Supply native UI containers while omitting full game startup and audio service startup. Create a mutable `AltheaWarriorStrike` in a live player's Play pile, place an actual initialized native `card.tscn` node for that model in `PlayContainer`, and call `AltheaRules.Reform` with Discard as its destination. Wait for the native card movement to finish. Assert the original model is removed, Siarcun is in Discard, and the original node is absent from the visible tree. Keep native Transform, pile movement, and node disposal unmodified. Use `dev.ps1 observe -ScriptPath <temporary-script>` for preparation, build, execution, and retained exit records; temporary code belongs outside formal test directories and is not a product acceptance test.
+
+The unchanged baseline reproduced the orphan twice. The same observation after the fix retained the correct replacement and reduced original play nodes from one to zero. An extended temporary observation passed five cases: base/upgraded self-Reform repeated twice each, and Discard-origin Reform with an unrelated visible Play card. It verified native pool return and reuse, compatible `Sharp 3` and upgrade inheritance, the preserved `DeckVersion` link, and the unchanged permanent deck. The unrelated Play card remained visible. Build warnings/errors and runtime errors before the observation verdict were zero. The isolated host still reports native pooled-resource/renderer leaks during shutdown after the verdict; this is not a clean full-game shutdown check.
+
+The existing `dev.ps1 card-tests` command also passed: 55 model states, 36 layout cases, and 18 native preview lifecycle cases, with zero failures. These preview checks do not cover playing or reforming a card. Game startup, saved runs, actual manual card input/attack execution, and network multiplayer are outside the isolated Reform observation. No formal tests, fixtures, or validation settings were added or changed. The fixed source was built and packaged locally; game installation and a manual gameplay confirmation were not performed.
+
 ## 2026-10-25 참조 카드 표시
 
 망혼의 타격·선조의 한·불퇴의 저주·속삭이는 원혼·모여드는 혼·망념의 그릇·영혼 장막에 망령 미리보기와 휘발성·소멸 설명을 연결했다. 육중한 타격의 의심과 광기의 업의 수치 미리보기도 추가했다.
