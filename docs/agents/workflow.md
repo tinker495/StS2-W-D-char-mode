@@ -26,6 +26,12 @@ Run one-off PowerShell reproductions through `dev.ps1 observe -ScriptPath <tempo
 
 Keep temporary scripts outside formal test directories and do not commit them. Their results are observations, not changes to product acceptance criteria; follow the root test ownership rules.
 
+## PR Evidence
+
+Create PR-only screenshots, comparison renders, evidence notes, and one-off render scripts under the ignored `artifacts/pr-<task>/` directory from the start. Keep product assets and reusable specifications in their normal tracked locations. Attach PR evidence directly to the PR when upload is available, or show local artifacts in the completion report. Keep evidence files out of Git even when upload is unavailable.
+
+Before staging, confirm that each PR-only output is ignored with `git check-ignore -- <path>` and that `git ls-files -- <path>` returns no entries. Stage explicit product and documentation paths. For human-facing procedures, see [development tools](../development-tools.md#pr-자료-보관).
+
 ## Rebase and Verify
 
 For a rebase request, inspect the branch and working tree, then fetch the requested remote target. Start with `dev.ps1 rebase -Upstream <target>` from the repository root; the default target is `origin/main`. Git requires a clean working tree. Preserve user changes and follow the session's existing authority for committing or stashing them.

@@ -1,6 +1,7 @@
 // Human requester: wjdrb, 2026-10-25 (retrospective items approved with "진행").
 // These explicit cases encode the earlier Althea patch request and "Q1 예":
-// include all four Reform outcomes and Guard's card even through keywords.
+// include all possible Reform outcomes and Guard's card even through keywords.
+// The later explicit Warrior Strike request narrows its two cases below.
 // Expected types/upgrades below are specifications, not generated snapshots.
 using System.Reflection;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -30,9 +31,11 @@ internal static class CardPreviewContracts
             yield return new(typeof(AltheaKarmicMadness), upgraded, [typeof(Shame)]);
             yield return new(typeof(AltheaFadedCrest), upgraded, [typeof(Folly)]);
 
-            // Warrior Strike knows its own target upgrade. Other Reform
-            // generators have no selected target yet, so show base outcomes.
-            yield return new(typeof(AltheaWarriorStrike), upgraded, reform, upgraded);
+            // Human requester: wjdrb, 2026-10-25, explicitly requested that
+            // Warrior Strike show only its determined Attack result, Siarcun,
+            // with the source upgrade state, and approved updating both cases.
+            yield return new(typeof(AltheaWarriorStrike), upgraded, [typeof(AltheaSiarcun)], upgraded);
+            // Other Reform generators have no selected target yet.
             foreach (Type source in new[] { typeof(AltheaRationalWill), typeof(AltheaPathToGreatness),
                 typeof(AltheaResoluteWill), typeof(AltheaLiberation), typeof(AltheaArchipelagoArts) })
                 yield return new(source, upgraded, reform);

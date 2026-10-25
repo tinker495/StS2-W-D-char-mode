@@ -12,12 +12,12 @@ public static class AltheaKeywords
     [CustomEnum("ALTHEA_CLASH")] public static CardKeyword Clash;
 
     // With no chosen target, show base outcomes; Reform inherits the target's upgrade.
-    internal static IEnumerable<IHoverTip> ReformHoverTips(bool upgraded = false) =>
+    internal static IEnumerable<IHoverTip> ReformHoverTips() =>
     [
         HoverTipFactory.FromKeyword(Reform),
-        HoverTipFactory.FromCard<AltheaSiarcun>(upgraded),
-        HoverTipFactory.FromCard<AltheaLleurh>(upgraded),
-        HoverTipFactory.FromCard<AltheaMorfiella>(upgraded),
-        HoverTipFactory.FromCard<AltheaPureWill>(upgraded)
+        HoverTipFactory.FromCard<AltheaSiarcun>(),
+        HoverTipFactory.FromCard<AltheaLleurh>(),
+        HoverTipFactory.FromCard<AltheaMorfiella>(),
+        HoverTipFactory.FromCard<AltheaPureWill>()
     ];
 }

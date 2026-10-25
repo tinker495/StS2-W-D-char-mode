@@ -56,6 +56,49 @@ try {
         throw "Card tests did not complete successfully; read $output/tests.log."
     }
     $log -split '\r?\n' | Where-Object { $_ -match '^Card previews:|^CARD_PREVIEW_TESTS_PASSED' } | Write-Host
+
+    # Human requester: wjdrb, 2026-10-25: add a separate native-scene lifecycle
+    # integration check to this local command. Publish current resources first;
+    # do not test a stale installed mod pack or install into the game.
+    Invoke-RecordedCommand -Executable 'powershell.exe' -Arguments @('-NoProfile', '-NonInteractive',
+        '-ExecutionPolicy', 'Bypass', '-File', (Join-Path $projectRoot 'dev.ps1'), 'publish',
+        '-Configuration', $Configuration) -LogDirectory $output -Step 'native-package' -Quiet
+    $modPack = Join-Path $paths.ModsPath 'Sts2WD/Sts2WD.pck'
+    Invoke-RecordedCommand -Executable $dotnet -Arguments @('msbuild', (Join-Path $testProject 'CardPreviewTests.csproj'),
+        '-getProperty:ProjectAssetsFile') -LogDirectory $output -Step 'assets-path' -Quiet
+    $assetsPath = (Get-Content -LiteralPath (Join-Path $output 'assets-path.log') -Encoding UTF8 -Raw).Trim()
+    $assets = Get-Content -LiteralPath $assetsPath -Encoding UTF8 -Raw | ConvertFrom-Json
+    $baseLib = @($assets.libraries.PSObject.Properties | Where-Object Name -Like 'Alchyr.Sts2.BaseLib/*')
+    if ($baseLib.Count -ne 1) { throw 'Expected exactly one restored BaseLib version.' }
+    $basePack = $assets.packageFolders.PSObject.Properties.Name | ForEach-Object {
+        Join-Path $_ ($baseLib[0].Value.path + '/Content/BaseLib.pck')
+    } | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf } | Select-Object -First 1
+    if (-not $basePack) { throw 'Restored BaseLib.pck is missing.' }
+    [ordered]@{
+        modPack = $modPack
+        modSha256 = (Get-FileHash -LiteralPath $modPack -Algorithm SHA256).Hash
+        basePack = $basePack
+        baseSha256 = (Get-FileHash -LiteralPath $basePack -Algorithm SHA256).Hash
+        saveIo = 'MockGodotFileIo (in-memory)'
+        configDirectory = (Join-Path $output 'user-data')
+    } | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $output 'native-environment.json') -Encoding UTF8
+    try {
+        Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--path', $testProject,
+            '--log-file', (Join-Path $output 'native-tests.engine.log'), 'res://native-layout.tscn',
+            '--', '--game-pack', $gamePack, '--base-pack', $basePack, '--mod-pack', $modPack,
+            '--user-data', (Join-Path $output 'user-data')) `
+            -LogDirectory $output -Step 'native-tests' -Quiet
+    } catch {
+        Get-Content -LiteralPath (Join-Path $output 'native-tests.log') -Encoding UTF8 |
+            Where-Object { $_ -match '^FAIL|^ERROR:' } | Select-Object -First 12 | Write-Host
+        throw
+    }
+    $nativeLog = Get-Content -LiteralPath (Join-Path $output 'native-tests.log') -Encoding UTF8 -Raw
+    if ($nativeLog -match '(?m)^ERROR:\s*(?!Failed to read the root certificate store\.)\S|SCRIPT ERROR:|Parse Error:|Failed (?:to load script|loading resource)' -or
+        -not $nativeLog.Contains('NATIVE_CARD_PREVIEW_TESTS_PASSED')) {
+        throw "Native card tests did not complete successfully; read $output/native-tests.log."
+    }
+    $nativeLog -split '\r?\n' | Where-Object { $_ -match '^Native card previews:|^NATIVE_CARD_PREVIEW_TESTS_PASSED' } | Write-Host
 } finally {
     Pop-Location
 }
