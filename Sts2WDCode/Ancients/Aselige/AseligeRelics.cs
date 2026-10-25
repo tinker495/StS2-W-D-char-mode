@@ -88,14 +88,14 @@ public sealed class AseligeEmbracingFlute : AseligeRelic
 
 public sealed class AseligeShiningFilm : AseligeRelic
 {
-    protected override IEnumerable<IHoverTip> ExtraHoverTips => HoverTipFactory.FromEnchantment<Steady>();
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => HoverTipFactory.FromEnchantment<Sown>();
     public override bool HasUponPickupEffect => true;
     public override Task AfterObtained()
     {
         foreach (var card in PileType.Deck.GetPile(Owner).Cards
-                     .Where(card => ModelDb.Enchantment<Steady>().CanEnchant(card))
+                     .Where(card => ModelDb.Enchantment<Sown>().CanEnchant(card))
                      .ToList().StableShuffle(Owner.RunState.Rng.Niche).Take(2))
-            CardCmd.Enchant<Steady>(card, 1);
+            CardCmd.Enchant<Sown>(card, 1);
         return Task.CompletedTask;
     }
 }

@@ -17,6 +17,8 @@ Apply this rule when creating or updating documentation. Existing language does 
 
 These rules apply to both human and AI reviewers. Formatting, linting, and other mechanical checks belong to CI and are outside review scope.
 
+For spec reviews, follow [the domain review guidance](docs/agents/domain.md#spec-review), including the source comparison required for reused base-game effects.
+
 Suggestions to change or remove tests, and co-migration requirements below, are review criteria. They do not authorize an agent to change tests. Execution authority is governed by "Test Ownership and Change Authority" in this document.
 
 ### Architectural Recommendations
@@ -99,7 +101,7 @@ Model IDs are `STS2WD-` plus the UPPER_SNAKE class name, so renaming a model cla
 
 ### Repository Workflow
 
-Before repository exploration or rebasing, read [docs/agents/workflow.md](docs/agents/workflow.md) for bounded file reads and the rebase completion check. Use its shared-record ownership rules when updating deployment documentation.
+Before repository exploration, design interviews, or rebasing, read [docs/agents/workflow.md](docs/agents/workflow.md) for settled decisions, fact-finding scope, bounded file reads, and the rebase completion check. Apply these repository rules when using skills. Use its shared-record ownership rules when updating deployment documentation.
 
 ### Issue Tracker
 

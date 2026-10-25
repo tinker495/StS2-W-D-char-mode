@@ -1,11 +1,24 @@
 # Repository Work
 
+## Scope and Settled Decisions
+
+- Treat explicit user requirements, corrections, and earlier answers as settled decisions, including during design interviews. Preserve the request's other values and constraints.
+- Ask only about unresolved choices whose alternatives would materially change the outcome. Once the required facts are available and every material decision is settled, summarize the result and continue work already authorized by the user's request. A skill's generic final-confirmation step does not reopen settled choices.
+- A design-only request ends with the agreed design and its requested documentation. Invoking a skill alone does not authorize implementation or expand the task's scope.
+
 ## Read Within an Output Budget
 
 - Use `rg --files` to locate files and `rg -n` to select headings or symbols before reading long files. Retrieve the relevant line ranges with explicit UTF-8 decoding.
 - Reuse instructions already read in this session. Reread only changed sections or context that is no longer available.
+- Resolve each skill once: honor an explicit user-provided path; for named dependencies, use the invoking skill's source (repository or plugin). Keep the resolved paths in task context and reuse their content. Consult another installed copy only when the selected source is unavailable.
 - Parallelize independent reads, but budget their combined output below the tool response limit. Narrow each result before printing it; do not concatenate several complete long files into one response.
 - If output is truncated, retrieve the missing selected range before making a decision that depends on it. Expand to adjacent sections only when a dependency requires them.
+
+## Fact Finding and Delegation
+
+- Resolve small local lookups directly with bounded searches and reads, including when an invoked skill prescribes delegation. Delegate substantial independent investigations when doing so reduces latency or context load.
+- Give each agent a non-overlapping question and require source locations plus the relevant observations. Work on separate questions while it runs.
+- Reuse returned evidence; reopen its sources only to resolve a concrete gap or contradiction. A running investigation is a prerequisite only for decisions that depend on its findings.
 
 ## Rebase and Verify
 
