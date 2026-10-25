@@ -1,0 +1,20 @@
+<Project Sdk="Godot.NET.Sdk/4.5.1">
+  <!-- Human requester: wjdrb, 2026-10-25. A separate headless host exercises
+       the installed game's model factories and native Control layout. -->
+  <Import Project="../../Sts2PathDiscovery.props" />
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+    <NoWarn>$(NoWarn);MSB3270</NoWarn>
+    <ModConfiguration Condition="'$(ModConfiguration)' == ''">Debug</ModConfiguration>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Sts2WD.csproj" AdditionalProperties="Configuration=$(ModConfiguration)" />
+    <PackageReference Include="Alchyr.Sts2.BaseLib" Version="3.4.7" />
+    <Reference Include="sts2" HintPath="$(Sts2DataDir)/sts2.dll" />
+    <Reference Include="0Harmony" HintPath="$(Sts2DataDir)/0Harmony.dll" />
+  </ItemGroup>
+</Project>

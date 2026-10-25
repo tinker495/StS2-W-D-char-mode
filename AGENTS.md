@@ -28,6 +28,20 @@ Suggestions to change or remove tests, and co-migration requirements below, are 
 - Flag speculative generality as a deletion candidate: single-implementation interfaces, configuration nobody sets, and hand-rolled replacements for standard-library functionality.
 - Support structural recommendations with evidence of their actual maintenance cost and present them in severity order.
 
+## Reuse StS2 Features First
+
+Prefer StS2's existing features and extension points for gameplay, commands, models, UI, tooltips, localization, and resource handling. Before adding a mod-owned equivalent or a Harmony patch, inspect the relevant native type, member, and vanilla call site in the installed game. Use the native API directly or through established BaseLib integration points; keep content and presentation changes within that native flow.
+
+Add custom behavior only for a required capability the native implementation lacks or a confirmed defect. Record the game version, relevant type/member, observed limitation, and why existing APIs or extension points are insufficient in the implementation documentation. Keep the extension limited to that gap and preserve native behavior outside it. For named base-game effects and their mappings, follow [ADR-0001](docs/adr/0001-reuse-base-game-effects.md).
+
+## Card Reference Previews
+
+In-game descriptions, including those on cards, relics, powers, and potions, must include a native card preview for every concrete card they reference, including cards named or produced through a keyword such as Reform or Guard. Register previews through the model's native hover-tip API, such as `ExtraHoverTips`, with `HoverTipFactory.FromCard<T>()`; use `FromCardWithCardHoverTips<T>()` when the referenced card's keyword explanations are also needed. Localized names and color tags alone do not register previews.
+
+Show only outcomes possible for the described target, and explain the mechanic's mapping in its keyword description. When the target determines one result, preview that result alone; Warrior Strike reforms itself from an Attack into Siarcun. When the target is not yet known, show all possible base outcomes and explain upgrade inheritance. Share a mechanic's preview list across cards and powers with the same possible outcomes. Match preview upgrades to the referenced card's rules: an unupgradable token stays unupgraded; a known transformation target supplies its own upgrade state. A generator's upgrade state alone does not imply an upgraded result.
+
+Generic references such as "a random card" or "the selected card" have no fixed model to preview. A card already being displayed needs no preview of itself. Keep preview dependencies finite and avoid recursive self-reference.
+
 ## Test Ownership and Change Authority
 
 ### Principle

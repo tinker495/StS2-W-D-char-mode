@@ -49,6 +49,8 @@
         <Compile Remove="materials/**" />
         <Compile Remove="shaders/**" />
         <Compile Remove="images/**" />
+        <!-- wjdrb requested a separate card-preview test host on 2026-10-25. -->
+        <Compile Remove="tests/**" />
         <EmbeddedResource Remove="Sts2WD/**" />
         <EmbeddedResource Remove="materials/**" />
         <EmbeddedResource Remove="shaders/**" />

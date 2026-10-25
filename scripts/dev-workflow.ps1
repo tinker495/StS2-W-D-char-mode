@@ -27,12 +27,21 @@ function Get-DevelopmentPaths([string]$ProjectRoot, [string]$DotNet) {
     }
 }
 
+function Get-DevelopmentIlSpy([string]$ProjectRoot) {
+    $localTool = Join-Path $ProjectRoot '.tools/ilspy/ilspycmd.exe'
+    if (Test-Path -LiteralPath $localTool -PathType Leaf) { return $localTool }
+    $command = Get-Command ilspycmd -ErrorAction SilentlyContinue
+    if ($command) { return $command.Source }
+    throw 'Install ilspycmd on PATH or supply -IlSpyPath. See docs/development-tools.md.'
+}
+
 function Invoke-RecordedCommand {
     param(
         [string]$Executable,
         [string[]]$Arguments,
         [string]$LogDirectory,
-        [string]$Step
+        [string]$Step,
+        [switch]$Quiet
     )
 
     $record = [ordered]@{
@@ -57,7 +66,7 @@ function Invoke-RecordedCommand {
         & $Executable @Arguments 2>&1 | ForEach-Object {
             $line = $_.ToString()
             $writer.WriteLine($line)
-            Write-Host $line
+            if (-not $Quiet) { Write-Host $line }
         }
         $record.exitCode = $LASTEXITCODE
         if ($null -eq $record.exitCode -or $record.exitCode -ne 0) {

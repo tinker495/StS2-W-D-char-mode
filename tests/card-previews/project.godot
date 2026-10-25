@@ -1,0 +1,16 @@
+; Human requester: wjdrb, 2026-10-25, isolated local card-preview tests.
+config_version=5
+
+[application]
+config/name="Sts2WD Card Preview Tests"
+run/main_scene="res://tests.tscn"
+
+[display]
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+
+[dotnet]
+project/assembly_name="CardPreviewTests"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"

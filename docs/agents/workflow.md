@@ -20,6 +20,18 @@
 - Give each agent a non-overlapping question and require source locations plus the relevant observations. Work on separate questions while it runs.
 - Reuse returned evidence; reopen its sources only to resolve a concrete gap or contradiction. A running investigation is a prerequisite only for decisions that depend on its findings.
 
+## Temporary Observations
+
+Run one-off PowerShell reproductions through `dev.ps1 observe -ScriptPath <temporary-script>`. Keep preparation and execution in the same script so setup errors stop the run and are recorded. Invoke native tools through the shared `Invoke-RecordedCommand` helper to enforce exit codes and retain logs. Follow the script contract and evidence format in [development tools](../development-tools.md#임시-검증-실행).
+
+Keep temporary scripts outside formal test directories and do not commit them. Their results are observations, not changes to product acceptance criteria; follow the root test ownership rules.
+
+## PR Evidence
+
+Create PR-only screenshots, comparison renders, evidence notes, and one-off render scripts under the ignored `artifacts/pr-<task>/` directory from the start. Keep product assets and reusable specifications in their normal tracked locations. Attach PR evidence directly to the PR when upload is available, or show local artifacts in the completion report. Keep evidence files out of Git even when upload is unavailable.
+
+Before staging, confirm that each PR-only output is ignored with `git check-ignore -- <path>` and that `git ls-files -- <path>` returns no entries. Stage explicit product and documentation paths. For human-facing procedures, see [development tools](../development-tools.md#pr-자료-보관).
+
 ## Rebase and Verify
 
 For a rebase request, inspect the branch and working tree, then fetch the requested remote target. Start with `dev.ps1 rebase -Upstream <target>` from the repository root; the default target is `origin/main`. Git requires a clean working tree. Preserve user changes and follow the session's existing authority for committing or stashing them.

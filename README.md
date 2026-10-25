@@ -14,7 +14,7 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 레아르타(`Realta`)의 카드·유물 구성은 설계 합의([`docs/characters/realta/realta.md`](docs/characters/realta/realta.md))를 따릅니다. 타격·수비는 레아르타 전용 카드이며, 시작 덱은 타격 4장·수비 4장·비행 글레이브·담금질의 총 10장입니다. 수호는 카드별 방어도를 누적해서 높이고, 개선·유산·주문·역작·결투·용맹 효과를 지원합니다. 1단계 캐릭터 UI와 정적 전신 스탠딩은 정본 베이스([`docs/characters/realta/base.png`](docs/characters/realta/base.png))를 기준으로 적용되어 있으며, 카드·유물·파워 개별 아이콘은 순차 교체합니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
-Althea의 카드·유물 구성과 내부 식별자 결정은 설계 합의([`docs/characters/althea/althea.md`](docs/characters/althea/althea.md))를 따릅니다.
+알테아의 카드·유물 구성과 내부 식별자 결정은 설계 합의([`docs/characters/althea/althea.md`](docs/characters/althea/althea.md))를 따릅니다.
 
 ## 소개문·대화 작성
 
@@ -34,12 +34,15 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 .\dev.ps1 verify             # Git 추적 파일의 로컬 참조 검사 (SDK·게임 DLL 불필요)
 .\dev.ps1 build              # 로컬 참조 검사 후 C# 빌드
 .\dev.ps1 check              # 로컬 참조 검사 후 잠긴 패키지 복원으로 C# 빌드
+.\dev.ps1 card-tests         # 참조 카드 55개 상태 + 화면 배치 36개 조건 검사
 .\dev.ps1 rebase             # origin/main 위로 리베이스한 뒤 기존 프리커밋 검사
 .\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
 .\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
 .\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
 .\dev.ps1 editor             # MegaDot 편집기 열기
 ```
+
+카드·API 자동 검사, 타입·멤버별 API 조사, 임시 검증 실행 방법은 [개발 검사와 조사 명령](docs/development-tools.md)에 정리했습니다. 카드 검사는 게임 DLL과 MegaDot을 사용하는 별도 로컬 명령입니다.
 
 PowerShell의 스크립트 실행 정책 때문에 실행되지 않는다면 해당 명령만 다음처럼 실행할 수 있습니다. 시스템 정책은 변경하지 않습니다.
 
