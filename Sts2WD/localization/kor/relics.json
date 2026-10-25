@@ -62,7 +62,7 @@
     "STS2WD-ASELIGE_PURIFYING_BREATH.description":  "전투마다 처음 재셔플한 뒤, 뽑을 더미의 모든 상태이상과 저주를 소멸시키고 에너지를 1 얻습니다.",
     "STS2WD-ASELIGE_PURIFYING_BREATH.flavor":  "",
     "STS2WD-ASELIGE_PURIFYING_BREATH.title":  "정화의 숨결",
-    "STS2WD-ASELIGE_REGENERATION_GRACE.description":  "?방에서 상점·일반 적·이벤트 대신 휴식 장소를 발견할 수 있습니다. 체력이 최대면 0%, 절반 이하면 100%, 그 외에는 50%입니다.",
+    "STS2WD-ASELIGE_REGENERATION_GRACE.description":  "? 방에서 휴식 장소를 발견할 수 있습니다. 체력이 낮으면, 더 높은 확률로 발견합니다.",
     "STS2WD-ASELIGE_REGENERATION_GRACE.flavor":  "",
     "STS2WD-ASELIGE_REGENERATION_GRACE.title":  "재생의 은총",
     "STS2WD-ASELIGE_SHINING_FILM.description":  "획득 시 덱의 무작위 카드 2장에 발아 1을 부여합니다.",
