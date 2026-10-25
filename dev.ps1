@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position=0)]
-    [ValidateSet('hooks', 'doctor', 'restore', 'verify', 'build', 'check', 'rebase', 'anim', 'publish', 'deploy', 'editor')]
+    [ValidateSet('hooks', 'doctor', 'restore', 'verify', 'build', 'check', 'rebase', 'anim', 'card-tests', 'api', 'api-tests', 'observe', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [Parameter(Position=1)]
     [ValidateSet('all', 'idle', 'idle_loop', 'attack', 'hurt', 'cast', 'powerup', 'die', 'relaxed', 'relaxed_loop', 'revive')]
@@ -14,6 +14,18 @@ param(
     [string]$Baseline,
     [string]$PackagePath,
     [string]$Upstream = 'origin/main',
+    [Alias('Type')]
+    [string]$TypeName,
+    [string]$Member,
+    [string]$AssemblyPath,
+    [string]$IlSpyPath,
+    [string]$ScriptPath,
+    [ValidateRange(1, 2147483647)]
+    [int]$StartLine = 1,
+    [ValidateRange(1, 200)]
+    [int]$MaxLines = 80,
+    [ValidateRange(0, 20)]
+    [int]$ContextLines = 8,
     [ValidateSet('unspecified', 'sandbox', 'escalated', 'local')]
     [string]$ExecutionContextLabel = 'unspecified'
 )
@@ -22,6 +34,34 @@ $ErrorActionPreference = 'Stop'
 $projectRoot = $PSScriptRoot
 . (Join-Path $projectRoot 'scripts/dev-workflow.ps1')
 $diagnosticRoot = $null
+if ($Task -eq 'observe') {
+    if (-not $ScriptPath) { throw 'observe requires -ScriptPath <temporary PowerShell script>.' }
+    & (Join-Path $projectRoot 'scripts/observe.ps1') -ScriptPath $ScriptPath -OutputDirectory $OutputDirectory
+    return
+}
+
+if ($Task -eq 'api-tests') {
+    # Human requester: wjdrb, 2026-10-25: automatically check that member
+    # lookup includes both generic and non-generic FromCard declarations.
+    & (Join-Path $projectRoot 'tests/api-member-selection.ps1')
+    return
+}
+
+if ($Task -eq 'api') {
+    if (-not $TypeName) { throw 'api requires -Type <fully-qualified type name>.' }
+    & (Join-Path $projectRoot 'scripts/inspect-game-api.ps1') -TypeName $TypeName -Member $Member `
+        -AssemblyPath $AssemblyPath -IlSpyPath $IlSpyPath -OutputDirectory $OutputDirectory `
+        -StartLine $StartLine -MaxLines $MaxLines -ContextLines $ContextLines
+    return
+}
+
+if ($Task -eq 'card-tests') {
+    # Human requester: wjdrb, 2026-10-25: add formal card-preview tests and
+    # connect them to a local command using the installed game DLL.
+    & (Join-Path $projectRoot 'scripts/test-card-previews.ps1') -Configuration $Configuration
+    return
+}
+
 if ($Task -eq 'hooks') {
     & git -C $projectRoot config --local core.hooksPath .githooks
     if ($LASTEXITCODE -ne 0) { throw 'Cannot configure Git hooks.' }

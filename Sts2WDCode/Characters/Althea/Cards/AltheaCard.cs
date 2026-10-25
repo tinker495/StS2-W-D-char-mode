@@ -67,10 +67,17 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
     {
         get
         {
+            if (Kind is AltheaCardKind.HauntedStrike or AltheaCardKind.AncestralGrudge
+                or AltheaCardKind.CurseOfNoRetreat or AltheaCardKind.WhisperingWraith
+                or AltheaCardKind.GatheringSouls or AltheaCardKind.VesselOfDelusion or AltheaCardKind.SoulVeil)
+                foreach (var tip in HoverTipFactory.FromCardWithCardHoverTips<AltheaWraith>()) yield return tip;
+            if (Kind == AltheaCardKind.HeavyStrike) yield return HoverTipFactory.FromCard<Doubt>();
+            if (Kind == AltheaCardKind.KarmicMadness) yield return HoverTipFactory.FromCard<Shame>();
             if (Kind == AltheaCardKind.FadedCrest) yield return HoverTipFactory.FromCard<Folly>();
             if (Kind is AltheaCardKind.WarriorStrike or AltheaCardKind.RationalWill or AltheaCardKind.PathToGreatness
-                or AltheaCardKind.ResoluteWill or AltheaCardKind.Liberation)
-                yield return HoverTipFactory.FromKeyword(AltheaKeywords.Reform);
+                or AltheaCardKind.ResoluteWill or AltheaCardKind.Liberation or AltheaCardKind.ArchipelagoArts)
+                foreach (var tip in AltheaKeywords.ReformHoverTips(Kind == AltheaCardKind.WarriorStrike && IsUpgraded))
+                    yield return tip;
             if (Definition.Flags.Contains('C')) yield return HoverTipFactory.FromKeyword(AltheaKeywords.Clash);
         }
     }
