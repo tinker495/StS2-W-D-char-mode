@@ -15,6 +15,7 @@ using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Althea;
 
@@ -99,7 +100,10 @@ internal static class AltheaRules
         if (source.Enchantment is { } enchantment && enchantment.CanEnchant(replacement))
             CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), replacement, enchantment.Amount);
         replacement.DeckVersion = source.DeckVersion;
+        // Native Transform updates hand nodes but leaves the original play-pile node behind.
+        var playedCard = source.Pile.Type == PileType.Play ? NCard.FindOnTable(source) : null;
         await CardCmd.Transform(source, replacement);
+        if (source.HasBeenRemovedFromState && playedCard?.Model == source) playedCard.QueueFreeSafely();
         For(source.Owner).ReformedThisTurn.Add(replacement);
         For(source.Owner).Reformed.Add(replacement);
         if (destination == PileType.Exhaust) await CardCmd.Exhaust(context, replacement);
