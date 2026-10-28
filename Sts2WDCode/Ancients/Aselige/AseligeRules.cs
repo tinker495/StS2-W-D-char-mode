@@ -2,7 +2,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Models.Characters;
 using Sts2WD.Sts2WDCode.Characters.CharacterFour;
-using Sts2WD.Sts2WDCode.Characters.CharacterThree;
+using Sts2WD.Sts2WDCode.Characters.Mercurius;
 using Sts2WD.Sts2WDCode.Characters.Althea;
 using Sts2WD.Sts2WDCode.Characters.Realta;
 
@@ -16,11 +16,11 @@ internal static class AseligeRules
         actIndex == 0 && party.Any(IsModCharacter);
 
     private static bool IsModCharacter(CharacterModel character) =>
-        character is Realta or Sts2WD.Sts2WDCode.Characters.Althea.Althea or CharacterThree or CharacterFour;
+        character is Realta or Sts2WD.Sts2WDCode.Characters.Althea.Althea or Mercurius or CharacterFour;
 
     // The three pools are independent. The recipient's eligibility, rather
     // than another party member's character, controls the exclusive flute.
-    // Mercurius is bound to CharacterThree by the event adapter.
+    // Mercurius is bound to Mercurius by the event adapter.
     internal static IReadOnlyList<IReadOnlyList<AseligeGiftOption>> GiftPools(
         ActModel firstAct, bool recipientCanReceiveDragonFlute)
     {

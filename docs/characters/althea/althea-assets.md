@@ -1,5 +1,9 @@
 # Althea Asset Status
 
+## Basic Strike candidate (2026-10-25)
+
+`card-candidates/2026-10-25/althea_strike.png` is a 1000 x 760 opaque PNG. The complete 1439 x 1093 generated landscape was proportionally Fit-resized without cropping. A 250 x 190 preview was opened beside the other Strike candidates and native `StrikeIronclad` at the same scale. Input roles and the production brief are in `althea-art.md`. The runtime placeholders remain unchanged; review precedes promotion.
+
 The user approved all five relic candidates on 2026-10-24. All 15 PNGs now occupy Sts2WD/images/relics/ and big/ under their althea_* model filenames. The native Burning Blood path overrides were removed from AltheaRelic; it now inherits the existing Sts2WDRelic path mapping. The complete review overview remains available beside the runtime mapping.
 
 

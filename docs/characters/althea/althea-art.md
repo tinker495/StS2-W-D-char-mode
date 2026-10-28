@@ -1,5 +1,9 @@
 # Althea Art Direction
 
+## Basic Strike candidate (2026-10-25)
+
+The user requested a weapon-focused Strike based on the character image. Production brief: the straight silver double-edged sword, angular gold guard, navy-black grip and faceted gold pommel sweeping diagonally across a crimson/burgundy background with a pale blue/ivory crescent. Preserve the complete blade, tip and hilt; use broad clean cel-shaded planes, no person, text, frame or UI. `base.png` supplied weapon construction; native `StrikeIronclad`/`StrikeSilent` portraits supplied staging and density. The built-in image generator produced a new complete landscape composition. At 250 x 190 the long straight blade and gold hilt remain distinct, with a brighter and sharper slash than native Ironclad's orange arc. Pending user review.
+
 The user selected `base.png` as the draft visual base on 2026-10-24. It owns the current appearance and equipment for further work; this is draft adoption, not final design lock. Branch B runtime scope is recorded below. The domain draft is [althea.md](althea.md). Do not infer body, costume, or equipment from the energy symbol's shape or color. Current candidate status is in [althea-assets.md](althea-assets.md); the reasons behind past choices are in [althea-history.md](althea-history.md).
 
 Labels *user-confirmed*, *reference-observed* and *provisional* follow [Recipe 1's source labels](../../../.agents/skills/character-asset-pipeline/PROMPT-RECIPES.md#recipe-1-new-canonical-art-and-local-edits).

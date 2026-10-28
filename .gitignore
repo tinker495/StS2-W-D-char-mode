@@ -6,6 +6,9 @@ artifacts/
 publish/
 packages/
 .tools/
+addons/godot_mcp_toolkit/
+.codex/config.toml
+.mcp.json
 .idea/
 .vs/
 *.user

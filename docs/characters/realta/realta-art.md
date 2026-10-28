@@ -1,5 +1,9 @@
 # Realta Art Specification
 
+## Basic Strike candidate (2026-10-25)
+
+The user requested the weapon from the character image being swung. Production brief: one oversized upper broom-glaive with its curved dark-steel blade, pale bevel, two-rivet bronze socket, red ribbon and connected wooden pole, sweeping across a crimson/burgundy graphic background with a cyan/ivory cutting arc. No person, frame, text or UI. The lower broom end is outside this weapon-focused composition; the blade remains aligned with its shaft rather than becoming a right-angle scythe. Inputs were `base.png` for equipment construction and native `StrikeIronclad`/`StrikeNecrobinder` portraits for staging and density. The built-in image generator created a new complete landscape painting. At 250 x 190 the blade, ribbon and socket remain readable; motion accents are sharper and brighter than native Ironclad's softer orange arc. Pending user review.
+
 Single source for Realta's identity, apparent age, costume, weapon, palette, asset-specific staging, and prompt material. Follow [ARTS.md](../../../ARTS.md) for shared rendering; [character-asset-pipeline](../../../.agents/skills/character-asset-pipeline/SKILL.md) for execution/recipes; [realta-assets.md](realta-assets.md) for file mapping, code wiring, and status; and [realta-history.md](realta-history.md) for decision rationale. [realta.md](realta.md) and [GLOSSARY.md](../../../GLOSSARY.md) own human-facing gameplay and setting.
 
 The approved [base.png](base.png) establishes the youthful appearance, open forehead, and refined weapon thickness now reflected in UI, standing art, and selection art. Character-specific values and construction are not defaults for other characters. Observations and choices below are neither official StS2 specifications nor automatic acceptance criteria.

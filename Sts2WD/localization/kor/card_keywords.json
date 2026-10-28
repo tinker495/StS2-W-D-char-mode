@@ -20,5 +20,13 @@
   "STS2WD-ALTHEA_UNFADING.title": "불실",
   "STS2WD-ALTHEA_UNFADING.description": "소멸·재편되면 덱 원본의 강화·인챈트를 가진 복사본을 손에 추가합니다. 생성 카드는 강화 여부만 반영합니다.",
   "STS2WD-ALTHEA_FRENZY.title": "광란",
-  "STS2WD-ALTHEA_FRENZY.description": "양옆의 카드를 내면, 뒤이어 사용됩니다. 에너지가 부족해도 사용할 수 있습니다."
+  "STS2WD-ALTHEA_FRENZY.description": "양옆의 카드를 내면, 뒤이어 사용됩니다. 에너지가 부족해도 사용할 수 있습니다.",
+  "STS2WD-MERCURIUS_REENACT.title": "재연",
+  "STS2WD-MERCURIUS_REENACT.description": "조건에 맞는 카드 3장 중 하나를 골라 [gold]휘발성[/gold]을 부여해 손에 추가합니다.",
+  "STS2WD-MERCURIUS_FINALE.title": "결말",
+  "STS2WD-MERCURIUS_FINALE.description": "어떤 방식으로든 이 카드를 뽑을 때마다 강화됩니다. 횟수 제한이 없습니다.",
+  "STS2WD-MERCURIUS_DOMINION.title": "권능",
+  "STS2WD-MERCURIUS_DOMINION.description": "손에 이 카드만 있으면 추가 효과가 발동합니다.",
+  "STS2WD-MERCURIUS_SONG.title": "노래",
+  "STS2WD-MERCURIUS_SONG.description": "이 카드를 뽑으면 효과가 발동합니다."
 }

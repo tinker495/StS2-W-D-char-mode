@@ -4,5 +4,8 @@
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryTitle": "Temporary Enchantment",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryDescription": "An enchantment that lasts only for this combat.",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.permanentEntry": "{Title}{AmountText}",
-  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "Temporary {Title}{AmountText}"
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "Temporary {Title}{AmountText}",
+  "STS2WD-MERCURIUS_ETCHING.title": "Etching",
+  "STS2WD-MERCURIUS_ETCHING.description": "Whenever this card is shuffled into your Draw Pile, put it on the bottom.",
+  "STS2WD-MERCURIUS_ETCHING.extraCardText": "Goes to the bottom when shuffled into your Draw Pile."
 }
