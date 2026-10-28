@@ -14,7 +14,7 @@
   "STS2WD-REALTA_VALOR.title": "용맹",
   "STS2WD-REALTA_VALOR.description": "대상 적에게 힘이나 방어도가 있으면 추가 효과가 발동합니다.",
   "STS2WD-ALTHEA_REFORM.title": "재편",
-  "STS2WD-ALTHEA_REFORM.description": "원래 타입에 맞는 토큰으로 이번 전투 동안 변형합니다. 강화와 적용 가능한 인챈트를 계승합니다.",
+  "STS2WD-ALTHEA_REFORM.description": "이번 전투 동안 원래 카드의 타입에 따라 변형합니다.\n공격 → [gold]시아르쿤[/gold]\n스킬 → [gold]를레우르흐[/gold]\n파워 → [gold]모르피엘라[/gold]\n그 외 → [gold]순수한 의지[/gold]\n대상 카드의 강화와 적용 가능한 인챈트를 계승합니다.",
   "STS2WD-ALTHEA_CLASH.title": "격전",
   "STS2WD-ALTHEA_CLASH.description": "자신 또는 적의 체력이 절반 이하면 발동합니다.",
   "STS2WD-ALTHEA_UNFADING.title": "불실",

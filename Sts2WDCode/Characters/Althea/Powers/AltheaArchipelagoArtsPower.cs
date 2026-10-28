@@ -1,12 +1,15 @@
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 
 namespace Sts2WD.Sts2WDCode.Characters.Althea;
 
 public sealed class AltheaArchipelagoArtsPower : AltheaPower
 {
+    protected override IEnumerable<IHoverTip> ExtraHoverTips => AltheaKeywords.ReformHoverTips();
+
     private sealed class Data { internal int AttackEnergy; }
     protected override object InitInternalData() => new Data();
 
