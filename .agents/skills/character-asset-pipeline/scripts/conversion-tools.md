@@ -2,6 +2,8 @@
 
 Use these commands for approved delivery conversions or review drafts. They do not imply approval to overwrite runtime files. Use Git-ignored draft outputs while reviewing candidates.
 
+For official card extraction and packaged-texture inspection, use [card texture observations](card-observations.md). Those commands preserve the full image and record measurements without adding acceptance gates.
+
 ## Shared-alpha tile pair
 
 `tile-pair` fits the whole transparent master once, composites normal RGB over the requested background, then composites black RGB with the exact same alpha over the locked background. Both results are opaque. Specify dimensions and colors from the target asset guide; use a transparent master rather than an opaque painted background.

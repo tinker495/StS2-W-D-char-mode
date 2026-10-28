@@ -16,7 +16,14 @@ Native source layout: `res://images/packed/card_portraits/<pool>/<card_id>.png`.
 | `regent` | `conqueror`, `devastate`, `photon_cut`, `heavenly_drill`, `kingly_punch`, `collision_course`, `big_bang`, `falling_star` |
 | `defect` | `sunder`, `hyperbeam`, `meteor_strike`, `glasswork`, `shatter`, `sweeping_beam` |
 
-To reproduce, mount the installed pack with Godot's `ProjectSettings.load_resource_pack`, load the listed PNG paths as `Texture2D`, and export each `get_image()` with `save_png()`. Use a temporary minimal host project and an explicit writable `--log-file`. Run the observation through the repository's [temporary-observation workflow](../development-tools.md). Use the packed portrait paths above: extracting an `AtlasTexture` can fail when its atlas image remains compressed. Preserve complete portraits and inspect them at equal displayed illustration sizes. Keep extracted game artwork and comparison sheets in ignored temporary storage; the names, source layout, build identity, and observations here are sufficient without those local files.
+To reproduce, use [`asset-pipeline.ps1 official-cards`](../../.agents/skills/character-asset-pipeline/scripts/card-observations.md) with the selected `<pool>/<card_id>` values and a fresh ignored output directory. For example:
+
+```powershell
+$referenceDirectory = Join-Path 'artifacts' ('card-reference-survey-' + [guid]::NewGuid().ToString('N'))
+& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 official-cards -CardIds @('ironclad/infernal_blade', 'ironclad/fiend_fire', 'ironclad/perfected_strike') -OutPath $referenceDirectory
+```
+
+The command mounts the installed pack with Godot's `ProjectSettings.load_resource_pack`, loads the packed PNG paths as `Texture2D`, and saves each complete `get_image()` as PNG with a source manifest and process logs. Use those packed portrait paths: an `AtlasTexture` may still have a compressed atlas image. Inspect the extracts at equal displayed illustration sizes with `compare -CompareMode IndividualFit`. Keep game artwork and comparison sheets in ignored storage. The manifest identifies the current installation; the version and observations above describe the original survey, not every later extraction. A local task's old `drafts/` files are unnecessary for reproduction.
 
 ## Observed visual patterns
 
@@ -43,7 +50,7 @@ Compare complete native illustration textures with the candidate at `250 × 190`
 
 ## Session retrospective
 
-1. **Review did not drive correction:** the initial notes recognized excess debris and floor detail but treated it as an optional later revision because the small image remained readable. The user had to trigger the correction. The [pipeline's default loop](../../.agents/skills/character-asset-pipeline/SKILL.md#default-generatereviewcorrect-loop) now connects pixel observations to bounded, in-scope corrections and rechecks preserved features before a final recommendation.
+1. **Review did not drive correction:** the initial notes recognized excess debris and floor detail but treated it as an optional later revision because the small image remained readable. The user had to trigger the correction. The [pipeline's default loop](../../.agents/skills/character-asset-pipeline/workflow.md#default-generatereviewcorrect-loop) now connects pixel observations to bounded, in-scope corrections and rechecks preserved features before a final recommendation.
 2. **Equipment depth was underspecified:** intact visible broom/blade ends were treated as sufficient evidence of a continuous weapon, without tracing the shaft through the body overlap and hand. The later request exposed that gap. Anatomical front/back and camera-near/far must be distinguished; local edit prompts now specify occluders and the object's continuous route. The user subsequently limited this turn to pipeline changes, so no revised shaft image was generated or verified.
 3. **Reference selection:** a single `Thrumming Hatchet` close-up was too narrow for a rear-view character confronting a giant target, and a whole-card comparison made the native artwork smaller than the candidate. The broader survey and equal-size portrait comparison address those distinct errors. Broad investigation and the smaller set of actual generation inputs are recorded separately.
 4. **Prompt priorities:** the initial prompt requested glass shards, droplets, chips, paving, ruined architecture, reflected light, and extensive equipment construction while also asking for economy. The concrete additions dominated the general simplification instruction. Compact card recipes now describe the action, visible identity cues, and allocation of detail; images supply construction. Local corrections use a narrow edit recipe instead of restarting the full brief.

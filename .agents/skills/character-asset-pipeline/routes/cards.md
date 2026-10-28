@@ -1,0 +1,60 @@
+# Branch C-3: `base + refs → Cards` (Focused Card Illustration Route)
+
+Read this route, the requested card's effect/theme and asset mapping, ARTS.md 5.5 and 6 (also 5.6 for Ancient), [the shared workflow](../workflow.md), and the active [engine section](../engines.md). Read only the matching Standard or Ancient recipe below. For a supplied rough, also read [reference roles and landmarks](../references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). A weapon-only card depicting a card-specific object needs its object/theme brief, not unrelated character face/costume sections or base.png. Base identity is required whenever character parts or canonical equipment appear.
+
+Select IDs from [the native card survey](../../../../docs/research/sts2-card-illustration-density.md), then extract the selected official textures with [`official-cards`](../scripts/card-observations.md). This creates fresh full portraits and a source manifest without looking through previous tasks' drafts. Use `observe-texture` from the same guide when a delivered PCK needs an image/loading observation; its optional pixel comparison reports evidence, not product acceptance. For previews and comparison modes, consult [observation tools](../observation-tools.md).
+
+1. **Group by theme/object family and establish masters first:** read card effects, types (`Attack`, `Skill`, `Power`, `Ancient`), themes, and recurring objects in `<char>.md`, `<char>-art.md`, and `<char>-assets.md`. Use the [native portrait survey](../../../../docs/research/sts2-card-illustration-density.md) to inspect a broad set, then select complementary anchors for the requested actors/targets, action, materials, and background hierarchy. A weapon-only close-up does not by itself establish a multi-subject scene's composition or density. The older public examples below are starting points, not a complete or mandatory input set ([public study](../../../../docs/research/sts2-future-asset-reference-study.md#3-attack-skill-and-power-card-illustrations)):
+   - **Attack anchors:** [card-attack-thrumming-hatchet.png](../../../../docs/research/sts2-style-refs/future-assets/card-attack-thrumming-hatchet.png), [card-attack-bodyguard-bone-shards.png](../../../../docs/research/sts2-style-refs/future-assets/card-attack-bodyguard-bone-shards.png).
+   - **Skill anchors:** [card-skill-scrawl.png](../../../../docs/research/sts2-style-refs/future-assets/card-skill-scrawl.png), [card-skill-soul-grave-warden.png](../../../../docs/research/sts2-style-refs/future-assets/card-skill-soul-grave-warden.png).
+   - **Power anchors:** [card-power-rolling-boulder.png](../../../../docs/research/sts2-style-refs/future-assets/card-power-rolling-boulder.png), [card-power-automation.png](../../../../docs/research/sts2-style-refs/future-assets/card-power-automation.png), [card-attack-power-blight-strike-neurosurge.png](../../../../docs/research/sts2-style-refs/future-assets/card-attack-power-blight-strike-neurosurge.png).
+   Organize card production in focused batches by **recurring object family or theme** (e.g., signature weapon strikes, close-up artisan/knight hands and vambraces, guardian/companion actions, spell/curse phenomena). Before generating batch cards that share a recurring non-base prop or summon, generate and lock a current-run **object-family master** in `drafts/` to pass as an image input across that batch.
+2. **Assemble per-card image inputs (Recipes 7, 8 & 1-D):**
+   - Pass `base.png` whenever the character, gloved hands/vambraces, or canonical weapon appear. Assign identity and prop ownership separately using Recipe 1-D; a card-specific object named by the user takes precedence over the base's equipment.
+   - Pass the relevant current-run object-family master for recurring props/summons.
+   - Pass any user-supplied card rough, pose sketch, or motif reference (`refs/cards/` or chat attachment). For complex two-subject duels, perspective strikes, or strict Ancient card windows without a user rough, optionally create a quick composition/layout rough in `drafts/<card>-rough.png` first and pass it as the composition owner.
+   - Pass the matching official StS2 Attack, Skill, or Power card reference for rendering density and value grouping. Use it for camera distance only when the user has not supplied staging through a rough or selected image.
+3. **Generate directly for the card type and frame geometry:**
+   - **Lock and enforce the canvas:** use the strict card geometry contract in [ARTS.md 5.5](../../../../ARTS.md#55-standard-card-illustrations). Record target width/height, reduced ratio, orientation, and fully painted opaque edges before generation. Include these in every initial and corrective prompt, and set the tool's canvas controls when available. A wide reference owns its subject staging, not the output ratio: extend its setting into the target frame instead of importing its letterboxing.
+   - **Standard cards (`1000 × 760` opaque, `25:19`, Recipe 7):** follow [ARTS.md 5.5](../../../../ARTS.md#55-standard-card-illustrations) for thumbnail composition and detail density. Write one action sentence, the visible identity cues, and the required large shapes before the compact recipe. Retain user-selected staging. Let image anchors supply construction details instead of expanding the prompt into an inventory of ornaments, materials, debris, and scenery.
+   - **Ancient full-art cards (`606 × 852` opaque vertical, `101:142`, Recipe 8):** stage the primary subject and action inside the upper-middle focal window (`y:15–58%`), clear of the top title/cost banner (`y:0–14%`), and keep the lower description area (`y:62–100%`) dark, low-contrast, and quiet.
+4. **Check actual geometry before visual approval:** run `inspect` on the generated file, then `export-card -CardType Standard` (or `Ancient`) to a temporary candidate in an ignored working directory using the [card export procedure](../scripts/conversion-tools.md#card-export-and-review). The command rejects a source requiring even one padding pixel after proportional Fit rounding and requires fully opaque input/output. Record source and final dimensions; use `FullyOpaque`, not rounded percentages, for opacity. Also open the image: a mechanically valid PNG can still contain painted letterbox bands. If geometry or painted coverage fails, regenerate/outpaint under the default correction loop, preserving the accepted subjects and composition. Do not promote or recommend the candidate as complete while the mismatch remains.
+5. **Compare at in-game card scale:** open a `250 × 190` standard-card preview (`250 × 350` for Ancient cards). Follow [ARTS.md 5.5](../../../../ARTS.md#55-standard-card-illustrations) to compare equal-sized illustration areas; `compare -CompareMode IndividualFit` is suitable for native portrait textures, not a frameless candidate beside a complete card fitted into the same rectangle. **Completion criterion:** record both action readability and secondary-detail density, along with identity, safe zones, painted coverage, and absence of painted UI. If background edges, material marks, or effects compete with the action relative to the reference, revise the painting before recommending it. Opening a preview or passing dimension checks does not resolve a visual mismatch.
+6. **Deliver full-bleed card portraits:** after the temporary candidate passes mechanical and visual review, copy that exact file to the runtime mapping in `<char>-assets.md` within the user's existing application authorization. Run `check-cards` to verify the delivered PNGs. Record generation, export, and visual observations separately. If the retry limit is reached with a mismatch, report it as unresolved rather than applying a padded substitute.
+
+## Recipe 7: `base + refs → Standard Card Portrait` (Branch C-3)
+
+Follow [Branch C-3](cards.md#branch-c-3-base--refs--cards-focused-card-illustration-route) and [ARTS.md 5.5](../../../../ARTS.md#55-standard-card-illustrations). Pass the applicable base, object, rough, and same-type official card anchors. Use this compact card-specific block instead of appending the full character inventory and general rendering block. Include only identity cues visible in this camera; the references carry the remaining construction. For a selected-image simplification, name the preserved composition and repaint its secondary forms under the same density rules.
+
+```text
+Create one opaque landscape card illustration on an exact 1000x760 canvas (25:19), designed to read at 250x190. Compose directly for this ratio, even when a reference has a different ratio.
+Action: <one sentence linking the subject's gesture to its result>.
+References: <rough or selected image> owns composition; <base/object anchors> own identity; <complementary official illustrations selected from a broader survey> guide <the specific action, hierarchy, or material role assigned to each>.
+Preserve: <camera, pose, visible identity cues, weapon connection, and target silhouette>.
+Large shapes: <primary subject, action/target, and quiet setting>. Keep essential action inside x15-85%, y12-82%.
+Rendering: crisp connected painted shapes with selective form shading, guided by the reference set. Concentrate the sharpest contrast and useful detail at <action>. Group secondary surfaces into broad color areas.
+Effects and setting: <one coherent effect and only the setting cues necessary to the action>. Leave clear space around the focal silhouettes.
+Output: scene painted continuously to all four canvas edges. No letterboxing, blank/solid-color bands, transparent margins, blurred/mirrored padding, card frame, text, cost orb, UI, or watermark. If adapting a wider reference, paint the missing setting above and below while preserving its subjects; do not crop, stretch, or add padding.
+```
+
+Follow Branch C-3's actual-file geometry check, painted-edge inspection, and preview/density review before recommending or promoting the result. Prompt dimensions alone do not establish compliance. For edits, repeat the exact canvas contract in the correction prompt.
+
+## Recipe 8: `base + refs → Ancient Full-Art Card` (Branch C-3)
+
+Read the target card list and actual frame dimensions from the character asset guide. Pass `base.png`, any current-run object-family master, any vertical layout rough (`<ROUGH_OR_REF_INPUT>`), and official StS2 card/illustration references for value hierarchy.
+
+```text
+Use case: identity-preserve / stylized-concept / reference-guided-generation.
+Asset type: vertical full-art card illustration on an exact 606x852 opaque canvas (101:142), <OUTPUT_CONTRACT>. Compose directly for this ratio.
+Engine mode: <ENGINE_MODE>.
+Input owners:
+- Character & prop anchors (<approved base.png and/or current-run object-family master>): own canonical identity, weapon/prop construction, and <PALETTE, MATERIALS>.
+- Layout rough / reference (<ROUGH_OR_REF_INPUT, when present>): owns vertical staging and focal-window placement.
+- Official StS2 anchors (<official card/illustration references in docs/research/sts2-style-refs/>): guide 2-3 value plane economy and 250x350 display readability.
+Subject and scene: <CHARACTER_ANCHOR, ASSET_SUBJECT, SCENE_SENTENCE>.
+Layout: stage face, hands, and primary action inside the upper-middle focal window (y:15-58%), clear of the top title/cost zone (y:0-14%), and keep the lower description zone (y:62-100%) dark, low-contrast, and quiet. Do not move the primary action by post-generation cropping.
+Style: <STYLE>. Palette/materials: <PALETTE, MATERIALS>.
+Backdrop: continuous opaque scene painted to all four edges. No letterboxing, blank/solid-color bands, transparent margins, blurred/mirrored padding, painted frame, banner, text box, numbers, letters or watermark. Extend the setting instead of padding a mismatched reference.
+```
+
+Run Branch C-3's actual-file geometry and painted-edge checks, then compare at `250 × 350` and verify that the upper-middle focal window (`y:15–58%`) and quiet lower text zone (`y:62–100%`) hold without post-generation cropping.

@@ -78,7 +78,7 @@ Reinvestigated on 2026-10-18; combat anchors updated 2026-10-24; downstream anch
 
 Originals belong to Mega Crit and are for research/comparison, not mod runtime delivery. Public sources, frames, and crops are listed in the [image index](docs/research/sts2-style-refs/README.md) and [future-assets index](docs/research/sts2-style-refs/future-assets/README.md); detailed observations are in the [combat-style study](docs/research/sts2-combat-style-study.md) and [downstream-asset study](docs/research/sts2-future-asset-reference-study.md).
 
-**Primary combat and merchant anchors** are installed-build Spine renders: alpha-clean, unoccluded and undithered. Generate fresh renders locally with `asset-pipeline.ps1 official-poses` ([pipeline section 3](.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools)) into a temporary output directory; they are never committed. Use the public crops only when the game is not installed, and do not read their dithering, overlapping figures or scene background as style.
+**Primary combat and merchant anchors** are installed-build Spine renders: alpha-clean, unoccluded and undithered. Generate fresh renders locally with `asset-pipeline.ps1 official-poses` ([pipeline observation tools](.agents/skills/character-asset-pipeline/observation-tools.md#observation-and-conversion-tools)) into a temporary output directory; they are never committed. Use the public crops only when the game is not installed, and do not read their dithering, overlapping figures or scene background as style.
 
 | Priority/use | Image | Observe | Do not import |
 |---|---|---|---|
@@ -139,7 +139,7 @@ These are production starting points, checked against actual UI/frames and chara
 
 Branch B first inspects the approved base's actual pose. Use the complete `base.png` with proportional Fit conversion for ordinary standing. If it already depicts a suitable combat-ready stance, reuse that export for combat by default. Generate a separate combat pose only when the base is a noncombat/everyday pose or the user requests a distinct combat pose; use the base and original-game combat references for weapon readiness, grounding, weight and credible hand contacts. Preserve canonical identity and rendering. Character guides own filenames, dimensions and shared or separate scene mappings.
 
-Include the entire character and tool, planning roughly 3–5% transparent margins at the extremities. Distinguish combat-forward from camera-facing. Preserve facial anatomy, apparent age, and identifying features while deriving rotation from original-game references for the requested use case. Facial identity does not require a frontal head or two fully visible eyes. Orientation prompt fields are defined in [Recipe 1](.agents/skills/character-asset-pipeline/PROMPT-RECIPES.md#recipe-1-new-canonical-art-and-local-edits). Character-specific face, pose, and direction belong in the target specification.
+Include the entire character and tool, planning roughly 3–5% transparent margins at the extremities. Distinguish combat-forward from camera-facing. Preserve facial anatomy, apparent age, and identifying features while deriving rotation from original-game references for the requested use case. Facial identity does not require a frontal head or two fully visible eyes. Orientation prompt fields are defined in [Recipe 1](.agents/skills/character-asset-pipeline/references.md#source-labels-and-character-orientation). Character-specific face, pose, and direction belong in the target specification.
 
 The character asset guide owns display size, ground line, sprite scale/position, dialogue/hit/health anchors. Do not fix those placements here.
 
@@ -198,7 +198,7 @@ Read effect/theme names from domain documents and translate them into actions, c
 
 Branch from a clean approved candidate and change one axis at a time. Separate length/width/thickness and gaze/head rotation. Do not accumulate excessive or rejected edits. Consider a form-preserving cleanup pass when surface noise appears. A user instruction to apply the final painting unchanged takes precedence over additional generation.
 
-The [asset pipeline's bounded review loop](.agents/skills/character-asset-pipeline/SKILL.md#default-generatereviewcorrect-loop) owns generation, automatic visual review, in-scope corrections, and stopping. Review both the requested change and preservation of already-settled choices; file measurements alone do not establish completion.
+The [asset pipeline's bounded review loop](.agents/skills/character-asset-pipeline/workflow.md#default-generatereviewcorrect-loop) owns generation, automatic visual review, in-scope corrections, and stopping. Review both the requested change and preservation of already-settled choices; file measurements alone do not establish completion.
 
 ### 7.2 Standard Prompt Blocks
 
@@ -230,6 +230,6 @@ Compare the original, previous candidate, and new candidate at the same display 
 
 Shared documents must explain production criteria without drafts, prompts, or comparison images. State current appearance and constraints in the art specification, dimensions/conversion/status in the asset guide, and decision rationale in history. Do not substitute version IDs or "same as the previous image." Share the base, runtime assets, and necessary specifications; optionally keep drafts and logs in Git-ignored `drafts/`. Tracking every intermediate is unnecessary.
 
-Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards preserve whole paintings; choose shared-scale preservation, individual-Fit, or equal-subject-height style comparisons through the [pipeline observation tools](.agents/skills/character-asset-pipeline/SKILL.md#3-observation-and-conversion-tools). Boards may remain local observations. State their conclusions and visual reasons directly in shared documents.
+Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards preserve whole paintings; choose shared-scale preservation, individual-Fit, or equal-subject-height style comparisons through the [pipeline observation tools](.agents/skills/character-asset-pipeline/observation-tools.md#observation-and-conversion-tools). Boards may remain local observations. State their conclusions and visual reasons directly in shared documents.
 
 Distinguish file dimensions, conversions, and PCK-loading observations from actual game verification. Packaging/installation follow the [pipeline](.agents/skills/character-asset-pipeline/SKILL.md) scope; tests and validation assets follow [AGENTS.md](AGENTS.md).

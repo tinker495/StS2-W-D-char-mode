@@ -6,7 +6,7 @@ The user requested a weapon-focused Strike based on the character image. Product
 
 The user selected `base.png` as the draft visual base on 2026-10-24. It owns the current appearance and equipment for further work; this is draft adoption, not final design lock. Branch B runtime scope is recorded below. The domain draft is [althea.md](althea.md). Do not infer body, costume, or equipment from the energy symbol's shape or color. Current candidate status is in [althea-assets.md](althea-assets.md); the reasons behind past choices are in [althea-history.md](althea-history.md).
 
-Labels *user-confirmed*, *reference-observed* and *provisional* follow [Recipe 1's source labels](../../../.agents/skills/character-asset-pipeline/PROMPT-RECIPES.md#recipe-1-new-canonical-art-and-local-edits).
+Labels *user-confirmed*, *reference-observed* and *provisional* follow [Recipe 1's source labels](../../../.agents/skills/character-asset-pipeline/references.md#source-labels-and-character-orientation).
 
 ## Adopted Draft Base — 2026-10-24
 

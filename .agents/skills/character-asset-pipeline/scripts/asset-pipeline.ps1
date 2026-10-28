@@ -1,7 +1,7 @@
 ﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet('inspect', 'preview', 'compare', 'export', 'export-card', 'check-cards', 'outline', 'official-poses', 'tile-pair', 'ui-preview')]
+    [ValidateSet('inspect', 'preview', 'compare', 'export', 'export-card', 'check-cards', 'outline', 'official-poses', 'official-cards', 'observe-texture', 'tile-pair', 'ui-preview')]
     [string]$Command,
 
     [string]$Path,
@@ -29,10 +29,19 @@ param(
     [ValidateSet('SharedScale', 'IndividualFit', 'SubjectFit')]
     [string]$CompareMode = 'SharedScale',
     [string]$GodotPath,
-    [string]$GamePath
+    [string]$GamePath,
+    [string[]]$CardIds,
+    [string]$PackPath,
+    [string]$ResourcePath
 )
 
 $ErrorActionPreference = 'Stop'
+if ($Command -in @('official-cards', 'observe-texture')) {
+    & (Join-Path $PSScriptRoot 'observe-textures.ps1') -Command $Command -CardIds $CardIds -PackPath $PackPath `
+        -ResourcePath $ResourcePath -Source $Source -OutPath $OutPath -GodotPath $GodotPath -GamePath $GamePath
+    return
+}
+
 Add-Type -AssemblyName System.Drawing
 $cardRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../Sts2WD/images/card_portraits'))
 $cardSizes = @{

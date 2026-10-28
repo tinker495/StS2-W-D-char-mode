@@ -131,7 +131,7 @@ Use the root `GLOSSARY.md` and `docs/adr/` as the single domain context. Follow 
 
 ### Art Direction
 
-When creating or editing images, or writing image-generation prompts, read the root [ARTS.md](ARTS.md) and the target's `docs/characters/<char>/<char>-art.md` and `<char>-assets.md`. Follow the `character-asset-pipeline` skill (`A: base`, `B: UI/standing/selection`, `C-1: relics`, `C-2: powers`, `C-3: cards`, `D: review/edit/conversion`) and its engine rules (`Codex` → `GPT Image`, `Antigravity` → `Nano Banana`, or parallel comparison across both).
+When creating or editing images, or writing image-generation prompts, start with [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) and open only the requested route. It identifies the required sections of [ARTS.md](ARTS.md), the target's `<char>-art.md` and `<char>-assets.md`, reference images and engine instructions. Use the card-observation route to extract native card portraits or inspect a packaged texture; previous tasks' draft folders are not a prerequisite.
 
 `ARTS.md` owns the shared style, chibi scope, official StS2 reference anchors, and composition principles. `<char>-art.md` owns the character's current appearance, palette, equipment, rough/reference roles, and prompt material. `<char>-assets.md` owns file mappings and runtime application status. Read `<char>-history.md` only when investigating past choices, rejections, or deliveries. The canonical visual anchor is `base.png` in the same directory, with `refs/` (including category subfolders such as `refs/relics/`, `refs/powers/`, `refs/cards/`) supplying character, rough-sketch, and motif/object references. Keep character-specific descriptions out of shared documents and general-purpose skills.
 
