@@ -205,6 +205,8 @@ The current tile was generated from base identity and actual Defect/Silent face 
 
 ### 3.5 Standard Card Illustrations
 
+**Mountain Splitter, application requested 2026-10-29:** the selected [painting](card-art/realta_mountain_splitter.png) shows Realta from behind after cleaving Aeonglass into two gold-framed turquoise sections. Preserve the simple connected color planes, the large straw broom head covering the back, the right-hand connection to the lowered glaive, and one continuous blue rear robe panel streaming left. Its front opening faces away from the camera; do not add a V-shaped opening on the visible back or a closed skirt-like lower hem. At the user's request, the setting extends upward through dark-blue architecture and downward through the ground and shadows to fill the complete `25:19` card window. Preserve this painted coverage; do not restore the former top/bottom letterboxing. This staging applies to this card, not to the canonical base or other assets. Mapping and conversion are in the [asset guide](realta-assets.md#0-current-application-status).
+
 - `Sts2WD/images/card_portraits/realta/realta_<name>.png`: 1000×760 opaque PNG, 25:19; standard display 250×190, enlarged 500×380.
 - Keep action, face, hand, and impact within `x:15–85%,y:12–82%`, away from upper-left energy and frame curves. Outer 10–15% may contain expendable environment, cloth tips, or trails.
 - **Depth/contrast starting points:** foreground action/tool 100% with sharpest edges and extreme values; midground target/prop 60%; background 25–35%, grouped into two or three broad values.

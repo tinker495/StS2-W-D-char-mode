@@ -10,6 +10,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaMountainSplitter() : RealtaCard(3, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_mountain_splitter.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Move)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromPower<StrengthPower>(), HoverTipFactory.Static(StaticHoverTip.Block), HoverTipFactory.FromPower<VigorPower>()];

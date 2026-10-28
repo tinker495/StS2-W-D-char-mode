@@ -10,6 +10,16 @@ This guide explains production and integration for character UI, 81 card illustr
 
 ## 0. Current Application Status
 
+**Mountain Splitter portrait, 2026-10-29:** the user requested applying the rear-view broom/robe correction, then replacing the top/bottom letterboxing with painted scene extensions. The model is `RealtaMountainSplitter` (`STS2WD-REALTA_MOUNTAIN_SPLITTER`), currently localized as `산 쪼개기`; the request called it `산 가르기`. This artwork change does not rename the card or change its effect. The full-bleed master is [card-art/realta_mountain_splitter.png](card-art/realta_mountain_splitter.png), `1439 × 1093`. The runtime portrait is [realta_mountain_splitter.png](../../../Sts2WD/images/card_portraits/realta/realta_mountain_splitter.png), exactly `1000 × 760` (`25:19`), fully opaque. The model overrides BaseLib's `CustomPortraitPath` and native `PortraitPath` to the same resource so display and preloading use the delivered portrait; other cards retain their existing fallback behavior.
+
+Reproduce the delivery from the tracked painting after checking the strict card geometry contract in [ARTS.md](../../../ARTS.md#55-standard-card-illustrations):
+
+```powershell
+& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 export -Source docs/characters/realta/card-art/realta_mountain_splitter.png -Target Sts2WD/images/card_portraits/realta/realta_mountain_splitter.png -Width 1000 -Height 760 -CropMode Fit -BackgroundColor '#081C35'
+```
+
+Proportional Fit uses scale `1000/1439`; the full painted source rounds to `1000 × 760`, leaving zero padding pixels. The background color only makes resampled boundary pixels opaque. The architecture and ground are painted to every edge, replacing the previous `82px` bands. The exported image and `250 × 190` preview were opened to check coverage, the rear robe, the back-covering broom, and the hourglass cut. Package/resource observations and installation status belong to [the shared record](../../deployment-status.md).
+
 On 2026-10-24 the user approved applying all five relic refresh illustrations. Their 94 px small icons, 94 px outlines and 256 px large icons were copied unchanged to the model-ID filenames under Sts2WD/images/relics/ (15 PNGs). The overview retains the reviewed complete compositions and display sizes.
 
 
@@ -323,7 +333,8 @@ BaseLib's `PostModInitPatch.RegisterSceneConversions` (`BaseLib.dll`, `[HarmonyP
      - `CustomCardPortrait` (`CardModel.Portrait` getter Prefix): returns `CustomPortrait` if set; otherwise, if `CustomPortraitPath` is not `null`, returns `ResourceLoader.Load<Texture2D>(CustomPortraitPath, null, CacheMode.Reuse)`. Only a `null` `CustomPortraitPath` falls through to vanilla `CardModel.Portrait`, which loads `PortraitPath`.
      - `CustomCardPortraitPngPath` (`CardModel.PortraitPngPath` getter Prefix): when `CustomPortraitPath != null`, replaces `PortraitPngPath` with `CustomPortraitPath`, making `HasPortrait` check `ResourceLoader.Exists(CustomPortraitPath)`.
      - `CustomCardPortraitPath` (`CardModel.PortraitPath` base getter Prefix): when `CustomPortraitPath != null`, makes the base `CardModel.PortraitPath` implementation return the `ResourcePath` of `CustomPortraitPath`.
-4. **Current dual-path lookup in `Sts2WDCard.cs` and a proposed improvement:**
+4. **Default dual-path lookup in `Sts2WDCard.cs` and a proposed broader improvement:**
+   - `RealtaMountainSplitter` is a delivered exception as of 2026-10-29: its `CustomPortraitPath` and `PortraitPath` both resolve the character-owned portrait documented in section 0. The defaults and future proposal below describe other cards; a general automatic resolver has not been added.
    - Template-derived code in `Sts2WDCode/Cards/Sts2WDCard.cs:17-25` currently overrides **both** `CustomPortraitPath` (`BigCardImagePath()` -> `images/card_portraits/big/<id>.png`) and `PortraitPath` (`CardImagePath()` -> `images/card_portraits/<id>.png`).
    - Consequences:
      1. At startup, `ModelDb.Preload()` (`ModelDb.cs:453`) calls `allCard.AllPortraitPaths` -> virtual `Sts2WDCard.PortraitPath`, looking for `images/card_portraits/<id>.png`. Missing files produce `"Could not find card image path: ..."` messages and return `images/card_portraits/card.png` (`250x190`). The eleven newer cards reuse the portrait properties listed in section 2.2.4.
