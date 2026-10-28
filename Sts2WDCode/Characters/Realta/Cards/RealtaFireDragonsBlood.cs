@@ -10,6 +10,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaFireDragonsBlood() : RealtaMasterworkCard(CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_fire_dragons_blood.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
     protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<VigorPower>(3m), new DamageVar(1m, ValueProp.Move)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [.. base.ExtraHoverTips, HoverTipFactory.FromPower<VigorPower>()];

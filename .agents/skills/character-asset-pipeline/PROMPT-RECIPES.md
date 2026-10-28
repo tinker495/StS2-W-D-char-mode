@@ -14,7 +14,7 @@ Generate new assets directly in the target composition; use Recipe 1-B for local
 | `<IDENTITY_CUES>` | Face, hair, and costume identifiers retained in the portrait |
 | `<CHIBI_DETAILS>` | Character-specific proportions, expression, and silhouette within the common chibi scope |
 | `<ROUGH_OR_REF_INPUT>` | User-supplied rough sketch, symbol draft, object photo (`refs/`), or agent-staged layout/pose rough (`drafts/`), with adopted vs. excluded traits |
-| `<OFFICIAL_ANCHOR>` | Same-use-case official StS2 reference image(s) from [sts2-style-refs](../../../docs/research/sts2-style-refs/README.md) (or temporary local PCK extraction), guiding display-size density, value grouping, and composition framing |
+| `<OFFICIAL_ANCHOR>` | Same-use-case official StS2 reference image(s) from [sts2-style-refs](../../../docs/research/sts2-style-refs/README.md) (or temporary local PCK extraction), guiding display-size density and value grouping; framing only when no user rough or selected composition owns it |
 | `<ENGINE_MODE>` | Engine-specific invocation (`Codex / GPT Image` via `image_gen` with `referenced_image_paths` and `transparent_background`, `Antigravity / Nano Banana` via `image-generator` subagent brief, or dual-engine comparison; see [SKILL.md](SKILL.md#image-generation-engines-codex-gpt-image-vs-antigravity-nano-banana)) |
 | `<PALETTE>`,`<MATERIALS>` | Color roles and materials in the character art specification |
 | `<ASSET_SUBJECT>`,`<SCENE_SENTENCE>` | Character themes, recurring objects, and chosen action |
@@ -73,6 +73,7 @@ Specify inputs in this order: **exact user-selected source → changed axis → 
 - List neighboring axes that could be confused with the edit, plus preserved face, pose, character scale, framing, and style. Do not paste the full equipment specification or new-generation recipe again.
 - For hand/equipment edits, identify each affected arm by its shoulder and near/far position, then trace shoulder → elbow → wrist → hand → contact target. Specify which joints must move and which remain fixed. Check that each required hand and its contact remain readable after the edit; screen-left/right hand labels alone do not establish the arm connection.
 - For overlap edits, distinguish anatomical front/back from camera depth. In a rear view, equipment behind the character's back may be nearer the camera and visible over the coat. State which surface occludes which, where the object enters/exits the silhouette, and how its centerline continues through the grip. Preserve unrelated pose and equipment design.
+- For requests to reduce detail, keep the selected image's staging and use Recipe 2-A. Identify the surfaces and background marks to merge; simplifying the prompt alone does not establish that the painting became simpler.
 
 ```text
 Use case: precise-object-edit / identity-preserve.
@@ -113,11 +114,15 @@ Compare the new combat pose against the ordinary standing export at the same dis
 Use whenever the user supplies a rough sketch, symbol draft, silhouette, or object/photo reference (`refs/<category>/` or chat attachment), or when you construct a layout/pose rough in `drafts/<asset>-rough.png` to lock complex staging before final rendering. Combine this block with the target asset's recipe (1-A, 3, 4, 5, 6, 7, or 8).
 
 - **Always pass the rough or reference file directly as an image input.** Never discard it in favor of text-only description.
+- **Write a landmark brief before generation:** record camera/body direction, visible body extent, head/gaze, each hand's position and role, and the object's grip-to-tip direction and contact point. Use rough-relative locations and visible relationships; label any necessary interpretation as an assumption. Preserve these relationships when adapting the canvas ratio by extending the setting around them. Keep the rough first among composition inputs and label each reference's role in the prompt.
 - **Assign explicit, non-overlapping owners:**
   - **Rough sketch / layout guide:** owns primary camera angle, silhouette, pose/gesture, focal placement, and core symbol arrangement. Translate rough lines and flats into finished StS2 2D game art without reinterpreting a user-chosen motif from the asset title alone.
   - **Object / photo / motif reference:** owns structural construction, proportions, and functional identifiers. Simplify photorealistic grain, complex engraving, background clutter, lighting mismatch, and watermarks into 2–3 broad value families and crisp contours.
-  - **Approved `base.png` & current-run family masters:** own character face, apparent age, sleek proportions, gloved hands/vambraces, canonical weapon construction, and palette.
+  - **Approved `base.png`:** owns character face, apparent age, proportions, costume, and palette. It supplies weapon construction only when that weapon belongs in the requested scene. The user's card-specific prop description and its rough/object reference own a different weapon's identity and handling; carry the latest correction into subsequent edits.
+  - **Current-run object-family masters:** own the recurring prop's construction within the requested object family.
   - **`<OFFICIAL_ANCHOR>`:** owns target display-size information density, contour hierarchy, and safe-zone readability.
+
+After generation, compare the rough and candidate directly: mark each landmark preserved, changed, or uncertain with visible evidence. A matching theme or plausible pose does not resolve a reversed object direction, substituted weapon, changed hand action, or lost body extent. Correct those findings before surface polish; return to the rough when the candidate has drifted. Record remaining differences rather than claiming exact rough fidelity.
 
 ```text
 Use case: reference-guided-generation / identity-preserve.
@@ -125,9 +130,10 @@ Asset type: <target asset family and OUTPUT_CONTRACT>.
 Engine mode: <ENGINE_MODE>.
 Input owners:
 - Rough / motif / object reference (<ROUGH_OR_REF_INPUT>): owns <composition / silhouette / pose / object construction / primary symbol arrangement>. Preserve <adopted rough/reference traits>; exclude <sketch construction lines, photorealistic noise, source background, border, or superseded details>.
-- Character & prop anchors (<approved base.png and/or current-run object-family master, when applicable>): own <facial anatomy, proportions, gloved hand/vambrace construction, canonical weapon, PALETTE, MATERIALS>.
+- Character & prop anchors (<approved base.png and/or current-run object-family master, when applicable>): own <visible character identity and requested prop construction, separately assigned; omit unrelated base equipment>.
 - Official StS2 anchor (<OFFICIAL_ANCHOR>): guides <display-size readability, 2-3 value plane grouping, contour weight, and UI safe-zone framing>; exclude <official character/item identity, UI frame, numbers, and dithering>.
 Subject & staging: <translate the rough/reference directly into the finished asset subject and action without reinterpreting the chosen motif>.
+Landmarks: <camera/body direction and visible extent; head/gaze; hand positions and roles; requested object type, grip-to-tip direction, and contact point>.
 Style: <STYLE>.
 Output: <OUTPUT_CONTRACT>.
 ```
@@ -138,12 +144,12 @@ Do not generate again when the user requests applying the selected painting unch
 
 ### 2-A. Surface Cleanup
 
-Use when surface noise is visible at actual size.
+Use when surface noise is visible at actual size or the user asks for less detail. Name the noisy regions, then specify the larger connected shapes that replace them: hair and fur clumps, broad cloth/metal planes, a few continuous liquid/effect shapes, and quiet background masses. Preserve the focal contact and silhouette. Compare source/result beside the official anchor at the same display size; record which competing marks disappeared and whether the action and pose stayed intact.
 
 ```text
 Use case: identity-preserve / rendering-cleanup.
 Edit target: <ASSET>. Preserve identity, equipment construction, pose, proportions, crisp facial features, framing and transparency.
-Rendering cleanup only: <ARTS.md 7.2 Block D>. Consolidate unnecessary fragments while preserving clean cel-plus-soft-form transitions, crisp contours, and palette clarity. Do not redesign equipment, coarsen facial anatomy, dull colors, blur, or over-sharpen the image.
+Rendering cleanup only: <ARTS.md 7.2 Block D>. Merge <observed noisy regions> into <larger connected shapes>, keeping the strongest contrast at <focal action/contact>. Preserve clean cel-plus-soft-form transitions, crisp contours, and palette clarity. Do not redesign equipment, coarsen facial anatomy, dull colors, blur, or over-sharpen the image.
 ```
 
 ## Recipe 3: `base → Chibi UI`
