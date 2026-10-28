@@ -11,6 +11,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaGreatFlame() : RealtaCard(4, CardType.Attack, CardRarity.Rare, TargetType.AllEnemies)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_great_flame.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(40m, ValueProp.Move), new EnergyVar(1)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         [HoverTipFactory.FromPower<VigorPower>(), HoverTipFactory.FromPower<FlameBarrierPower>()];

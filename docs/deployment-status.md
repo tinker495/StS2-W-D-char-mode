@@ -2,6 +2,14 @@
 
 여러 캐릭터에 걸친 패키지·설치·검증 기록을 이 문서에서 관리한다. 캐릭터별 에셋 경로와 적용 범위는 각 에셋 가이드가 관리한다. 아래 내용은 원래 배포 환경의 관찰 기록이며, 현재 체크아웃이나 다른 PC의 설치 상태를 뜻하지 않는다.
 
+## 2026-10-29 레아르타 위대한 불꽃 카드 이미지 패키징
+
+`codex/expand-godot-art-skills`의 `5015268` 이후 작업 변경분에 `RealtaGreatFlame` 전용 일러스트를 연결했다. 사용자가 선택한 롱소드와 극염 그림을 그대로 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다.
+
+최초 sandbox 실행은 Steam 경로를 찾는 레지스트리 접근 제한으로 패키징 전에 중단됐다. 같은 `dev.ps1 publish`를 escalated로 다시 실행하여 C# 빌드(경고·오류 0건), Godot 가져오기와 PCK 내보내기를 종료 코드 0으로 완료했다.
+
+별도 임시 Godot 프로세스에서 생성된 PCK의 `realta_great_flame.png` 텍스처를 로드하여 정확히 `1000×760`, 완전 불투명이며 적용한 PNG와 모든 픽셀이 같음을 확인했다. 카드 PNG 5개의 크기·불투명도 검사도 통과했다. 임시 관찰은 정식 인수 테스트가 아니며 테스트와 검증 기준은 변경하지 않았다. 게임 설치, 실제 게임 플레이와 UI 안에서의 표시는 검증하지 않았다.
+
 ## 2026-10-29 레아르타 화룡의 피 카드 이미지 패키징
 
 `codex/expand-godot-art-skills`의 `d80cb21` 이후 작업 변경분에 `RealtaFireDragonsBlood` 전용 일러스트를 연결했다. 마지막 단순화본을 새로 생성하지 않고 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다.
