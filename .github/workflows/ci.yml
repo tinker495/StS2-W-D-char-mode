@@ -17,3 +17,15 @@ jobs:
       # tracked-reference validation in pre-commit and CI, without game DLLs.
       - name: Check tracked references
         run: pwsh -NoProfile -File ./scripts/check-tracked-references.ps1
+
+  card-portraits:
+    name: Card portrait dimensions and alpha
+    # Human requester: wjdrb, 2026-10-29, retrospective items 1 and 2:
+    # check the delivered card canvases and every pixel's opacity in CI.
+    # Reuse the Windows System.Drawing converter; no game/SDK setup is needed.
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Check card portraits
+        shell: powershell
+        run: ./.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 check-cards

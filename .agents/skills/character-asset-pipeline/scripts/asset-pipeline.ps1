@@ -1,7 +1,7 @@
 ﻿[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet('inspect', 'preview', 'compare', 'export', 'outline', 'official-poses', 'tile-pair', 'ui-preview')]
+    [ValidateSet('inspect', 'preview', 'compare', 'export', 'export-card', 'check-cards', 'outline', 'official-poses', 'tile-pair', 'ui-preview')]
     [string]$Command,
 
     [string]$Path,
@@ -20,6 +20,8 @@ param(
     [int]$DisplayHeight = 0,
     [ValidateSet('Fit', 'Cover', 'Stretch')]
     [string]$CropMode = 'Fit',
+    [ValidateSet('Standard', 'Ancient')]
+    [string]$CardType = 'Standard',
     [int]$Radius = 2,
     [string]$Color = '#FFFFFF',
     [string[]]$Paths,
@@ -32,6 +34,29 @@ param(
 
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Drawing
+$cardRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../Sts2WD/images/card_portraits'))
+$cardSizes = @{
+    Standard = [System.Drawing.Size]::new(1000, 760)
+    Ancient = [System.Drawing.Size]::new(606, 852)
+    Thumbnail = [System.Drawing.Size]::new(250, 190)
+}
+
+function Get-RuntimeCardType([string]$TargetPath) {
+    if (-not $TargetPath) { return $null }
+    $absolute = [IO.Path]::GetFullPath($TargetPath)
+    if (-not $absolute.StartsWith($cardRoot + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) { return $null }
+    # Expected layouts are independent of the candidate's pixels. New Ancient
+    # runtime portraits register their relative paths in the shared overrides.
+    $layoutsPath = Join-Path $PSScriptRoot '../../../../scripts/card-portrait-layouts.json'
+    $layouts = Get-Content -LiteralPath $layoutsPath -Encoding UTF8 -Raw | ConvertFrom-Json
+    foreach ($override in $layouts.overrides.PSObject.Properties) {
+        if (-not $cardSizes.ContainsKey($override.Value)) { throw "Unknown card layout '$($override.Value)' for $($override.Name)." }
+    }
+    $relative = $absolute.Substring($cardRoot.Length + 1).Replace('\', '/')
+    $entry = $layouts.overrides.PSObject.Properties[$relative]
+    if ($null -ne $entry) { return $entry.Value }
+    return 'Standard'
+}
 
 function Get-AlphaBytes([System.Drawing.Bitmap]$bmp) {
     $rect = New-Object System.Drawing.Rectangle(0, 0, $bmp.Width, $bmp.Height)
@@ -54,13 +79,18 @@ function Get-AlphaBounds([System.Drawing.Bitmap]$bmp, [int]$alphaThreshold = 8) 
     $maxX = -1
     $maxY = -1
     $nonZero = 0
+    $opaque = 0
+    $minAlpha = 255
     for ($y = 0; $y -lt $bmp.Height; $y++) {
         $row = $y * $stride
         $rowMin = -1
         $rowMax = -1
         for ($x = 0; $x -lt $bmp.Width; $x++) {
             # Format32bppArgb is stored as BGRA; alpha is the fourth byte.
-            if ($bytes[$row + ($x * 4) + 3] -gt $alphaThreshold) {
+            $pixelAlpha = $bytes[$row + ($x * 4) + 3]
+            if ($pixelAlpha -eq 255) { $opaque++ }
+            if ($pixelAlpha -lt $minAlpha) { $minAlpha = $pixelAlpha }
+            if ($pixelAlpha -gt $alphaThreshold) {
                 $nonZero++
                 if ($rowMin -lt 0) { $rowMin = $x }
                 $rowMax = $x
@@ -105,11 +135,38 @@ function Get-AlphaBounds([System.Drawing.Bitmap]$bmp, [int]$alphaThreshold = 8) 
         BBoxHeightRatio  = [math]::Round(($bboxH / [double]$bmp.Height) * 100, 1)
         MarginsPx        = $margins
         MinMarginRatio   = $minMarginRatio
-        OpaquePixelRatio = [math]::Round(($nonZero / [double]$total) * 100, 1)
+        VisibleAlphaThreshold = $alphaThreshold
+        VisiblePixelRatio = [math]::Round(($nonZero / [double]$total) * 100, 1)
+        OpaquePixelRatio = [math]::Round(($opaque / [double]$total) * 100, 1)
+        FullyOpaque      = ($opaque -eq $total)
+        MinAlpha         = $minAlpha
     }
 }
 
-function New-ResizedBitmap([System.Drawing.Bitmap]$src, [int]$targetW, [int]$targetH, [string]$mode) {
+function Get-FitRectangle([int]$sourceW, [int]$sourceH, [int]$targetW, [int]$targetH) {
+    $scale = [math]::Min($targetW / [double]$sourceW, $targetH / [double]$sourceH)
+    $drawW = [int][math]::Round($sourceW * $scale)
+    $drawH = [int][math]::Round($sourceH * $scale)
+    return [System.Drawing.Rectangle]::new(
+        [int][math]::Floor(($targetW - $drawW) / 2.0),
+        [int][math]::Floor(($targetH - $drawH) / 2.0), $drawW, $drawH)
+}
+
+# Human requester: wjdrb, 2026-10-29, retrospective items 1 and 2:
+# reject padding before card export and check exact delivery dimensions and
+# every pixel's alpha through the existing local/CI validation workflow.
+# Rounded percentages are informational; FullyOpaque is the exact predicate.
+function Assert-CardBitmap([System.Drawing.Bitmap]$Bitmap, [int]$ExpectedWidth, [int]$ExpectedHeight, [string]$Label) {
+    if ($Bitmap.Width -ne $ExpectedWidth -or $Bitmap.Height -ne $ExpectedHeight) {
+        throw "${Label}: expected ${ExpectedWidth}x${ExpectedHeight}, got $($Bitmap.Width)x$($Bitmap.Height)."
+    }
+    $info = Get-AlphaBounds $Bitmap
+    if (-not $info.FullyOpaque) {
+        throw "${Label}: every card pixel must have alpha 255; minimum alpha is $($info.MinAlpha)."
+    }
+}
+
+function New-ResizedBitmap([System.Drawing.Bitmap]$src, [int]$targetW, [int]$targetH, [string]$mode, [switch]$PreserveEdges) {
     $dst = New-Object System.Drawing.Bitmap($targetW, $targetH, [System.Drawing.Imaging.PixelFormat]::Format32bppArgb)
     $g = [System.Drawing.Graphics]::FromImage($dst)
     try {
@@ -122,12 +179,19 @@ function New-ResizedBitmap([System.Drawing.Bitmap]$src, [int]$targetW, [int]$tar
         if ($mode -eq 'Stretch') {
             $g.DrawImage($src, (New-Object System.Drawing.Rectangle(0, 0, $targetW, $targetH)))
         } elseif ($mode -eq 'Fit') {
-            $scale = [math]::Min($targetW / [double]$src.Width, $targetH / [double]$src.Height)
-            $drawW = [int][math]::Round($src.Width * $scale)
-            $drawH = [int][math]::Round($src.Height * $scale)
-            $posX = [int][math]::Floor(($targetW - $drawW) / 2.0)
-            $posY = [int][math]::Floor(($targetH - $drawH) / 2.0)
-            $g.DrawImage($src, (New-Object System.Drawing.Rectangle($posX, $posY, $drawW, $drawH)))
+            $rectangle = Get-FitRectangle $src.Width $src.Height $targetW $targetH
+            if ($PreserveEdges) {
+                # Sample opaque boundary pixels during bicubic filtering instead
+                # of transparent pixels outside the source. No canvas is added.
+                $attributes = [System.Drawing.Imaging.ImageAttributes]::new()
+                try {
+                    $attributes.SetWrapMode([System.Drawing.Drawing2D.WrapMode]::TileFlipXY)
+                    $g.DrawImage($src, $rectangle, 0, 0, $src.Width, $src.Height,
+                        [System.Drawing.GraphicsUnit]::Pixel, $attributes)
+                } finally { $attributes.Dispose() }
+            } else {
+                $g.DrawImage($src, $rectangle)
+            }
         } else {
             $scale = [math]::Max($targetW / [double]$src.Width, $targetH / [double]$src.Height)
             $cropW = [int][math]::Round($targetW / $scale)
@@ -344,19 +408,49 @@ switch ($Command) {
         }
     }
 
-    'export' {
+    { $_ -in @('export', 'export-card') } {
+        $cardExport = $Command -eq 'export-card'
+        $effectiveCardType = $CardType
+        $runtimeCardType = Get-RuntimeCardType $Target
+        if ($runtimeCardType) {
+            # Keep existing runtime export commands subject to the same card
+            # checks; generic export must not silently reintroduce letterboxing.
+            $cardExport = $true
+            if ($PSBoundParameters.ContainsKey('CardType') -and $CardType -ne $runtimeCardType) {
+                throw "Runtime portrait expects $runtimeCardType, not $CardType. Check scripts/card-portrait-layouts.json."
+            }
+            $effectiveCardType = $runtimeCardType
+        }
+        if ($cardExport) {
+            $cardWidth = $cardSizes[$effectiveCardType].Width
+            $cardHeight = $cardSizes[$effectiveCardType].Height
+            if (($Width -ne 0 -and $Width -ne $cardWidth) -or ($Height -ne 0 -and $Height -ne $cardHeight) -or $CropMode -ne 'Fit') {
+                throw "Card export requires ${cardWidth}x${cardHeight} proportional Fit. Regenerate or outpaint an incompatible source."
+            }
+            $Width = $cardWidth
+            $Height = $cardHeight
+            if (-not $Target -or [IO.Path]::GetExtension($Target) -ine '.png') { throw 'Card export requires a .png target.' }
+        }
         if (-not $Source -or -not $Target -or $Width -le 0 -or $Height -le 0) {
             throw 'Specify -Source <png> -Target <png> -Width <int> -Height <int> [-CropMode Fit|Cover|Stretch] [-BackgroundColor <hex>].'
         }
         $resolvedSrc = (Resolve-Path -LiteralPath $Source).Path
-        $targetDir = Split-Path -Parent $Target
-        if ($targetDir -and -not (Test-Path -LiteralPath $targetDir)) {
-            New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
-        }
         $srcBmp = New-Object System.Drawing.Bitmap($resolvedSrc)
         try {
-            $dstBmp = New-ResizedBitmap $srcBmp $Width $Height $CropMode
+            if ($cardExport) {
+                $rectangle = Get-FitRectangle $srcBmp.Width $srcBmp.Height $Width $Height
+                if ($rectangle.Width -ne $Width -or $rectangle.Height -ne $Height) {
+                    throw "Card source $($srcBmp.Width)x$($srcBmp.Height) fits to $($rectangle.Width)x$($rectangle.Height), requiring padding in ${Width}x${Height}. Regenerate or outpaint before export."
+                }
+                Assert-CardBitmap $srcBmp $srcBmp.Width $srcBmp.Height 'Card source'
+            }
+            $dstBmp = New-ResizedBitmap $srcBmp $Width $Height $CropMode -PreserveEdges:$cardExport
             try {
+                if ($cardExport) { Assert-CardBitmap $dstBmp $Width $Height 'Card output' }
+                $targetDir = Split-Path -Parent $Target
+                if ($targetDir -and -not (Test-Path -LiteralPath $targetDir)) {
+                    New-Item -ItemType Directory -Path $targetDir -Force | Out-Null
+                }
                 if ($BackgroundColor) {
                     $backing = New-Object System.Drawing.Bitmap($Width, $Height)
                     $graphics = [System.Drawing.Graphics]::FromImage($backing)
@@ -375,6 +469,21 @@ switch ($Command) {
         } finally {
             $srcBmp.Dispose()
         }
+    }
+
+    'check-cards' {
+        $count = 0
+        foreach ($file in Get-ChildItem -LiteralPath $cardRoot -Filter '*.png' -File -Recurse | Sort-Object FullName) {
+            $relative = $file.FullName.Substring($cardRoot.Length + 1).Replace('\', '/')
+            $bmp = [System.Drawing.Bitmap]::new($file.FullName)
+            try {
+                $expected = $cardSizes[(Get-RuntimeCardType $file.FullName)]
+                if ($bmp.RawFormat.Guid -ne [System.Drawing.Imaging.ImageFormat]::Png.Guid) { throw "${relative}: expected PNG encoding." }
+                Assert-CardBitmap $bmp $expected.Width $expected.Height $relative
+                $count++
+            } finally { $bmp.Dispose() }
+        }
+        Write-Host "Card portrait check passed ($count PNGs; exact dimensions and fully opaque pixels)."
     }
 
     'outline' {

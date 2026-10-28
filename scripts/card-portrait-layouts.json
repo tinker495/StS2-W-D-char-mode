@@ -1,0 +1,6 @@
+{
+  "requestedBy": "wjdrb, 2026-10-29 retrospective item 1: check expected card layouts independently of the image dimensions",
+  "overrides": {
+    "card.png": "Thumbnail"
+  }
+}

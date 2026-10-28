@@ -13,6 +13,9 @@ Generate new assets directly in the target composition; use Recipe 1-B for local
 | `<CHARACTER_ANCHOR>` | Visible parts of the canonical appearance, face, apparent age, and equipment in the character art specification |
 | `<IDENTITY_CUES>` | Face, hair, and costume identifiers retained in the portrait |
 | `<CHIBI_DETAILS>` | Character-specific proportions, expression, and silhouette within the common chibi scope |
+| `<ROUGH_OR_REF_INPUT>` | User-supplied rough sketch, symbol draft, object photo (`refs/`), or agent-staged layout/pose rough (`drafts/`), with adopted vs. excluded traits |
+| `<OFFICIAL_ANCHOR>` | Same-use-case official StS2 reference image(s) from [sts2-style-refs](../../../docs/research/sts2-style-refs/README.md) (or temporary local PCK extraction), guiding display-size density, value grouping, and composition framing |
+| `<ENGINE_MODE>` | Engine-specific invocation (`Codex / GPT Image` via `image_gen` with `referenced_image_paths` and `transparent_background`, `Antigravity / Nano Banana` via `image-generator` subagent brief, or dual-engine comparison; see [SKILL.md](SKILL.md#image-generation-engines-codex-gpt-image-vs-antigravity-nano-banana)) |
 | `<PALETTE>`,`<MATERIALS>` | Color roles and materials in the character art specification |
 | `<ASSET_SUBJECT>`,`<SCENE_SENTENCE>` | Character themes, recurring objects, and chosen action |
 | `<FRAMING>`,`<OUTPUT_CONTRACT>` | Target composition, UI overlap, and asset-guide dimensions/paths |
@@ -22,7 +25,7 @@ Do not fill slots with another character's example values. Write reusable descri
 
 ## Recipe 1: New Canonical Art and Local Edits
 
-Use 1-A for new standing art/compositions and 1-B for modifying a specific part of a user-selected image. Recipe 1-B also applies to selected UI, card, and selection-scene artwork.
+Use 1-A for new standing art/compositions, 1-B for modifying a specific part of a user-selected image, 1-C for a separate combat pose, and 1-D whenever a rough sketch, layout guide, or object/motif reference image drives the composition or subject across any asset family. Recipe 1-B and 1-D also apply to UI, relic, power, card, and selection-scene artwork.
 
 For character orientation, write body direction, head angle, and gaze as separate prompt fields. Describe head angle through the visible facial planes and the extent of the near/far eyes, using the target specification and references. A screen direction alone does not determine head rotation.
 
@@ -69,11 +72,13 @@ Specify inputs in this order: **exact user-selected source → changed axis → 
 - Describe change relative to the selected source. If a numeric amount was not supplied by the user, state its observational basis and provisional status. Do not add unrequested absolute ratios or body-size targets.
 - List neighboring axes that could be confused with the edit, plus preserved face, pose, character scale, framing, and style. Do not paste the full equipment specification or new-generation recipe again.
 - For hand/equipment edits, identify each affected arm by its shoulder and near/far position, then trace shoulder → elbow → wrist → hand → contact target. Specify which joints must move and which remain fixed. Check that each required hand and its contact remain readable after the edit; screen-left/right hand labels alone do not establish the arm connection.
+- For overlap edits, distinguish anatomical front/back from camera depth. In a rear view, equipment behind the character's back may be nearer the camera and visible over the coat. State which surface occludes which, where the object enters/exits the silhouette, and how its centerline continues through the grip. Preserve unrelated pose and equipment design.
 
 ```text
 Use case: precise-object-edit / identity-preserve.
 Edit target: <exact user-selected image and version>. This image owns the current design and rendering.
 Change only: <requested part and dimension, with a restrained change relative to this input; necessary connected joints/contacts when applicable>.
+Depth and continuity: <camera-near to camera-far order at the affected crossing, visible/hidden segments, and hand/tool connection; for overlap edits>.
 Body direction: <preserved or changed torso/pelvis orientation; for character orientation edits>.
 Head angle: <preserved or changed facial planes and near/far eye visibility; for character orientation edits>.
 Gaze: <preserved or changed pupil direction and target; for character orientation edits>.
@@ -81,7 +86,7 @@ Preserve: <neighboring dimensions and identity/pose/scale/framing/materials that
 Output: the complete edited image in the same canvas and framing, preserving existing transparency.
 ```
 
-After generation, open the selected source and new result side by side with `compare`. Check both the requested difference and preserved features. If another axis changed, record it as unresolved and branch again from the selected source. Do not accumulate failed edits as subsequent inputs. Present changes, remaining differences, and the comparison; promotion follows the skill's existing approval scope.
+After generation, use the [default review loop](SKILL.md#default-generatereviewcorrect-loop). Compare the selected source and result, checking the requested difference, depth/continuity, and preserved features. Correct clear defects within the bounded loop before the final recommendation; after unrelated drift, branch again from the selected source. Promotion follows the skill's existing approval scope.
 
 ### 1-C. `base → Combat Pose` for Branch B
 
@@ -102,6 +107,30 @@ Output: <OUTPUT_CONTRACT>, true transparent alpha. No environment, ground shadow
 ```
 
 Compare the new combat pose against the ordinary standing export at the same display size. Inspect balance, both hands, equipment continuity, silhouette, margins, face identity, and gaze on light/dark backgrounds. Save candidates separately; runtime promotion follows the user's approval scope.
+
+### 1-D. Rough Sketch or Reference Image → Finished Asset (`refs/` or `drafts/<guide>.png`)
+
+Use whenever the user supplies a rough sketch, symbol draft, silhouette, or object/photo reference (`refs/<category>/` or chat attachment), or when you construct a layout/pose rough in `drafts/<asset>-rough.png` to lock complex staging before final rendering. Combine this block with the target asset's recipe (1-A, 3, 4, 5, 6, 7, or 8).
+
+- **Always pass the rough or reference file directly as an image input.** Never discard it in favor of text-only description.
+- **Assign explicit, non-overlapping owners:**
+  - **Rough sketch / layout guide:** owns primary camera angle, silhouette, pose/gesture, focal placement, and core symbol arrangement. Translate rough lines and flats into finished StS2 2D game art without reinterpreting a user-chosen motif from the asset title alone.
+  - **Object / photo / motif reference:** owns structural construction, proportions, and functional identifiers. Simplify photorealistic grain, complex engraving, background clutter, lighting mismatch, and watermarks into 2–3 broad value families and crisp contours.
+  - **Approved `base.png` & current-run family masters:** own character face, apparent age, sleek proportions, gloved hands/vambraces, canonical weapon construction, and palette.
+  - **`<OFFICIAL_ANCHOR>`:** owns target display-size information density, contour hierarchy, and safe-zone readability.
+
+```text
+Use case: reference-guided-generation / identity-preserve.
+Asset type: <target asset family and OUTPUT_CONTRACT>.
+Engine mode: <ENGINE_MODE>.
+Input owners:
+- Rough / motif / object reference (<ROUGH_OR_REF_INPUT>): owns <composition / silhouette / pose / object construction / primary symbol arrangement>. Preserve <adopted rough/reference traits>; exclude <sketch construction lines, photorealistic noise, source background, border, or superseded details>.
+- Character & prop anchors (<approved base.png and/or current-run object-family master, when applicable>): own <facial anatomy, proportions, gloved hand/vambrace construction, canonical weapon, PALETTE, MATERIALS>.
+- Official StS2 anchor (<OFFICIAL_ANCHOR>): guides <display-size readability, 2-3 value plane grouping, contour weight, and UI safe-zone framing>; exclude <official character/item identity, UI frame, numbers, and dithering>.
+Subject & staging: <translate the rough/reference directly into the finished asset subject and action without reinterpreting the chosen motif>.
+Style: <STYLE>.
+Output: <OUTPUT_CONTRACT>.
+```
 
 ## Recipe 2: Surface Passes
 
@@ -124,7 +153,7 @@ Rendering cleanup only: <ARTS.md 7.2 Block D>. Consolidate unnecessary fragments
 ```text
 Use case: identity-preserve / style-transfer.
 Asset type: chibi character portrait for <OUTPUT_CONTRACT>.
-Input: approved base.png for identity and equipment.
+Input: approved base.png for identity and equipment; official portrait reference (docs/research/sts2-style-refs/future-assets/ui-character-portrait-crop.png) for small-scale readability.
 Subject: <IDENTITY_CUES>. Apply the common chibi portrait treatment with <CHIBI_DETAILS>.
 Composition: directly paint a head-dominant portrait with only the specified small shoulder/costume cues at the bottom. Keep the face readable at the actual small display size. <FRAMING>.
 Style: <STYLE>. Palette: <PALETTE>. True transparent background.
@@ -175,6 +204,7 @@ If only an opaque master exists, do not mix its background into the figure using
 ```text
 Use case: stylized-concept.
 Asset type: one energy-icon master exported to the two sizes in <OUTPUT_CONTRACT>.
+Input: <ROUGH_OR_REF_INPUT when supplied>; official energy reference (docs/research/sts2-style-refs/future-assets/ui-energy-in-combat-crop.png or installed energy_necrobinder.tres / energy_*.tres) for rim/inset readability.
 Subject: <ASSET_SUBJECT, MATERIALS, PALETTE>.
 Composition: <FRAMING>. Keep the actual central cost-number overlay area quiet and readable; use a few connected shapes that survive the smallest display size.
 Style: <STYLE>. Transparent outside the icon. No painted cost number, text, frame or outer glow.
@@ -202,53 +232,76 @@ Exclude: painted UI, words, numbers, frames, watermark and other characters' ide
 
 Read scene, property, and runtime paths from the target asset guide.
 
-## Recipe 5: `base → Relic Icon`
+## Recipe 5: `base + refs → Relic Icon` (Branch C-1)
 
-Input the base for character, costume, or equipment-related objects; also input an object-family master newly generated and established in this run. New/replacement production follows the [Branch B/C input rule](SKILL.md#branch-b-and-c-start-with-new-artwork).
+Follow [Branch C-1](SKILL.md#branch-c-1-base--refs--relics-focused-relic-route) and the [Branch B/C input rule](SKILL.md#branch-b-and-c-start-with-new-artwork). Open and pass the official StS2 relic anchors ([relics-potions-frame0.png](../../../docs/research/sts2-style-refs/future-assets/relics-potions-frame0.png) and [relics-in-combat-crop.png](../../../docs/research/sts2-style-refs/future-assets/relics-in-combat-crop.png)). Pass `<ROUGH_OR_REF_INPUT>` (object photo, rough sketch, or designated symbol) when supplied, `base.png` only when the relic depicts canonical character costume/weaponry, and the newly generated current-run starter/base relic master when producing an upgraded/paired relic variant.
 
 ```text
-Use case: stylized-concept.
-Asset type: isolated relic icon for <OUTPUT_CONTRACT>.
+Use case: stylized-concept / reference-guided-generation.
+Asset type: isolated relic icon for <OUTPUT_CONTRACT> (256x256 master exported to 94x94 + 94x94 outline).
+Engine mode: <ENGINE_MODE>.
+Input owners:
+- Object / rough reference (<ROUGH_OR_REF_INPUT or current-run family master, when present>): owns silhouette proportions, structural construction, and key functional identifiers; simplify photo grain, engraving noise, and source backing.
+- Character anchor (<approved base.png, only when canonical character gear is depicted>): owns canonical material and equipment construction.
+- Official StS2 relic anchor (docs/research/sts2-style-refs/future-assets/relics-potions-frame0.png, relics-in-combat-crop.png): guides bold near-black outer contour, 2-3 broad matte value planes, and 48-64px top-bar readability; exclude source blue backing, numbers, and ticket lettering.
 Subject: <ASSET_SUBJECT, canonical object construction, MATERIALS, PALETTE>.
-Composition: a single centered object, approximately72-84% occupancy as a starting point. Prioritize a clear silhouette and a few large readable value families at the actual small size.
-Style: <STYLE>. True transparent background. No floor shadow, pedestal, scenery, text or UI.
+Composition: a single centered isolated object, approximately 72-84% occupancy (preserving at least 2-3px transparent margin at 94x94 so the alpha outline never clips). Prioritize a distinct outer silhouette and 2-3 large connected value families at 48-64px display size.
+Style: <STYLE>. True transparent background. No floor shadow, pedestal, mannequin, scenery, fine filigree, text or UI frame.
 ```
 
-Resize large to small, then derive the outline from the small alpha.
+Compare at `94 × 94` and `48 × 48` beside `relics-potions-frame0.png` and `relics-in-combat-crop.png` on dark/light boards. Resize `256 × 256` large to `94 × 94` small, then derive the `94 × 94` outline from the small alpha.
 
-## Recipe 6: `base → Power Emblem`
+## Recipe 6: `base + refs → Power Emblem` (Branch C-2)
+
+Follow [Branch C-2](SKILL.md#branch-c-2-base--refs--powers-focused-power-emblem-route). Open and pass the official StS2 status icon anchor ([status-icons-in-combat-crop.png](../../../docs/research/sts2-style-refs/future-assets/status-icons-in-combat-crop.png)). When a user-supplied motif rough or symbol PNG exists in `docs/characters/<char>/refs/powers/`, pass it directly as `<ROUGH_OR_REF_INPUT>` and preserve its chosen symbol rather than reinterpreting from the power title alone.
 
 ```text
-Use case: stylized-concept.
-Asset type: single symbolic status emblem for <OUTPUT_CONTRACT>.
-Subject: <ASSET_SUBJECT derived from the actual power meaning and character's visual theme>.
-Composition: a few bold interlocking shapes, distinct silhouette and <PALETTE>. Keep the primary feature central/upper-left and the actual bottom-right stack-number area quiet.
-Style: <STYLE>. True transparent background. No painted numbers, letters, box/frame or scene background.
+Use case: stylized-concept / reference-guided-generation.
+Asset type: single symbolic status emblem for <OUTPUT_CONTRACT> (256x256 master exported to 64x64).
+Engine mode: <ENGINE_MODE>.
+Input owners:
+- Motif / symbol rough (<ROUGH_OR_REF_INPUT in refs/powers/, when present>): owns the primary symbol choice, silhouette, and motif arrangement, incorporating any documented user overrides in <char>-art.md.
+- Official StS2 status anchor (docs/research/sts2-style-refs/future-assets/status-icons-in-combat-crop.png): guides compact symbolic abstraction, bold interior/edge value separation, and 32-64px buff-bar readability; exclude composited stack digits, health bar, and unrelated symbols.
+Subject: <ASSET_SUBJECT derived from the motif rough and character's visual theme>.
+Composition: 2-3 bold interlocking shapes, a distinct outer silhouette, and <PALETTE>. Place the primary identifying feature in x/y:15-80% (central/upper-left) and keep the bottom-right x/y:60-100% stack-number zone quiet.
+Style: <STYLE>. True transparent background. No miniature card scene, full figures, painted numbers, letters, box/frame or scene background.
 ```
 
-## Recipe 7: `base → Standard Card Portrait`
+Compare at `64 × 64` and `32 × 32` beside `status-icons-in-combat-crop.png` and sibling powers in the character's set.
 
-Input the base for the character, body parts, or unique equipment. For recurring objects, also use family masters newly generated and established in this run. Read card names, types, themes, and counts from target documents. New/replacement production follows the [Branch B/C input rule](SKILL.md#branch-b-and-c-start-with-new-artwork).
+## Recipe 7: `base + refs → Standard Card Portrait` (Branch C-3)
+
+Follow [Branch C-3](SKILL.md#branch-c-3-base--refs--cards-focused-card-illustration-route) and [ARTS.md 5.5](../../../ARTS.md#55-standard-card-illustrations). Pass the applicable base, object, rough, and same-type official card anchors. Use this compact card-specific block instead of appending the full character inventory and general rendering block. Include only identity cues visible in this camera; the references carry the remaining construction. For a selected-image simplification, name the preserved composition and repaint its secondary forms under the same density rules.
 
 ```text
-Use case: identity-preserve / stylized-concept.
-Asset type: standard landscape card illustration, <OUTPUT_CONTRACT>.
-Input: <required character/object anchors>. Subject: <CHARACTER_ANCHOR and ASSET_SUBJECT adapted to this scene>.
-Card action: <one concrete action derived from the actual card effect/type/theme>.
-Composition: <FRAMING and actual UI-safe zones>. High-contrast focal foreground, supportive midground, and a quiet low-contrast background. Preserve readable face/hand/tool/contact inside the art window.
+Create one opaque landscape card illustration on an exact 1000x760 canvas (25:19), designed to read at 250x190. Compose directly for this ratio, even when a reference has a different ratio.
+Action: <one sentence linking the subject's gesture to its result>.
+References: <rough or selected image> owns composition; <base/object anchors> own identity; <complementary official illustrations selected from a broader survey> guide <the specific action, hierarchy, or material role assigned to each>.
+Preserve: <camera, pose, visible identity cues, weapon connection, and target silhouette>.
+Large shapes: <primary subject, action/target, and quiet setting>. Keep essential action inside x15-85%, y12-82%.
+Rendering: crisp connected painted shapes with selective form shading, guided by the reference set. Concentrate the sharpest contrast and useful detail at <action>. Group secondary surfaces into broad color areas.
+Effects and setting: <one coherent effect and only the setting cues necessary to the action>. Leave clear space around the focal silhouettes.
+Output: scene painted continuously to all four canvas edges. No letterboxing, blank/solid-color bands, transparent margins, blurred/mirrored padding, card frame, text, cost orb, UI, or watermark. If adapting a wider reference, paint the missing setting above and below while preserving its subjects; do not crop, stretch, or add padding.
+```
+
+Follow Branch C-3's actual-file geometry check, painted-edge inspection, and preview/density review before recommending or promoting the result. Prompt dimensions alone do not establish compliance. For edits, repeat the exact canvas contract in the correction prompt.
+
+## Recipe 8: `base + refs → Ancient Full-Art Card` (Branch C-3)
+
+Read the target card list and actual frame dimensions from the character asset guide. Pass `base.png`, any current-run object-family master, any vertical layout rough (`<ROUGH_OR_REF_INPUT>`), and official StS2 card/illustration references for value hierarchy.
+
+```text
+Use case: identity-preserve / stylized-concept / reference-guided-generation.
+Asset type: vertical full-art card illustration on an exact 606x852 opaque canvas (101:142), <OUTPUT_CONTRACT>. Compose directly for this ratio.
+Engine mode: <ENGINE_MODE>.
+Input owners:
+- Character & prop anchors (<approved base.png and/or current-run object-family master>): own canonical identity, weapon/prop construction, and <PALETTE, MATERIALS>.
+- Layout rough / reference (<ROUGH_OR_REF_INPUT, when present>): owns vertical staging and focal-window placement.
+- Official StS2 anchors (<official card/illustration references in docs/research/sts2-style-refs/>): guide 2-3 value plane economy and 250x350 display readability.
+Subject and scene: <CHARACTER_ANCHOR, ASSET_SUBJECT, SCENE_SENTENCE>.
+Layout: stage face, hands, and primary action inside the upper-middle focal window (y:15-58%), clear of the top title/cost zone (y:0-14%), and keep the lower description zone (y:62-100%) dark, low-contrast, and quiet. Do not move the primary action by post-generation cropping.
 Style: <STYLE>. Palette/materials: <PALETTE, MATERIALS>.
-Backdrop: full bleed opaque scene. No painted card frame, cost, words, numbers, UI icons or watermark.
+Backdrop: continuous opaque scene painted to all four edges. No letterboxing, blank/solid-color bands, transparent margins, blurred/mirrored padding, painted frame, banner, text box, numbers, letters or watermark. Extend the setting instead of padding a mismatched reference.
 ```
 
-## Recipe 8: `base → Ancient Full-Art Card`
-
-Read the target card list and actual frame dimensions from the character asset guide.
-
-```text
-Use case: identity-preserve / stylized-concept.
-Asset type: vertical full-art card illustration, <OUTPUT_CONTRACT>.
-Input: <required character/object anchors>. Subject and scene: <CHARACTER_ANCHOR, ASSET_SUBJECT, SCENE_SENTENCE>.
-Layout: use the actual title/cost overlay zone, upper-middle focal window and lower description zone from the asset contract. Put face/hands/main action in the focal window and keep the text background quiet. Do not move the primary action by post-generation cropping.
-Style: <STYLE>. Palette/materials: <PALETTE, MATERIALS>.
-Backdrop: full bleed opaque painting. No painted frame, banner, text box, numbers, letters or watermark.
-```
+Run Branch C-3's actual-file geometry and painted-edge checks, then compare at `250 × 350` and verify that the upper-middle focal window (`y:15–58%`) and quiet lower text zone (`y:62–100%`) hold without post-generation cropping.

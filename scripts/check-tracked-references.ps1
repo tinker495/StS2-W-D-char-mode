@@ -183,6 +183,13 @@ function Check-PathMention([string]$Source, [int]$Line, [string]$Target, [bool]$
     if (-not $Markdown -and $Source.EndsWith('.import') -and
         $targetPath -match '^\.godot/imported/[^/]+\.ctex$') { return }
 
+    # Human requester: wjdrb, 2026-10-29: exempt only this bundled inspector's
+    # excluded project-data directory names. Resource URLs and paths inside that
+    # directory remain dependencies and continue through the normal checks.
+    if (-not $Markdown -and -not $isResource -and
+        $Source -ceq '.agents/skills/godot-nodes-scenes/scripts/check_godot_project.py' -and
+        $targetPath -cin @('.godot', '.godot/')) { return }
+
     # Human requester: wjdrb, 2026-10-24: preserve skill sources. General examples
     # there are templates for other repositories, not this checkout's dependencies.
     # Explicit links, repository paths and the prohibited local namespaces still apply.
