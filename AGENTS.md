@@ -23,24 +23,15 @@ Suggestions to change or remove tests, and co-migration requirements below, are 
 
 ### Architectural Recommendations
 
-- Go beyond minimal edits to diff lines. When a change reveals structural problems such as duplicated ownership of a concept, shotgun surgery, delegation-only wrappers, or eroding stage boundaries, propose deeper alternatives explicitly: moving, merging, or deleting modules, or reassigning ownership.
-- Optimize for minimum context rather than minimum change. Prefer deep modules with narrow interfaces that reduce the concepts maintainers must understand. Favor removing complexity over adding code.
-- Flag speculative generality as a deletion candidate: single-implementation interfaces, configuration nobody sets, and hand-rolled replacements for standard-library functionality.
-- Support structural recommendations with evidence of their actual maintenance cost and present them in severity order.
+For architectural review, apply [architecture criteria](docs/conventions/review/architecture.md). Before code changes or standards reviews, use [CODING_STANDARDS.md](CODING_STANDARDS.md) to load the applicable topic rules for every affected character and shared module.
 
 ## Reuse StS2 Features First
 
-Prefer StS2's existing features and extension points for gameplay, commands, models, UI, tooltips, localization, and resource handling. Before adding a mod-owned equivalent or a Harmony patch, inspect the relevant native type, member, and vanilla call site in the installed game. Use the native API directly or through established BaseLib integration points; keep content and presentation changes within that native flow.
-
-Add custom behavior only for a required capability the native implementation lacks or a confirmed defect. Record the game version, relevant type/member, observed limitation, and why existing APIs or extension points are insufficient in the implementation documentation. Keep the extension limited to that gap and preserve native behavior outside it. For named base-game effects and their mappings, follow [ADR-0001](docs/adr/0001-reuse-base-game-effects.md).
+Before implementing gameplay, model, UI, localization or resource behavior, read [native StS2 integration](docs/conventions/native/features.md) for the native-first rule and required evidence for custom behavior.
 
 ## Card Reference Previews
 
-In-game descriptions, including those on cards, relics, powers, and potions, must include a native card preview for every concrete card they reference, including cards named or produced through a keyword such as Reform or Guard. Register previews through the model's native hover-tip API, such as `ExtraHoverTips`, with `HoverTipFactory.FromCard<T>()`; use `FromCardWithCardHoverTips<T>()` when the referenced card's keyword explanations are also needed. Localized names and color tags alone do not register previews.
-
-Show only outcomes possible for the described target, and explain the mechanic's mapping in its keyword description. When the target determines one result, preview that result alone; Warrior Strike reforms itself from an Attack into Siarcun. When the target is not yet known, show all possible base outcomes and explain upgrade inheritance. Share a mechanic's preview list across cards and powers with the same possible outcomes. Match preview upgrades to the referenced card's rules: an unupgradable token stays unupgraded; a known transformation target supplies its own upgrade state. A generator's upgrade state alone does not imply an upgraded result.
-
-Generic references such as "a random card" or "the selected card" have no fixed model to preview. A card already being displayed needs no preview of itself. Keep preview dependencies finite and avoid recursive self-reference.
+When a description references or produces concrete cards, including through keywords, apply [native card previews](docs/conventions/ui/card-previews.md) for registration, possible outcomes, upgrade state and recursion limits.
 
 ## Test Ownership and Change Authority
 
@@ -100,16 +91,7 @@ Write shared documentation so it remains understandable without local drafts, ge
 
 ## Character Naming
 
-Name every character-owned path and identifier after the character's decided English name, following the Realta and Althea layouts. `CharacterN` / `character_n` placeholders remain only for characters whose name is undecided (currently `CharacterFour`); rename them to this layout once the name is decided. The third character is now `Mercurius`.
-
-| Area | Layout (`<Char>` = `Realta`, `<char>` = `realta`) |
-|---|---|
-| Code | `Sts2WDCode/Characters/<Char>/`, namespace `Sts2WD.Sts2WDCode.Characters.<Char>`, subfolders `Cards/`, `Relics/`, `Potions/`, `Powers/` |
-| Types | Model `<Char>`; pools `<Char>CardPool`, `<Char>RelicPool`, `<Char>PotionPool`; pool bases `<Char>Card`, `<Char>Relic`, `<Char>Potion` carry `[Pool]`; every other type is `<Char>`-prefixed. One top-level type per file, named after that type: each card, relic, potion and power model gets its own `<Type>.cs` and `.cs.uid`, and a class stays in one file (no `partial` split) |
-| Assets | `Sts2WD/images/charui/<char>/`, `Sts2WD/images/cards/<char>/`, `Sts2WD/materials/<char>/`, `Sts2WD/character_text/<char>.json` |
-| Docs | `docs/characters/<char>/`: design `<char>.md`, plus `<char>-art.md`, `<char>-assets.md`, `<char>-history.md` |
-
-Model IDs are `STS2WD-` plus the UPPER_SNAKE class name, so renaming a model class changes its saved ID; folders and namespaces leave IDs untouched. A model rename also carries the `STS2WD-<CHAR>.*` keys in `Sts2WD/localization/*/characters.json` and `ancients.json` and the preset's `characterId`. Moving a texture rewrites its `.import` `source_file` and the `.ctex` hash, which is the MD5 of the `res://` source path. Record the save-compatibility outcome in the character's design doc.
+Before creating or renaming character-owned types, paths or identifiers, apply [character naming and layout](docs/conventions/characters/naming.md), including undecided names, native roles and save compatibility. When creating or reorganizing character documentation, follow [topic-based character guides](docs/conventions/documentation/character-guides.md); the same rules cover every character and visual owner.
 
 ## Agent Skills
 
@@ -133,6 +115,6 @@ Use the root `GLOSSARY.md` and `docs/adr/` as the single domain context. Follow 
 
 When creating or editing images, or writing image-generation prompts, start with [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) and open only the requested route. It identifies the required sections of [ARTS.md](ARTS.md), the target's `<char>-art.md` and `<char>-assets.md`, reference images and engine instructions. Use the card-observation route to extract native card portraits or inspect a packaged texture; previous tasks' draft folders are not a prerequisite.
 
-`ARTS.md` owns the shared style, chibi scope, official StS2 reference anchors, and composition principles. `<char>-art.md` owns the character's current appearance, palette, equipment, rough/reference roles, and prompt material. `<char>-assets.md` owns file mappings and runtime application status. Read `<char>-history.md` only when investigating past choices, rejections, or deliveries. The canonical visual anchor is `base.png` in the same directory, with `refs/` (including category subfolders such as `refs/relics/`, `refs/powers/`, `refs/cards/`) supplying character, rough-sketch, and motif/object references. Keep character-specific descriptions out of shared documents and general-purpose skills.
+`ARTS.md` owns the shared style, chibi scope, official StS2 reference anchors, and composition principles. `<char>-art.md` and `<char>-assets.md` are short indexes to the requested topic's specification, file mappings and runtime status under `visuals/<topic>/`. Read `<char>-history.md` only when investigating past choices, rejections, or deliveries. The canonical visual anchor is `base.png` in the same directory, with `refs/` supplying character, rough-sketch, and motif/object references. For owners without guides or an approved base, use [the missing-guide procedure](docs/conventions/documentation/character-guides.md#owners-without-art-guides). Keep character-specific descriptions out of shared documents and general-purpose skills.
 
 Generate each asset directly in its intended composition by passing `base.png` (when applicable), any rough/motif reference in `refs/`, and the same-use-case official StS2 reference from [sts2-style-refs](docs/research/sts2-style-refs/README.md) as image inputs, then comparing at actual display size. Regenerate when the composition is wrong; do not solve it through post-generation cropping, extracting and enlarging a region, or automatic Cover fitting. Resize while preserving the whole painting by default. Crop only when the user explicitly requests it for that image. See [ARTS.md section 1.3](ARTS.md#13-composition-principles-for-all-assets) and [section 2.3](ARTS.md#23-actual-official-image-anchors-and-priority).

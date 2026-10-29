@@ -20,15 +20,15 @@ Raw `refs/` may differ in costume, rendering, and camera. Resolve conflicts into
 | Document | Owns |
 |---|---|
 | This document | Shared rendering, information density, materials, asset compositions, and UI safe zones |
-| `<char>-art.md` in the [character directory](docs/characters/) | Appearance, proportions, colors, equipment, prompt material, reference roles, and adopted constraints |
-| `<char>-assets.md` in the same directory | Delivery paths, dimensions, model/scene wiring, counts, and current status |
+| `<char>-art.md` in the [character directory](docs/characters/) | Short index to the relevant appearance, palette, equipment, reference roles, constraints and prompt specifications under `visuals/<topic>/` |
+| `<char>-assets.md` in the same directory | Short index to topic delivery paths, dimensions and status; separate API references and inventories when needed |
 | `<char>-history.md` in the same directory | Past exploration, choices, rejections, deliveries, and observations |
 | `base.png` and `refs/` in the same directory | Approved visual canon and raw references |
 | Optional `drafts/` in the same directory | Git-ignored drafts, prompts, comparisons, and other local records; never required to understand shared documents |
 | [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) | Production branches, records, previews, conversion, promotion, and packaging |
 | [Official-source research](docs/research/sts2-art-direction-sources.md) and related studies | Official statements, source images, observations, project judgments, and limitations |
 
-Read the target art specification and asset guide before creating or revising a character. Update character decisions there rather than duplicating them in shared documents or generic skills.
+Before creating or revising an asset, follow its owner's art and asset indexes to the requested topic. Update decisions in that topic. The [character-guide convention](docs/conventions/documentation/character-guides.md) defines ownership for all characters, Ancients and owners without existing guides.
 
 ### 1.3 Composition Principles for All Assets
 
@@ -108,7 +108,7 @@ Give the outer silhouette and crossing forms a clear value break, let clean cel-
 
 ## 3. Character Art Specification Contract
 
-Check `docs/characters/<char>/<char>-art.md` for:
+Start at `docs/characters/<char>/<char>-art.md` and open the requested topic's specification. Read the relevant identity and palette pages when those features appear. The topic pages collectively own:
 
 - Approved canonical appearance, runtime coverage, and remaining differences.
 - Adopted/excluded features of each raw reference.
@@ -117,7 +117,7 @@ Check `docs/characters/<char>/<char>-art.md` for:
 - Recurring objects, themes, family masters, and character prompt material.
 - Constraints established through selection/rejection and their reasons, understandable without opening historical drafts.
 
-Do not change identity while applying the shared style. If a new character has no specification, record observed references and user decisions in its directory rather than copying another character's defaults.
+Preserve identity while applying the shared style. When guides or approved references are missing, follow [Owners Without Art Guides](docs/conventions/documentation/character-guides.md#owners-without-art-guides) to record observed facts and unresolved decisions in the target owner's directory.
 
 ## 4. Shared Material Treatment
 

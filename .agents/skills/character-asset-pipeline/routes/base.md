@@ -1,5 +1,7 @@
 # Branch A: `refs → base`
 
+This route establishes a standing master. For a canonical Ancient/event painting, use [event art](event.md#event-painting-and-canonical-base); the filename `base.png` does not prescribe standing geometry.
+
 Read the target identity/reference roles and current base status, then ARTS.md sections 1–4 and 5.1. Use [the shared workflow](../workflow.md), the active [engine section](../engines.md), [source labels](../references.md#source-labels-and-character-orientation), and the recipe below. A rough also requires the landmark brief in references.md. Official standing extraction and comparisons are in [observation tools](../observation-tools.md#official-standing-poses).
 
 1. Open all raw references in `refs/` and the official combat/merchant references (`official-poses` or [sts2-style-refs](../../../../docs/research/sts2-style-refs/README.md)). Record adopted and excluded features in the target art specification with [Recipe 1's source labels](../references.md#source-labels-and-character-orientation). For revisions, separate preserved features from the requested change axis.

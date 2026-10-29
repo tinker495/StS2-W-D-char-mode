@@ -1,5 +1,7 @@
 # Branch B: `base → UI, Standing Art, Selection Illustration`
 
+For an Ancient's dialogue/history/map miniature, use [event miniatures](event.md#dialogue-history-and-map-miniatures). Its native dimensions and outline contract come from the owner's UI topic rather than the playable-character output set below.
+
 Read the target's requested output brief/status and visible identity, then [the shared workflow](../workflow.md) and active [engine section](../engines.md). Read only the relevant row and recipe: standing/combat → ARTS.md 5.1 and 1-C; portrait/marker → 5.2 and Recipe 3; selection tiles → 5.2.1 and 4-A/B; energy → 5.2 and 4-C; selection scene → 5.7 and 4-D. A supplied rough uses [the landmark brief](../references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). Use [observation tools](../observation-tools.md) and [conversion commands](../scripts/conversion-tools.md) at the requested display size.
 
 1. Open the approved `base.png` as the primary identity/equipment input, plus any UI/scene roughs in `refs/` and the matching official StS2 UI/tile/selection references from [ARTS.md 2.3](../../../../ARTS.md#23-actual-official-image-anchors-and-priority). Follow ARTS.md's common chibi scope; obtain proportion details, visible parts, expressions, and backgrounds from the target art specification.

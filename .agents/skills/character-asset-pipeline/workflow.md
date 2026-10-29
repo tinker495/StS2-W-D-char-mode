@@ -4,7 +4,7 @@ All routes use this workflow. For new generation, read Starting Inputs and the r
 
 ## Starting Inputs
 
-Generate new or replacement UI, selection scenes, cards, relics and powers from the approved base when applicable, supplied rough/object references, and same-use-case official StS2 images. Previous deliveries and earlier production drafts are comparison material after the new result exists, not initial edit targets, composition anchors or prompts to reproduce. The approved base, user-supplied rough/motif references and current-run object-family masters are exceptions. Explicitly selected-image edits use [the review route](routes/review.md).
+Generate new or replacement UI, event/selection scenes, cards, relics and powers from the approved base when applicable, supplied rough/object references, and same-use-case official StS2 images. Previous deliveries and earlier production drafts are comparison material after the new result exists, not initial edit targets, composition anchors or prompts to reproduce. The approved base, user-supplied rough/motif references and current-run object-family masters are exceptions. Explicitly selected-image edits use [the review route](routes/review.md).
 
 This rule governs the initial composition. The bounded loop may edit a sound candidate from the current run to correct an observed defect; that does not make it a starting anchor for a later production request.
 

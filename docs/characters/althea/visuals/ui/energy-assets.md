@@ -1,0 +1,7 @@
+# Althea Energy Texture Delivery
+
+The runtime uses the accepted crimson variant at `Sts2WD/images/charui/althea/big_energy.png` and `text_energy.png`. `AltheaCardPool`, `AltheaRelicPool`, and `AltheaPotionPool` point to these shared files. These cover card-cost and inline energy textures. The combat energy counter still uses the placeholder character's native presentation.
+
+The user requested a dark-crimson recolor of the Necrobinder shape and accepted the resulting direction. The generated review master is 1254x1254 RGBA with transparent corners; complete-image Fit conversions are 74x74 RGBA for card costs and 24x24 RGBA for inline energy. The accepted variant is not a pixel-exact hue transform. Runtime replacement and game-folder installation were performed on 2026-10-23. Preserve the complete symbol and alpha; do not crop the painting. Local masters, conversions, and comparisons are optional working material; the tracked runtime textures are the accepted outputs.
+
+To recover the original reference from the installed game, mount `SlayTheSpire2.pck` in Godot, load `res://images/atlases/ui_atlas.sprites/card/energy_necrobinder.tres` as `AtlasTexture`, decompress its atlas image and read its declared region. This recovers the asset's native region, rather than deriving a new composition from a larger painting. The inline source is `res://images/packed/sprite_fonts/necrobinder_energy_icon.png`.

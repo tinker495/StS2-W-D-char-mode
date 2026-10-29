@@ -4,7 +4,8 @@ Start with [SKILL.md](SKILL.md) and the selected route. Recipes live beside thei
 
 | Needed prompt | Authoritative recipe |
 |---|---|
-| New canonical base (1-A) | [Base route](routes/base.md#1-a-refs--base-new-standing-master) |
+| New canonical standing base (1-A) | [Base route](routes/base.md#1-a-refs--base-new-standing-master) |
+| Ancient/event painting or dialogue miniature | [Event route](routes/event.md); build the prompt from the owner's event/UI contract |
 | Combat pose (1-C), chibi/UI/selection (3–4) | [UI route](routes/ui.md) |
 | Relic (5) | [Relic route](routes/relics.md#recipe-5-base--refs--relic-icon-branch-c-1) |
 | Power (6) | [Power route](routes/powers.md#recipe-6-base--refs--power-emblem-branch-c-2) |

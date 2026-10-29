@@ -6,6 +6,8 @@
 
 [card-candidates/2026-10-25/realta_strike.png](../../card-candidates/2026-10-25/realta_strike.png) is a 1000 x 760 opaque PNG. The complete 1439 x 1093 generated landscape was proportionally Fit-resized without cropping. A 250 x 190 preview was opened beside the other Strike candidates and native `StrikeIronclad` at the same scale. Input roles and the production brief are in [the card art specification](art.md#basic-strike-candidate-2026-10-25). This candidate has not replaced runtime artwork or been installed.
 
+## Applied Card Portraits
+
 **Craft-card portraits, 2026-10-29:** the user approved applying the four hands-and-tools illustrations below. Each runtime PNG is exactly `1000 × 760` (`25:19`), with every pixel at alpha 255. Each model overrides BaseLib's `CustomPortraitPath` and native `PortraitPath` to the same resource, covering display and preloading without changing card mechanics or saved model IDs.
 
 | Model / localized name | Tracked painting | Runtime portrait | Master dimensions |

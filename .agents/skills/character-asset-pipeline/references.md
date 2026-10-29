@@ -2,7 +2,7 @@
 
 Read the source-label section when adopting or changing character features. Read the rough section whenever a supplied sketch, layout guide, object photo or motif determines the result. Open every actual input; never replace an available visual reference with text alone.
 
-Store supplied roughs, motifs and object photos under `docs/characters/<char>/refs/` (optionally `refs/cards/`, `refs/relics/`, `refs/powers/`) and record adopted/excluded traits in `<char>-art.md`. Optional agent-staged layouts belong in ignored `drafts/`. Shared documents must explain current constraints without those local drafts.
+Store supplied roughs, motifs and object photos under `docs/characters/<char>/refs/` (optionally `refs/cards/`, `refs/relics/`, `refs/powers/`) and record adopted/excluded traits in the topic specification reached through `<char>-art.md`. Optional agent-staged layouts belong in ignored `drafts/`. Shared documents must explain current constraints without those local drafts.
 
 ## Source Labels and Character Orientation
 For character orientation, write body direction, head angle, and gaze as separate prompt fields. Describe head angle through the visible facial planes and the extent of the near/far eyes, using the target specification and references. A screen direction alone does not determine head rotation.
