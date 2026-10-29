@@ -4,7 +4,7 @@
 
 ## 2026-10-29 레아르타 작업 도구 카드 4종 이미지 패키징
 
-`codex/asset-workflow-tools`의 `46d0686`에서 분기한 `codex/realta-craft-card-art`에 담금질·숯돌·싸릿대·망치질 전용 일러스트를 연결했다. 손과 도구만 보이는 승인본을 그대로 사용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다. 각 카드의 `CustomPortraitPath`와 `PortraitPath`가 같은 PNG를 가리킨다.
+`codex/asset-workflow-tools`의 `46d0686`에서 분기한 `codex/realta-craft-card-art`에 담금질·숯돌·싸릿대·망치질 전용 일러스트를 연결했다. 손과 도구만 보이는 승인본을 그대로 사용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/visuals/cards/assets.md)에 기록했다. 각 카드의 `CustomPortraitPath`와 `PortraitPath`가 같은 PNG를 가리킨다.
 
 `dev.ps1 publish -ExecutionContextLabel escalated`로 C# 빌드(경고·오류 0건), Godot 가져오기와 PCK 내보내기를 종료 코드 0으로 완료했다. SDK 9.0.318, MegaDot 4.5.1.m.14 환경이며 기존 Steam 경로 탐색의 sandbox 레지스트리 접근 제한을 고려해 escalated로 실행했다.
 
@@ -12,7 +12,7 @@
 
 ## 2026-10-29 레아르타 위대한 불꽃 카드 이미지 패키징
 
-`codex/expand-godot-art-skills`의 `5015268` 이후 작업 변경분에 `RealtaGreatFlame` 전용 일러스트를 연결했다. 사용자가 선택한 롱소드와 극염 그림을 그대로 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다.
+`codex/expand-godot-art-skills`의 `5015268` 이후 작업 변경분에 `RealtaGreatFlame` 전용 일러스트를 연결했다. 사용자가 선택한 롱소드와 극염 그림을 그대로 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/visuals/cards/assets.md)에 기록했다.
 
 최초 sandbox 실행은 Steam 경로를 찾는 레지스트리 접근 제한으로 패키징 전에 중단됐다. 같은 `dev.ps1 publish`를 escalated로 다시 실행하여 C# 빌드(경고·오류 0건), Godot 가져오기와 PCK 내보내기를 종료 코드 0으로 완료했다.
 
@@ -20,7 +20,7 @@
 
 ## 2026-10-29 레아르타 화룡의 피 카드 이미지 패키징
 
-`codex/expand-godot-art-skills`의 `d80cb21` 이후 작업 변경분에 `RealtaFireDragonsBlood` 전용 일러스트를 연결했다. 마지막 단순화본을 새로 생성하지 않고 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다.
+`codex/expand-godot-art-skills`의 `d80cb21` 이후 작업 변경분에 `RealtaFireDragonsBlood` 전용 일러스트를 연결했다. 마지막 단순화본을 새로 생성하지 않고 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/visuals/cards/assets.md)에 기록했다.
 
 `dev.ps1 publish`로 C# 빌드, Godot 가져오기, PCK 내보내기를 완료했다. 최초 sandbox 실행의 인증서 저장소 접근 진단 후 escalated로 한 번 재실행했으며, 재실행은 해당 진단 없이 종료 코드 0, C# 경고·오류 0건으로 완료했다. 두 실행의 로그를 보관했으며 인증서 문제의 근본 원인을 수정한 것은 아니다. 내보내기 로그에서 새 초상화의 import와 텍스처 포함을 확인했다.
 
@@ -28,7 +28,7 @@
 
 ## 2026-10-29 레아르타 산 쪼개기 카드 이미지 패키징
 
-`codex/expand-godot-art-skills`에서 에셋 파이프라인 정비 커밋 `09887eb` 이후, `RealtaMountainSplitter`의 전용 이미지를 연결했다. 사용자가 요청한 상하 배경 확장을 반영해 카드 영역 전체를 채웠다. 파일 경로·원본·변환 절차는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 있다.
+`codex/expand-godot-art-skills`에서 에셋 파이프라인 정비 커밋 `09887eb` 이후, `RealtaMountainSplitter`의 전용 이미지를 연결했다. 사용자가 요청한 상하 배경 확장을 반영해 카드 영역 전체를 채웠다. 파일 경로·원본·변환 절차는 [레아르타 에셋 가이드](characters/realta/visuals/cards/assets.md)에 있다.
 
 `dev.ps1 publish`로 C# 빌드, Godot 가져오기, PCK 내보내기를 완료했다. SDK 9.0.318, MegaDot 4.5.1.m.14 환경이며 C# 경고·오류는 0건이다. sandbox 실행의 인증서 저장소 접근 오류를 확인한 뒤 절차에 따라 한 번 escalated로 재실행했고, 해당 오류 없이 종료 코드 0과 `savepack` 완료를 확인했다. 두 실행 기록을 보관했으며 재실행 성공만으로 인증서 오류의 근본 원인을 확정하지 않는다.
 

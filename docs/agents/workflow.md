@@ -8,10 +8,11 @@
 
 ## Read Within an Output Budget
 
-- Use `rg --files` to locate files and `rg -n` to select headings or symbols before reading long files. Retrieve the relevant line ranges with explicit UTF-8 decoding.
+- Use `rg --files` to locate files. For a topic index, open only the requested topic and its necessary dependencies; keep API references and inventories separate from routine production reads. Use `rg -n` to select headings or symbols within a longer reference, then retrieve the relevant UTF-8 line range.
 - Reuse instructions already read in this session. Reread only changed sections or context that is no longer available.
 - Resolve each skill once: honor an explicit user-provided path; for named dependencies, use the invoking skill's source (repository or plugin). Keep the resolved paths in task context and reuse their content. Consult another installed copy only when the selected source is unavailable.
 - Parallelize independent reads, but budget their combined output below the tool response limit. Narrow each result before printing it; do not concatenate several complete long files into one response.
+- For tool discovery, return matching tool names first, then inspect the selected tool's description. Keep unrelated descriptions out of the lookup output.
 - If output is truncated, retrieve the missing selected range before making a decision that depends on it. Expand to adjacent sections only when a dependency requires them.
 
 ## Fact Finding and Delegation

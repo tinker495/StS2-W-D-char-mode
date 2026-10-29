@@ -21,8 +21,8 @@ Read the selected route and the applicable sections of [the shared workflow](wor
 
 ## Find the target facts
 
-- `docs/characters/<char>/<char>-art.md` owns the requested asset's brief, reference roles and visible identity, palette and equipment. Read full character identity only when the character, body parts or canonical equipment appear. A standalone card-specific object needs its object/theme brief, not unrelated face or costume details.
-- `<char>-assets.md` owns that asset's filename, dimensions, runtime mapping and current status. Resolve actual paths there.
+- `docs/characters/<char>/<char>-art.md` routes the requested asset's brief, reference roles and visible identity, palette and equipment. If it is a topic index, open only the matching specification. Read character identity only when the character, body parts or canonical equipment appear; a standalone card-specific object needs its object/theme brief.
+- `<char>-assets.md` routes filenames, dimensions, runtime mappings and current status. If it is an index, follow the matching delivery page and only the needed inventory; open API references when integration work requires them.
 - `<char>.md` and [GLOSSARY.md](../../../GLOSSARY.md) own card/relic/power effects and themes; read the relevant definitions. `<char>-history.md` is needed only for past decisions or rejected versions.
 - [ARTS.md](../../../ARTS.md) owns rendering and composition. The route names the applicable sections and official pixels. Preserve common chibi scope: portrait/outline/map marker use chibi; selection tiles, standing art, cards and selection scenes keep canonical proportions.
 

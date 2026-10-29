@@ -38,7 +38,7 @@ Run this loop for every newly generated or edited asset before the final recomme
 
 ## Delivery and Completion Records
 
-After applying a base or asset, update current appearance and adopted constraints in `<char>-art.md`; update technical mapping, dimensions, conversion procedures, delivery paths, and status in `<char>-assets.md`. Keep only decision rationale needed for future work in `<char>-history.md`. Explain adopted forms and forms to avoid directly. Full generation calls and version-by-version experiments are optional local records, not prerequisites for understanding the documents.
+After applying a base or asset, update the appearance specification reached from `<char>-art.md` and the matching delivery/mapping page reached from `<char>-assets.md`. When these guides are topic indexes, keep them as short routing tables and put details in the owning topic; otherwise update the applicable section in place. Record dimensions, conversion, paths and status on the delivery page. Keep only decision rationale needed for future work in `<char>-history.md`. Explain adopted forms and forms to avoid directly. Full generation calls and version-by-version experiments are optional local records, not prerequisites for understanding the documents.
 
 Before editing shared guidance after long-running generation or packaging, reread the current target sections and apply scoped patches. Preserve intervening edits; an earlier in-memory copy is not a safe replacement for the current file.
 
