@@ -100,7 +100,7 @@ Write shared documentation so it remains understandable without local drafts, ge
 
 ## Character Naming
 
-Name every character-owned path and identifier after the character's decided English name, following the Realta and Althea layouts. `CharacterN` / `character_n` placeholders remain only for characters whose name is undecided (currently `CharacterThree` and `CharacterFour`); rename them to this layout once the name is decided.
+Name every character-owned path and identifier after the character's decided English name, following the Realta and Althea layouts. `CharacterN` / `character_n` placeholders remain only for characters whose name is undecided (currently `CharacterFour`); rename them to this layout once the name is decided. The third character is now `Mercurius`.
 
 | Area | Layout (`<Char>` = `Realta`, `<char>` = `realta`) |
 |---|---|

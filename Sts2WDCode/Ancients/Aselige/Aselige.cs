@@ -5,7 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Ancients;
 using MegaCrit.Sts2.Core.Events;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
-using Sts2WD.Sts2WDCode.Characters.CharacterThree;
+using Sts2WD.Sts2WDCode.Characters.Mercurius;
 
 namespace Sts2WD.Sts2WDCode.Ancients.Aselige;
 
@@ -29,7 +29,7 @@ public sealed class Aselige : CustomAncientModel
     protected override IReadOnlyList<EventOption> GenerateInitialOptions()
     {
         var owner = Owner ?? throw new InvalidOperationException("Aselige options require an owner.");
-        var pools = AseligeRules.GiftPools(owner.RunState.Acts[0], owner.Character is CharacterThree);
+        var pools = AseligeRules.GiftPools(owner.RunState.Acts[0], owner.Character is Mercurius);
         return pools.Select(pool =>
         {
             var roll = Rng.NextInt(pool.Sum(option => option.Weight));

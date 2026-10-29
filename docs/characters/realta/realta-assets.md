@@ -1,5 +1,9 @@
 # Realta Asset Production and Integration Guide
 
+## Basic Strike candidate (2026-10-25)
+
+`card-candidates/2026-10-25/realta_strike.png` is a 1000 x 760 opaque PNG. The complete 1439 x 1093 generated landscape was proportionally Fit-resized without cropping. A 250 x 190 preview was opened beside the other Strike candidates and native `StrikeIronclad` at the same scale. Input roles and the production brief are in `realta-art.md`. This candidate has not replaced runtime artwork or been installed.
+
 This guide explains production and integration for character UI, 81 card illustrations, five relic icons, and power artwork. The delivered power set contains 24 mod-supplied icons (21 custom powers and three native-power presentations); one additional custom power retains native fallback art. Its evidence is the shared [mod code](../../../Sts2WDCode/), [runtime images](../../../Sts2WD/images/), [project dependencies](../../../Sts2WD.csproj), and the StS2 / BaseLib 3.4.7 API observations recorded below. Identify external game APIs by assembly, type, and member; private decompilation-cache paths and decompiler line numbers are not required evidence.
 
 [realta-art.md](realta-art.md) owns appearance, palette, equipment, theme visualization, asset staging, and character prompt material. This guide owns file mappings, code/scene integration, and current runtime status. [realta-history.md](realta-history.md) records past production decisions and verification. Follow [ARTS.md](../../../ARTS.md) for shared style and chibi scope.

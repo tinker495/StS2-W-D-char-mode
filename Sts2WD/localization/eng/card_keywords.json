@@ -20,5 +20,13 @@
   "STS2WD-ALTHEA_UNFADING.title": "Unfading",
   "STS2WD-ALTHEA_UNFADING.description": "When Exhausted or transformed, return a copy using deck-original upgrades and enchantments. Generated cards retain only upgraded status.",
   "STS2WD-ALTHEA_FRENZY.title": "Frenzy",
-  "STS2WD-ALTHEA_FRENZY.description": "When an adjacent hand card is played, automatically play this next, spending up to its normal cost from remaining Energy."
+  "STS2WD-ALTHEA_FRENZY.description": "When an adjacent hand card is played, automatically play this next, spending up to its normal cost from remaining Energy.",
+  "STS2WD-MERCURIUS_REENACT.title": "Reenact",
+  "STS2WD-MERCURIUS_REENACT.description": "Choose 1 of 3 eligible cards. Add it to your Hand with [gold]Ethereal[/gold].",
+  "STS2WD-MERCURIUS_FINALE.title": "Finale",
+  "STS2WD-MERCURIUS_FINALE.description": "Upgrades whenever this card is drawn, by any means. Can Upgrade any number of times.",
+  "STS2WD-MERCURIUS_DOMINION.title": "Dominion",
+  "STS2WD-MERCURIUS_DOMINION.description": "Gains an additional effect if it is the only card in your Hand.",
+  "STS2WD-MERCURIUS_SONG.title": "Song",
+  "STS2WD-MERCURIUS_SONG.description": "Triggers its effect when drawn."
 }

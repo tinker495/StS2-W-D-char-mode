@@ -70,5 +70,21 @@
     "STS2WD-ASELIGE_SHINING_FILM.title":  "빛나는 피막",
     "STS2WD-ASELIGE_SMALL_SPROUT.description":  "획득 시 빛나는 잎을 덱에 추가합니다. 휴식 장소에서 체력을 회복하면 빛나는 잎을 강화합니다.",
     "STS2WD-ASELIGE_SMALL_SPROUT.flavor":  "",
-    "STS2WD-ASELIGE_SMALL_SPROUT.title":  "작은 새싹"
+    "STS2WD-ASELIGE_SMALL_SPROUT.title":  "작은 새싹",
+  "STS2WD-MERCURIUS_DRAGONS_WAYMARK.flavor": "",
+  "STS2WD-MERCURIUS_DRAGONS_WAYMARK.title": "용의 이정표",
+  "STS2WD-MERCURIUS_DRAGONS_WAYMARK.description": "첫 턴의 기본 드로우 후, 손의 사용불가 또는 휘발성 카드를 모두 버리고 같은 장수를 뽑습니다.",
+  "STS2WD-MERCURIUS_MEMORY_OF_THE_WORLD.flavor": "",
+  "STS2WD-MERCURIUS_MEMORY_OF_THE_WORLD.title": "세계의 기억",
+  "STS2WD-MERCURIUS_MEMORY_OF_THE_WORLD.description": "첫 턴의 기본 드로우 후, 손의 사용불가 또는 휘발성 카드를 모두 버리고 같은 장수를 뽑습니다.\n다른 모든 턴의 기본 드로우 후, [gold]조율[/gold]합니다.",
+  "STS2WD-MERCURIUS_BOND_OF_PROTECTION.flavor": "",
+  "STS2WD-MERCURIUS_BOND_OF_PROTECTION.title": "방호의 결속",
+  "STS2WD-MERCURIUS_BOND_OF_PROTECTION.description": "전투마다 처음 재셔플하면 방어도를 {Block} 얻습니다.",
+  "STS2WD-MERCURIUS_FLAME_SCROLL.flavor": "",
+  "STS2WD-MERCURIUS_FLAME_SCROLL.title": "불꽃 두루마리",
+  "STS2WD-MERCURIUS_FLAME_SCROLL.description": "휘발성 카드가 소멸할 때마다 무작위 적이 체력을 7 잃습니다.",
+  "STS2WD-MERCURIUS_MORNING_STAR.flavor": "",
+  "STS2WD-MERCURIUS_MORNING_STAR.title": "샛별",
+  "STS2WD-MERCURIUS_MORNING_STAR.description": "첫 턴의 기본 드로우 후, 뽑을 더미에서 카드 1장을 골라 맨 위에 놓고 {Energy:energyIcons()}를 얻습니다.",
+  "STS2WD-MERCURIUS_MORNING_STAR.selectionScreenPrompt": "뽑을 더미 맨 위에 놓을 카드를 선택하세요."
 }

@@ -4,5 +4,8 @@
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryTitle": "임시 인챈트",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryDescription": "이번 전투 동안만 유지되는 인챈트입니다.",
   "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.permanentEntry": "{Title}{AmountText}",
-  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "일시적 {Title}{AmountText}"
+  "STS2WD-REALTA_COMPOSITE_ENCHANTMENT.temporaryEntry": "일시적 {Title}{AmountText}",
+  "STS2WD-MERCURIUS_ETCHING.title": "새김",
+  "STS2WD-MERCURIUS_ETCHING.description": "이 카드를 뽑을 더미에 섞을 때마다 맨 아래에 놓습니다.",
+  "STS2WD-MERCURIUS_ETCHING.extraCardText": "섞을 때 뽑을 더미 맨 아래에 놓습니다."
 }

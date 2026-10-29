@@ -70,5 +70,21 @@
     "STS2WD-ASELIGE_SHINING_FILM.title":  "Shining Film",
     "STS2WD-ASELIGE_SMALL_SPROUT.description":  "Upon pickup, add Shining Leaf to your Deck. When you choose to heal at a Rest Site, Upgrade your Shining Leaves.",
     "STS2WD-ASELIGE_SMALL_SPROUT.flavor":  "",
-    "STS2WD-ASELIGE_SMALL_SPROUT.title":  "Small Sprout"
+    "STS2WD-ASELIGE_SMALL_SPROUT.title":  "Small Sprout",
+  "STS2WD-MERCURIUS_DRAGONS_WAYMARK.flavor": "",
+  "STS2WD-MERCURIUS_DRAGONS_WAYMARK.title": "Dragon\u0027s Waymark",
+  "STS2WD-MERCURIUS_DRAGONS_WAYMARK.description": "After your first hand draw, discard all Unplayable or Ethereal cards in your Hand and draw that many cards.",
+  "STS2WD-MERCURIUS_MEMORY_OF_THE_WORLD.flavor": "",
+  "STS2WD-MERCURIUS_MEMORY_OF_THE_WORLD.title": "Memory of the World",
+  "STS2WD-MERCURIUS_MEMORY_OF_THE_WORLD.description": "After your first hand draw, discard all Unplayable or Ethereal cards in your Hand and draw that many cards.\nAfter every other hand draw, [gold]Tune[/gold].",
+  "STS2WD-MERCURIUS_BOND_OF_PROTECTION.flavor": "",
+  "STS2WD-MERCURIUS_BOND_OF_PROTECTION.title": "Bond of Protection",
+  "STS2WD-MERCURIUS_BOND_OF_PROTECTION.description": "After your first reshuffle each combat, gain {Block} Block.",
+  "STS2WD-MERCURIUS_FLAME_SCROLL.flavor": "",
+  "STS2WD-MERCURIUS_FLAME_SCROLL.title": "Flame Scroll",
+  "STS2WD-MERCURIUS_FLAME_SCROLL.description": "Whenever an Ethereal card is Exhausted, a random enemy loses 7 HP.",
+  "STS2WD-MERCURIUS_MORNING_STAR.flavor": "",
+  "STS2WD-MERCURIUS_MORNING_STAR.title": "Morning Star",
+  "STS2WD-MERCURIUS_MORNING_STAR.description": "After your first hand draw, choose a card in your Draw Pile to put on top, then gain {Energy:energyIcons()}.",
+  "STS2WD-MERCURIUS_MORNING_STAR.selectionScreenPrompt": "Choose a card to put on top of your Draw Pile."
 }
