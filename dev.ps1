@@ -81,6 +81,9 @@ if ($Task -eq 'rebase') {
 # in pre-commit (through build), check, and the SDK/game-independent verify task.
 if ($Task -in @('verify', 'build', 'check')) {
     & (Join-Path $projectRoot 'scripts/check-tracked-references.ps1')
+    # Human requester: wjdrb, 2026-10-29, retrospective item 1: connect final
+    # card dimensions/alpha checks to the existing local validation route.
+    & (Join-Path $projectRoot '.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1') check-cards
     if ($Task -eq 'verify') { return }
 }
 
@@ -88,7 +91,7 @@ $dotnet = Initialize-DevelopmentDotNet $projectRoot
 
 function Invoke-DotNet([string[]]$Arguments) {
     if ($diagnosticRoot) {
-        Invoke-RecordedCommand -Executable $dotnet -Arguments $Arguments -LogDirectory $diagnosticRoot -Step $Arguments[0]
+        Invoke-RecordedCommand -Executable $dotnet -Arguments $Arguments -LogDirectory $diagnosticRoot -Step $Arguments[0] -Summary
         return
     }
     & $dotnet @Arguments
@@ -255,13 +258,14 @@ try {
         installation = $null
     }
     try {
-        Invoke-RecordedCommand -Executable $dotnet -Arguments @('--version') -LogDirectory $diagnosticRoot -Step 'dotnet-version'
-        Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--version') -LogDirectory $diagnosticRoot -Step 'megadot-version'
+        Invoke-RecordedCommand -Executable $dotnet -Arguments @('--version') -LogDirectory $diagnosticRoot -Step 'dotnet-version' -Summary
+        Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--version') -LogDirectory $diagnosticRoot -Step 'megadot-version' -Summary
         Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
         Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--log-file', (Join-Path $diagnosticRoot 'import.engine.log'),
-            '--headless', '--editor', '--path', $projectRoot, '--import', '--quit') -LogDirectory $diagnosticRoot -Step 'import'
+            '--headless', '--editor', '--path', $projectRoot, '--import', '--quit') -LogDirectory $diagnosticRoot -Step 'import' -Summary
         $importLog = Get-Content -LiteralPath (Join-Path $diagnosticRoot 'import.log') -Encoding UTF8 -Raw
         if ($importLog -match 'SCRIPT ERROR:|Parse Error:|Failed (?:to load script|loading resource)') {
+            Write-RecordedLogExcerpt -LogPath (Join-Path $diagnosticRoot 'import.log') -IncludeTail
             throw "Resource import failed; read $diagnosticRoot/import.log"
         }
         Invoke-DotNet @('publish', 'Sts2WD.csproj', '-c', $Configuration, '--no-restore')
@@ -270,9 +274,11 @@ try {
         $publishLog = Get-Content -LiteralPath (Join-Path $diagnosticRoot 'publish.log') -Encoding UTF8 -Raw
         $plainPublishLog = $publishLog -replace '\x1B\[[0-?]*[ -/]*[@-~]', ''
         if ($plainPublishLog -notmatch '\[\s*DONE\s*\]\s*savepack') {
+            Write-RecordedLogExcerpt -LogPath (Join-Path $diagnosticRoot 'publish.log') -IncludeTail
             throw "Package export did not report completed savepack; read $diagnosticRoot/publish.log"
         }
         if ($plainPublishLog -match 'SCRIPT ERROR:|Parse Error:|Failed (?:to load script|loading resource)') {
+            Write-RecordedLogExcerpt -LogPath (Join-Path $diagnosticRoot 'publish.log') -IncludeTail
             throw "Package export reported a resource error; read $diagnosticRoot/publish.log"
         }
 

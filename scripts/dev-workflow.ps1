@@ -35,13 +35,46 @@ function Get-DevelopmentIlSpy([string]$ProjectRoot) {
     throw 'Install ilspycmd on PATH or supply -IlSpyPath. See docs/development-tools.md.'
 }
 
+function Write-RecordedLogExcerpt {
+    param([string]$LogPath, [switch]$IncludeTail)
+
+    # Console excerpts are navigation aids, never command-success criteria.
+    # Keep the complete UTF-8 log; bound both line count and displayed line length.
+    $diagnostics = [Collections.Generic.List[string]]::new()
+    $tail = [Collections.Generic.Queue[string]]::new()
+    foreach ($line in [IO.File]::ReadLines($LogPath, [Text.Encoding]::UTF8)) {
+        $plain = $line -replace '\x1B\[[0-?]*[ -/]*[@-~]', ''
+        if ($diagnostics.Count -lt 5 -and -not $diagnostics.Contains($plain) -and
+            $plain -match '(?i)\b(?:error|warning)(?=\s*:|\s+[A-Z]+\d+\s*:)|\b(?:access (?:is )?denied|permission denied|failed to read the root certificate store)\b') {
+            $diagnostics.Add($plain)
+        }
+        if ($IncludeTail) {
+            $tail.Enqueue($plain)
+            if ($tail.Count -gt 8) { [void]$tail.Dequeue() }
+        }
+    }
+    if ($diagnostics.Count -gt 0) {
+        Write-Host "Diagnostics (up to 5 lines); full log: $LogPath"
+        foreach ($line in $diagnostics) {
+            Write-Host $(if ($line.Length -gt 400) { $line.Substring(0, 396) + ' ...' } else { $line })
+        }
+    }
+    if ($IncludeTail -and $tail.Count -gt 0) {
+        Write-Host "Last 8 log lines; full log: $LogPath"
+        foreach ($line in $tail) {
+            Write-Host $(if ($line.Length -gt 400) { $line.Substring(0, 396) + ' ...' } else { $line })
+        }
+    }
+}
+
 function Invoke-RecordedCommand {
     param(
         [string]$Executable,
         [string[]]$Arguments,
         [string]$LogDirectory,
         [string]$Step,
-        [switch]$Quiet
+        [switch]$Quiet,
+        [switch]$Summary
     )
 
     $record = [ordered]@{
@@ -66,7 +99,7 @@ function Invoke-RecordedCommand {
         & $Executable @Arguments 2>&1 | ForEach-Object {
             $line = $_.ToString()
             $writer.WriteLine($line)
-            if (-not $Quiet) { Write-Host $line }
+            if (-not $Quiet -and -not $Summary) { Write-Host $line }
         }
         $record.exitCode = $LASTEXITCODE
         if ($null -eq $record.exitCode -or $record.exitCode -ne 0) {
@@ -82,6 +115,11 @@ function Invoke-RecordedCommand {
         $record.finishedUtc = [DateTime]::UtcNow.ToString('o')
         $record | ConvertTo-Json -Depth 4 |
             Set-Content -LiteralPath (Join-Path $LogDirectory "$Step.json") -Encoding UTF8
+        if ($Summary) {
+            $outcome = if ($record.failure) { 'failed' } else { 'completed' }
+            Write-Host "$Step $outcome (exit $($record.exitCode)); log: $logPath"
+            Write-RecordedLogExcerpt -LogPath $logPath -IncludeTail:([bool]$record.failure)
+        }
     }
 }
 

@@ -43,7 +43,9 @@ Completion requires exit code 0 and all four reported hash matches. Preserve the
 
 ## Diagnose Failures Without Installing Failed Output
 
-Each `publish`/`deploy` run prints a unique `artifacts/runtime/packaging-...` directory. Read `run.json`, the failed step's JSON, and its UTF-8 log. Version steps record the actual SDK and MegaDot versions. Command records include executable, arguments, working directory, UTC times, and exit code. Do not dump credentials or the process environment into diagnostics.
+Each `publish`/`deploy` run prints a unique `artifacts/runtime/packaging-...` directory and one result/log-path line per command. Full stdout/stderr remains in UTF-8 logs. Console output includes at most five diagnostic lines per command and eight tail lines on failure, each limited to 400 characters. An exit-zero command can still print engine diagnostics such as certificate-store errors; these remain visible and do not change the existing package-completion checks.
+
+Read `run.json` and the failed step's JSON first, then retrieve a bounded excerpt from that step's log. Expand only around the relevant diagnostic; do not print all build/import/export logs together. Version steps record the actual SDK and MegaDot versions. Command records include executable, arguments, working directory, UTC times, and exit code. Do not dump credentials or the process environment into diagnostics.
 
 Rig checks retain their `*.stdout.log`, `*.stderr.log`, `*.engine.log`, and `*.exitcode` files in the same diagnostic directory. For process-result capture and MegaDot startup-log crashes, use [Build execution and diagnostics](../../../docs/agents/build-troubleshooting.md).
 

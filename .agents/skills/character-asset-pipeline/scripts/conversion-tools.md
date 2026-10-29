@@ -2,6 +2,8 @@
 
 Use these commands for approved delivery conversions or review drafts. They do not imply approval to overwrite runtime files. Use Git-ignored draft outputs while reviewing candidates.
 
+For official card extraction and packaged-texture inspection, use [card texture observations](card-observations.md). Those commands preserve the full image and record measurements without adding acceptance gates.
+
 ## Shared-alpha tile pair
 
 `tile-pair` fits the whole transparent master once, composites normal RGB over the requested background, then composites black RGB with the exact same alpha over the locked background. Both results are opaque. Specify dimensions and colors from the target asset guide; use a transparent master rather than an opaque painted background.
@@ -15,13 +17,36 @@ $info.Width
 
 `inspect` always returns a `PSCustomObject`, suitable for property access or `ConvertTo-Json -Depth 4`. `-AsObject` is retained as a compatibility no-op. Apply `Format-List` only when displaying the result, never before serialization.
 
-## Opaque Fit export
+`VisiblePixelRatio` counts pixels above `VisibleAlphaThreshold` (8); the bounding box and margins use that same visibility threshold. `OpaquePixelRatio` counts only alpha-255 pixels. Both percentages are rounded for display: use `FullyOpaque` (every pixel is alpha 255) and `MinAlpha` for exact opacity decisions. An opaque letterbox has no alpha margin; these measurements do not establish painted scene coverage.
+
+## Card export and review
+
+Use `export-card` for standard and Ancient card paintings. It selects the exact canvas from `-CardType Standard` (`1000 × 760`, default) or `-CardType Ancient` (`606 × 852`). Before writing, it requires an opaque master and a proportional Fit rectangle that fills both target dimensions after integer rounding. It rejects padding, Cover/Stretch, conflicting dimensions, and transparent pixels. Bicubic filtering preserves opaque source edges; no background fill is needed. A failed input leaves any existing target unchanged.
+
+```powershell
+# Set $reviewDirectory to a fresh Git-ignored working directory.
+$candidate = Join-Path $reviewDirectory 'candidate.png'
+$preview = Join-Path $reviewDirectory 'preview.png'
+& $pipeline export-card -CardType Standard -Source $painting -Target $candidate
+$info = & $pipeline inspect -Path $candidate
+& $pipeline preview -Path $candidate -DisplayWidth 250 -DisplayHeight 190 -OutPath $preview
+# Open the complete candidate and preview. After visual review, and within
+# existing user authorization, promote the exact reviewed file:
+Copy-Item -LiteralPath $candidate -Destination $runtimePath
+& $pipeline check-cards
+```
+
+Use `250 × 350` for an Ancient preview. The whole candidate and preview must show continuous painted scene at every edge, correct subject staging, and readable action before promotion. These visual judgments are separate from mechanical size/alpha checks. Regenerate or outpaint an incompatible master; generic `export` is not a card padding fallback. Existing generic exports targeting the runtime card directory receive the same card checks.
+
+`check-cards` checks every PNG under `Sts2WD/images/card_portraits/`: exact expected delivery dimensions, PNG encoding, and full opacity. Unlisted paths are Standard. Before delivering an Ancient portrait, register its relative PNG path as `Ancient` in [card-portrait-layouts.json](../../../../scripts/card-portrait-layouts.json); both export and validation use that mapping, never the image's actual dimensions, to select the expected layout. The existing root `card.png` fallback is explicitly `Thumbnail` (`250 × 190`). The local `dev.ps1 verify`, `build`, and `check` routes run the validator; the pre-commit hook uses `build`, and CI runs the same command on Windows. It needs neither the game nor the .NET SDK. Mechanical checks do not establish composition or painted coverage.
+
+## Opaque Fit export for other asset types
 
 ```powershell
 & $pipeline export -Source $painting -Target $output -Width 1920 -Height 1080 -CropMode Fit -BackgroundColor '#101321'
 ```
 
-The optional background color composites behind the entire resized image, including partially transparent resampling edges and rounding margins. Omitting it preserves transparent output. Choose the color from the target asset guide. This preserves the complete painting instead of filling the canvas by cropping.
+For non-card assets whose delivery contract permits padding, the optional background color composites behind the entire resized image, including partially transparent resampling edges and rounding margins. Omitting it preserves transparent output. Choose the color from the target asset guide. This preserves the complete painting instead of filling the canvas by cropping. Full-bleed cards follow the card export procedure above.
 
 ## UI layout preview
 
