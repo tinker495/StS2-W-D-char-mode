@@ -9,6 +9,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaWhetstone() : RealtaCard(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_whetstone.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Move), new DynamicVar("Refine", 3m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromKeyword(RealtaKeywords.Refine)];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

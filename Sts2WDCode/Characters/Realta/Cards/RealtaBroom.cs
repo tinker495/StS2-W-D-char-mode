@@ -10,6 +10,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaBroom() : RealtaCard(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_broom.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<VigorPower>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay) =>

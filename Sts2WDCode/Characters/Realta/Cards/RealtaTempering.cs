@@ -11,6 +11,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 // Block is gained even when the refine has no valid target.
 public sealed class RealtaTempering() : RealtaCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_tempering.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     private const string RefineVar = "Refine";
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(7m, ValueProp.Move), new DynamicVar(RefineVar, 3m)];

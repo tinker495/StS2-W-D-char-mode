@@ -9,6 +9,9 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaHammering() : RealtaCard(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self)
 {
+    public override string CustomPortraitPath => "res://Sts2WD/images/card_portraits/realta/realta_hammering.png";
+    public override string PortraitPath => CustomPortraitPath;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(2), new PowerVar<VigorPower>(3m)];
     protected override IEnumerable<IHoverTip> ExtraHoverTips => [HoverTipFactory.FromPower<VigorPower>()];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

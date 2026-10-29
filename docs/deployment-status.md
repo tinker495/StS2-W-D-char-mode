@@ -2,6 +2,14 @@
 
 여러 캐릭터에 걸친 패키지·설치·검증 기록을 이 문서에서 관리한다. 캐릭터별 에셋 경로와 적용 범위는 각 에셋 가이드가 관리한다. 아래 내용은 원래 배포 환경의 관찰 기록이며, 현재 체크아웃이나 다른 PC의 설치 상태를 뜻하지 않는다.
 
+## 2026-10-29 레아르타 작업 도구 카드 4종 이미지 패키징
+
+`codex/asset-workflow-tools`의 `46d0686`에서 분기한 `codex/realta-craft-card-art`에 담금질·숯돌·싸릿대·망치질 전용 일러스트를 연결했다. 손과 도구만 보이는 승인본을 그대로 사용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다. 각 카드의 `CustomPortraitPath`와 `PortraitPath`가 같은 PNG를 가리킨다.
+
+`dev.ps1 publish -ExecutionContextLabel escalated`로 C# 빌드(경고·오류 0건), Godot 가져오기와 PCK 내보내기를 종료 코드 0으로 완료했다. SDK 9.0.318, MegaDot 4.5.1.m.14 환경이며 기존 Steam 경로 탐색의 sandbox 레지스트리 접근 제한을 고려해 escalated로 실행했다.
+
+생성한 PCK에서 네 텍스처를 별도 Godot 프로세스로 각각 로드했다. 모두 정확히 `1000×760`, 완전 불투명이며 적용한 런타임 PNG와 모든 픽셀이 같았다. 전체 카드 PNG 9개의 크기·불투명도 검사도 통과했다. 임시 패키지 관찰은 정식 인수 테스트가 아니며 테스트나 검증 기준은 변경하지 않았다. 게임 설치와 실제 게임 UI 표시는 검증하지 않았다.
+
 ## 2026-10-29 레아르타 위대한 불꽃 카드 이미지 패키징
 
 `codex/expand-godot-art-skills`의 `5015268` 이후 작업 변경분에 `RealtaGreatFlame` 전용 일러스트를 연결했다. 사용자가 선택한 롱소드와 극염 그림을 그대로 적용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/realta-assets.md#0-current-application-status)에 기록했다.
