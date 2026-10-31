@@ -1,8 +1,16 @@
 # Mercurius Art Direction
 
+## Branch B adopted art
+
+On 2026-10-31 the user adopted tile B and the calmer-eye revisions for [UI and shared standing art](visuals/ui/art.md) and the [selection illustration](visuals/selection/art.md). These pages own composition, reference roles and review findings; the unchanged approved base remains the identity authority. The nine selected textures and four scene connections are applied to runtime resources.
+
+## Branch A standing master
+
+The user approved color-tone version v7 on 2026-10-31, then authorized transparent-margin trimming and a 1024 × 1536 portrait delivery matching the other standing bases; [base.png](base.png) is the canonical Mercurius appearance. [Base art specification](visuals/base/art.md) owns approved identity, colors, equipment, pose, portrait framing and reference roles. [Base assets](visuals/base/assets.md) records delivery and runtime coverage; [history](mercurius-history.md) records the selection and conversion.
+
 ## Confirmed scope
 
-On 2026-10-25 the user requested a basic Strike showing Mercurius firing a crossbow, alongside Realta's and Althea's weapon strikes. No approved Mercurius `base.png` or character reference exists in the current checkout. This establishes the crossbow action only, not a face, body, costume, complete weapon design or broader character palette.
+On 2026-10-25 the user requested a basic Strike showing Mercurius firing a crossbow, alongside Realta's and Althea's weapon strikes. No approved Mercurius `base.png` or character reference was available for that card request. This establishes the crossbow action only, not a face, body, costume, complete weapon design or broader character palette. The later Branch A reference brief is separate.
 
 ## Basic Strike candidate
 

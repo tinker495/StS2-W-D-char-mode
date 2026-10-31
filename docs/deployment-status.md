@@ -2,6 +2,16 @@
 
 여러 캐릭터에 걸친 패키지·설치·검증 기록을 이 문서에서 관리한다. 캐릭터별 에셋 경로와 적용 범위는 각 에셋 가이드가 관리한다. 아래 내용은 원래 배포 환경의 관찰 기록이며, 현재 체크아웃이나 다른 PC의 설치 상태를 뜻하지 않는다.
 
+## 2026-10-31 메르쿠리우스 Branch B 패키징
+
+`art/mercurius-base-20261031`의 `1600859` 이후 작업 변경분에 사용자가 채택한 선택 타일 B와 차분한 눈매 수정본을 적용했다. 정식 PNG 9종과 전투·휴식·상점·선택 배경 장면 4개를 연결했다. 파일·장면 계약은 [메르쿠리우스 UI·전신 상태](characters/mercurius/visuals/ui/assets.md), 선택 배경의 구도와 UI 겹침은 [배경 상태](characters/mercurius/visuals/selection/assets.md)에 있다.
+
+`dev.ps1 publish`로 C# 빌드, Godot 임포트, PCK 내보내기를 종료 코드 0으로 완료했다. SDK 9.0.318, MegaDot 4.5.1.m.14, BaseLib 3.4.7 환경이다. C# 경고·오류는 0건이며 `savepack` 완료를 확인했다. 임포트·내보내기 로그에는 `Failed to read the root certificate store.` 환경 진단이 남았지만 명령 실패나 리소스 파싱 오류는 없었다.
+
+`dev.ps1 observe`로 별도 최소 Godot 프로젝트에서 생성된 `artifacts/mods/Sts2WD/Sts2WD.pck`를 마운트했다. 텍스처 9개의 규격과 소스 PNG 대비 픽셀 일치를 확인했다. 비교에는 Godot 임포트의 `fix_alpha_border` 처리를 동일하게 적용했다. 장면 4개를 인스턴스화해 필수 노드·전신 텍스처 연결·선택 배경의 Fit 모드 5를 확인했다. 이 임시 관찰은 네이티브 런 초기화나 실제 게임 플레이 검증을 대신하지 않는다.
+
+게임 폴더 설치와 실제 게임 UI·멀티플레이 검증은 수행하지 않았다. 정식 테스트·독립 검증기·CI는 변경하지 않았다.
+
 ## 2026-10-29 레아르타 작업 도구 카드 4종 이미지 패키징
 
 `codex/asset-workflow-tools`의 `46d0686`에서 분기한 `codex/realta-craft-card-art`에 담금질·숯돌·싸릿대·망치질 전용 일러스트를 연결했다. 손과 도구만 보이는 승인본을 그대로 사용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/visuals/cards/assets.md)에 기록했다. 각 카드의 `CustomPortraitPath`와 `PortraitPath`가 같은 PNG를 가리킨다.

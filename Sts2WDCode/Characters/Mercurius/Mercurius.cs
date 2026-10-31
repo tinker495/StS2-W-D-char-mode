@@ -41,10 +41,11 @@ public class Mercurius : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<MercuriusRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<MercuriusPotionPool>();
 
-    /*  PlaceholderCharacterModel will utilize placeholder basegame assets for most of your character assets until you
-        override all the other methods that define those assets.
-        These are just some of the simplest assets, given some placeholders to differentiate your character with.
-        You don't have to, but you're suggested to rename these images. */
+    public override string CustomVisualPath => "res://Sts2WD/scenes/mercurius/combat.tscn";
+    public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/mercurius/rest_site.tscn";
+    public override string CustomMerchantAnimPath => "res://Sts2WD/scenes/mercurius/merchant.tscn";
+    public override string CustomCharacterSelectBg => "res://Sts2WD/scenes/mercurius/char_select_bg_mercurius.tscn";
+
     public override Control CustomIcon
     {
         get
@@ -55,6 +56,7 @@ public class Mercurius : PlaceholderCharacterModel
         }
     }
     public override string CustomIconTexturePath => "mercurius/character_icon.png".CharacterUiPath();
+    public override string CustomIconOutlineTexturePath => "mercurius/character_icon_outline.png".CharacterUiPath();
     public override string CustomCharacterSelectIconPath => "mercurius/char_select.png".CharacterUiPath();
     public override string CustomCharacterSelectLockedIconPath => "mercurius/char_select_locked.png".CharacterUiPath();
     public override string CustomMapMarkerPath => "mercurius/map_marker.png".CharacterUiPath();
