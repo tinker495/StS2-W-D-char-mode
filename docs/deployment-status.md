@@ -2,6 +2,16 @@
 
 여러 캐릭터에 걸친 패키지·설치·검증 기록을 이 문서에서 관리한다. 캐릭터별 에셋 경로와 적용 범위는 각 에셋 가이드가 관리한다. 아래 내용은 원래 배포 환경의 관찰 기록이며, 현재 체크아웃이나 다른 PC의 설치 상태를 뜻하지 않는다.
 
+## 2026-11-12 메르쿠리우스 선택 타일 보완과 UI 합성 검토
+
+목도리 아래를 보완한 일반·잠금 타일을 `dev.ps1 publish`로 패키징했다. SDK 9.0.318, MegaDot 4.5.1.m.14, BaseLib 3.4.7에서 빌드·임포트·PCK 내보내기와 `dev.ps1 verify`가 통과했다. PCK의 두 타일은 132 × 195 불투명이며 소스 PNG와 픽셀이 일치했다. 엔진의 기존 루트 인증서 진단은 남았다.
+
+[실제 UI 요소의 합성 검토](characters/mercurius/visuals/selection/assets.md#ui-검토)를 완료했다. 게임 설치·실제 플레이·멀티플레이는 미검증이다.
+
+## 2026-10-31 메르쿠리우스 Branch B 패키징
+
+선택 타일 B·차분한 눈매 수정본을 PNG 9종과 장면 4개에 적용했다. SDK 9.0.318, MegaDot 4.5.1.m.14, BaseLib 3.4.7에서 패키징을 완료하고 PCK 텍스처·장면 로딩을 확인했다. 게임 설치·실제 플레이는 수행하지 않았다. 현재 매핑은 [UI·전신 상태](characters/mercurius/visuals/ui/assets.md)가 관리한다.
+
 ## 2026-10-29 레아르타 작업 도구 카드 4종 이미지 패키징
 
 `codex/asset-workflow-tools`의 `46d0686`에서 분기한 `codex/realta-craft-card-art`에 담금질·숯돌·싸릿대·망치질 전용 일러스트를 연결했다. 손과 도구만 보이는 승인본을 그대로 사용했으며, 원본·런타임 경로와 구도는 [레아르타 에셋 가이드](characters/realta/visuals/cards/assets.md)에 기록했다. 각 카드의 `CustomPortraitPath`와 `PortraitPath`가 같은 PNG를 가리킨다.

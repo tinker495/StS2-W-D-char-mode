@@ -1,5 +1,9 @@
 # Mercurius Art Direction
 
+## Branch B adopted art
+
+On 2026-10-31 the user adopted tile B and the calmer-eye revisions for [UI and shared standing art](visuals/ui/art.md) and the [selection illustration](visuals/selection/art.md). These pages own composition, reference roles and review findings; the unchanged approved base remains the identity authority. The nine selected textures and four scene connections are applied to runtime resources.
+
 ## Branch A standing master
 
 The user approved color-tone version v7 on 2026-10-31, then authorized transparent-margin trimming and a 1024 × 1536 portrait delivery matching the other standing bases; [base.png](base.png) is the canonical Mercurius appearance. [Base art specification](visuals/base/art.md) owns approved identity, colors, equipment, pose, portrait framing and reference roles. [Base assets](visuals/base/assets.md) records delivery and runtime coverage; [history](mercurius-history.md) records the selection and conversion.

@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://Sts2WD/images/charui/mercurius/combat.png" id="1_sprite"]
+
+[node name="MercuriusRestSite" type="Node2D"]
+
+[node name="ControlRoot" type="Control" parent="."]
+mouse_filter = 2
+
+[node name="Visuals" type="Sprite2D" parent="ControlRoot"]
+position = Vector2(0, -16)
+scale = Vector2(0.85, 0.85)
+texture = ExtResource("1_sprite")
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = -170.0
+offset_top = -300.0
+offset_right = 170.0
+offset_bottom = 200.0
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = -90.0
+offset_top = -230.0
+offset_right = -90.0
+offset_bottom = -230.0
+mouse_filter = 2
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = 90.0
+offset_top = -230.0
+offset_right = 90.0
+offset_bottom = -230.0
+mouse_filter = 2
