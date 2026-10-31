@@ -1,5 +1,9 @@
 # Mercurius Asset Status
 
+## 공식 베이스 — 2026-10-31
+
+사용자가 선택한 색조 수정본 v7을 다른 전신 베이스에 맞춰 [base.png](base.png)에 적용했다. 현재 규격은 **1024 × 1536 RGBA**다. 사용자 요청에 따라 투명 여백만 정리하고 비례 확대하여 인물 높이를 캔버스의 82.7%로 맞췄으며, 그림의 색상·포즈·신체 비율은 유지했다. 파일·승인·런타임 적용 범위는 [베이스 에셋](visuals/base/assets.md), 확정 외형·색상·구도는 [베이스 제작 명세](visuals/base/art.md)를 따른다. 게임 내 UI·전투 이미지와 설치 상태는 이번 작업에서 변경하지 않았다.
+
 ## Current runtime delivery (2026-10-28)
 
 The current package includes 81 character cards, three internal Tune option cards, five relics and their 15 runtime icon textures. Card portraits and power icons still use the documented native placeholders; the Strike candidate below is not connected to runtime. The six renamed character UI textures retain their placeholder artwork. The local package was installed; build, installation, dependency, backup and verification status is owned by the [shared deployment record](../../deployment-status.md#2026-10-28-메르쿠리우스-카드유물-로컬-설치). This does not establish live UI or network gameplay validation.
