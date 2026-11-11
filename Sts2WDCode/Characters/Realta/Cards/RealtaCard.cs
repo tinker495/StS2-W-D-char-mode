@@ -1,6 +1,8 @@
 using BaseLib.Utils;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
 using Sts2WD.Sts2WDCode.Cards;
 
@@ -12,6 +14,9 @@ public abstract class RealtaCard(int cost, CardType type, CardRarity rarity, Tar
     : Sts2WDCard(cost, type, rarity, target)
 {
     public override int MaxUpgradeLevel => Keywords.Contains(RealtaKeywords.Legacy) ? int.MaxValue : base.MaxUpgradeLevel;
+
+    protected override string FallbackPortraitPath => Type == CardType.Attack
+        ? ModelDb.Card<StrikeIronclad>().PortraitPath : ModelDb.Card<DefendIronclad>().PortraitPath;
 
     protected static bool IsDuel(Creature target) =>
         !target.HasPower<WeakPower>() && !target.HasPower<VulnerablePower>();

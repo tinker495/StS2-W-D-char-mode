@@ -12,8 +12,6 @@ public abstract class MercuriusCard(int cost, CardType type, CardRarity rarity, 
     : Sts2WDCard(cost, type, rarity, target)
 {
     // Native placeholders until dedicated card portraits are approved.
-    public override string PortraitPath => Type == CardType.Attack
+    protected override string FallbackPortraitPath => Type == CardType.Attack
         ? ModelDb.Card<StrikeIronclad>().PortraitPath : ModelDb.Card<DefendIronclad>().PortraitPath;
-    public override string CustomPortraitPath => PortraitPath;
-    public override string BetaPortraitPath => PortraitPath;
 }

@@ -1,9 +1,10 @@
+using System.Collections.Concurrent;
 using BaseLib.Abstracts;
 using BaseLib.Extensions;
 using BaseLib.Utils;
-
-using Sts2WD.Sts2WDCode.Extensions;
+using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using Sts2WD.Sts2WDCode.Extensions;
 
 namespace Sts2WD.Sts2WDCode.Cards;
 
@@ -11,16 +12,60 @@ namespace Sts2WD.Sts2WDCode.Cards;
 public abstract class Sts2WDCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     CustomCardModel(cost, type, rarity, target)
 {
-    //Image size:
-    //Normal art: 1000x760 (Using 500x380 should also work, it will simply be scaled.)
-    //Full art: 606x852
-    public override string CustomPortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".BigCardImagePath();
+    private static readonly ConcurrentDictionary<string, string> PortraitPathCache = new();
 
-    //Smaller variants of card images for efficiency:
-    //Smaller variant of fullart: 250x350
-    //Smaller variant of normalart: 250x190
+    public override string CustomPortraitPath => ResolvePortraitPath();
+    public override string PortraitPath => CustomPortraitPath;
+    public override string BetaPortraitPath => CustomPortraitPath;
 
-    //Uses card_portraits/card_name.png as image path. These should be smaller images.
-    public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
-    public override string BetaPortraitPath => $"beta/{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
+    protected virtual string FallbackPortraitPath =>
+        Rarity == CardRarity.Ancient
+            ? Path.Join(MainFile.ResPath, "images", "card_portraits", "big", "ancient_card.png")
+            : Path.Join(MainFile.ResPath, "images", "card_portraits", "card.png");
+
+    protected virtual string ResolveCharacterSubfolder()
+    {
+        var entry = Id.Entry;
+        if (entry.StartsWith("STS2WD-", StringComparison.OrdinalIgnoreCase))
+        {
+            var parts = entry.Substring(7);
+            var underscore = parts.IndexOf('_');
+            if (underscore > 0)
+                return parts.Substring(0, underscore).ToLowerInvariant();
+        }
+
+        var ns = GetType().Namespace;
+        if (!string.IsNullOrEmpty(ns) && ns.Contains("Characters."))
+        {
+            var seg = ns.Split("Characters.")[1];
+            var dot = seg.IndexOf('.');
+            return (dot > 0 ? seg.Substring(0, dot) : seg).ToLowerInvariant();
+        }
+
+        return string.Empty;
+    }
+
+    private string ResolvePortraitPath()
+    {
+        var key = Id.Entry;
+        if (PortraitPathCache.TryGetValue(key, out var cached))
+            return cached;
+
+        var charFolder = ResolveCharacterSubfolder();
+        var fileName = $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png";
+
+        if (!string.IsNullOrEmpty(charFolder))
+        {
+            var charSpecificPath = Path.Join(MainFile.ResPath, "images", "card_portraits", charFolder, fileName);
+            if (ResourceLoader.Exists(charSpecificPath))
+            {
+                PortraitPathCache[key] = charSpecificPath;
+                return charSpecificPath;
+            }
+        }
+
+        var fallback = FallbackPortraitPath;
+        PortraitPathCache[key] = fallback;
+        return fallback;
+    }
 }

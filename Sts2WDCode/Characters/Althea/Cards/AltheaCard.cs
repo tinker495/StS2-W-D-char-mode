@@ -46,9 +46,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
         CardType.Curse => ModelDb.Card<Doubt>(),
         _ => ModelDb.Card<DefendIronclad>()
     };
-    public override string PortraitPath => Art.PortraitPath;
-    public override string CustomPortraitPath => Art.PortraitPath;
-    public override string BetaPortraitPath => Art.BetaPortraitPath;
+    protected override string FallbackPortraitPath => Art.PortraitPath;
     protected override HashSet<CardTag> CanonicalTags => Kind.ToString().EndsWith("Strike", StringComparison.Ordinal)
         || Kind == AltheaCardKind.Strike ? [CardTag.Strike] : [];
     public override IEnumerable<CardKeyword> CanonicalKeywords

@@ -21,6 +21,10 @@
 - Give each agent a non-overlapping question and require source locations plus the relevant observations. Work on separate questions while it runs.
 - Reuse returned evidence; reopen its sources only to resolve a concrete gap or contradiction. A running investigation is a prerequisite only for decisions that depend on its findings.
 
+## Local Shell
+
+Run repository scripts through `dev.ps1` or `powershell.exe` (Windows PowerShell 5.1); `pwsh` is not installed on this PC. CI runs the tracked-reference check under PowerShell 7, so keep shared scripts compatible with both.
+
 ## Temporary Observations
 
 Run one-off PowerShell reproductions through `dev.ps1 observe -ScriptPath <temporary-script>`. Keep preparation and execution in the same script so setup errors stop the run and are recorded. Invoke native tools through the shared `Invoke-RecordedCommand` helper to enforce exit codes and retain logs. Follow the script contract and evidence format in [development tools](../development-tools.md#임시-검증-실행).

@@ -10,4 +10,4 @@ These conventions apply to every mod character and shared implementation. Open o
 | Character documentation or artwork records | [Topic-based character guides](docs/conventions/documentation/character-guides.md) |
 | Architectural review | [Architecture review criteria](docs/conventions/review/architecture.md) |
 
-Existing automated checks own mechanical validation. These documents do not authorize changes to tests or acceptance criteria; [AGENTS.md](AGENTS.md#test-ownership-and-change-authority) governs execution authority. Spec reviews also follow [domain guidance](docs/agents/domain.md#spec-review).
+Existing automated checks own mechanical validation. These documents do not authorize changes to tests or acceptance criteria; [test ownership](docs/agents/test-ownership.md) governs execution authority. Spec reviews also follow [domain guidance](docs/agents/domain.md#spec-review).
