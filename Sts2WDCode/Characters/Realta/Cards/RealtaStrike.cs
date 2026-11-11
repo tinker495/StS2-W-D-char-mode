@@ -10,11 +10,6 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public sealed class RealtaStrike() : RealtaCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
-    // Reuse the placeholder artwork, while the card itself belongs to Realta's pool.
-    public override string PortraitPath => ModelDb.Card<StrikeIronclad>().PortraitPath;
-    public override string CustomPortraitPath => PortraitPath;
-    public override string BetaPortraitPath => ModelDb.Card<StrikeIronclad>().BetaPortraitPath;
-
     protected override HashSet<CardTag> CanonicalTags => [CardTag.Strike];
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
 

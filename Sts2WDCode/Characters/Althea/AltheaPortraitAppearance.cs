@@ -16,6 +16,8 @@ internal static class AltheaPortraitAppearance
         {
             if (!__instance.IsNodeReady() || __instance.Model is not AltheaCard card
                 || card.Rarity == CardRarity.Ancient) return;
+            // Bypass temporary palette shader for mod-provided custom portraits
+            if (card.PortraitPath.StartsWith("res://Sts2WD/", StringComparison.OrdinalIgnoreCase)) return;
             var portrait = __instance.GetNode<TextureRect>("%Portrait");
             // Reload clears visible portraits and assigns blur to undiscovered cards.
             // Leave that blur intact; native Reload/pool reset also clears this palette on reuse.

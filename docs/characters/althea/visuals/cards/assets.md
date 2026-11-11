@@ -1,8 +1,8 @@
 # Althea Card Portrait Integration
 
-## Basic Strike candidate (2026-10-25)
+## Basic Strike Delivery (2026-11-11)
 
-[card-candidates/2026-10-25/althea_strike.png](../../card-candidates/2026-10-25/althea_strike.png) is a 1000 x 760 opaque PNG. The complete 1439 x 1093 generated landscape was proportionally Fit-resized without cropping. A 250 x 190 preview was opened beside the other Strike candidates and native `StrikeIronclad` at the same scale. Input roles and the production brief are in [the card art specification](art.md#basic-strike-candidate-2026-10-25). The runtime placeholders remain unchanged; review precedes promotion.
+The basic Strike portrait is [Sts2WD/images/card_portraits/althea/althea_strike.png](../../../../../Sts2WD/images/card_portraits/althea/althea_strike.png), an exact 1000 x 760 fully opaque PNG (`25:19`). Input roles and the production brief are in [the card art specification](art.md#basic-strike-candidate-2026-10-25). `AltheaStrike` overrides `CustomPortraitPath` and `PortraitPath` to this runtime texture, and `AltheaPortraitAppearance` bypasses the temporary palette shader for mod-provided portraits.
 
 ## Temporary Portrait Palettes
 

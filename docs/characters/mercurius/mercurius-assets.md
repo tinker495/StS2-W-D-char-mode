@@ -12,11 +12,9 @@ Three Token-rarity Tune option models use native Acrobatics, Hologram and Reboot
 
 C# build completed with zero warnings/errors. Direct `dotnet publish` produced the mod PCK, and a separate resource process loaded all 15 relic textures, all six renamed character UI textures and both languages' five relic / three option entries. Temporary native observations covered 43 effect/formatting cases; their isolated bootstrap supplies the mod model/pool registrations that normal BaseLib startup provides. These are diagnostic observations rather than formal acceptance tests. No Steam installation or Git upload was performed. Local MCP configuration was restored byte-for-byte after packaging with the development plugin temporarily disabled.
 
-## Basic Strike candidate (2026-10-25)
+## Basic Strike Delivery (2026-11-11)
 
-`card-candidates/2026-10-25/mercurius_strike.png` is a 1000 x 760 opaque PNG pending user review. The built-in image generator created a new 1439 x 1093 landscape painting. Delivery proportionally Fit-resized the complete painting without cropping or region extraction. A 250 x 190 preview was opened beside the Realta/Althea candidates and native `StrikeIronclad` at the same scale. The crossbow and bolt remain readable. Input roles and provisional design decisions are in `mercurius-art.md`.
-
-No canonical character base, runtime card mapping or installation was established by this task.
+The basic Strike portrait is [Sts2WD/images/card_portraits/mercurius/mercurius_strike.png](../../../Sts2WD/images/card_portraits/mercurius/mercurius_strike.png), an exact 1000 x 760 fully opaque PNG (`25:19`). Input roles and design decisions are in `mercurius-art.md`. `MercuriusStrike` overrides `CustomPortraitPath` and `PortraitPath` to this runtime texture.
 
 ## Relic candidates (2026-10-25)
 
