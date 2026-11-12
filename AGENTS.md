@@ -12,6 +12,14 @@ An agent-written PR or review is still human-facing and must be in Korean. A ski
 
 Apply this rule when creating or updating documentation. Existing language does not override the intended audience.
 
+## Requested Work and Completion
+
+For implementation, asset delivery, or PR creation/update, follow [Complete Requested Work](docs/agents/workflow.md#complete-requested-work). A natural-language request to open a PR includes this completion procedure. Use the repository's [PR skill](.agents/skills/pr/SKILL.md) for preparation and its body.
+
+Account for every requested deliverable in the final product files and their actual entry points. Apply the affected owner's conventions, trace approved artwork through the model's resource selection, and resolve omissions in the current task. For requirements that mechanical checks cannot decide, inspect the relevant source, resources and specifications and record the evidence for the conclusion.
+
+Use the current task and environment for execution and direct inspection. Report what ran, what the source/resource inspection established, and what remains unexecuted. Mechanical verification limits alone do not introduce a separate verification handoff or a Draft-to-ready stage. Existing test ownership and failure/conflict rules govern actual check failures.
+
 ## Code Review Rules
 
 
@@ -45,6 +53,8 @@ Before adding a test, touching anything under `tests/` or CI validation, handlin
 
 ## Shared Documentation
 
+Use repository-root-relative destinations such as `/docs/agents/workflow.md` when a documentation link would otherwise traverse a parent directory. Same-folder and descendant links may use local paths, including `./`. Markdown repository links must contain no `..` path segments. Resolve a documentation link's leading `/` against the Git repository root when opening files. Same-document anchors use `#section`, and external plugin resources follow their owning source's path rules.
+
 Write shared documentation so it remains understandable without local drafts, generation logs, or personal caches. State the rules, rationale, current behavior, and procedures needed to reproduce the work in the document itself. Do not rely on "same as the previous version" or descriptions that require opening Git-ignored files. Drafts, prompts, and comparison images do not all need to be tracked. Track product files and necessary specifications. Identify external evidence through public sources or versions, types, and members, together with observations summarized in the document.
 
 ## Character Naming
@@ -73,6 +83,6 @@ Use the root `GLOSSARY.md` and `docs/adr/` as the single domain context. Follow 
 
 When creating or editing images, or writing image-generation prompts, start with [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) and open only the requested route. It identifies the required sections of [ARTS.md](ARTS.md), the target's `<char>-art.md` and `<char>-assets.md`, reference images and engine instructions. Use the card-observation route to extract native card portraits or inspect a packaged texture; previous tasks' draft folders are not a prerequisite.
 
-`ARTS.md` owns the shared style, chibi scope, official StS2 reference anchors, and composition principles. `<char>-art.md` and `<char>-assets.md` are short indexes to the requested topic's specification, file mappings and runtime status under `visuals/<topic>/`. Read `<char>-history.md` only when investigating past choices, rejections, or deliveries. The canonical visual anchor is `base.png` in the same directory, with `refs/` supplying character, rough-sketch, and motif/object references. For owners without guides or an approved base, use [the missing-guide procedure](docs/conventions/documentation/character-guides.md#owners-without-art-guides). Keep character-specific descriptions out of shared documents and general-purpose skills.
+`ARTS.md` owns the shared style, chibi scope, official StS2 reference anchors, and composition principles. `<char>-art.md` and `<char>-assets.md` are short indexes to the requested topic's specification, file mappings and runtime status in same-folder `<topic>-*.md` documents. Read `<char>-history.md` only when investigating past choices, rejections, or deliveries. The canonical visual anchor is `base.png` in the same directory, with `refs/` supplying character, rough-sketch, and motif/object references. For owners without guides or an approved base, use [the missing-guide procedure](docs/conventions/documentation/character-guides.md#owners-without-art-guides). Keep character-specific descriptions out of shared documents and general-purpose skills.
 
 Generate each asset directly in its intended composition by passing `base.png` (when applicable), any rough/motif reference in `refs/`, and the same-use-case official StS2 reference from [sts2-style-refs](docs/research/sts2-style-refs/README.md) as image inputs, then comparing at actual display size. Regenerate when the composition is wrong; do not solve it through post-generation cropping, extracting and enlarging a region, or automatic Cover fitting. Resize while preserving the whole painting by default. Crop only when the user explicitly requests it for that image. See [ARTS.md section 1.3](ARTS.md#13-composition-principles-for-all-assets) and [section 2.3](ARTS.md#23-actual-official-image-anchors-and-priority).

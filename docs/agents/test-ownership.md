@@ -1,6 +1,6 @@
 # Test Ownership and Change Authority
 
-These rules govern every repository test and acceptance asset. [AGENTS.md](../../AGENTS.md#test-ownership-and-change-authority) carries the always-loaded summary; this document is the single source of truth.
+These rules govern every repository test and acceptance asset. [AGENTS.md](/AGENTS.md#test-ownership-and-change-authority) carries the always-loaded summary; this document is the single source of truth.
 
 ## Principle
 

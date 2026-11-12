@@ -8,11 +8,11 @@
 
 | 대상 | 실제 작성 파일 | 게임 모델 ID |
 |---|---|---|
-| 레아르타 | [realta.json](../../Sts2WD/character_text/realta.json) | `STS2WD-REALTA` |
-| 알테아 | [althea.json](../../Sts2WD/character_text/althea.json) | `STS2WD-ALTHEA` |
-| 메르쿠리우스 | [mercurius.json](../../Sts2WD/character_text/mercurius.json) | `STS2WD-MERCURIUS` |
-| 캐릭터 4 | [character_four.json](../../Sts2WD/character_text/character_four.json) | `STS2WD-CHARACTER_FOUR` |
-| 새 캐릭터용 복사본 | [_template.json](../../Sts2WD/character_text/_template.json) | 복사 후 실제 모델 ID로 변경 |
+| 레아르타 | [realta.json](/Sts2WD/character_text/realta.json) | `STS2WD-REALTA` |
+| 알테아 | [althea.json](/Sts2WD/character_text/althea.json) | `STS2WD-ALTHEA` |
+| 메르쿠리우스 | [mercurius.json](/Sts2WD/character_text/mercurius.json) | `STS2WD-MERCURIUS` |
+| 캐릭터 4 | [character_four.json](/Sts2WD/character_text/character_four.json) | `STS2WD-CHARACTER_FOUR` |
+| 새 캐릭터용 복사본 | [_template.json](/Sts2WD/character_text/_template.json) | 복사 후 실제 모델 ID로 변경 |
 
 각 파일에는 캐릭터 문구 15종, 고대 존재 9종 각각의 첫 만남·재방문·반복 대화, 유물 이야기와 `SEA_GLASS`의 이름을 넣을 자리가 있다. 대화 칸은 필요에 따라 늘리거나 줄일 수 있다. 레아르타에는 현재 전용 유물 5종의 빈칸도 준비되어 있다.
 
@@ -214,7 +214,7 @@ powershell -ExecutionPolicy Bypass -File .\dev.ps1 deploy
 | BaseLib `AddAncientDialogues`, `AncientDialogueUtil.GetDialoguesForKey` | 모드 캐릭터 대화 등록·연속 번호 규칙 |
 | `LocManager.LoadTable`, `LocTable` | 번역 병합과 영어 fallback |
 
-[연결 코드](../../Sts2WDCode/Localization/CharacterTextLocalization.cs)는 이 모드의 `characters.json`, `ancients.json`, `relics.json`을 읽는 지점에서만 원고를 병합한다. [프리셋 처리](../../Sts2WDCode/Localization/CharacterTextPreset.cs)가 빈칸 제외·언어 선택·연속 번호·화자·버튼·반복 접미사·방문 조건을 담당하고, 대화 등록과 선택은 기존 BaseLib·게임 코드를 사용한다.
+[연결 코드](/Sts2WDCode/Localization/CharacterTextLocalization.cs)는 이 모드의 `characters.json`, `ancients.json`, `relics.json`을 읽는 지점에서만 원고를 병합한다. [프리셋 처리](/Sts2WDCode/Localization/CharacterTextPreset.cs)가 빈칸 제외·언어 선택·연속 번호·화자·버튼·반복 접미사·방문 조건을 담당하고, 대화 등록과 선택은 기존 BaseLib·게임 코드를 사용한다.
 
 완성된 대화의 키 형식은 `<ANCIENT>.talk.<CHAR>.<대화번호>-<줄번호>[r].ancient` 또는 `.char`다. 반복의 `r`은 모든 줄에 일관되게 붙고, 마지막 줄을 제외하면 `.next`가 생성된다. `visitIndex: null`은 BaseLib의 정수 메타데이터 `-visit: "-1"`로 전달한다. 방문·승리 수는 음수가 아니므로 정확한 횟수에는 일치하지 않으면서 반복 후보로는 사용되는 원작 선택 규칙을 이용한다.
 

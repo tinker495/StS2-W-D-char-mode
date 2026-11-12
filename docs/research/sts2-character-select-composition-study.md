@@ -92,7 +92,7 @@ Generate directly for 16:9 and proportionally resize the whole image. Revise gen
 
 Example: "Realta infuses her well-used broom-glaive with improvement magic, expressing confidence in her craft."
 
-This connects existing infusion, Legacy, and Refine themes without inventing companions or lore. It is an example of scene construction, not a requirement to reuse that exact scene. [Character design](../characters/realta/realta.md)
+This connects existing infusion, Legacy, and Refine themes without inventing companions or lore. It is an example of scene construction, not a requirement to reuse that exact scene. [Character design](/docs/characters/realta/realta.md)
 
 ### Connect Face, Hand, and Workpiece
 

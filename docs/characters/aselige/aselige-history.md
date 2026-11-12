@@ -6,7 +6,7 @@ The following records describe earlier stages. Current appearance and runtime st
 
 ## Current scope
 
-Aselige is an Ancient, not a playable character. The encounter specification is [aselige-design.md](../../ancients/aselige-design.md). On 2026-10-23 the user approved the beta doodle and asked to apply it unchanged. `base.png` is the exact approved painting and anchors the current temporary appearance.
+Aselige is an Ancient, not a playable character. The encounter specification is [aselige-design.md](/docs/ancients/aselige-design.md). On 2026-10-23 the user approved the beta doodle and asked to apply it unchanged. `base.png` is the exact approved painting and anchors the current temporary appearance.
 
 ## User direction (2026-10-23)
 

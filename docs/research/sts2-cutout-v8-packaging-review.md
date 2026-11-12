@@ -14,7 +14,7 @@ Audience: agents preparing a later authorized runtime candidate. Reviewed 2026-1
 
 ### Include the raw JSON, not only textures and scripts
 
-`rig.gd` reads `rig.json` and `meshes.json` with `FileAccess.get_file_as_string` and `JSON.parse_string`. `death_body.gd` reads `death-mesh.json` the same way. The main project's [export preset](../../export_presets.cfg) uses `export_filter="all_resources"`, but its only non-resource include pattern is `Sts2WD/localization/**/*.json`. Arbitrary JSON is not automatically a Godot resource. Merely relocating the draft under `Sts2WD/` does not solve that inclusion gap. Godot explicitly requires a Keep File import mode or a non-resource export filter for files read this way. [Godot 4.5 FileAccess](https://docs.godotengine.org/en/4.5/classes/class_fileaccess.html), [Godot export resource filters](https://docs.godotengine.org/en/4.5/tutorials/export/exporting_projects.html)
+`rig.gd` reads `rig.json` and `meshes.json` with `FileAccess.get_file_as_string` and `JSON.parse_string`. `death_body.gd` reads `death-mesh.json` the same way. The main project's [export preset](/export_presets.cfg) uses `export_filter="all_resources"`, but its only non-resource include pattern is `Sts2WD/localization/**/*.json`. Arbitrary JSON is not automatically a Godot resource. Merely relocating the draft under `Sts2WD/` does not solve that inclusion gap. Godot explicitly requires a Keep File import mode or a non-resource export filter for files read this way. [Godot 4.5 FileAccess](https://docs.godotengine.org/en/4.5/classes/class_fileaccess.html), [Godot export resource filters](https://docs.godotengine.org/en/4.5/tutorials/export/exporting_projects.html)
 
 For a later approved application, choose one concrete option:
 

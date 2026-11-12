@@ -1,6 +1,6 @@
 ---
 name: pr
-description: "Use when writing a PR body."
+description: "Use when preparing, creating or updating a pull request, including writing its body."
 metadata:
   credits:
     skill: show-me
@@ -8,6 +8,10 @@ metadata:
     organisation: Humanlayer
     url: "https://github.com/humanlayer/skills/blob/main/plugins/show-me/skills/show-me/SKILL.md"
 ---
+
+Before creating or updating a PR, follow [Complete Requested Work](/docs/agents/workflow.md#complete-requested-work) to reconcile the requested deliverables, applicable conventions, existing checks and final-change evidence. For a body-only request, use the supplied change and available evidence within that scope. Consult [the issue tracker instructions](/docs/agents/issue-tracker.md) before GitHub operations.
+
+Write the body from the final change and the evidence actually obtained. Include the requested asset application status when artwork is affected, and identify direct source/resource inspection and unexecuted verification accurately.
 
 Use this template for writing the PR body:
 

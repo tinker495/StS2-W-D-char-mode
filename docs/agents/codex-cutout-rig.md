@@ -18,7 +18,7 @@ For the initial Realta trial, `Realta.CustomVisualPath` points to `Sts2WD/scenes
 
 Find actual attack, damage, death, and return-to-idle dispatch before wiring clips. A playable standalone `AnimationPlayer` does not establish that game events invoke it. If the framework dispatch is unresolved, deliver the standalone candidate and state that limit explicitly.
 
-The subsequent [runtime investigation](../research/sts2-cutout-runtime-contract.md) found a separate BaseLib 3.4.7 non-Spine dispatch. Combat needs `idle`/`relaxed`/`powerup` aliases for official-style names, explicit completion transitions, and an intentional death wait. Merchant searches `idle` before `relaxed_loop`, so its idle alias must represent the merchant pose. Rest Act/light-off and rest game-over do not automatically reach non-Spine players. Combat/rest factories replace the original scene root; place persistent controllers below a retained child. Confirm these version-specific findings before promotion.
+The subsequent [runtime investigation](/docs/research/sts2-cutout-runtime-contract.md) found a separate BaseLib 3.4.7 non-Spine dispatch. Combat needs `idle`/`relaxed`/`powerup` aliases for official-style names, explicit completion transitions, and an intentional death wait. Merchant searches `idle` before `relaxed_loop`, so its idle alias must represent the merchant pose. Rest Act/light-off and rest game-over do not automatically reach non-Spine players. Combat/rest factories replace the original scene root; place persistent controllers below a retained child. Confirm these version-specific findings before promotion.
 
 ## 2. Preserve visible pixels; generate only missing artwork
 
@@ -81,7 +81,7 @@ Write an `AnimationLibrary` and `AnimationPlayer`. Author setup/reset values for
 
 Let the native player own clip state and time. A script that calls `seek()` every frame can display correct previews while overriding external `Play()` calls. Bake joint motion and key any attachment-controller state/time on the same player; reserve `seek()` for scrubbing. Observe automatic return with `advance()` and the real engine clock, since seeking to a clip's end does not exercise completion. Repeated `play()` of the already-playing clip does not establish a fresh time-zero sample: stop/reset or observe accumulated time explicitly.
 
-Keep the controller under the retained `Visuals` child when the framework replaces scene roots. Resolve adjacent resources relative to the script directory, and reimport after relocation. Combat `idle` and merchant `idle` need different underlying poses. Define return-to-idle explicitly; a name alias alone does not create a transition. The inspected game's default revive is a 0.2-second fade-out, idle reset, and 0.2-second fade-in, not reversed death. Custom player discovery can suppress this fallback even when the candidate lacks a `revive` clip. Include and observe that dispatch name and interrupted fade recovery. See the [packaging/lifecycle review](../research/sts2-cutout-v8-packaging-review.md) for the evidence and version limits.
+Keep the controller under the retained `Visuals` child when the framework replaces scene roots. Resolve adjacent resources relative to the script directory, and reimport after relocation. Combat `idle` and merchant `idle` need different underlying poses. Define return-to-idle explicitly; a name alias alone does not create a transition. The inspected game's default revive is a 0.2-second fade-out, idle reset, and 0.2-second fade-in, not reversed death. Custom player discovery can suppress this fallback even when the candidate lacks a `revive` clip. Include and observe that dispatch name and interrupted fade recovery. See the [packaging/lifecycle review](/docs/research/sts2-cutout-v8-packaging-review.md) for the evidence and version limits.
 
 Check prop clearance numerically: transform the rigid weapon's alpha pixels by FK at every key and at interpolation quarter-points and compare with the source floor. When it fails, redesign the grip path first (lift during wind-up and recovery); a per-key angle correction that spreads into the anticipation or the event pose is a regression. Put expressions and VFX (texture swaps, trail/sigil alpha and scale) on the same player as the joints, and key their defaults at t=0 of every clip so an interrupted clip never leaves a stale face or effect.
 
@@ -91,7 +91,7 @@ Native Godot data requires no Spine conversion. Only if importing a verified Spi
 
 ## 5. Verify and report
 
-Use the [motion review matrix](cutout-motion-review.md) for each affected action and record evidence for every applicable row. For Realta iteration, follow the tracked [animation procedure](../characters/realta/animation/reproduction.md); its `dev.ps1 anim` command owns authoring, import, baking, capture and review-sheet creation.
+Use the [motion review matrix](cutout-motion-review.md) for each affected action and record evidence for every applicable row. For Realta iteration, follow the tracked [animation procedure](/docs/characters/realta/animation/reproduction.md); its `dev.ps1 anim` command owns authoring, import, baking, capture and review-sheet creation.
 
 Serialize scalar rotation key values as floating-point literals, including `0.0`. Sample actual joint properties during playback; integer-valued keys can round small rotations to zero even when clip names and durations load correctly.
 
@@ -103,7 +103,7 @@ At every verification iteration, open a relevant external primary source and con
 
 For runtime promotion, preserve markers/bounds and the verified framework dispatch, run the repository build/import/PCK workflow, and verify resources instantiate. Run gameplay checks if available. A successful C# build alone verifies neither imported textures nor event playback. For standalone draft-only work, compile/package the candidate only as necessary; installation is not implied.
 
-Prefer baking the authored rig into a `.tscn` (bones, skinned polygons, AnimationPlayer with aliases, `next` and `autoplay`) and keeping only a small controller script for state a value track cannot express. Trim fully transparent margins from part textures and record their source-canvas offsets in one manifest; downscale VFX painted far larger than displayed. Realta's implementation is the reference: [animation/README.md](../characters/realta/animation/README.md).
+Prefer baking the authored rig into a `.tscn` (bones, skinned polygons, AnimationPlayer with aliases, `next` and `autoplay`) and keeping only a small controller script for state a value track cannot express. Trim fully transparent margins from part textures and record their source-canvas offsets in one manifest; downscale VFX painted far larger than displayed. Realta's implementation is the reference: [animation-sources.md](/docs/characters/realta/animation-sources.md).
 
 Raw JSON loaded by `FileAccess` needs explicit non-resource export inclusion. Dynamically constructed texture/script paths also need inclusion when exporting selected resources. Build an isolated candidate PCK and mount it in a fresh host project without the source project's import cache; render the loaded candidate and exercise the actual clip names. This demonstrates packaged resource loading, not BaseLib factory conversion or gameplay. Do not promote unused experiments, captures, or official research artwork into the package.
 
@@ -117,4 +117,4 @@ Report saved artifacts, prompt location, rig hierarchy, parts/Z order, clips, ob
 - [Esoteric asset preparation](https://eu.esotericsoftware.com/blog/How-to-cut-your-assets-for-animation): hidden surfaces, joint overlap and motion-driven decomposition.
 - [Spine mesh attachments](https://esotericsoftware.com/spine-meshes): topology, weights, vertex economy and destructive Trace/Generate caveats.
 - [Godot 4.5 2D skeletons](https://docs.godotengine.org/en/4.5/tutorials/animation/2d_skeletons.html): weighted geometry and internal vertices; verify the version-marked tutorial in the actual engine.
-- [Official animation comparison](../research/sts2-official-animation-comparison.md): local resource evidence, scene differences and external workflow research.
+- [Official animation comparison](/docs/research/sts2-official-animation-comparison.md): local resource evidence, scene differences and external workflow research.

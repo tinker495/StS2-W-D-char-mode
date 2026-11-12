@@ -20,7 +20,7 @@ Raw `refs/` may differ in costume, rendering, and camera. Resolve conflicts into
 | Document | Owns |
 |---|---|
 | This document | Shared rendering, information density, materials, asset compositions, and UI safe zones |
-| `<char>-art.md` in the [character directory](docs/characters/) | Short index to the relevant appearance, palette, equipment, reference roles, constraints and prompt specifications under `visuals/<topic>/` |
+| `<char>-art.md` in the [character directory](docs/characters/) | Short index to the relevant appearance, palette, equipment, reference roles, constraints and prompt specifications in same-folder `<topic>-*.md` documents |
 | `<char>-assets.md` in the same directory | Short index to topic delivery paths, dimensions and status; separate API references and inventories when needed |
 | `<char>-history.md` in the same directory | Past exploration, choices, rejections, deliveries, and observations |
 | `base.png` and `refs/` in the same directory | Approved visual canon and raw references |

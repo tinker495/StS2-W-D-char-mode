@@ -2,7 +2,7 @@
 
 - Research date:2026-10-18 (Asia/Seoul).
 - Inspected installation: **v0.107.1**, commit **59260271**, from local game metadata.
-- Detailed analysis: [selection-tile study](../../sts2-character-select-tile-study.md).
+- Detailed analysis: [selection-tile study](/docs/research/sts2-character-select-tile-study.md).
 - Source: Mega Crit's local base-game resource pack. Distribution context: [press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/), [official Steam page](https://store.steampowered.com/app/2868840/Slay_the_Spire_2/).
 - Extraction: load each `Texture2D` and call `get_image().save_png()`. No resizing, background removal, color correction, or repainting. These are neither generated images nor composited button screenshots.
 - Inspection: all five normal and five locked images were opened directly. Every file is a **132×195 PNG**.
@@ -39,7 +39,7 @@ SHA-256:
 ## Distinct States
 
 - **Normal source tile:** colored art centered on the face/mask.
-- **Deselected tile in a screen:** source art with game deselection treatment, visible in the [official screen crop](../future-assets/ui-select-tiles-crop.png).
+- **Deselected tile in a screen:** source art with game deselection treatment, visible in the [official screen crop](/docs/research/sts2-style-refs/future-assets/ui-select-tiles-crop.png).
 - **Locked source tile:** black silhouette on gray, distinct from merely darkening colored art.
 
 Distinguish thin color lines in source PNGs from game selection frames, masks, and focus effects. These references do not instruct painting gold borders, lock icons, or button corners into Realta's master.

@@ -4,7 +4,7 @@ Use this workflow when changing combat/merchant authoring inputs or reviewing ge
 
 ## Setup
 
-Complete the root [development setup](../../../../README.md#새-pc에서-준비하기): .NET 9, MegaDot 4.5.1.m.14, installed game assemblies and the locked BaseLib dependency. `dev.ps1 doctor` resolves project paths; no script contains a personal checkout path. Authoring and review sheets also require Python with NumPy and Pillow. The verified environment is Python 3.12.4, NumPy 2.3.1 and Pillow 11.3.0. For a matching Python environment, install `numpy==2.3.1` and `Pillow==11.3.0` with that interpreter's `python -m pip install`.
+Complete the root [development setup](/README.md#새-pc에서-준비하기): .NET 9, MegaDot 4.5.1.m.14, installed game assemblies and the locked BaseLib dependency. `dev.ps1 doctor` resolves project paths; no script contains a personal checkout path. Authoring and review sheets also require Python with NumPy and Pillow. The verified environment is Python 3.12.4, NumPy 2.3.1 and Pillow 11.3.0. For a matching Python environment, install `numpy==2.3.1` and `Pillow==11.3.0` with that interpreter's `python -m pip install`.
 
 Run from the repository root in PowerShell. Command examples use a process-scoped execution-policy option, preserving machine settings.
 
@@ -34,7 +34,7 @@ Each run contains:
 
 The fixed viewport is 640×420, with source origin at (120,32), scale .625, transparent background, and GL compatibility rendering. The helper window runs hidden/offscreen. Frame n is n/24 seconds, ending before the clip endpoint. The seven current clip lengths produce 396 frames per variant; this describes the sampling recipe, not an acceptance threshold. Frame capture requires a renderer; the numerical tests use headless mode.
 
-Review at normal speed and by frame using [the motion review matrix](../../../agents/cutout-motion-review.md). The isolated capture stops autoplay, drains its deferred random seek, disconnects only phase selection and plays with zero blend; the controller's mixer handling remains active. For revive it starts from the final death pose. This isolates authored frames and does not demonstrate live transitions.
+Review at normal speed and by frame using [the motion review matrix](/docs/agents/cutout-motion-review.md). The isolated capture stops autoplay, drains its deferred random seek, disconnects only phase selection and plays with zero blend; the controller's mixer handling remains active. For revive it starts from the final death pose. This isolates authored frames and does not demonstrate live transitions.
 
 ## Mechanical checks and publishing
 
@@ -43,9 +43,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim <clip>
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
 ```
 
-`anim` runs [the mechanical rig checks](../../../../tests/rig-checks.md) and [instance isolation test](../../../../tests/README.md) after bake; require exit 0 and both PASS summaries before treating a rig change as checked. `check`, `publish` and `deploy` skip these animation checks; `publish` still imports resources before exporting the PCK. Pre-commit runs the tracked-reference validator followed by the C# build through `dev.ps1 build`; `dev.ps1 verify` runs only the reference validator. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
+`anim` runs [the mechanical rig checks](/tests/rig-checks.md) and [instance isolation test](/tests/README.md) after bake; require exit 0 and both PASS summaries before treating a rig change as checked. `check`, `publish` and `deploy` skip these animation checks; `publish` still imports resources before exporting the PCK. Pre-commit runs the tracked-reference validator followed by the C# build through `dev.ps1 build`; `dev.ps1 verify` runs only the reference validator. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
 
-For native startup crashes, certificate-store errors, access denial, or separate log-display failures, follow [Build execution and diagnostics](../../../agents/build-troubleshooting.md). It owns the shared handling procedure; certificate settings stay unchanged.
+For native startup crashes, certificate-store errors, access denial, or separate log-display failures, follow [Build execution and diagnostics](/docs/agents/build-troubleshooting.md). It owns the shared handling procedure; certificate settings stay unchanged.
 
 ## Inspect only the published package
 
@@ -66,4 +66,4 @@ For a temporary live observation, instantiate the runtime rig, retain `animation
 - Observe die → revive, including the invisible reset at .20 s. Read `lower_mode`, `weapon_gripped`, `free_arm_back`, body/cel visibility and rig alpha alongside the image.
 - While a loop plays, allow a process frame, record `current_animation_position`, call `stop()` then `play()` with the same name, and allow the deferred callback. Repeat with aliases sharing the same resource. Observe saved phase restoration separately from ordinary resource changes.
 
-These transition observations supplement the explicitly requested automated checks. Record inputs, actual behavior and remaining uncertainty. Keep dated verification reports in [iteration notes](iteration-notes.md), and current ownership/timing rules in [README.md](README.md). For official comparisons, identify the installation/version/resources using [the animation study](../../../research/sts2-official-animation-comparison.md); prior local captures are optional evidence.
+These transition observations supplement the explicitly requested automated checks. Record inputs, actual behavior and remaining uncertainty. Keep dated verification reports in [iteration notes](/docs/characters/realta/animation-iteration-notes.md), and current ownership/timing rules in [README.md](/docs/characters/realta/animation-sources.md). For official comparisons, identify the installation/version/resources using [the animation study](/docs/research/sts2-official-animation-comparison.md); prior local captures are optional evidence.

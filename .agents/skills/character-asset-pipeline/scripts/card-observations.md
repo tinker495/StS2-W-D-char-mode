@@ -4,7 +4,7 @@ Use these commands to obtain original card anchors or inspect a packaged mod tex
 
 ## Official card anchors
 
-Select complementary card IDs from the [native portrait survey](../../../../docs/research/sts2-card-illustration-density.md). IDs use `pool/card_id`, without an extension. The command maps them to `res://images/packed/card_portraits/<pool>/<card_id>.png` inside the installed `SlayTheSpire2.pck`; it does not depend on a previous task's draft folder.
+Select complementary card IDs from the [native portrait survey](/docs/research/sts2-card-illustration-density.md). IDs use `pool/card_id`, without an extension. The command maps them to `res://images/packed/card_portraits/<pool>/<card_id>.png` inside the installed `SlayTheSpire2.pck`; it does not depend on a previous task's draft folder.
 
 Run from the repository root in PowerShell. Pass arrays with `&`, rather than a comma-containing string through `powershell -File`.
 
