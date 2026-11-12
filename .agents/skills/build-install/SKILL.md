@@ -35,7 +35,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File ./dev.ps1 deploy -ExecutionC
 
 Use `-Configuration` only when requested. Set `-ExecutionContextLabel` to the actual invocation context: `sandbox`, `escalated`, or `local`. This label records the caller's knowledge; it does not grant or detect permissions. Omit it if unknown.
 
-`publish` and `deploy` perform the C# build, MegaDot resource import, and PCK export. Animation rig checks run only through `dev.ps1 anim`; [check scope](../../../tests/rig-checks.md) documents them.
+`publish` and `deploy` perform the C# build, MegaDot resource import, and PCK export. Animation rig checks run only through `dev.ps1 anim`; [check scope](/tests/rig-checks.md) documents them.
 
 `deploy` packages first, checks the four package files and game process, backs up existing files, installs only the package, and compares SHA256 hashes. Apply required sandbox permission to the command. An installation request authorizes replacing the mod files; do not ask for the same confirmation again. Avoid separate copy commands or a redundant build/publish before deploy.
 
@@ -47,7 +47,7 @@ Each `publish`/`deploy` run prints a unique `artifacts/runtime/packaging-...` di
 
 Read `run.json` and the failed step's JSON first, then retrieve a bounded excerpt from that step's log. Expand only around the relevant diagnostic; do not print all build/import/export logs together. Version steps record the actual SDK and MegaDot versions. Command records include executable, arguments, working directory, UTC times, and exit code. Do not dump credentials or the process environment into diagnostics.
 
-Rig checks retain their `*.stdout.log`, `*.stderr.log`, `*.engine.log`, and `*.exitcode` files in the same diagnostic directory. For process-result capture and MegaDot startup-log crashes, use [Build execution and diagnostics](../../../docs/agents/build-troubleshooting.md).
+Rig checks retain their `*.stdout.log`, `*.stderr.log`, `*.engine.log`, and `*.exitcode` files in the same diagnostic directory. For process-result capture and MegaDot startup-log crashes, use [Build execution and diagnostics](/docs/agents/build-troubleshooting.md).
 
 For `Failed to read the root certificate store` or explicit access denial, retry once through the tool's escalation mechanism and mark the new run `escalated`. Keep both runs for comparison.
 

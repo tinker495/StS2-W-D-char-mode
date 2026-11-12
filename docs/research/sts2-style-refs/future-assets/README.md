@@ -3,7 +3,7 @@
 - Saved and inspected: 2026-10-18 (Asia/Seoul).
 - Purpose: visual research for standard cards, relics, status icons, selection screens, and energy/UI. All are official Mega Crit public materials, not files to copy into runtime assets.
 - Public URLs may change contents. These are directly downloaded and inspected snapshots. Originals were not resized or color-corrected; crops and GIF stills were saved separately.
-- Detailed analysis: [downstream-asset study](../../sts2-future-asset-reference-study.md).
+- Detailed analysis: [downstream-asset study](/docs/research/sts2-future-asset-reference-study.md).
 
 ## Original Files and Sources
 
@@ -59,5 +59,5 @@ SHA-256 for the 2026-10-18 download snapshots:
 
 - No original explicitly identified as an **Ancient/full-art card** was found in these Mega Crit public articles. Do not misclassify Quest, ordinary Rare cards, or Ancient events as such.
 - No complete transparent buff/debuff icon library was obtained. Combat crops provide limited examples, not universal colors, frames, or symbols.
-- This public-article pass did not obtain separate selection backgrounds or locked tiles. Later local-game research obtained [selection resources](../character-select/README.md) and [ten normal/locked tiles](../character-select-tiles/README.md). Deselected screenshot crops remain distinct from locked originals.
+- This public-article pass did not obtain separate selection backgrounds or locked tiles. Later local-game research obtained [selection resources](/docs/research/sts2-style-refs/character-select/README.md) and [ten normal/locked tiles](/docs/research/sts2-style-refs/character-select-tiles/README.md). Deselected screenshot crops remain distinct from locked originals.
 - Chibi for `character_icon` and `map_marker` is a user/project decision. Official portrait/map-node references do not prove an original-game chibi standard.

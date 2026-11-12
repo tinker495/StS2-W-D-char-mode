@@ -8,7 +8,7 @@ The raw references differed in armor, collar construction, facial proportions, a
 
 The base has two bronze pauldrons, a continuous ivory fur collar around the neck, a bronze cuirass and bracers, a blue coat, leather pouches, and sturdy boots. Raw references support individual expressions; they do not override the approved equipment.
 
-Shared style and chibi scope belong in [ARTS.md](../../../ARTS.md). Realta's apparent age, colors, clothing, weapon, and selection scene belong in character documents so they do not become defaults for other characters.
+Shared style and chibi scope belong in [ARTS.md](/ARTS.md). Realta's apparent age, colors, clothing, weapon, and selection scene belong in character documents so they do not become defaults for other characters.
 
 ## 2. Youthful Appearance and Open Forehead
 
@@ -35,13 +35,13 @@ When applying the base, preserve the complete painting and transparent margins. 
 
 The user selected chibi portraits and map markers, then clarified that selection buttons should retain the existing non-SD style. Chibi therefore applies only to portraits, their alpha-derived outlines, and map markers. Selection tiles, locked tiles, full bodies, cards, and selection scenes preserve natural proportions and the approved youthful appearance. This scope is a shared project rule.
 
-Including everything from the hat tip to the belt and pouches made the selection-tile face too small. The [original-game tile study](../../research/sts2-character-select-tile-study.md) supports a close camera where both eyes, eyebrows, nose, and mouth read first. Partial hat and lower collar are sufficient; the tile need not show all equipment.
+Including everything from the hat tip to the belt and pouches made the selection-tile face too small. The [original-game tile study](/docs/research/sts2-character-select-tile-study.md) supports a close camera where both eyes, eyebrows, nose, and mouth read first. Partial hat and lower collar are sufficient; the tile need not show all equipment.
 
 The user requested reference-based regeneration instead of cropping an existing image. Design the target composition during generation and export the whole painting with Fit. Normal and locked variants share the same downscaled alpha: full-color figure on blue versus black silhouette on gray.
 
 ## 6. A Distinctive Action and Fresh Selection Composition
 
-Placing the combat figure in front of a fortress workshop emphasized a generic fantasy setting over the character's personality. The [original-game selection study](../../research/sts2-character-select-composition-study.md) identified how gestures, foreground tools, abilities, and large background forms combine into one action.
+Placing the combat figure in front of a fortress workshop emphasized a generic fantasy setting over the character's personality. The [original-game selection study](/docs/research/sts2-character-select-composition-study.md) identified how gestures, foreground tools, abilities, and large background forms combine into one action.
 
 The adopted scene shows **Realta smiling as she holds her improved broom-glaive upright and inspects its blade in the light**. Her large face sits on the right, with the rising blade and hands in front of her. Bronze diagonals and the dark blue coat organize the wide frame, while cyan magic concentrates near the blade. The scene was generated anew using the canonical base and the original Ironclad and Regent selection illustrations.
 
@@ -61,4 +61,4 @@ The user requested that Branch B use the approved base directly for ordinary sta
 
 The generated combat pose used a grounded staggered stance and two hands on a diagonally raised broom-glaive, preserving the base's identity and rendering. Both full paintings were Fit-exported to 384×576 without cropping. Publish completed with zero C# warnings/errors, and temporary PCK observations loaded ten textures and four scenes with the separated references. A later blade refinement narrowed the pale cutting bevel, and that package was installed locally; actual gameplay was not verified.
 
-The user subsequently reverted this split: the separate combat painting was removed from runtime, the base-derived standing image was restored to `combat.png`, and rest/merchant references were changed back to `combat.png`. The extra `standing.png` and its import descriptor were removed. This rollback changes the current character delivery, while the generic Branch B production workflow still supports separate poses. The [art specification](visuals/animation/art.md) and [asset guide](visuals/animation/assets.md#standing-and-combat-split) own the current state.
+The user subsequently reverted this split: the separate combat painting was removed from runtime, the base-derived standing image was restored to `combat.png`, and rest/merchant references were changed back to `combat.png`. The extra `standing.png` and its import descriptor were removed. This rollback changes the current character delivery, while the generic Branch B production workflow still supports separate poses. The [art specification](animation-art.md) and [asset guide](animation-assets.md#standing-and-combat-split) own the current state.

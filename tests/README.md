@@ -6,7 +6,7 @@
 
 ## 실행
 
-[개발 환경](../README.md#새-pc에서-준비하기)을 준비한 뒤 저장소 루트의 PowerShell에서 실행한다. 아래는 저장소 안에 SDK를 설치한 경우이며, 별도로 설치했다면 두 실행 경로를 해당 설치 위치로 지정한다. `dev.ps1 doctor`로 프로젝트가 사용하는 경로를 확인할 수 있다.
+[개발 환경](/README.md#새-pc에서-준비하기)을 준비한 뒤 저장소 루트의 PowerShell에서 실행한다. 아래는 저장소 안에 SDK를 설치한 경우이며, 별도로 설치했다면 두 실행 경로를 해당 설치 위치로 지정한다. `dev.ps1 doctor`로 프로젝트가 사용하는 경로를 확인할 수 있다.
 
 ```powershell
 $ErrorActionPreference = 'Stop'

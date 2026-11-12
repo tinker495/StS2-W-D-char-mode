@@ -4,13 +4,13 @@ Start with [SKILL.md](SKILL.md) and the selected route. Recipes live beside thei
 
 | Needed prompt | Authoritative recipe |
 |---|---|
-| New canonical standing base (1-A) | [Base route](routes/base.md#1-a-refs--base-new-standing-master) |
-| Ancient/event painting or dialogue miniature | [Event route](routes/event.md); build the prompt from the owner's event/UI contract |
-| Combat pose (1-C), chibi/UI/selection (3–4) | [UI route](routes/ui.md) |
-| Relic (5) | [Relic route](routes/relics.md#recipe-5-base--refs--relic-icon-branch-c-1) |
-| Power (6) | [Power route](routes/powers.md#recipe-6-base--refs--power-emblem-branch-c-2) |
-| Standard/Ancient card (7–8) | [Card route](routes/cards.md) |
-| Selected-image edit (1-B) or cleanup (2-A) | [Review route](routes/review.md) |
+| New canonical standing base (1-A) | [Base route](base.md#1-a-refs--base-new-standing-master) |
+| Ancient/event painting or dialogue miniature | [Event route](event.md); build the prompt from the owner's event/UI contract |
+| Combat pose (1-C), chibi/UI/selection (3–4) | [UI route](ui.md) |
+| Relic (5) | [Relic route](relics.md#recipe-5-base--refs--relic-icon-branch-c-1) |
+| Power (6) | [Power route](powers.md#recipe-6-base--refs--power-emblem-branch-c-2) |
+| Standard/Ancient card (7–8) | [Card route](cards.md) |
+| Selected-image edit (1-B) or cleanup (2-A) | [Review route](review.md) |
 | Rough/reference translation (1-D), source labels | [References](references.md) |
 ## Shared Input Slots
 
@@ -20,7 +20,7 @@ Start with [SKILL.md](SKILL.md) and the selected route. Recipes live beside thei
 | `<IDENTITY_CUES>` | Face, hair, and costume identifiers retained in the portrait |
 | `<CHIBI_DETAILS>` | Character-specific proportions, expression, and silhouette within the common chibi scope |
 | `<ROUGH_OR_REF_INPUT>` | User-supplied rough sketch, symbol draft, object photo (`refs/`), or agent-staged layout/pose rough (`drafts/`), with adopted vs. excluded traits |
-| `<OFFICIAL_ANCHOR>` | Same-use-case official StS2 reference image(s) from [sts2-style-refs](../../../docs/research/sts2-style-refs/README.md) (or temporary local PCK extraction), guiding display-size density and value grouping; framing only when no user rough or selected composition owns it |
+| `<OFFICIAL_ANCHOR>` | Same-use-case official StS2 reference image(s) from [sts2-style-refs](/docs/research/sts2-style-refs/README.md) (or temporary local PCK extraction), guiding display-size density and value grouping; framing only when no user rough or selected composition owns it |
 | `<ENGINE_MODE>` | Engine-specific invocation (`Codex / GPT Image` via `image_gen` with `referenced_image_paths` and `transparent_background`, `Antigravity / Nano Banana` via `image-generator` subagent brief, or dual-engine comparison; see [engine instructions](engines.md#image-generation-engines-codex-gpt-image-vs-antigravity-nano-banana)) |
 | `<PALETTE>`,`<MATERIALS>` | Color roles and materials in the character art specification |
 | `<ASSET_SUBJECT>`,`<SCENE_SENTENCE>` | Character themes, recurring objects, and chosen action |

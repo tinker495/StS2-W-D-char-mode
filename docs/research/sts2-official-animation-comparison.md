@@ -12,7 +12,7 @@
 | Necrobinder/Osty 영상 | [2025년 10월 공식 글](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/), [원본 GIF](https://www.megacrit.com/images/osty_poke3.gif) | 700×432, 130프레임, 각 30ms, 전체 3.90초. 카드 선택·공격·피격 효과가 함께 들어간 화면이며 클립 단독 길이가 아님 |
 | 공식 선택 화면 | [공식 PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [공식 press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | Necrobinder와 Osty의 대형 구도, UI와의 관계. 정지 화면으로 애니메이션 길이나 변형 방식은 판단하지 않음 |
 | 설치판 코드·애니메이션 | `Slay the Spire 2/release_info.json`, `sts2.dll`의 아래 형식·멤버, `SlayTheSpire2.pck`의 아래 리소스 | 메타데이터 직접 확인: **v0.107.1, commit 59260271**, 배포 날짜 `2026-06-18T15:43:56-07:00`. 코드 재생 계약, Spine 리소스의 클립 길이, Ironclad/Silent의 씬별 표본 렌더 확인. 최신 공개판 여부와 완성된 게임 화면 재생은 별개 |
-| Realta v1 | [시도 보고서](../characters/realta/realta-cutout-trial.md)의 관절 manifest·전용 조립 변환·합성 GIF | manifest와 프리뷰 프레임 직접 확인. 104개 인코딩 프레임, 전체 5.25초. 원래 생성기의 105개 입력 프레임 중 동일 프레임 병합으로 한 프레임이 100ms가 됨. Godot 실시간 녹화가 아닌 별도 합성 프리뷰 |
+| Realta v1 | [시도 보고서](/docs/characters/realta/realta-cutout-trial.md)의 관절 manifest·전용 조립 변환·합성 GIF | manifest와 프리뷰 프레임 직접 확인. 104개 인코딩 프레임, 전체 5.25초. 원래 생성기의 105개 입력 프레임 중 동일 프레임 병합으로 한 프레임이 100ms가 됨. Godot 실시간 녹화가 아닌 별도 합성 프리뷰 |
 
 공개 GIF의 저장본·해시는 [출처 목록](sts2-style-refs/README.md)에 있다. 이번 관찰용 contact sheet는 각 GIF를 Pillow로 순회하며 누적 `duration`을 기록하고 6프레임 간격으로 **전체 프레임**을 축소해 배치했다. 공식 파일을 고치거나 가려진 부위를 생성하지 않았다. 로컬 비교 시트는 선택적 작업 자료이며, 공유 문서의 판단 근거는 아래에 시간과 관찰로 남겼다. 설치판 원본 자산을 새로 배포하지 않았다.
 

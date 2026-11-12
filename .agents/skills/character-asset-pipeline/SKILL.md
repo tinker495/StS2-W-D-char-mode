@@ -5,30 +5,30 @@ description: Create, edit, review, or apply character artwork through focused ba
 
 # Character Asset Pipeline
 
-Choose one route before reading production details. Route files are ordinary reference documents in this skill; open the selected file directly. Use the [bounded reading procedure](../../../docs/agents/workflow.md#read-within-an-output-budget), reusing material already read in the session.
+Choose one route before reading production details. Route files are ordinary reference documents beside this file and the shared workflow; open the selected file directly. Use the [bounded reading procedure](/docs/agents/workflow.md#read-within-an-output-budget), reusing material already read in the session.
 
 | Request | Read next |
 |---|---|
-| A: establish or replace a canonical standing base | [Base](routes/base.md) |
-| Ancient/event painting, including its canonical base, or dialogue/history/map miniature | [Event art and miniatures](routes/event.md); select the owner's native role before a standing or player-UI recipe |
-| B: portrait, map marker, energy, standing/combat, selection tile or scene | [UI, standing and selection](routes/ui.md); only the requested output's subsection |
-| C-1: relic object or paired upgrade | [Relics](routes/relics.md) |
-| C-2: power/status symbol | [Powers](routes/powers.md) |
-| C-3: standard or Ancient card illustration | [Cards](routes/cards.md); only the matching card recipe |
-| D: selected-image edit, cleanup, comparison or delivery conversion | [Review and conversion](routes/review.md) |
+| A: establish or replace a canonical standing base | [Base](base.md) |
+| Ancient/event painting, including its canonical base, or dialogue/history/map miniature | [Event art and miniatures](event.md); select the owner's native role before a standing or player-UI recipe |
+| B: portrait, map marker, energy, standing/combat, selection tile or scene | [UI, standing and selection](ui.md); only the requested output's subsection |
+| C-1: relic object or paired upgrade | [Relics](relics.md) |
+| C-2: power/status symbol | [Powers](powers.md) |
+| C-3: standard or Ancient card illustration | [Cards](cards.md); only the matching card recipe |
+| D: selected-image edit, cleanup, comparison or delivery conversion | [Review and conversion](review.md) |
 | Extract native card references or inspect a packaged texture | [Card observations](scripts/card-observations.md) |
 
 Read the selected route and the applicable sections of [the shared workflow](workflow.md). During generation, read the active harness's section in [engines.md](engines.md); a supplied rough or motif also requires [reference roles and landmarks](references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). Read delivery records only when applying or finishing an asset. Do not load unrelated routes, all prompt recipes, or every character subsection.
 
 ## Find the target facts
 
-Resolve `<char>` through [character naming and layout](../../../docs/conventions/characters/naming.md). The [topic-guide convention](../../../docs/conventions/documentation/character-guides.md) applies to every character and visual owner, including undecided names and Ancients.
+Resolve `<char>` through [character naming and layout](/docs/conventions/characters/naming.md). The [topic-guide convention](/docs/conventions/documentation/character-guides.md) applies to every character and visual owner, including undecided names and Ancients.
 
 - `docs/characters/<char>/<char>-art.md` routes the requested asset's brief, reference roles and visible identity, palette and equipment. If it is a topic index, open only the matching specification. Read character identity only when the character, body parts or canonical equipment appear; a standalone card-specific object needs its object/theme brief.
 - `<char>-assets.md` routes filenames, dimensions, runtime mappings and current status. If it is an index, follow the matching delivery page and only the needed inventory; open API references when integration work requires them.
-- `<char>.md` and [GLOSSARY.md](../../../GLOSSARY.md) own card/relic/power effects and themes; read the relevant definitions. `<char>-history.md` is needed only for past decisions or rejected versions.
-- [ARTS.md](../../../ARTS.md) owns rendering and composition. The route names the applicable sections and official pixels. Preserve common chibi scope: portrait/outline/map marker use chibi; selection tiles, standing art, cards and selection scenes keep canonical proportions.
+- `<char>.md` and [GLOSSARY.md](/GLOSSARY.md) own card/relic/power effects and themes; read the relevant definitions. `<char>-history.md` is needed only for past decisions or rejected versions.
+- [ARTS.md](/ARTS.md) owns rendering and composition. The route names the applicable sections and official pixels. Preserve common chibi scope: portrait/outline/map marker use chibi; selection tiles, standing art, cards and selection scenes keep canonical proportions.
 
-For a missing guide or base, follow [Owners Without Art Guides](../../../docs/conventions/documentation/character-guides.md#owners-without-art-guides). Keep character-specific content in its topic pages. Drafts, prompts and observation sheets may remain in ignored `drafts/`; approved bases, runtime assets and necessary specifications must stand on their own.
+For a missing guide or base, follow [Owners Without Art Guides](/docs/conventions/documentation/character-guides.md#owners-without-art-guides). Keep character-specific content in its topic pages. Drafts, prompts and observation sheets may remain in ignored `drafts/`; approved bases, runtime assets and necessary specifications must stand on their own.
 
 **Application authority:** preserve the base and runtime assets until the user selects, approves or instructs their application. Reuse existing approval within its scope. Base-only approval does not authorize UI/runtime regeneration or game installation. The [shared workflow](workflow.md#delivery-and-completion-records) defines delivery and completion records.

@@ -4,7 +4,7 @@
 
 `dev.ps1 publish`와 `deploy`는 각 명령의 종료 결과와 전체 로그 경로를 표시한다. 표준 출력·오류 전체와 단계별 JSON 기록은 실행마다 생성하는 `artifacts/runtime/packaging-...` 폴더에 보존한다. 화면에는 진단 메시지를 최대 5줄, 실패 시 마지막 로그를 최대 8줄 표시하며 한 줄은 최대 400자로 줄인다. 종료 코드가 0이어도 인증서 저장소 접근 오류 같은 엔진 진단은 표시한다. 이는 출력 요약이며 기존 성공·실패 판정은 유지한다.
 
-실패를 조사할 때는 `run.json`과 해당 단계의 JSON부터 읽고, 그 단계의 로그에서 필요한 부분만 조회한다. SDK·MegaDot 버전도 각각의 로그에 남는다. 설치와 재시도 절차는 [빌드·설치 스킬](../.agents/skills/build-install/SKILL.md)을 따른다.
+실패를 조사할 때는 `run.json`과 해당 단계의 JSON부터 읽고, 그 단계의 로그에서 필요한 부분만 조회한다. SDK·MegaDot 버전도 각각의 로그에 남는다. 설치와 재시도 절차는 [빌드·설치 스킬](/.agents/skills/build-install/SKILL.md)을 따른다.
 
 ## 카드 미리보기 검사
 
@@ -13,7 +13,7 @@
 .\dev.ps1 card-tests -Configuration Release
 ```
 
-게임 DLL과 PCK, MegaDot을 사용하는 로컬 검사다. 참조 카드 종류·강화·자기 참조의 55개 모델 상태와 화면 넘침·겹침·크기의 36개 배치 조건을 확인한다. 이어서 현재 리소스를 `dev.ps1 publish`로 패키징하고, 원작 카드·툴팁 씬을 실제로 초기화하는 18개 통합 조건을 검사한다. 전사의 타격은 자신의 강화 상태에 맞는 시아르쿤 한 장, 대상 미정인 재편은 결과 4종을 표시해야 한다. [테스트 명세와 실행 결과 판정](../tests/card-previews/README.md)에 사용자 승인 범위와 검증하지 않는 항목을 정리했다.
+게임 DLL과 PCK, MegaDot을 사용하는 로컬 검사다. 참조 카드 종류·강화·자기 참조의 55개 모델 상태와 화면 넘침·겹침·크기의 36개 배치 조건을 확인한다. 이어서 현재 리소스를 `dev.ps1 publish`로 패키징하고, 원작 카드·툴팁 씬을 실제로 초기화하는 18개 통합 조건을 검사한다. 전사의 타격은 자신의 강화 상태에 맞는 시아르쿤 한 장, 대상 미정인 재편은 결과 4종을 표시해야 한다. [테스트 명세와 실행 결과 판정](/tests/card-previews/README.md)에 사용자 승인 범위와 검증하지 않는 항목을 정리했다.
 
 통합 검사는 창 없이 실행하며 저장 I/O는 메모리로 격리한다. 원작 카드의 `_Ready`와 `Reload`는 그대로 실행하므로 MegaDot의 카드 노드 이름 변경 후에도 크기·화면 범위·겹침을 검사한다. 패키지 생성은 로컬 개발 산출물을 갱신하며 게임 설치를 수행하지 않는다.
 
@@ -39,7 +39,7 @@ ILSpy는 저장소의 도구 폴더를 먼저 찾고, 없으면 PATH의 `ilspycm
 - `request.json`: DLL 경로·제품 버전·SHA256, 타입·멤버·출력 범위.
 - 단계별 로그와 JSON: SDK·ILSpy 버전, 실제 인수, 작업 디렉터리, 종료 코드와 실패 정보.
 
-명령은 [공통 프로세스 기록 함수](../scripts/dev-workflow.ps1)의 `Invoke-RecordedCommand`를 재사용한다. 디컴파일이 실패하면 해당 단계 로그 경로와 함께 실패한다. 타입 조회는 성공했으나 멤버가 없을 때도 실패를 알리고 전체 소스 경로를 남긴다. 제한된 출력은 조사 편의를 위한 것이며 원문을 삭제하지 않는다. 공유 문서에는 이 로컬 산출물 경로 대신 DLL 버전, 타입·멤버, 확인한 동작을 기록한다.
+명령은 [공통 프로세스 기록 함수](/scripts/dev-workflow.ps1)의 `Invoke-RecordedCommand`를 재사용한다. 디컴파일이 실패하면 해당 단계 로그 경로와 함께 실패한다. 타입 조회는 성공했으나 멤버가 없을 때도 실패를 알리고 전체 소스 경로를 남긴다. 제한된 출력은 조사 편의를 위한 것이며 원문을 삭제하지 않는다. 공유 문서에는 이 로컬 산출물 경로 대신 DLL 버전, 타입·멤버, 확인한 동작을 기록한다.
 
 ### 멤버 조회 자동 검사
 
@@ -47,7 +47,7 @@ ILSpy는 저장소의 도구 폴더를 먼저 찾고, 없으면 PATH의 `ilspycm
 .\dev.ps1 api-tests
 ```
 
-[사용자가 요청한 자동 검사](../tests/api-member-selection.ps1)는 설치된 게임의 `MegaCrit.Sts2.Core.HoverTips.HoverTipFactory`를 실제로 조회한다. 주변 문맥을 제외한 선언 출력에 `FromCard<T>(bool upgrade = false)`와 `FromCard(CardModel card, bool upgrade = false)`가 모두 있는지 확인한다. 위 API 조사와 같은 SDK·ILSpy·게임 DLL이 필요하며, 이 명령은 별도 로컬 검사다.
+[사용자가 요청한 자동 검사](/tests/api-member-selection.ps1)는 설치된 게임의 `MegaCrit.Sts2.Core.HoverTips.HoverTipFactory`를 실제로 조회한다. 주변 문맥을 제외한 선언 출력에 `FromCard<T>(bool upgrade = false)`와 `FromCard(CardModel card, bool upgrade = false)`가 모두 있는지 확인한다. 위 API 조사와 같은 SDK·ILSpy·게임 DLL이 필요하며, 이 명령은 별도 로컬 검사다.
 
 ## 임시 검증 실행
 

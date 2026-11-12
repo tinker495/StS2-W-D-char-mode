@@ -13,9 +13,9 @@ Realta의 `Sprite2D`·`AnimationPlayer` 경로는 `MegaSprite`나 `CreatureAnima
 | 대상 | 확인한 버전·식별자 | 재확인할 파일·멤버 |
 |---|---|---|
 | 설치 게임 | `v0.107.1`, commit `59260271`, 빌드 일시 `2026-06-18T15:43:56-07:00` | 설치 폴더 `release_info.json`, `sts2.dll`, `SlayTheSpire2.pck` |
-| BaseLib | 프로젝트 의존성 `Alchyr.Sts2.BaseLib 3.4.7`; 조사 소스 commit `c070755d11ec062f6c97c4dda1a205d975ed066a` | [프로젝트 의존성](../../Sts2WD.csproj), [BaseLib 저장소](https://github.com/Alchyr/BaseLib-StS2/tree/c070755d11ec062f6c97c4dda1a205d975ed066a) |
+| BaseLib | 프로젝트 의존성 `Alchyr.Sts2.BaseLib 3.4.7`; 조사 소스 commit `c070755d11ec062f6c97c4dda1a205d975ed066a` | [프로젝트 의존성](/Sts2WD.csproj), [BaseLib 저장소](https://github.com/Alchyr/BaseLib-StS2/tree/c070755d11ec062f6c97c4dda1a205d975ed066a) |
 | 렌더러·SDK | MegaDot `4.5.1.m.14.mono.custom_build`, `Godot.NET.Sdk/4.5.1`, `net9.0` | 프로젝트 SDK와 실행 로그 |
-| 현재 모델 | `Realta : PlaceholderCharacterModel : CustomCharacterModel` | [Realta.cs](../../Sts2WDCode/Characters/Realta/Realta.cs) |
+| 현재 모델 | `Realta : PlaceholderCharacterModel : CustomCharacterModel` | [Realta.cs](/Sts2WDCode/Characters/Realta/Realta.cs) |
 
 아래 게임 API의 namespace는 `MegaCrit.Sts2.Core` 기준이다. 설치판 DLL의 디컴파일 결과와 위 commit의 BaseLib 소스를 조사했다. 개인 캐시가 없어도 표의 버전, 타입, 멤버 및 PCK 리소스 경로로 같은 관찰을 재현할 수 있다. 설치된 BaseLib DLL의 바이너리와 조사 소스의 완전 일치까지 검증한 것은 아니므로 실제 패키지 로딩 시 의존성 버전도 다시 확인해야 한다.
 
@@ -66,10 +66,10 @@ Realta 같은 비-Spine 경로는 `BaseLib.Patches.UI.CustomAnimationPatch.SendT
 
 | 씬 | 현재 파일·구조 | 후보에서 유지할 계약 |
 |---|---|---|
-| 전투 | [combat.tscn](../../Sts2WD/scenes/realta/combat.tscn), `%Visuals`는 정적 Sprite2D | `%Visuals`를 Node2D 리그로 사용. root 직계 `Bounds`·`IntentPos`, unique `%CenterPos`·`%OrbPos`·`%TalkPos`·`%FormVfx` 유지 |
-| 휴식 | [rest_site.tscn](../../Sts2WD/scenes/realta/rest_site.tscn), `ControlRoot/Visuals`와 `%Hitbox` | 리그를 `ControlRoot` 아래에 두어 공식 `FlipX`를 상속. reticle·thought anchor는 factory 생성 가능하나 최종 좌표 확인 |
-| 상점 | [merchant.tscn](../../Sts2WD/scenes/realta/merchant.tscn), 정적 Sprite2D | 재귀로 찾을 단일 주 AnimationPlayer, relaxed autoplay, die 유지 |
-| 선택 | [char_select_bg_realta.tscn](../../Sts2WD/scenes/realta/char_select_bg_realta.tscn), Control/TextureRect | root `Control`, mouse ignore, 화면 전체 레이아웃 유지. 별도 selection autoplay |
+| 전투 | [combat.tscn](/Sts2WD/scenes/realta/combat.tscn), `%Visuals`는 정적 Sprite2D | `%Visuals`를 Node2D 리그로 사용. root 직계 `Bounds`·`IntentPos`, unique `%CenterPos`·`%OrbPos`·`%TalkPos`·`%FormVfx` 유지 |
+| 휴식 | [rest_site.tscn](/Sts2WD/scenes/realta/rest_site.tscn), `ControlRoot/Visuals`와 `%Hitbox` | 리그를 `ControlRoot` 아래에 두어 공식 `FlipX`를 상속. reticle·thought anchor는 factory 생성 가능하나 최종 좌표 확인 |
+| 상점 | [merchant.tscn](/Sts2WD/scenes/realta/merchant.tscn), 정적 Sprite2D | 재귀로 찾을 단일 주 AnimationPlayer, relaxed autoplay, die 유지 |
+| 선택 | [char_select_bg_realta.tscn](/Sts2WD/scenes/realta/char_select_bg_realta.tscn), Control/TextureRect | root `Control`, mouse ignore, 화면 전체 레이아웃 유지. 별도 selection autoplay |
 
 현재 combat/rest/merchant는 모두 `combat.png`를 참조하며 클립이 없다. 공식은 전투 준비, 상점 이완, 앉은 휴식을 각각 표현한다. 리그가 같아도 자세·anchor·별도 원화의 역할은 구분되어야 한다.
 
@@ -85,7 +85,7 @@ Realta 같은 비-Spine 경로는 `BaseLib.Patches.UI.CustomAnimationPatch.SendT
 
 ## 선택 화면: 현재 그림과 공식 애니메이션의 차이
 
-현재 Realta 선택 그림은 1920×1080의 완성된 한 장이다. 오른쪽에 얼굴과 갑옷, 중앙에 들린 글레이브와 작업 손, 왼쪽에 넓은 망토·광선이 있다. [선택 원화](../../Sts2WD/images/charui/realta/char_select_bg.png)를 직접 열어 확인했다. 씬에는 `AnimationPlayer`, `SpineSprite`, particle, script가 없고 `TextureRect.stretch_mode=6`을 사용한다. 즉 그림 안의 바람·마법 선은 움직임의 묘사이며 실제 시간 변화는 없다. 기존 Cover 배치의 다른 화면 비율 검증은 별도다.
+현재 Realta 선택 그림은 1920×1080의 완성된 한 장이다. 오른쪽에 얼굴과 갑옷, 중앙에 들린 글레이브와 작업 손, 왼쪽에 넓은 망토·광선이 있다. [선택 원화](/Sts2WD/images/charui/realta/char_select_bg.png)를 직접 열어 확인했다. 씬에는 `AnimationPlayer`, `SpineSprite`, particle, script가 없고 `TextureRect.stretch_mode=6`을 사용한다. 즉 그림 안의 바람·마법 선은 움직임의 묘사이며 실제 시간 변화는 없다. 기존 Cover 배치의 다른 화면 비율 검증은 별도다.
 
 설치 PCK의 `res://scenes/screens/char_select/char_select_bg_ironclad.tscn`, `..._silent.tscn`은 `SpineSprite` 아래 `Nodes.Animation.NSpineAutoPlayer`를 두고 별도의 `CPUParticles2D` 조명·재 입자를 배치한다. `NSpineAutoPlayer._Ready`는 부모 Spine이 준비되면 **정확히 하나인** animation 이름을 가져와 재생한다. 이 두 캐릭터에서는 이름이 `animation`이며 관찰한 길이는 Ironclad 5.333333초, Silent 11.666667초다. scene의 `preview_animation` 값을 런타임 autoplay의 근거로 삼으면 안 된다.
 
@@ -99,10 +99,10 @@ GDScript 사용 자체는 가능성을 배제할 이유가 없다. 설치 PCK의
 
 이 저장소의 제약은 다음과 같다.
 
-- [export_presets.cfg](../../export_presets.cfg)의 `all_resources` export는 `docs/*`, `artifacts/*`, `Sts2WDCode/*` 등을 제외한다. `drafts`의 `.gd`·PNG를 그대로 참조하는 후보는 배포 리소스가 아니다. 승인 후 리소스와 상대 경로를 `res://Sts2WD/...`로 옮겨야 한다. `Image.load_from_file`로 원본 PNG를 찾는 draft 로더도 export된 texture resource를 `load/preload`하는 방식으로 바꾸는 편이 안전하다.
+- [export_presets.cfg](/export_presets.cfg)의 `all_resources` export는 `docs/*`, `artifacts/*`, `Sts2WDCode/*` 등을 제외한다. `drafts`의 `.gd`·PNG를 그대로 참조하는 후보는 배포 리소스가 아니다. 승인 후 리소스와 상대 경로를 `res://Sts2WD/...`로 옮겨야 한다. `Image.load_from_file`로 원본 PNG를 찾는 draft 로더도 export된 texture resource를 `load/preload`하는 방식으로 바꾸는 편이 안전하다.
 - 같은 preset의 `script_export_mode=2`, `dotnet/include_scripts_content=false`는 GDScript 전면 금지 규칙이 아니다. `.NET` 스크립트 소스 포함 여부와 GDScript export는 서로 다른 설정이다.
-- [Sts2WD.csproj](../../Sts2WD.csproj)는 `Sts2WD/**`의 C# 컴파일을 제외한다. C# controller를 자산 폴더에 넣어도 DLL에 포함되지 않는다. `docs`는 C# compile 제외 목록에 없으므로 임시 `.cs` 파일을 무심코 draft 아래 추가하지 않는다.
-- [MainFile.Initialize](../../Sts2WDCode/MainFile.cs)는 현재 `ScriptManagerBridge.LookupScriptsInAssembly(assembly)`가 주석 처리되어 있다. 씬에 모드 C# script를 붙이는 설계라면 script 등록 경로를 함께 준비해야 한다. Harmony 연결 코드만 작성하는 경우와 씬 script를 연결하는 경우를 구별한다.
+- [Sts2WD.csproj](/Sts2WD.csproj)는 `Sts2WD/**`의 C# 컴파일을 제외한다. C# controller를 자산 폴더에 넣어도 DLL에 포함되지 않는다. `docs`는 C# compile 제외 목록에 없으므로 임시 `.cs` 파일을 무심코 draft 아래 추가하지 않는다.
+- [MainFile.Initialize](/Sts2WDCode/MainFile.cs)는 현재 `ScriptManagerBridge.LookupScriptsInAssembly(assembly)`가 주석 처리되어 있다. 씬에 모드 C# script를 붙이는 설계라면 script 등록 경로를 함께 준비해야 한다. Harmony 연결 코드만 작성하는 경우와 씬 script를 연결하는 경우를 구별한다.
 - `Modding.ModManager`는 DLL을 `AssemblyLoadContext.LoadFromAssemblyPath`로, PCK를 `ProjectSettings.LoadResourcePack`으로 읽는다. GDScript 파일 자체가 모드 초기화 DLL을 대체하지는 않는다. 게임 내부 타입에 대한 Harmony 후처리는 기존 C# 모듈에 두고 시각 계산은 하위 GDScript controller에 남길 수 있다.
 
 Godot의 PCK 방식은 리소스·스크립트 묶음을 로드할 수 있지만 필요한 dependency와 로드 순서를 준비해야 한다. 독립 프로젝트가 가진 설정·autoload가 자동으로 게임에 통합된다고 가정하지 않는다. [Godot 4.5 PCK와 모드 배포](https://docs.godotengine.org/en/4.5/tutorials/export/exporting_pcks.html)
@@ -119,7 +119,7 @@ Godot의 PCK 방식은 리소스·스크립트 묶음을 로드할 수 있지만
 
 ## 적용 결과와 실제 BaseLib 관찰 (2026-10-19, v12)
 
-위 계약을 따라 네 씬을 런타임에 적용했다. 구조와 재현은 [animation/README.md](../characters/realta/animation/README.md)에 있다. 전투·상점 rig는 `Visuals/Rig` 아래에 있고, 휴식 Act·`HideFlameGlow`·전투/상점 외 게임오버 `die`는 `Sts2WDCode/Characters/Realta/RealtaSceneBridge.cs`의 Harmony postfix가 연결한다.
+위 계약을 따라 네 씬을 런타임에 적용했다. 구조와 재현은 [animation-sources.md](/docs/characters/realta/animation-sources.md)에 있다. 전투·상점 rig는 `Visuals/Rig` 아래에 있고, 휴식 Act·`HideFlameGlow`·전투/상점 외 게임오버 `die`는 `Sts2WDCode/Characters/Realta/RealtaSceneBridge.cs`의 Harmony postfix가 연결한다.
 
 임시 독립 C# 호스트로 실제 `BaseLib.dll` 3.4.7(패키지 파일과 SHA256 일치)과 설치판 `sts2.dll`을 불러, 배포 PCK(`artifacts/mods/Sts2WD/Sts2WD.pck`)만 mount한 상태에서 관찰했다. `BaseLibMain.Initialize`는 호출하지 않았다. 호스트는 로컬 탐색 도구이며 아래 관찰의 재현에 필요한 버전·진입점·로딩 조건은 이 문서에 기록한다.
 

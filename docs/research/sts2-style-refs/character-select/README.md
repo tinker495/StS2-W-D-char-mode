@@ -1,7 +1,7 @@
 # Base-Game Selection Illustration References
 
 - Research date:2026-10-18 (Asia/Seoul).
-- Comparative study: [selection compositions](../../sts2-character-select-composition-study.md).
+- Comparative study: [selection compositions](/docs/research/sts2-character-select-composition-study.md).
 - Distinguish official distributed screens from locally read illustrations and their UI/compositing state. Keep generated images separate.
 
 ## Official Distributed Screenshot

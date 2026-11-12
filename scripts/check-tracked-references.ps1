@@ -135,6 +135,13 @@ function Check-MarkdownLink([string]$Source, [int]$Line, [string]$Target) {
     $targetPath = ($targetPath -split '[#?]', 2)[0]
     $isResource = $targetPath.StartsWith('res://')
     if ($isResource) { $targetPath = $targetPath.Substring(6) }
+    # Human requester: tinker495 (wjdrb), 2026-11-12: reject only parent-directory
+    # traversal in Markdown references. Same-folder, descendant and ./ links remain
+    # supported, along with repository-root links, anchors, URLs and res:// paths.
+    if (-not $isResource -and $targetPath.Replace('\', '/') -match '(?:^|/)\.\.(?:/|$)') {
+        Add-ReferenceIssue $Source $Line $Target 'Markdown repository links must not traverse parent directories (..)'
+        return
+    }
     $targets = @(Resolve-ReferencePaths $Source $targetPath -RootOnly:$isResource -Link)
     foreach ($resolved in $targets) { if ($tracked.Contains($resolved)) { return } }
     Add-ReferenceIssue $Source $Line $Target 'Markdown target is not a tracked file or directory'

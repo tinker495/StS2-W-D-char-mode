@@ -1,6 +1,6 @@
 # 아셀리게·알테아 변경 재구성
 
-PR #29의 아셀리게 조우·유물, 알테아 카드 85종 및 캐릭터 유물 이미지를 `origin/main`의 `f48f6da` 위에 재구성했다. 기존 병합 커밋은 가져오지 않고 최종 변경을 새 브랜치에 적용했다. 캐릭터 설계의 기준 문서는 [알테아](../characters/althea/althea.md)와 [아셀리게](aselige-design.md)다.
+PR #29의 아셀리게 조우·유물, 알테아 카드 85종 및 캐릭터 유물 이미지를 `origin/main`의 `f48f6da` 위에 재구성했다. 기존 병합 커밋은 가져오지 않고 최종 변경을 새 브랜치에 적용했다. 캐릭터 설계의 기준 문서는 [알테아](/docs/characters/althea/althea.md)와 [아셀리게](aselige-design.md)다.
 
 ## 리뷰 반영
 
