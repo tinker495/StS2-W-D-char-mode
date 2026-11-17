@@ -19,7 +19,7 @@ public sealed class MercuriusAvatarOfStories() : MercuriusCard(1, CardType.Attac
     protected override async Task OnPlay(PlayerChoiceContext context, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(context);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(context);
         await PowerCmd.Apply<MercuriusStoryReplayPower>(context, Owner.Creature, 1, Owner.Creature, this);
     }
     protected override void OnUpgrade() { DynamicVars.Damage.UpgradeValueBy(4m); }

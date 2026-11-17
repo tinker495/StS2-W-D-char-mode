@@ -1,0 +1,14 @@
+<Project>
+    <!-- StS2 v0.111.1 initializes Sentry.Godot when its assembly is loaded.
+         Every host referencing the installed game needs these runtime entries. -->
+    <ItemGroup Condition="'$(Sts2DataDir)' != '' and Exists('$(Sts2DataDir)')">
+        <Reference Include="Sentry">
+            <HintPath>$(Sts2DataDir)/Sentry.dll</HintPath>
+            <Private>true</Private>
+        </Reference>
+        <Reference Include="Sentry.Godot">
+            <HintPath>$(Sts2DataDir)/Sentry.Godot.dll</HintPath>
+            <Private>true</Private>
+        </Reference>
+    </ItemGroup>
+</Project>

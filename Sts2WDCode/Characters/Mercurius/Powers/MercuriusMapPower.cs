@@ -16,9 +16,10 @@ public sealed class MercuriusMapPower : CustomPowerModel
     public override PowerStackType StackType => PowerStackType.Single;
     public override string CustomPackedIconPath => ModelDb.Power<ReboundPower>().PackedIconPath;
     public override string CustomBigIconPath => ModelDb.Power<ReboundPower>().ResolvedBigIconPath;
-    public override (PileType, CardPilePosition) ModifyCardPlayResultPileTypeAndPosition(CardModel card, bool isAutoPlay,
-        ResourceInfo resources, PileType pileType, CardPilePosition position) =>
-        card.Owner.Creature == Owner && pileType == PileType.Discard ? (PileType.Draw, CardPilePosition.Top) : (pileType, position);
+    public override CardLocation ModifyCardPlayResultLocation(CardModel card, bool isAutoPlay,
+        ResourceInfo resources, CardLocation cardLocation) =>
+        card.Owner.Creature == Owner && cardLocation.pileType == PileType.Discard
+            ? cardLocation with { pileType = PileType.Draw, position = CardPilePosition.Top } : cardLocation;
     public override async Task AfterSideTurnEnd(PlayerChoiceContext context, CombatSide side, IEnumerable<Creature> participants)
     {
         if (participants.Contains(Owner)) await PowerCmd.Remove(this);

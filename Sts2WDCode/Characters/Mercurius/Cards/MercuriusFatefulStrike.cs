@@ -17,7 +17,7 @@ public sealed class MercuriusFatefulStrike() : MercuriusCard(1, CardType.Attack,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         var drawn = (await CardPileCmd.Draw(choiceContext, 1, Owner)).FirstOrDefault();
-        if (drawn?.Type == CardType.Attack) await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState!).Execute(choiceContext);
+        if (drawn?.Type == CardType.Attack) await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(CombatState!).Execute(choiceContext);
     }
     protected override void OnUpgrade() { DynamicVars.Damage.UpgradeValueBy(4m); }
 }

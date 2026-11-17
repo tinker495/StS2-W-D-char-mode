@@ -19,7 +19,7 @@ public sealed class MercuriusMiserableEnding() : MercuriusFinaleCard(2, CardType
     protected override async Task OnPlay(PlayerChoiceContext context, CardPlay cardPlay)
     {
         foreach (var enemy in CombatState!.HittableEnemies.ToList())
-            await CreatureCmd.Damage(context, enemy, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Unblockable, Owner.Creature, this);
+            await CreatureCmd.Damage(context, enemy, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Unblockable, Owner.Creature, this, cardPlay);
     }
     protected override void OnUpgrade() { DynamicVars.HpLoss.UpgradeValueBy(5m); }
 }

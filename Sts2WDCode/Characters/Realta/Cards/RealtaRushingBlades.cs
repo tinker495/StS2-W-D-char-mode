@@ -11,7 +11,7 @@ public sealed class RealtaRushingBlades() : RealtaSpellCard(2, CardType.Attack, 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move), new RepeatVar(2)];
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).WithHitCount(DynamicVars.Repeat.IntValue);
+        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).WithHitCount(DynamicVars.Repeat.IntValue);
         if (SpellActive) attack.TargetingAllOpponents(CombatState!);
         else
         {

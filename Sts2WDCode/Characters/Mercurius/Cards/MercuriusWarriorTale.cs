@@ -23,7 +23,7 @@ public sealed class MercuriusWarriorTale() : MercuriusCard(1, CardType.Attack, C
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(choiceContext);
         var candidates = ModelDb.CardPool<AltheaCardPool>().GetUnlockedCards(Owner.UnlockState, Owner.RunState.CardMultiplayerConstraint);
         await MercuriusReenactCommand.Reenact(choiceContext, Owner, candidates, IsUpgraded);
     }

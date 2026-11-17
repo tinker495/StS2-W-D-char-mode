@@ -22,7 +22,7 @@ public sealed class MercuriusBeastTale() : MercuriusCard(0, CardType.Attack, Car
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(choiceContext);
         var candidates = MercuriusReenactCommand.OtherCharacterAndColorlessCards(Owner)
             .Where(card => card.Type == CardType.Attack && !card.EnergyCost.CostsX && card.EnergyCost.Canonical == 0);
         await MercuriusReenactCommand.Reenact(choiceContext, Owner, candidates, IsUpgraded);

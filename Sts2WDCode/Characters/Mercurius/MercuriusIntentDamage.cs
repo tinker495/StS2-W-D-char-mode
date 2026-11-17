@@ -20,7 +20,7 @@ public static class MercuriusIntentDamage
                 if (intent.DamageCalc is not { } damageCalc) continue;
                 // Never use AttackIntent.GetTotalDamage: it depends on the local client player.
                 decimal damage = Hook.ModifyDamage(player.RunState, combat,
-                    player.Creature, enemy, damageCalc(), ValueProp.Move, null,
+                    player.Creature, enemy, damageCalc(), ValueProp.Move, null, null,
                     ModifyDamageHookType.All, CardPreviewMode.None, out _);
                 total += Math.Max(0, (int)damage) * Math.Max(0, intent.Repeats);
             }

@@ -16,15 +16,15 @@ public sealed class RealtaIordinaMacBethlehem() : RealtaCard(1, CardType.Attack,
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target)
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target)
             .WithHitFx("vfx/vfx_attack_slash")
             .Execute(choiceContext);
     }
 
-    protected override PileType GetResultPileTypeForCardPlay()
+    protected override CardLocation GetResultLocationForCardPlay()
     {
-        PileType result = base.GetResultPileTypeForCardPlay();
-        return result == PileType.Discard ? PileType.Hand : result;
+        CardLocation result = base.GetResultLocationForCardPlay();
+        return result.pileType == PileType.Discard ? result with { pileType = PileType.Hand } : result;
     }
 
     protected override void OnUpgrade()

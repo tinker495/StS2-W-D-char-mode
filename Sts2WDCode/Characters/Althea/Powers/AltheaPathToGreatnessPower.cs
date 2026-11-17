@@ -9,14 +9,14 @@ public sealed class AltheaPathToGreatnessPower : AltheaPower
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => AltheaKeywords.ReformHoverTips();
 
-    public override (PileType, CardPilePosition) ModifyCardPlayResultPileTypeAndPosition(CardModel card, bool isAutoPlay,
-        ResourceInfo resources, PileType pile, CardPilePosition position)
+    public override CardLocation ModifyCardPlayResultLocation(CardModel card, bool isAutoPlay,
+        ResourceInfo resources, CardLocation cardLocation)
     {
         if (card.Owner.Creature == Owner && AltheaRules.For(card.Owner).CardsPlayed == 0)
         {
-            AltheaRules.For(card.Owner).ReformAfterPlay[card] = pile;
-            return (PileType.Discard, position);
+            AltheaRules.For(card.Owner).ReformAfterPlay[card] = cardLocation.pileType;
+            return cardLocation with { pileType = PileType.Discard };
         }
-        return (pile, position);
+        return cardLocation;
     }
 }

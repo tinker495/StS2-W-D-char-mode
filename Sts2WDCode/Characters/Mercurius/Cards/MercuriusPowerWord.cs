@@ -20,7 +20,7 @@ public sealed class MercuriusPowerWord() : MercuriusCard(3, CardType.Attack, Car
     protected override async Task OnPlay(PlayerChoiceContext context, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(context);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(context);
         if (cardPlay.Target.IsAlive && cardPlay.Target.CurrentHp <= 100) await CreatureCmd.Stun(cardPlay.Target);
     }
     protected override void OnUpgrade() { EnergyCost.UpgradeBy(-1); }

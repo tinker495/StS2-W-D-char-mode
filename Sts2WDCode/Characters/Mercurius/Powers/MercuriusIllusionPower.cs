@@ -1,6 +1,7 @@
 using BaseLib.Abstracts;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Commands.Builders;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -43,7 +44,7 @@ public sealed class MercuriusIllusionPower : CustomPowerModel
     public override string CustomPackedIconPath => ModelDb.Power<IntangiblePower>().PackedIconPath;
     public override string CustomBigIconPath => ModelDb.Power<IntangiblePower>().ResolvedBigIconPath;
 
-    public override decimal ModifyDamageCap(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource) =>
+    public override decimal ModifyDamageCap(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay) =>
         props.IsPoweredAttack() && (dealer == Owner || target == Owner) ? 1m : decimal.MaxValue;
 
     public override async Task AfterAttack(PlayerChoiceContext choiceContext, AttackCommand command)

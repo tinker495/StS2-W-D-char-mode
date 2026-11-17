@@ -110,7 +110,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
         return AltheaCardEffects.Play(this, context, play);
     }
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
-        Creature? dealer, CardModel? cardSource) => cardSource == this && Kind == AltheaCardKind.DeathStrike
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay) => cardSource == this && Kind == AltheaCardKind.DeathStrike
             && (Pile?.Type == PileType.Play ? ClashAtPlay : AltheaRules.Clash(Owner)) ? 2m : 1m;
     public override bool TryModifyEnergyCostInCombat(CardModel card, decimal originalCost, out decimal modifiedCost)
     {

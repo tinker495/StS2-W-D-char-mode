@@ -32,8 +32,8 @@ internal static class AltheaCardEffects
             if (combat.HittableEnemies.Count() == 0) return;
             decimal attackDamage = value ?? damage;
             if (copied && self.GetPower<AltheaNextDoublePower>() is { } nextDouble)
-                attackDamage *= nextDouble.ModifyDamageMultiplicative(null, attackDamage, ValueProp.Move, self, card);
-            var attack = DamageCmd.Attack(attackDamage).FromCard(card).WithHitCount(hits);
+                attackDamage *= nextDouble.ModifyDamageMultiplicative(null, attackDamage, ValueProp.Move, self, card, play);
+            var attack = DamageCmd.Attack(attackDamage).FromCard(card, play).WithHitCount(hits);
             if (copied) attack.Unpowered(); // Already includes the source card's attacker-side preview modifiers.
             if (all) attack.TargetingAllOpponents(combat);
             else if (random) attack.TargetingRandomOpponents(combat);
@@ -111,7 +111,7 @@ internal static class AltheaCardEffects
             case AltheaCardKind.OrcasAmbush: await Attack(); await SelfPower<AltheaNextDrainPower>(1); break;
             case AltheaCardKind.Disarm: await SelfPower<AltheaDisarmPower>(amount); await Attack(); break;
             case AltheaCardKind.PiercingHarpoon:
-                if (play.Target != null) await CreatureCmd.LoseBlock(play.Target, play.Target.Block);
+                if (play.Target != null) await CreatureCmd.LoseBlock(context, play.Target, play.Target.Block, self);
                 await Attack(); break;
             case AltheaCardKind.Slaughter: await Attack(all: true); await SelfPower<VulnerablePower>(1); break;
             case AltheaCardKind.BloodSea: await Attack(all: AltheaRules.HarmfulCount(owner) > 0); break;

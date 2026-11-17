@@ -22,6 +22,6 @@ public sealed class MercuriusFormlessWingsPower : MercuriusPower
     {
         if (!_lastCards.Remove(cardPlay)) return;
         foreach (var enemy in Owner.CombatState!.HittableEnemies.ToList())
-            await CreatureCmd.Damage(context, enemy, Amount, ValueProp.Unpowered | ValueProp.Unblockable, Owner, null);
+            await CreatureCmd.Damage(context, enemy, Amount, ValueProp.Unpowered | ValueProp.Unblockable, Owner, null, null);
     }
 }

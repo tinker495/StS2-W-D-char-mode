@@ -18,7 +18,7 @@ public sealed class MercuriusSongOfSorrow() : MercuriusSongCard(CardRarity.Commo
     {
         var target = Owner.RunState.Rng.CombatTargets.NextItem(CombatState!.HittableEnemies);
         if (target != null) await CreatureCmd.Damage(context, target, DynamicVars.HpLoss.BaseValue,
-            ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this);
+            ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this, null);
     }
     protected override void OnUpgrade() { DynamicVars.HpLoss.UpgradeValueBy(4m); }
 }

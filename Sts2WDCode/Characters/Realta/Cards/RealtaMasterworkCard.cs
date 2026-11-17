@@ -22,7 +22,7 @@ public abstract class RealtaMasterworkCard(CardType type, CardRarity rarity, Tar
         if (repeats <= 0) return;
 
         await using AttackContext? attackContext = Type == CardType.Attack
-            ? await AttackCommand.CreateContextAsync(CombatState!, choiceContext, this)
+            ? await AttackCommand.CreateContextAsync(CombatState!, choiceContext, cardPlay)
             : null;
 
         bool executedAnyRepeat = false;

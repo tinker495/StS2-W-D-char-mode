@@ -18,7 +18,7 @@ public sealed class MercuriusLegendaryBlow() : MercuriusCard(2, CardType.Attack,
     {
         var cards = Owner.PlayerCombatState!.Hand.Cards.Where(card => MercuriusCardEffects.IsOffColor(card, Owner)).ToList();
         await CardCmd.Discard(choiceContext, cards);
-        for (int i = 0; i <= cards.Count; i++) await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState!).Execute(choiceContext);
+        for (int i = 0; i <= cards.Count; i++) await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(CombatState!).Execute(choiceContext);
     }
     protected override void OnUpgrade() { DynamicVars.Damage.UpgradeValueBy(3m); }
 }

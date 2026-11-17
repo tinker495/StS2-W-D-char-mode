@@ -12,10 +12,10 @@ public sealed class AltheaReformEchoPower : AltheaPower
 {
     protected override IEnumerable<IHoverTip> ExtraHoverTips => AltheaKeywords.ReformHoverTips();
 
-    public override (PileType, CardPilePosition) ModifyCardPlayResultPileTypeAndPosition(CardModel card,
-        bool isAutoPlay, ResourceInfo resources, PileType pileType, CardPilePosition position) =>
+    public override CardLocation ModifyCardPlayResultLocation(CardModel card,
+        bool isAutoPlay, ResourceInfo resources, CardLocation cardLocation) =>
         card.Owner.Creature == Owner && AltheaRules.For(card.Owner).ReformedThisTurn.Contains(card)
-            ? (PileType.Exhaust, position) : (pileType, position);
+            ? cardLocation with { pileType = PileType.Exhaust } : cardLocation;
     public override int ModifyCardPlayCount(CardModel card, Creature? target, int playCount) =>
         card.Owner.Creature == Owner && AltheaRules.For(card.Owner).ReformedThisTurn.Contains(card)
             ? playCount + Amount : playCount;

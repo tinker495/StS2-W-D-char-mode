@@ -23,7 +23,7 @@ public sealed class AltheaNextDoublePower : AltheaPower
         return Task.CompletedTask;
     }
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
-        Creature? dealer, CardModel? source)
+        Creature? dealer, CardModel? source, CardPlay? cardPlay)
     {
         if (dealer != Owner || source?.Type != CardType.Attack || !props.IsPoweredAttack()) return 1;
         var data = GetInternalData<Data>();

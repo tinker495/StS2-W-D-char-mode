@@ -21,6 +21,6 @@ public sealed class RealtaEldirGramr : RealtaRelic
         var enemies = Owner.Creature.CombatState?.HittableEnemies.ToList();
         if (enemies is not { Count: > 0 }) return;
         Flash();
-        await CreatureCmd.Damage(choiceContext, enemies, -amount, ValueProp.Unpowered, Owner.Creature, null);
+        await CreatureCmd.Damage(choiceContext, enemies, -amount, ValueProp.Unpowered, Owner.Creature);
     }
 }

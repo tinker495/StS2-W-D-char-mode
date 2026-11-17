@@ -21,7 +21,7 @@ public sealed class MercuriusHeavenlyMight() : MercuriusCard(2, CardType.Attack,
     {
         bool dominion = MercuriusCardEffects.HasDominion(this);
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(context);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(context);
         if (dominion) await CardPileCmd.Draw(context, DynamicVars.Cards.BaseValue, Owner);
     }
     protected override void OnUpgrade() { DynamicVars.Damage.UpgradeValueBy(4m); DynamicVars.Cards.UpgradeValueBy(1m); }

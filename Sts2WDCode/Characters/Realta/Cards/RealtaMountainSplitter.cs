@@ -19,7 +19,7 @@ public sealed class RealtaMountainSplitter() : RealtaCard(3, CardType.Attack, Ca
         decimal total = CombatState!.HittableEnemies.Sum(e => e.Block + Math.Max(0m, e.GetPowerAmount<StrengthPower>()));
         if (total > 0m)
             await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, total, Owner.Creature, this);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(CombatState).Execute(choiceContext);
     }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);

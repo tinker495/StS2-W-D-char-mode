@@ -12,7 +12,7 @@ public sealed class RealtaDimensionalCharge() : RealtaSpellCard(3, CardType.Atta
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(choiceContext);
         if (SpellActive) await PlayerCmd.GainEnergy(DynamicVars.Energy.IntValue, Owner);
     }
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(4m);

@@ -14,7 +14,7 @@ public sealed class RealtaWhetstone() : RealtaCard(1, CardType.Attack, CardRarit
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).Execute(choiceContext);
         await RefineCmd.Refine(choiceContext, Owner, DynamicVars["Refine"].IntValue, this);
     }
     protected override void OnUpgrade() => DynamicVars["Refine"].UpgradeValueBy(2m);

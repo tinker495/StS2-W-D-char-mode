@@ -19,6 +19,6 @@ public sealed class MercuriusFlameScroll : MercuriusRelic
         if (target == null) return;
         Flash();
         // Native HP-loss path, as used by Poison: bypass Block and powered attack modifiers.
-        await CreatureCmd.Damage(context, target, 7m, ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, null);
+        await CreatureCmd.Damage(context, target, 7m, ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, null, null);
     }
 }

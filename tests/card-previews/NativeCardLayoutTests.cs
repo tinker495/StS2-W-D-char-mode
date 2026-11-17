@@ -147,16 +147,17 @@ public partial class NativeCardLayoutTests : Node
         saves.SettingsSave.Language = "kor";
         var mods = (List<Mod>)typeof(ModManager).GetField("_mods", BindingFlags.Static | BindingFlags.NonPublic)!.GetValue(null)!;
         mods.Add(new Mod { path = System.IO.Path.GetDirectoryName(Argument("--base-pack"))!,
-            state = ModLoadState.Loaded, assembly = typeof(BaseLibMain).Assembly,
+            state = ModLoadState.Loaded, assemblies = [typeof(BaseLibMain).Assembly],
             manifest = new ModManifest { id = "BaseLib", name = "BaseLib", hasDll = true, hasPck = true, affectsGameplay = false } });
         mods.Add(new Mod { path = System.IO.Path.GetDirectoryName(Argument("--mod-pack"))!,
-            state = ModLoadState.Loaded, assembly = typeof(MainFile).Assembly,
+            state = ModLoadState.Loaded, assemblies = [typeof(MainFile).Assembly],
             manifest = new ModManifest { id = MainFile.ModId, name = MainFile.ModId, hasDll = true, hasPck = true, affectsGameplay = true } });
         typeof(ModManager).GetProperty(nameof(ModManager.State))!.SetValue(null, ModManagerState.Initialized);
         BaseLibMain.Initialize();
         MainFile.Initialize();
         LocManager.Initialize();
         ModelDb.Init();
+        AssemblyInfo.Init();
         ModelIdSerializationCache.Init();
         ModelDb.InitIds();
     }

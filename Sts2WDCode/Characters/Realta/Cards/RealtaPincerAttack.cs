@@ -23,7 +23,7 @@ public sealed class RealtaPincerAttack() : RealtaCard(0, CardType.Attack, CardRa
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         int hits = WasGuardPlayedThisTurn ? 2 : 1;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target).WithHitCount(hits).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target).WithHitCount(hits).Execute(choiceContext);
     }
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m);

@@ -11,12 +11,12 @@ namespace Sts2WD.Sts2WDCode.Characters.Mercurius;
 
 public sealed class MercuriusEchoingSongPower : MercuriusPower
 {
-    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource)
+    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
     {
         if (dealer != Owner || cardSource is not MercuriusEchoingSong || !props.IsPoweredAttack()) return 1;
         return (decimal)Math.Pow(2, Math.Min(31, Math.Max(0, Amount)));
     }
-    public override decimal ModifyDamageCap(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource) =>
+    public override decimal ModifyDamageCap(Creature? target, ValueProp props, Creature? dealer, CardModel? cardSource, CardPlay? cardPlay) =>
         dealer == Owner && cardSource is MercuriusEchoingSong ? int.MaxValue : decimal.MaxValue;
     public override async Task AfterSideTurnEnd(PlayerChoiceContext context, CombatSide side, IEnumerable<Creature> participants)
     {

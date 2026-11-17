@@ -130,7 +130,9 @@ BaseLib는 구체적인 캐릭터 모델을 자동 등록합니다. 모델 ID는
 - `Godot.NET.Sdk`: 4.5.1
 - `Alchyr.Sts2.BaseLib`: 3.4.7
 - `Alchyr.Sts2.ModAnalyzers`: 0.2.1
-- 구성 기준 게임 버전: 0.107.1
+- 구성 기준 게임 버전: 0.111.1
+
+게임 DLL을 참조하는 프로젝트는 공통 `Directory.Build.targets`에서 설치 게임의 `Sentry`와 `Sentry.Godot`도 참조합니다. 게임 DLL의 초기화에 필요한 의존성이므로 모드와 별도 실행 호스트에 모두 적용합니다.
 
 NuGet 버전은 프로젝트와 `packages.lock.json`에 고정합니다. 게임 또는 BaseLib를 업데이트할 때 컴파일과 게임 실행을 다시 확인하세요. 게임 DLL은 각 개발자의 로컬 설치를 참조하므로 일반 GitHub 호스팅 러너에서는 바로 빌드할 수 없습니다.
 

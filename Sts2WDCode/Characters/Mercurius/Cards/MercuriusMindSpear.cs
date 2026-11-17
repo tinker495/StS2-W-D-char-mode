@@ -20,11 +20,11 @@ public sealed class MercuriusMindSpear() : MercuriusCard(2, CardType.Attack, Car
     protected override async Task OnPlay(PlayerChoiceContext context, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(cardPlay.Target);
+        var attack = DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(cardPlay.Target);
         await attack.Execute(context);
         int hpDamage = attack.Results.SelectMany(hit => hit).Sum(result => result.UnblockedDamage);
         if (hpDamage > 0 && cardPlay.Target.IsAlive)
-            await CreatureCmd.Damage(context, cardPlay.Target, hpDamage, ValueProp.Unpowered | ValueProp.Unblockable, Owner.Creature, this);
+            await CreatureCmd.Damage(context, cardPlay.Target, hpDamage, ValueProp.Unpowered | ValueProp.Unblockable, Owner.Creature, this, cardPlay);
     }
     protected override void OnUpgrade() { DynamicVars.Damage.UpgradeValueBy(2m); }
 }

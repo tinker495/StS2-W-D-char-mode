@@ -19,7 +19,7 @@ public sealed class RealtaHeroicCharge() : RealtaCard(2, CardType.Attack, CardRa
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(CombatState!).Execute(choiceContext);
         await CardCmd.Discard(choiceContext, Owner.PlayerCombatState!.Hand.Cards.ToList());
     }
 

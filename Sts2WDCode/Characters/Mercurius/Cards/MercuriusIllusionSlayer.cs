@@ -22,7 +22,7 @@ public sealed class MercuriusIllusionSlayer() : MercuriusCard(1, CardType.Attack
 
     protected override async Task OnPlay(PlayerChoiceContext context, CardPlay cardPlay)
     {
-        if (cardPlay.Target is { } target) await CreatureCmd.Damage(context, target, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Unblockable, Owner.Creature, this);
+        if (cardPlay.Target is { } target) await CreatureCmd.Damage(context, target, DynamicVars.HpLoss.BaseValue, ValueProp.Unpowered | ValueProp.Unblockable, Owner.Creature, this, cardPlay);
     }
     protected override void OnUpgrade() { DynamicVars.HpLoss.UpgradeValueBy(4m); }
 }

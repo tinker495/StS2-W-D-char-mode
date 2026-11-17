@@ -22,7 +22,7 @@ public sealed class MercuriusFatesEnd() : MercuriusCard(1, CardType.Attack, Card
         {
             var target = Owner.RunState.Rng.CombatTargets.NextItem(CombatState!.HittableEnemies);
             if (target == null) break;
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).Targeting(target).Execute(context);
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).Targeting(target).Execute(context);
             var drawn = (await CardPileCmd.Draw(context, 1, Owner)).FirstOrDefault();
             if (drawn == null || !drawn.Keywords.Contains(CardKeyword.Ethereal)) break;
         }

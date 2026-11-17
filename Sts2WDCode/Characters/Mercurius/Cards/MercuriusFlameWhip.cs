@@ -15,7 +15,7 @@ public sealed class MercuriusFlameWhip() : MercuriusCard(1, CardType.Attack, Car
     protected override void DeepCloneFields() { base.DeepCloneFields(); _pending = []; }
     protected override async Task OnPlay(PlayerChoiceContext context, CardPlay cardPlay)
     {
-        await Strike(context, DynamicVars.Damage.BaseValue);
+        await Strike(context, DynamicVars.Damage.BaseValue, cardPlay);
         _pending.Add((cardPlay, DynamicVars.Damage.BaseValue));
     }
     public override async Task AfterCardPlayed(PlayerChoiceContext context, CardPlay cardPlay)
@@ -23,13 +23,13 @@ public sealed class MercuriusFlameWhip() : MercuriusCard(1, CardType.Attack, Car
         if (cardPlay.Card.Owner != Owner || !MercuriusCardEffects.IsOffColor(cardPlay.Card, Owner)) return;
         var ready = _pending.Where(entry => entry.Origin != cardPlay).ToList();
         _pending.RemoveAll(entry => entry.Origin != cardPlay);
-        foreach (var entry in ready) await Strike(context, entry.Damage);
+        foreach (var entry in ready) await Strike(context, entry.Damage, entry.Origin);
     }
-    private async Task Strike(PlayerChoiceContext context, decimal damage)
+    private async Task Strike(PlayerChoiceContext context, decimal damage, CardPlay cardPlay)
     {
         if (CombatManager.Instance.IsOverOrEnding) return;
         var target = Owner.RunState.Rng.CombatTargets.NextItem(CombatState!.HittableEnemies);
-        if (target != null) await DamageCmd.Attack(damage).FromCard(this).Targeting(target).Execute(context);
+        if (target != null) await DamageCmd.Attack(damage).FromCard(this, cardPlay).Targeting(target).Execute(context);
     }
     public override Task AfterSideTurnEnd(PlayerChoiceContext context, CombatSide side, IEnumerable<Creature> participants)
     {

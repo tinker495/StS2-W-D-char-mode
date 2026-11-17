@@ -17,7 +17,7 @@ public sealed class MercuriusDispelMagic() : MercuriusCard(1, CardType.Skill, Ca
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         if (cardPlay.Target is not { } target) return;
-        await CreatureCmd.LoseBlock(target, target.Block);
+        await CreatureCmd.LoseBlock(choiceContext, target, target.Block, Owner.Creature);
         foreach (var power in target.Powers.Where(power => power is StrengthPower or PlatingPower or ArtifactPower).ToList())
             await PowerCmd.Remove(power);
     }

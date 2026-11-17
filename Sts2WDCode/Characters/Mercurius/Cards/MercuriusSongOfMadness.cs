@@ -24,6 +24,6 @@ public sealed class MercuriusSongOfMadness() : MercuriusSongCard(CardRarity.Rare
             targets = selected == null ? [] : [selected];
         }
         foreach (var enemy in targets)
-            await CreatureCmd.Damage(context, enemy, damage, ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this);
+            await CreatureCmd.Damage(context, enemy, damage, ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this, null);
     }
 }

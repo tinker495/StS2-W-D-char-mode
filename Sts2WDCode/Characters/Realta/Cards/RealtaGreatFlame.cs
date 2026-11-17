@@ -26,7 +26,7 @@ public sealed class RealtaGreatFlame() : RealtaCard(4, CardType.Attack, CardRari
     }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay) =>
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this).TargetingAllOpponents(CombatState!).Execute(choiceContext);
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue).FromCard(this, cardPlay).TargetingAllOpponents(CombatState!).Execute(choiceContext);
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1);
 }
