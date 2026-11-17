@@ -9,6 +9,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.ValueProps;
 using Sts2WD.Sts2WDCode.Cards;
 
@@ -47,6 +48,7 @@ public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
         _ => ModelDb.Card<DefendIronclad>()
     };
     protected override string FallbackPortraitPath => Art.PortraitPath;
+    internal override void ApplyPortraitAppearance(NCard card) => AltheaCardAppearance.ApplyPortrait(card, this);
     protected override HashSet<CardTag> CanonicalTags => Kind.ToString().EndsWith("Strike", StringComparison.Ordinal)
         || Kind == AltheaCardKind.Strike ? [CardTag.Strike] : [];
     public override IEnumerable<CardKeyword> CanonicalKeywords

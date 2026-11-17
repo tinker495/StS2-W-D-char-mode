@@ -77,8 +77,8 @@ public class Althea : PlaceholderCharacterModel
     {
         if (AltheaRules.Applies(player))
         {
-            var state = AltheaRules.For(player); state.Attacks = 0; state.Streak = 0; state.CardsPlayed = 0;
-            state.ReformedThisTurn.Clear();
+            var state = AltheaRules.For(player); state.Attacks = 0; state.Streak = 0;
+            AltheaReformLifecycle.StartTurn(player);
         }
         return Task.CompletedTask;
     }

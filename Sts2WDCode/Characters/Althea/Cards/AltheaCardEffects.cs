@@ -81,7 +81,7 @@ internal static class AltheaCardEffects
             case AltheaCardKind.HauntedStrike: await Attack(all: true); await Wraiths(1, PileType.Hand); break;
             case AltheaCardKind.DesperateStrike: await Attack(); await SelfPower<WeakPower>(amount); break;
             case AltheaCardKind.WarriorStrike:
-                await Attack(); await AltheaRules.Reform(context, card, play.ResultPile); break;
+                await Attack(); await AltheaReformLifecycle.Reform(context, card, play.ResultPile); break;
             case AltheaCardKind.KarmicMadness: case AltheaCardKind.Defend: await Block(block); break;
             case AltheaCardKind.Deflect:
                 selected = await SelectAttack();
@@ -138,7 +138,7 @@ internal static class AltheaCardEffects
                 for (int i = 0; i < repeats; i++) await Block(block); break;
             case AltheaCardKind.UndyingRage: await Block(block); break;
             case AltheaCardKind.RationalWill:
-                foreach (var other in await ChooseAny()) await AltheaRules.Reform(context, other); break;
+                foreach (var other in await ChooseAny()) await AltheaReformLifecycle.Reform(context, other); break;
             case AltheaCardKind.Bloodlust: await SelfPower<VulnerablePower>(1); await PlayerCmd.GainEnergy(3, owner); break;
             case AltheaCardKind.WhisperingWraith:
                 await Wraiths(2, PileType.Hand); await Block(block * piles.Hand.Cards.Count(AltheaRules.IsCurse)); break;
@@ -195,7 +195,7 @@ internal static class AltheaCardEffects
                 }
                 await SelfPower<WeakPower>(amount); await SelfPower<VulnerablePower>(amount); break;
             case AltheaCardKind.Liberation:
-                foreach (var other in piles.DiscardPile.Cards.ToList()) await AltheaRules.Reform(context, other); break;
+                foreach (var other in piles.DiscardPile.Cards.ToList()) await AltheaReformLifecycle.Reform(context, other); break;
             case AltheaCardKind.GatheringSouls:
                 await Wraiths(amount, PileType.Hand);
                 await PlayerCmd.GainEnergy(piles.Hand.Cards.Count(AltheaRules.IsCurse), owner); break;
@@ -206,7 +206,7 @@ internal static class AltheaCardEffects
             case AltheaCardKind.ResoluteWill:
                 selected = (await CardSelectCmd.FromHand(context, owner,
                     new CardSelectorPrefs(card.ChoicePrompt, 1), c => c.IsTransformable, card)).FirstOrDefault();
-                if (selected != null) await AltheaRules.Reform(context, selected);
+                if (selected != null) await AltheaReformLifecycle.Reform(context, selected);
                 await SelfPower<AltheaReformEchoPower>(1); break;
             case AltheaCardKind.WarriorsCreed:
                 await SelfPower<StrengthPower>(amount); await SelfPower<DexterityPower>(amount);
@@ -236,7 +236,7 @@ internal static class AltheaCardEffects
                 var curses = combat.Players.Where(p => p != owner && p.PlayerCombatState != null)
                     .SelectMany(p => new[] { p.PlayerCombatState!.Hand, p.PlayerCombatState.DrawPile, p.PlayerCombatState.DiscardPile })
                     .SelectMany(pile => pile.Cards).Where(AltheaRules.IsCurse).ToList();
-                foreach (var curse in curses) await AltheaRules.TakeCombatCard(curse, owner);
+                foreach (var curse in curses) await AltheaReformLifecycle.TakeCombatCard(curse, owner);
                 break;
             case AltheaCardKind.FinalBlow: await Attack(); break;
             case AltheaCardKind.FightersForm: await SelfPower<AltheaFightersFormPower>(amount); break;

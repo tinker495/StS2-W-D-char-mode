@@ -12,11 +12,7 @@ public sealed class AltheaPathToGreatnessPower : AltheaPower
     public override CardLocation ModifyCardPlayResultLocation(CardModel card, bool isAutoPlay,
         ResourceInfo resources, CardLocation cardLocation)
     {
-        if (card.Owner.Creature == Owner && AltheaRules.For(card.Owner).CardsPlayed == 0)
-        {
-            AltheaRules.For(card.Owner).ReformAfterPlay[card] = cardLocation.pileType;
-            return cardLocation with { pileType = PileType.Discard };
-        }
-        return cardLocation;
+        return card.Owner.Creature == Owner
+            ? AltheaReformLifecycle.ReserveAfterFirstPlay(card, cardLocation) : cardLocation;
     }
 }

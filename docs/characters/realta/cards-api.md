@@ -2,6 +2,14 @@
 
 [Asset index](realta-assets.md).
 
+## Card Reload Ownership (2026-11-17)
+
+The shared [`CardAppearance`](/Sts2WDCode/Cards/CardAppearance.cs) owns the single mod postfix on native `NCard.Reload`. It resets the mod's common energy/type-label overrides and portrait-border modulation, applies `ICardPoolAppearance` from `model.VisualCardPool`, invokes the actual model's `Sts2WDCard.ApplyPortraitAppearance`, then refreshes cost autosizing. The existing Realta and Althea pools supply the two pool-specific implementations; shared presentation code does not reference character-owned types. Realta's style values remain in `RealtaCardAppearance`, with their resource mapping in [frame integration](cards-frames.md).
+
+Inspection of installed `sts2.dll` product version `0.1.0+cc1f9462ca6c602e88f83f3bd7e2d084d4d4f8d7` established that `NCard.Model` and `NCard.Visibility` call `Reload`, which restores the native frame, type-plaque and portrait materials. BaseLib 3.4.7 `CustomCardModel` exposes frame/banner material and portrait selection, but no cost-label geometry/autosizing or post-Reload styling operation. The existing postfix is retained only for that presentation gap. Native material restoration still owns rarity and visibility; the mod does not duplicate it.
+
+The visual-pool selection and model portrait selection are intentionally independent. `RealtaGuard` keeps its native Token pool and its Realta visual-pool override. An Althea card keeps its portrait treatment when its visual pool changes. No card model IDs, textures, materials or visible style values were changed by this ownership refactor.
+
 ## Card Portraits and Frames (`CardModel`, `CustomCardModel`, `CustomCardPoolModel`)
 
 - **Primary sources:**

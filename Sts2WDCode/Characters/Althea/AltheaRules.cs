@@ -12,10 +12,8 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Extensions;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Modding;
-using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
-using MegaCrit.Sts2.Core.Nodes.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Althea;
 
@@ -26,7 +24,6 @@ internal static class AltheaRules
     {
         internal int Attacks;
         internal int Streak;
-        internal int CardsPlayed;
         internal int Shuffles;
         internal int CursesExhausted;
         internal bool Draining;
@@ -35,9 +32,6 @@ internal static class AltheaRules
         internal readonly HashSet<CardModel> Pending = [];
         internal readonly Dictionary<CardModel, CardModel[]> Neighbours = [];
         internal readonly HashSet<PowerModel> EnemyEffects = [];
-        internal readonly Dictionary<CardModel, PileType> ReformAfterPlay = [];
-        internal readonly HashSet<CardModel> ReformedThisTurn = [];
-        internal readonly HashSet<CardModel> Reformed = [];
     }
     private static readonly ConditionalWeakTable<PlayerCombatState, State> States = new();
     internal static State For(Player player) => States.GetValue(player.PlayerCombatState!, _ => new State());
@@ -81,56 +75,6 @@ internal static class AltheaRules
         await CardPileCmd.AddGeneratedCardToCombat(copy, PileType.Hand, source.Owner);
     }
 
-    internal static async Task<CardModel?> Reform(PlayerChoiceContext context, CardModel source, PileType? destination = null)
-    {
-        if (source.Pile == null || !source.IsTransformable || source.Owner.Creature.CombatState is not { } combat) return null;
-        CardModel token = source.Type switch
-        {
-            CardType.Attack => ModelDb.Card<AltheaSiarcun>(), CardType.Skill => ModelDb.Card<AltheaLleurh>(),
-            CardType.Power => ModelDb.Card<AltheaMorfiella>(), _ => ModelDb.Card<AltheaPureWill>()
-        };
-        var replacement = combat.CreateCard(token, source.Owner);
-        if (For(source.Owner).ReformAfterPlay.Remove(source, out var result))
-            destination = result == PileType.Exhaust ? PileType.Exhaust : PileType.Draw;
-        if (source.IsUpgraded)
-        {
-            replacement.UpgradeInternal();
-            replacement.FinalizeUpgradeInternal();
-        }
-        if (source.Enchantment is { } enchantment && enchantment.CanEnchant(replacement))
-            CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), replacement, enchantment.Amount);
-        replacement.DeckVersion = source.DeckVersion;
-        // Native Transform updates hand nodes but leaves the original play-pile node behind.
-        var playedCard = source.Pile.Type == PileType.Play ? NCard.FindOnTable(source) : null;
-        await CardCmd.Transform(source, replacement);
-        if (source.HasBeenRemovedFromState && playedCard?.Model == source) playedCard.QueueFreeSafely();
-        For(source.Owner).ReformedThisTurn.Add(replacement);
-        For(source.Owner).Reformed.Add(replacement);
-        if (destination == PileType.Exhaust) await CardCmd.Exhaust(context, replacement);
-        else if (destination.HasValue) await CardPileCmd.Add(replacement, destination.Value, CardPilePosition.Top);
-        return replacement;
-    }
-
-    internal static async Task TakeCombatCard(CardModel card, Player recipient)
-    {
-        var previousOwner = card.Owner;
-        var combat = recipient.Creature.CombatState!;
-        bool reformed = For(previousOwner).Reformed.Remove(card);
-        bool reformedThisTurn = For(previousOwner).ReformedThisTurn.Remove(card);
-        // Resolve any visible hand/draw-pile movement with the native command before changing ownership.
-        await CardPileCmd.Add(card, PileType.Discard);
-        card.RemoveFromCurrentPile();
-        combat.RemoveCard(card);
-        combat.AddCard(card, recipient);
-        if (reformed) For(recipient).Reformed.Add(card);
-        if (reformedThisTurn) For(recipient).ReformedThisTurn.Add(card);
-        // This is the same combat instance, not a newly generated card or another combat entry.
-        var discard = recipient.PlayerCombatState!.DiscardPile;
-        discard.AddInternal(card);
-        await Hook.AfterCardChangedPiles(recipient.RunState, combat, card, PileType.Discard, null);
-        discard.InvokeCardAddFinished();
-    }
-
     internal static decimal DisplayDamage(CardModel card)
     {
         if (card.EnergyCost.CostsX || !card.DynamicVars.TryGetValue("Damage", out var damage)) return 0;
@@ -155,7 +99,7 @@ internal static class AltheaRules
     {
         if (!Applies(play.Card.Owner)) return;
         var state = For(play.Card.Owner);
-        state.CardsPlayed++;
+        AltheaReformLifecycle.RecordPlay(play.Card);
         if (play.Card.Type == CardType.Attack) { state.Attacks++; state.Streak++; } else state.Streak = 0;
         if (play.PlayIndex != 0 || !state.Neighbours.Remove(play.Card, out var neighbours)) return;
         foreach (var neighbour in neighbours)
@@ -211,12 +155,7 @@ internal static class AltheaRules
             var player = card.Owner;
             try { await original; }
             finally { For(player).PlayDepth--; }
-            if (For(player).ReformAfterPlay.TryGetValue(card, out var result))
-            {
-                if (card.Pile != null && For(player).CardsPlayed > 0)
-                    await Reform(context, card, result == PileType.Exhaust ? PileType.Exhaust : PileType.Draw);
-                For(player).ReformAfterPlay.Remove(card);
-            }
+            await AltheaReformLifecycle.CompletePlay(context, player, card);
             if (For(player).PlayDepth == 0) await Drain(context, player);
         }
     }

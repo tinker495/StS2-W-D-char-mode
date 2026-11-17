@@ -2,6 +2,21 @@
 
 2026-10-23, [공유 카드 시트](https://docs.google.com/spreadsheets/d/1rwlbeGbN32cwy-rOZWJzCIR_Rhyx5rmiezInGhioEq0/edit)의 `Althea` 탭과 [설계 합의](althea.md)를 바탕으로 초기 카드 구성을 구현했다. 기준은 2026-10-23에 다시 읽은 시트와 같은 날 사용자가 확정한 이름·효과 해석이다. 이후 시트 변경은 다시 비교해야 한다.
 
+## 2026-11-17 Reform Lifecycle Ownership — Agent Reference
+
+[`AltheaReformLifecycle`](/Sts2WDCode/Characters/Althea/AltheaReformLifecycle.cs) owns deferred Reform, its first-play counter, and turn/combat provenance. Its private state is keyed by the native `PlayerCombatState` in a `ConditionalWeakTable`; none of these records is saved to the permanent deck. `AltheaRules` retains Frenzy, harmful-effect tracking, and other combat bookkeeping.
+
+The native hooks retain their existing order:
+
+- `AltheaPathToGreatnessPower.ModifyCardPlayResultLocation` reserves the original result pile before the first play and returns a Discard location while preserving the destination player and position.
+- `AltheaRules.BeginPlay` records that play at the original `BeforeCardPlayed` point. `PlayBoundary.Finish` completes deferred Reform after the original play task and before draining Frenzy. Completion uses the player captured before awaiting that task.
+- `AltheaReformEchoPower` queries only this turn's provenance; `AltheaArchipelagoArtsPower` queries combat provenance. Turn start resets the first-play counter and turn provenance while retaining combat provenance.
+- `TakeCombatCard` removes provenance from the previous owner before native pile movement and restores it for the recipient before the recipient's pile hooks. The same combat card instance is transferred.
+
+Callers use the lifecycle's operations and boolean queries rather than editing its collections. Direct Reform still chooses the token from the original type, preserves upgrade/enchantment/`DeckVersion`, uses native `CardCmd.Transform`, applies the conditional play-node cleanup below, records provenance, and moves the result in that order. A reserved Exhaust destination stays Exhaust; other reserved destinations resolve to Draw as before. Model types, IDs, artwork, localized descriptions, and effect timing are unchanged.
+
+The 2026-10-25 section below records the original `AltheaRules.Reform` location and its native evidence. The current implementation of that operation is `AltheaReformLifecycle.Reform`; the visual workaround and its limited scope remain the same. Existing `dev.ps1 card-tests` checks cover previews rather than executing Reform. Gameplay observations must cross the existing card/power hooks and native transform flow; private collections are not an acceptance interface.
+
 ## 2026-10-25 Self-Reform Visual Lifecycle — Agent Reference
 
 The reported Warrior Strike failure leaves its original card visible after Siarcun reaches the discard pile. Other cards and turn completion remain usable. The minimal native-scene observation reproduced this with only BaseLib and this mod loaded: the original model was removed from combat, the replacement was Siarcun in Discard, and one visible original `NCard` remained in `NCombatUi.PlayContainer`.
@@ -123,7 +138,7 @@ MegaDot 등 editor 기능을 가진 환경에서는 원작 `NCard.Reload`가 카
 
 ## 구현 위치와 유지보수
 
-`Sts2WDCode/Characters/Althea/`가 알테아 규칙을 소유한다. 카드 모델은 `Cards/<모델명>.cs`에 하나씩 두어 안정적인 모델 ID를 정하고, `AltheaCardKind.cs`·`AltheaCardDefinitions.cs`는 카드 종류와 수치, `AltheaCard.cs`는 공통 표시·강화, `AltheaCardEffects.cs`는 카드 효과를 담당한다. `AltheaRules.cs`의 전투별 상태와 실행 경계에서 광란·재편·불실을 연결하며, `AltheaCombatHooks.cs`가 공통 전투 이벤트를 받는다. `Powers/AltheaPower.cs`는 공통 아이콘·파워 기본값만 정의하고, 각 `Althea*Power.cs`가 해당 효과의 훅과 상태를 소유한다. `Relics/AltheaRelics.cs`는 전용 유물, `AltheaCompatibility.cs`는 기본 게임의 저주 검사·변형·오로바스·디버프 배율에 연결한다.
+`Sts2WDCode/Characters/Althea/`가 알테아 규칙을 소유한다. 카드 모델은 `Cards/<모델명>.cs`에 하나씩 두어 안정적인 모델 ID를 정하고, `AltheaCardKind.cs`·`AltheaCardDefinitions.cs`는 카드 종류와 수치, `AltheaCard.cs`는 공통 표시·강화, `AltheaCardEffects.cs`는 카드 효과를 담당한다. `AltheaRules.cs`의 전투별 상태와 사용 완료 처리에서 광란·불실을 연결하며, `AltheaReformLifecycle.cs`가 재편 예약·처리와 턴·전투별 기록을 소유한다. `Althea.cs`가 공통 전투 이벤트를 받아 각 처리를 호출한다. `Powers/AltheaPower.cs`는 공통 아이콘·파워 기본값만 정의하고, 각 `Althea*Power.cs`가 해당 효과의 훅과 상태를 소유한다. `Relics/Althea*.cs`는 전용 유물, `AltheaCompatibility.cs`는 기본 게임의 저주 검사·변형·오로바스·디버프 배율에 연결한다.
 
 쉼없는 광기는 `AfterCombatEnd`에서 손·뽑을 더미·버린 더미의 저주를 집계해 회복한다. 기본 게임의 `CombatManager.EndCombatInternal`은 이 훅 다음에 `Player.AfterCombatEnd`로 파워를 제거하고 전투 더미를 비운 뒤 `AfterCombatVictory`를 호출하므로, 회복을 승리 훅에 두면 실행되지 않는다. 소멸 더미는 제외하며 유물로 저주 취급되는 타격 카드도 포함한다.
 

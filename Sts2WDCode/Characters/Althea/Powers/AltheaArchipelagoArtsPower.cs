@@ -15,7 +15,7 @@ public sealed class AltheaArchipelagoArtsPower : AltheaPower
 
     public override async Task AfterEnergySpent(CardModel card, int amount)
     {
-        if (card.Owner.Creature != Owner || (card.Type != CardType.Attack && !AltheaRules.For(card.Owner).Reformed.Contains(card))) return;
+        if (card.Owner.Creature != Owner || (card.Type != CardType.Attack && !AltheaReformLifecycle.WasReformed(card))) return;
         var data = GetInternalData<Data>();
         data.AttackEnergy += amount;
         int refunds = data.AttackEnergy / 3;

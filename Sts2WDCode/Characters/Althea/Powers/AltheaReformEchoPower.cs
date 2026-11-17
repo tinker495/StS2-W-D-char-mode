@@ -14,10 +14,10 @@ public sealed class AltheaReformEchoPower : AltheaPower
 
     public override CardLocation ModifyCardPlayResultLocation(CardModel card,
         bool isAutoPlay, ResourceInfo resources, CardLocation cardLocation) =>
-        card.Owner.Creature == Owner && AltheaRules.For(card.Owner).ReformedThisTurn.Contains(card)
+        card.Owner.Creature == Owner && AltheaReformLifecycle.WasReformedThisTurn(card)
             ? cardLocation with { pileType = PileType.Exhaust } : cardLocation;
     public override int ModifyCardPlayCount(CardModel card, Creature? target, int playCount) =>
-        card.Owner.Creature == Owner && AltheaRules.For(card.Owner).ReformedThisTurn.Contains(card)
+        card.Owner.Creature == Owner && AltheaReformLifecycle.WasReformedThisTurn(card)
             ? playCount + Amount : playCount;
 
     public override async Task AfterSideTurnEnd(PlayerChoiceContext context, CombatSide side, IEnumerable<Creature> participants)

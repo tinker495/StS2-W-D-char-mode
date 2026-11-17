@@ -2,10 +2,12 @@ using BaseLib.Abstracts;
 using Sts2WD.Sts2WDCode.Extensions;
 using Godot;
 using MegaCrit.Sts2.Core.Assets;
+using MegaCrit.Sts2.Core.Nodes.Cards;
+using Sts2WD.Sts2WDCode.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-public class RealtaCardPool : CustomCardPoolModel
+public class RealtaCardPool : CustomCardPoolModel, ICardPoolAppearance
 {
     public override string Title => Realta.CharacterId; //This is not a display name.
 
@@ -25,4 +27,6 @@ public class RealtaCardPool : CustomCardPoolModel
     public override Color DeckEntryCardColor => new("e76f51");
 
     public override bool IsColorless => false;
+
+    void ICardPoolAppearance.ApplyAppearance(NCard card) => RealtaCardAppearance.ApplyTo(card);
 }

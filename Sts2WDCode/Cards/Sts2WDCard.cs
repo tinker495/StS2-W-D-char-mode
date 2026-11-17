@@ -4,6 +4,7 @@ using BaseLib.Extensions;
 using BaseLib.Utils;
 using Godot;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Nodes.Cards;
 using Sts2WD.Sts2WDCode.Extensions;
 
 namespace Sts2WD.Sts2WDCode.Cards;
@@ -17,6 +18,8 @@ public abstract class Sts2WDCard(int cost, CardType type, CardRarity rarity, Tar
     public override string CustomPortraitPath => ResolvePortraitPath();
     public override string PortraitPath => CustomPortraitPath;
     public override string BetaPortraitPath => CustomPortraitPath;
+
+    internal virtual void ApplyPortraitAppearance(NCard card) { }
 
     protected virtual string FallbackPortraitPath =>
         Rarity == CardRarity.Ancient
