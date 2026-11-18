@@ -1,0 +1,257 @@
+---
+name: rig-parts
+description: Turn one anime character painting and its See-through layer decomposition into a verified 2D character rig (Spine 4.3 skeleton data) — measured parts, weighted meshes, bone chains and a looping idle — with rig-parts, which gates everything through rig-c before it is written. Use for a request to rig or animate a single character painting, to check a painting before See-through (rig-parts painting), to run or read rig-parts layers, sheet, assemble, depth-prepare, depth-apply, propose, rig, check, loop or build, or to write or fix a rig-parts config.json. Not for cutting art into parts by hand, for authoring a rig from loose PNGs (that is the rigc skill), for lip-sync or swapping a part's image, or for running See-through itself.
+license: MIT
+compatibility: Requires Bun 1.4 or later (declared in engines.bun >=1.4.0; CI tests latest only). The tool is the npm package @rig-c/parts (npm i -D @rig-c/parts, or bun add -d @rig-c/parts), whose command is rig-parts; @rig-c/core (the rigc command) is installed with it. See-through is run separately.
+---
+
+# rig-parts — a painting to a Spine rig, for agents
+
+rig-parts merges See-through's two layer runs over one painting into rig-space
+parts, authors a rig spec and a motion spec over them, and hands those to
+rig-c, which compiles, gates, packs and renders. You cannot see the painting,
+the layers or the rig. The printed lines, `docs/AUTHORING.md` and the files each
+stage writes are the whole interface.
+
+**A FAIL line ends with the command that prints its row of the guide:**
+`FAIL  RULE: object — detail (see rig-parts guide RULE)`. Run that command before
+anything else. It prints the one row of `docs/AUTHORING.md` that maps the rule to
+what has to change, read from the installed file. `rig-parts guide §<n>` prints a
+section, `§<n>.<m>` the m-th `###` under it and `§<n>.<m>.<k>` the k-th `####`
+under that.
+
+## Non-negotiables
+
+- **rig-c's gate is never bypassed.** rig-parts writes no Spine data
+  itself; `rig` writes only after rigc's `build` gate is green, and `build`'s
+  artifact is what rigc wrote. There is no flag that skips it, and none may be added.
+  `check.json`'s `rigc_entry` names which gate ran: rigc's own validator in an
+  install, the spine-core round trip where the runtime is installed beside rigc.
+- **No value is invented.** A missing config field is a refusal naming it. Take a
+  value from the command that proposes it (`propose --head-box`,
+  `assemble --propose-plan`, `propose`) or decide it yourself — never guess one
+  because the tool refused.
+- **The refusal is the instruction.** `FAIL  RULE: object — detail` names the object,
+  the value found and the value required; AUTHORING §6 maps every rule to the field
+  or input that has to change, and `rig-parts guide RULE` prints that row.
+- **Green is not "looks right".** `check` measures the gates, the seam, the loop and
+  six judgement lines (`BREATH_VISIBLE`, `BLINK_NO_HOLE`, `CHAIN_LAG`,
+  `TIP_OVER_ROOT`, `STILL_REGIONS_DARK` — its face half in the head's own frame —
+  and `TEXTURE_STRETCH`) (AUTHORING §7). A judgement line that says
+  SKIP was not verified: report it as such, with its reason, never as passed.
+  No line judges a bang over the face or the eyes: `STILL_REGIONS_DARK`'s
+  `crossing` reports how deep each one swings, and only an eye can say whether
+  that reads right.
+- **What a scene asks is declared, not assumed.** When the request says what the
+  motion must do — a hand on a cup, a sleeve taking half an arm's turn, a joint
+  inside a range, a fringe that must not part from the face — write it into a `spine-parts-requirements/1` file and pass
+  `check --requirements <file>` (or `build --requirements`); every bar in it is the
+  requester's, never yours to invent (AUTHORING §7, *Declared requirements*). Each
+  line is PASS, FAIL or NOT MEASURABLE; a NOT MEASURABLE is not green, and a kind the
+  file does not declare was not measured — say so, never "passed".
+- **A hole in the layers is invisible to every bar.** Painting that no part holds is
+  missing from the setup pose and from the flat stack alike, so the seam passes over
+  it. `assemble` lists it (`uncovered hole N: <px> px at x,y wxh (between …)`) and
+  paints it red in `recomposite_error_rig.png`; `check` copies it into `check.json` as
+  `RECOMPOSITE_HOLES`, a REPORTED line with no bar. Read it; never report it as a
+  pass.
+
+## The loop
+
+0. Before See-through, check the painting: `rig-parts painting --keypoints
+   <k.json> <painting.png>` with the figure's body-18 joints (the file
+   `propose --keypoints` reads, from an estimator or the painting — never a joint
+   you guessed). A `FAIL  PAINTING_…` line names what a rig cannot be cut from —
+   an arm against the body, hands together, legs with no gap, a joint off the
+   figure, a background that is not plain — and the fix is a new painting, not a
+   config field. `docs/PAINTING.md` lists every requirement, the ones only an eye
+   reads (front view, feet, anything on an elbow: a cape, a sleeve's frill, a
+   bow), and one generation recipe; report those as not checked. A hip a skirt
+   hides is written `occluded` with its estimated position, not `observed`.
+1. `rig-parts inputs --source <painting> --config config.json --out <dir>` writes
+   `st_input_full.png`, the painting on a white square. The config needs only `key`,
+   `seethrough` and `assemble.rig_scale` at this point. Run See-through on it — any
+   route; the optional `comfy seethrough` adapter only talks to a ComfyUI box.
+2. `rig-parts layers <full run>` — read the table. A `WARN  PLAN_LAYER_…` line names
+   a layer See-through invented (a translucent haze, or one out of proportion);
+   the plan step leaves it out and says so in its `notes`. When an input carries no
+   depth (`depth_median: null` on every layer, or a PSD), `layers` prints one
+   `SKIP  depth:` line (manifest order is then the draw order, and `propose --full`
+   or `--head` prints `turn: SKIP`) — report it as skipped, never as passed.
+3. `rig-parts propose --head-box --full <full run> --canvas <W>x<H>` → put
+   `head_box` in the config, run `inputs` again (it now also writes
+   `st_input_head.png`, the crop at that box), and run See-through on the crop.
+4. `rig-parts assemble --propose-plan …` → `config.assemble.plan` and
+   `extend_below_crop`.
+5. `rig-parts assemble … --out work` — read the `uncovered hole` lines and look at
+   `work/render/recomposite_error_rig.png`; a large red hole between two parts is a
+   gap See-through left (a skirt split into two legs), fixed in the plan or the layers,
+   not in the rig. Then `rig-parts propose --parts work/rig --bust-landmarks bust-landmarks.json
+   --source <painting> --out work` → copy `bones`, `meshes`, `regions`, `limbs`,
+   `motion`, `constraints`, `turn`, `motion_seams`, `proposed_rig_scale` from `proposal.json` into the config, each it
+   wrote (`limbs` only with `--keypoints`, `constraints` only with `--cloth`, `turn`
+   only with `--full`/`--head`; a `limbs` block left out is refused at the next step). `assemble` needs the plan and none of
+   those sections; do not stub them to get past it (AUTHORING §4 says what each step
+   requires). If an `uncovered hole` stays large with the plan right — a piece
+   of the figure neither run holds, red in `recomposite_error_rig.png` — add an
+   `assemble.patches` entry (a rig-pixel box, `alpha: "silhouette"`, drawn
+   `"back"` and reaching under its neighbours, its bone in `regions`) and assemble
+   again; never add a part to `rig/` or `parts/` by hand (AUTHORING §5).
+   One layer holding two things that must move apart (a scarf end inside
+   `topwear`, both arms in one `handwear`): add an `assemble.cuts` entry — a
+   polygon in rig pixels read off `work/rig/parts/<part>.png` plus its
+   `parts.json` `x`, `y`, a new name, a `draw`, an `overlap` (the band the part
+   keeps under the piece's edge; 1 px closed the seam on scarf) — and give the piece its own
+   `meshes` entry; the `cut:` line gives the split. At overlap 0 a cut through
+   opaque art leaves a seam `check` reads (AUTHORING §5).
+   A figure whose joints are not where the screen-y rules put them — reclining,
+   an arm raised, seated in a skirt that does not start at the hip: add
+   `--keypoints <file>` (body-18 joints in painting px, each observed, occluded
+   or missing; AUTHORING §3, *A posed figure*) so the neck, hip, chest and
+   sleeves follow the pose and LINT reads the joints, not screen y. Each arm and
+   leg it places comes back as `limbs` (AUTHORING §3, *Limbs*): paste it, assemble
+   again, and read each `limb cap:` line for the pixels a cap is missing. A clean
+   LINT does not show a seated hip is right; the overlay does. Never write a joint you did not get from an
+   estimator or the painting: say `missing` and let the rule stand in.
+   A skirt or hair that must answer the scene (wind, the body moving) rather than
+   loop a keyed swing: add a `cloth` block to the config — one recipe per tag,
+   `bottomwear`, `back hair`, `front hair`: `chains`, `links`, `wind` and `gravity`
+   as `[root, tip]` (multipliers of the consumer's environment, tip >= root), and
+   optionally `split`, `strength`, `damping`/`alternate_damping`, `translate`,
+   and on the skirt `swing.scales` (AUTHORING §3, *Recipe: cloth and hair*) —
+   and propose with `--cloth config.json`; copy its `constraints` too. Every
+   number is yours but `length_ratio` and `strength`, whose defaults the note
+   names. Weights across neighbouring trees are not drafted (issue #378). No
+   stop at the legs is drafted: on the recipe's fixture the environment alone
+   pushed no hem through a thigh, but the consumer's hip motion can
+   (rig-c/core#1413).
+6. Correct against `render/landmarks.png` and `note:` lines; a
+   `coverage … not checked` line is a bone no check read (the line says why),
+   and `basis.json` beside the proposal says what each bone rests on — check
+   the `ratio` bones and any with a `fallback` first. `rig-parts propose --parts work/rig --source <painting> --out work
+   --from-config config.json` (with the same `--keypoints`) until it prints no
+   `LINT` line. `rig-parts compare
+   --left work/proposal.json --right config.json` lists what the correction changed,
+   bone by bone — origin, parent, tip, length, direction (AUTHORING §4).
+   A constraint the motion needs (an ik reaching a scene target, physics on a
+   link) goes in `config.constraints`, in rig-c's own rig-spec shape: the
+   loader resolves the bones it names and nothing else, and rigc's gate refuses
+   the rest in its words. A scene target is a single bone under `root`. A two-bone
+   ik over links the idle keys needs `--idle-keys direct` on `rig` or `build`
+   (rigc refuses the pair the link's control splits, and the line names the flag
+   on the command that ran; AUTHORING §3).
+7. `rig-parts build --config … --source … --full … --head … --out out --loop`
+   (no `--head` for an artist's own file, below)
+   (add `--idle-keys direct` when step 6 said so).
+   It stops at the first stage that refuses, printing that stage's lines under
+   `[assemble]`, `[rig]` or `[check]`. Fix what the FAIL line names and build again.
+   When a declared head turn (`turn.depths` or `turn.roles`) has an absolute setup
+   eye-line roll above `18.485385` degrees, `rig` and `build` print
+   `WARN RIG_TURN_HEAD_ROLL` naming the face/eye parts, both eye bones, signed roll
+   and limit; it does not refuse the build or change emitted bytes — inspect the neck
+   at both yaw/pitch extremes before accepting the turn
+   ([Head roll before a declared turn](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#head-roll-before-a-declared-turn)).
+8. Read `out/check/check.json` — the six judgement lines the same way as the seam
+   and the loop: a FAIL names the field to change (AUTHORING §6);
+   `TEXTURE_STRETCH` names the worst mesh triangle (slot, triangle, vertices, edge,
+   frame), so quote it even on a PASS; its FAIL line also names the bones the
+   edge's two vertices are weighted to and the idle chains they hang on. Quote
+   `RECOMPOSITE_HOLES` (uncovered px, hole count, the largest hole's box) in the
+   report whatever `PASS` says. The artifact is the three paths the build prints
+   last: `check/build/skeleton.json`, `skeleton.atlas` and the packed page. Report
+   them with the pack line and the check figures verbatim.
+
+An artist's own layered PSD (issue #359; AUTHORING §4, *For artists*): one run,
+no See-through, no `--head` and no `head_box` in the config. The file must hold
+`face`, `eyewhite-r` and `eyewhite-l`, painted (`ASSEMBLE_SINGLE_RUN_FACE`
+otherwise); its stacking is the draw order and it carries no depth, so `layers`
+prints `SKIP  depth:` and the turn draft says `turn: SKIP` — report those as
+skipped, never as passed. `rig-parts layers --template art.psd --canvas <W>x<H>`
+writes the empty layers an artist paints into. A layer named `<layer>:hidden` is
+that layer's art where something covers it (the forearm under a sleeve): read as a
+cut's `under` and a limb segment's cap, never drawn; a `hidden art:` line names
+what read it. To correct a parse, `rig-parts layers --export work art.psd` writes
+the same layers as `layers.json` and one PNG each; move pixels between the PNGs
+(grow a PNG and its box in `layers.json` together), then pass `--full work` and
+read `recomposite vs source` and the error map again (AUTHORING §4, *The
+correction loop*). A patch in the wrong layer shows as error only where the
+painting is near-white; elsewhere it shows as `drift=`/`seam=` on the part drawn
+over it.
+
+Several characters in one rig: build each one green on its own, then
+`rig-parts compose --scene scene.json --out scene` (spec `spine-parts-scene/1`:
+the canvas, each character's `build` and `offset`, an optional plate with its
+`provenance`, and the `order` of the characters' slots, back to front). You write
+the order and the offsets; nothing infers them, nothing scales a character, and
+nothing detects or separates people. Report the plate's provenance as you declared
+it and the order as `scene.json` records it (AUTHORING §7, *Composing several
+characters*).
+
+Depth-driven 2.5D turns ([Depth-driven rigging](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#depth-driven-rigging)):
+`depth_filename` is a legacy hint and activates nothing on its own. Declare
+`config.depth` with positive finite `zScale` (`near: "black"` for See-through's
+far-high sheets, or user fallbacks under `depth.full` / `depth.head`, and
+`comfy seethrough --config <file> --depth-run <full|head>` when fetching from
+ComfyUI; [Per-layer depth sheets](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#per-layer-depth-sheets-773)
+and [Per-layer depth input](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#per-layer-depth-input)),
+then map parts in `turn.roles` (head `yaw_dial`/`pitch_dial`) and `turn.body.roles`
+(independent `body_yaw_dial` or `turn.body.slider`) as `"surface"` (grid or authored
+weighted meshes; `auto` is refused by `CONFIG_TURN_SURFACE_AUTO`), `"unit"` or
+`"rear"`. A `"unit"` part's depth resolves by `unitDepths.<part>` →
+`unitDepths.<bone>` → primary surface sheet before the part's own sheet
+([Unit depth precedence](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#unit-depth-precedence)).
+When depth comes from external per-part provider maps (`rig-parts-depth/1` recipe
+and `rig-parts-map/1` float JSON maps, run after `assemble` and before `rig`), run
+`rig-parts depth-prepare --parts <assembled> --config <depth.json> --out <inference>`
+and `rig-parts depth-apply --parts <assembled> --manifest <manifest.json> --config <depth.json> --rig-config <config.json> --out <mapped>`;
+non-empty output (`DEPTH_OUTPUT_EMPTY`), stale input bindings (`DEPTH_INPUT_BINDING`),
+`authored-unit` provenance (`DEPTH_AUTHORED_UNIT_CONFLICT`), flat maps with nonzero
+relief (`DEPTH_MAP_SPREAD`) and multi-island or non-convex normal maps
+(`DEPTH_NORMAL_*`) are refused by name
+([Per-part provider maps](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#per-part-provider-maps-897)
+and [Depth sheet refusals](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#depth-sheet-refusals-773)).
+
+`assemble.seam` (`"near-white"` or `"silhouette"` in `config.json`, overridden by
+`--seam`; [AUTHORING §3](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#3-configjson-field-by-field)
+and [§5](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md#5-after-each-stage-what-to-read)):
+`--seam silhouette` repairs more of the seam on white garments than the default
+`near-white` (reference-demo: 10,340 → 8,644 recomposite error pixels); the default is
+the reference implementation's rule. `--project visible` lets thin visible parts
+(lashes, brows, irises) take the painting's pixels, which the default `core` rule
+erodes away. Name both rules you used in your report, and quote the assemble
+`pixels:` line: its occluded share is hidden art, its "visible but not projected"
+share is synthesis where the painting was there to be taken.
+
+## What this will not do
+
+- Run See-through or generate the painting itself. The optional `comfy seethrough`
+  and `comfy paint` commands drive a ComfyUI box you name; nothing else here reaches
+  a GPU or the network.
+- Give a layer two depths: a layer in front of another in one place and behind it in
+  another is right in the still and wrong in motion.
+- Propose, key or judge any animation but the looping `idle`, or lip-sync: every slot
+  holds one attachment, so nothing swaps a part's image. Expressions and a jiggle are
+  yours to build on top (below).
+- Write animated WebP: `loop` writes GIF and APNG.
+- Know what the art does not tag: a swinging element painted inside another layer,
+  hair of an unfamiliar shape, whether an accessory swings. Those are yours to add.
+- Promise a success rate. Three public characters and eight private ones check green;
+  that is all that has been measured.
+
+## Where to read next
+
+[docs/AUTHORING.md](https://github.com/rig-c/parts/blob/main/docs/AUTHORING.md)
+first — every config field, the command order, what to read after each stage, every
+refusal. It is in the installed package at `node_modules/@rig-c/parts/docs/AUTHORING.md`,
+the copy that matches the version you run. Two recipes there cover what this package
+leaves to you:
+
+- An expression or any other named animation: AUTHORING §3, *Recipe: expressions and other
+  named animations* (`motion.animations_from`; built and gated with the rig, not measured).
+- A jiggle (a bust, the hips): AUTHORING §3, *Recipe: a soft region driven by physics* (a
+  config-only bone, a `contour` region on it, a `physics` constraint; `examples/reference-sample`
+  carries one, and its slow idle barely moves it).
+
+A `RIG_RIGC_GREEN` or `CHECK_RIGC_GREEN`
+line quotes rig-c's own assertion; rig-c's guide for those is
+`node_modules/@rig-c/core/docs/AUTHORING.md`, and its `rigc` skill covers the compiler.

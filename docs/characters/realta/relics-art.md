@@ -10,7 +10,7 @@ Generate each complete object directly in a square transparent composition. Use 
 
 ## Runtime Application Approval (2026-10-24)
 
-The user approved applying all five relic illustrations and installing them locally. The described candidate forms are now the selected relic artwork; earlier pending-selection wording records only the previous review stage. Runtime uses the existing model filenames; gameplay behavior was not changed by the image promotion.
+The user approved these five relic illustrations for local installation. They use the existing model filenames in the [runtime mapping](relics-assets.md#filename-mapping-for-five-realta-relics).
 
 ## Icon Composition
 

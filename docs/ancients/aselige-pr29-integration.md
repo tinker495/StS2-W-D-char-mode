@@ -15,12 +15,4 @@ PR #29의 아셀리게 조우·유물, 알테아 카드 85종 및 캐릭터 유�
 현재 게임 DLL의 다음 경로를 확인했다. 초기 셔플과 다음 런 누출 지적은 아래 호출 관계와 구분해야 한다.
 
 - `CardPile.RandomizeOrderInternal`은 `Hook.ModifyShuffleOrder(..., isInitialShuffle: true)`만 호출한다. `AfterShuffle`은 호출하지 않는다. `CardPileCmd.Shuffle`이 실제 재셔플을 마친 뒤 `Hook.AfterShuffle`을 호출한다. 정화의 숨결은 이 후자만 처리한다. `PlayerCombatState.TurnNumber`는 1에서 시작하므로 `> 0` 조건으로 초기 셔플을 구분하지 않는다.
-- `ActModel.DeepCloneFields`는 새 `RoomSet`을 만든다. `NGame`과 `NCharacterSelectScreen`의 새 런 진입점은 `RunState.CreateForNewRun`에 각 막을 `ToMutable`로 복제해 전달한다. `CreateForTest`도 막을 복제하며, 저장 복원은 `ActModel.FromSave`에서 별도 `RoomSet`을 만든다. 조우 훅의 `run.Acts[0]`는 canonical 모델이 아니다. 여기에 `AssertMutable` 검사를 추가해 전제를 명시했다. 기본 캐릭터 런에서는 원래 고대 선택을 유지한다.
-
-정식 테스트와 CI 정의는 변경하지 않는다. 임시 실행 관찰은 실제 게임 플레이와 멀티플레이 검증을 대신하지 않는다.
-
-## 검증 결과
-
-`dev.ps1 publish`로 C# 빌드(오류·경고 0건), MegaDot 리소스 가져오기와 PCK 내보내기를 완료했다. 임시 네이티브 실행 관찰에서 아셀리게·유물·설명 113건을 확인했다. 이 중 초기 덱 무작위화와 실제 재셔플, 모드 런 직후 기본 캐릭터 런의 고대 분리, 서로 다른 런과 canonical 모델의 `RoomSet` 분리, 재편 시 강화 복원, 마검의 숙명 복귀본의 인챈트·누적 강화·유물 횟수를 직접 확인했다. 한·영 세 카드의 JSON 파싱 결과도 실제 개행임을 확인했다.
-
-이번 재구성은 새 PR 준비 범위이며 로컬 게임 설치본을 교체하거나 실행하지 않았다.
+- `ActModel.DeepCloneFields`는 새 `RoomSet`을 만든다. `NGame`과 `NCharacterSelectScreen`의 새 런 진입점은 `RunState.CreateForNewRun`에 각 막을 `ToMutable`로 복제해 전달한다. 저장 복원은 `ActModel.FromSave`에서 별도 `RoomSet`을 만든다. 아셀리게 조우 훅은 `run.Acts[0]`에 `AssertMutable`을 호출한 뒤 현재 런의 첫 막을 수정한다. 기본 캐릭터 런에서는 원래 고대 선택을 유지한다.

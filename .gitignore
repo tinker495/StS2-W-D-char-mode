@@ -5,7 +5,11 @@ __pycache__/
 artifacts/
 publish/
 packages/
-.tools/
+/.tools/*
+!/.tools/.gdignore
+!/.tools/rig-c/
+/.tools/rig-c/*
+!/.tools/rig-c/setup/
 addons/godot_mcp_toolkit/
 .codex/config.toml
 .mcp.json

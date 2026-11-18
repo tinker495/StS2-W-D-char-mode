@@ -12,4 +12,4 @@ Use [base appearance](base-appearance.md) for identity.
 
 `Althea.CustomVisualPath`, `CustomMerchantAnimPath`, `CustomRestSiteAnimPath` and `CustomCharacterSelectBg` point to `Sts2WD/scenes/althea/combat.tscn`, `merchant.tscn`, `rest_site.tscn` and `char_select_bg_althea.tscn`. Combat exposes `Visuals`, `Bounds`, `CenterPos`, `OrbPos`, `TalkPos` and `FormVfx`; merchant exposes `Visuals`; rest exposes `ControlRoot/Visuals`, `Hitbox` and thought-bubble anchors. These are static sprites, with no new animation or event bridge. Character selection uses a full-rect Control/TextureRect.
 
-[UI inventory](ui-assets.md) lists the applied files; [selection delivery](selection-assets.md) owns background conversion and selection observations. These are approved runtime uses of the draft base, not a final character-design lock.
+[UI inventory](ui-assets.md) lists the applied files. [Selection delivery](selection-assets.md) describes the applied background and its conversion. The [base appearance guide](base-appearance.md) records the remaining design decisions.

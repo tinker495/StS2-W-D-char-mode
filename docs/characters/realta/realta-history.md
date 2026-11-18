@@ -1,6 +1,6 @@
 # Realta Art Decision History
 
-These decisions and their rationale were established through production as of 2026-10-18. They explain the constraints without requiring draft images, version nicknames, or generation logs. The [art specification](realta-art.md) owns the current appearance; the [asset guide](realta-assets.md) owns file dimensions, conversion, integration, and verification scope. This history does not replace either specification.
+These decisions explain the applied appearance and resource choices. The [art specification](realta-art.md) owns the current appearance and the [asset guide](realta-assets.md) owns dimensions, conversion, and integration.
 
 ## 1. Why One Canonical Base Defines the Appearance
 
@@ -47,18 +47,6 @@ The adopted scene shows **Realta smiling as she holds her improved broom-glaive 
 
 Editing the face or colors of an old background repeated its composition. At the user's direction, **Branch B and C replacement production defaults to excluding previous deliveries and drafts from earlier production rounds as inputs**. Design a fresh composition from the approved base, necessary raw references, and original-game references for the same use case. Reusing a portrait or related object newly created within the current round, and deriving delivery variants from the same alpha or master, are allowed. A user request to edit a particular image authorizes that specific edit.
 
-## 7. Delivery and Documentation Storage
+## 7. Shared Standing Source and Animated Scenes
 
-The canonical base is 1152×1728 RGBA. The initial Branch B delivery contained nine PNGs: six UI assets, a portrait outline, a shared combat/rest/merchant standing figure, and a selection background. A temporary standing/combat split increased this to ten; section 8 records its subsequent rollback to nine. Runtime paths, scene placement, and export procedures belong in the [asset guide](realta-assets.md#0-current-application-status). Relic, power, and card production requires a separate request.
-
-Historical verification for this delivery covered `dev.ps1 -Task publish` with zero C# warnings and errors, Godot import and PCK export, and loading nine textures and four scenes from the package. Installation, actual gameplay, and other aspect ratios were not checked. An approximate UI overlay obscured part of the hand behind the left description area; actual game readability remains to be checked. These are one-time observations, not formal tests or product acceptance.
-
-**Git-shareable documentation does not require sharing every production intermediate.** Share the canonical base, runtime files, and necessary specifications; drafts, prompts, comparisons, and execution logs may remain Git-ignored local material. State rules, rationale, current behavior, and required procedures directly in shared documents. Do not replace explanations with version nicknames or local-history links that only make sense after opening those files.
-
-## 8. Separate Ordinary Standing from Combat Readiness
-
-The user requested that Branch B use the approved base directly for ordinary standing and generate a separate pose appropriate for combat, then requested placing the new combat image in the runtime asset directory. The former shared PNG was replaced by two files: base-derived `standing.png` for rest/merchant and newly posed `combat.png` for combat.
-
-The generated combat pose used a grounded staggered stance and two hands on a diagonally raised broom-glaive, preserving the base's identity and rendering. Both full paintings were Fit-exported to 384×576 without cropping. Publish completed with zero C# warnings/errors, and temporary PCK observations loaded ten textures and four scenes with the separated references. A later blade refinement narrowed the pale cutting bevel, and that package was installed locally; actual gameplay was not verified.
-
-The user subsequently reverted this split: the separate combat painting was removed from runtime, the base-derived standing image was restored to `combat.png`, and rest/merchant references were changed back to `combat.png`. The extra `standing.png` and its import descriptor were removed. This rollback changes the current character delivery, while the generic Branch B production workflow still supports separate poses. The [art specification](animation-art.md) and [asset guide](animation-assets.md#standing-and-combat-split) own the current state.
+The user restored the base-derived upright pose as the canonical standing still. The entire 1152×1728 RGBA base is Fit-exported at 384×576 to `Sts2WD/images/charui/realta/combat.png`. Combat and merchant now use their rigs. Rest and selection use their own animated paintings. See the [scene connections](animation-assets.md#current-scene-and-property-connections) for current integration.

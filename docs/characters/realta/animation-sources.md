@@ -25,7 +25,9 @@ The runtime controller retains only layer/visibility and loop-phase state. Anima
 
 The baker marks the Slash ShaderMaterial as local to each scene instance. Shader code and textures may be shared, but animated `reveal` belongs to one character: playing another instance's idle must not change an active attack. Run the [instance isolation test](/tests/README.md) after changing or rebaking either rig.
 
-Runtime PNGs and their tracked coordinate manifests are the production source. Authoring and baking consume those inputs directly. The one-time draft conversion/export programs have been retired; their former implementations remain in Git history. Rest/selection use their delivered runtime paintings and blink patches.
+Runtime PNGs and their tracked coordinate manifests are the production source. Authoring and baking consume those inputs directly. Rest and selection use their own runtime paintings and blink patches.
+
+The [expression texture record](animation-verification.md#combat-expressions) maps the active combat textures. When authoring separate features, use the [eye and mouth masters](animation/expressions/manifest.json) for neutral, closed, hurt, and attack, with the brows, nose and face outline from [base.png](base.png). Each PNG holds one screen-side eye or the mouth at three texels per base pixel. The manifest gives each `rect_px` as `[x, y, width, height]` on the 1152×1728 base canvas, including transparent padding. It binds that canvas and each original painting by SHA-256 and records the affine registration of the alternate expressions.
 
 ## Clips and dispatch
 
@@ -149,4 +151,4 @@ The controller resolves discrete value tracks from the current AnimationPlayer r
 
 The [mechanical rig checks](/tests/rig-checks.md) cover structure, dispatch, defaults, sampled floor clearance and death settlement; the [instance isolation test](/tests/README.md) covers two-character effect ownership. Use the [motion review matrix](/docs/agents/cutout-motion-review.md) for spatial and painted-surface judgments. Native capture, package loading and actual game/multiplayer playback are distinct evidence.
 
-Small painted fold/contour differences remain between death cels. Corrected part ownership intentionally changes some original setup pixels. Consult [iteration notes](animation-iteration-notes.md) only for previous choices, measurements and delivery reports.
+Small painted fold and contour differences remain between death cels. The revised overlap ownership changes the setup pixels along part boundaries.

@@ -72,17 +72,7 @@ The following are **image observations** of the [official-screen snapshot](sts2-
 
 **Project judgment:** adopt the relationship between character and second major form, not the coordinates "hero right, giant hand left." Skull, Osty, and violet flame remain Necrobinder's identity.
 
-## 3. Limits of a Combat Figure in Front of a Workshop
-
-An early selection experiment placed a standing figure holding an upright weapon, with the other arm lowered, before a stone workshop. These **project judgments** describe the problem without requiring the local draft.
-
-1. **Repeated combat pose:** confidence/costume read, but crafting, magical infusion, and improvement did not.
-2. **Unrelated props:** arch, chains, forge, and wall swords signaled a fantasy workshop that could serve another knight or smith without changing meaning.
-3. **Safe space became an empty half-screen:** architecture left and figure right dominated. Original Necrobinder shows meaningful forms continuing behind information.
-4. **Generic architecture was the largest secondary form:** the vertical weapon hugged the figure while the arch occupied the center, failing to connect attention to a distinctive ability.
-5. **Equipment carried all identity:** hat, hair, armor, and broom-glaive remained, but personality and use were absent. Equipment preservation and scene character are separate tasks.
-
-## 4. Sequence for Designing a New Selection Scene
+## 3. Sequence for Designing a New Selection Scene
 
 These are **project proposals**, not new canon or substitute user approval.
 
@@ -112,7 +102,7 @@ This connects existing infusion, Legacy, and Refine themes without inventing com
 - Broad workbench or dark weapon shapes can continue behind information; reduce detail/contrast there and inspect actual text.
 - Check language, aspect ratio, and UI scaling. One screenshot's coordinates are not universal runtime specifications.
 
-## 5. Separate Comparison Questions
+## 4. Comparison Questions
 
 - **Identity:** both shoulders, connected collar, red bob, violet eyes, hat, and weapon construction preserved?
 - **Rendering:** do major values, selective contours, soft curvature, and quiet brushwork support the reading order?

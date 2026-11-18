@@ -7,4 +7,4 @@ The [approved dialogue head](ui-art.md) and its outline are applied to dialogue,
 | Dialogue/history/map icon | Sts2WD/images/ancients/aselige_icon.png | 85 x 85 RGBA, whole-head Fit |
 | Icon outline | Sts2WD/images/ancients/aselige_icon_outline.png | 85 x 85, white 1 px alpha-derived outline |
 
-The 85 px head and outline were copied from the reviewed complete-painting exports; no crop, extraction, repaint or automatic Cover fitting was performed. The original miniature master is optional production history, not a runtime dependency. See [runtime integration](event-api.md) for the native consumers.
+The 85 px icon preserves the entire painted head and both horn tips. See [runtime integration](event-api.md) for the native consumers.

@@ -4,7 +4,7 @@
 
 ## New Production and Delivery Conversion
 
-The game and packaging use the runtime PNGs and can build without generation intermediates. For new images, design the composition from the approved base, [art specification](realta-art.md), and original-game research for the use case. Do not reuse old deliveries or local drafts as generation inputs. The following procedures export new masters; they do not reproduce the exact pixels of unavailable historical masters.
+The tracked runtime PNGs supply the game textures. For new images, use the approved base, the [art specification](realta-art.md), and original-game references for the target scene. Use the procedures below to export new approved masters.
 
 - **Canonical standing figure:** Fit the whole `base.png` to 384×576, including transparent margins, without cropping. The command below reproduces the `combat.png` still; animated resources are listed in [scene connections](animation-assets.md#current-scene-and-property-connections). The user reverted the separate combat pose; do not regenerate or reintroduce a separate runtime standing file without a new request.
 - **Portrait and marker:** Generate each for a square composition. Export the whole portrait to 128×128 and dilate its final alpha by a 2 px radius for a white outline. Fit the whole marker master within 110×110, then place it at `(9,9)` on a 128×128 transparent canvas.

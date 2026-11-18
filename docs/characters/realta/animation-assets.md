@@ -10,7 +10,7 @@ Merchant `relaxed_loop` and its `idle`/`relaxed` aliases place the entire free a
 
 Merchant refinement on 2026-10-19 replaces the native eight-second `relaxed_loop` with independently authored planted-foot IK, a lower fixed shaft grip, free glove by the belt and viewer-left leg support. The same resource serves merchant autoplay/idle and combat relaxed aliases. `author_clips.py` owns the pose; `build_combat_rig.gd` owns live-phase blends to idle/death; the runtime controller suppresses phase randomization when changing loops. Alpha-only cleanup of `combat/parts/weapon-rigid.png` and `foot_l.png` preserves their canvas/offset registration and all RGB. No new paintings or rest/selection edits are part of this refinement. Reproduction and verification scope are documented in [animation-sources.md](animation-sources.md).
 
-As of 2026-10-19, **all four Realta scenes are animated** (combat/merchant cutout rig, seated rest mesh, animated selection painting). Their runtime files, ownership and reproduction live in [animation-sources.md](animation-sources.md); decisions and comparisons are in [the iteration log](animation-iteration-log.md) and [the runtime dispatch research](/docs/research/sts2-cutout-runtime-contract.md). `combat.png` remains the canonical standing still (portrait source, fallback), but no scene references it any more. The repository build/PCK export and packaged-scene rendering were verified; in-game play was not.
+The four Realta scenes use a combat and merchant cutout rig, a seated rest mesh, and an animated selection painting. [Animation sources](animation-sources.md) owns the runtime files, layer ownership, and reproduction. [Runtime dispatch research](/docs/research/sts2-cutout-runtime-contract.md) identifies the native game and BaseLib entry points. The base-derived `combat.png` remains the canonical standing still and portrait source.
 
 The 2026-10-18 standing delivery reverted the separate combat pose and removed the extra `standing.png`. The base-derived `combat.png` retains the youthful appearance, open forehead, both pauldrons, continuous collar, and upright one-handed stance of the approved base. The selection illustration retains the blade-inspection scene. The scene table below and [delivery conversion](shared-conversion.md) explain the current state without local generation masters or historical logs.
 
@@ -33,7 +33,7 @@ The separate runtime combat pose was reverted at the user's request. The former 
 
 The restored 384×576 RGBA image has SHA-256 `0372A0C097D3EF52CF90858889BAB0DAFE068D3B3171027902E6C0A9C1A7AE6B`, matching the former standing file exactly. This is the current character-specific delivery even though the generic Branch B workflow supports separate poses.
 
-Rollback packaging completed through `dev.ps1 publish` with zero C# warnings/errors and successful Godot import/PCK export. Temporary resource observations loaded nine textures and instantiated four scenes. All three character scenes resolved `combat.png`, and `ResourceLoader.exists` returned false for `standing.png`. Subsequent local installations include this rollback; actual gameplay remains unverified.
+See the [deployment record](/docs/deployment-status.md) for local installation scope.
 
 ## Attack Trail (2026-10-20)
 

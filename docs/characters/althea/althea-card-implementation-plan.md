@@ -15,11 +15,11 @@ The native hooks retain their existing order:
 
 Callers use the lifecycle's operations and boolean queries rather than editing its collections. Direct Reform still chooses the token from the original type, preserves upgrade/enchantment/`DeckVersion`, uses native `CardCmd.Transform`, applies the conditional play-node cleanup below, records provenance, and moves the result in that order. A reserved Exhaust destination stays Exhaust; other reserved destinations resolve to Draw as before. Model types, IDs, artwork, localized descriptions, and effect timing are unchanged.
 
-The 2026-10-25 section below records the original `AltheaRules.Reform` location and its native evidence. The current implementation of that operation is `AltheaReformLifecycle.Reform`; the visual workaround and its limited scope remain the same. Existing `dev.ps1 card-tests` checks cover previews rather than executing Reform. Gameplay observations must cross the existing card/power hooks and native transform flow; private collections are not an acceptance interface.
+The section below documents the native transform and play-node lifecycle behind `AltheaReformLifecycle.Reform`. Use the game card and power hooks to exercise that behavior. Run `dev.ps1 card-tests` for the card preview checks.
 
 ## 2026-10-25 Self-Reform Visual Lifecycle — Agent Reference
 
-The reported Warrior Strike failure leaves its original card visible after Siarcun reaches the discard pile. Other cards and turn completion remain usable. The minimal native-scene observation reproduced this with only BaseLib and this mod loaded: the original model was removed from combat, the replacement was Siarcun in Discard, and one visible original `NCard` remained in `NCombatUi.PlayContainer`.
+When Warrior Strike reforms itself into Siarcun, native Transform can leave the original play node visible after moving the replacement into Discard. The card model and the visible node have separate lifecycles.
 
 Native evidence comes from installed `sts2.dll` product version `0.1.0+59260271157f76a2896f0eab5bc6ea1245d8b314` (Steam build `23811903`):
 
@@ -28,13 +28,9 @@ Native evidence comes from installed `sts2.dll` product version `0.1.0+592602711
 - `CardPileCmd.RemoveFromCombat` can remove a visible card through the native lifecycle, but requires the original to belong to a combat pile. Calling it after Transform is invalid; calling it first would invalidate Transform's required source pile.
 - `GodotTreeExtensions.QueueFreeSafely` detaches a pooled `NCard` and returns it through `NodePool.Free`. `NCard.OnFreedToPool` releases model subscriptions and its play tween. A successful removal therefore need not destroy the Godot object: it must leave the scene tree and return to the pool.
 
-`AltheaRules.Reform` fills only this native presentation gap. Capture the original `NCard` before Transform, and only when the source is in Play. After native Transform removes the source from state, return that captured node with `QueueFreeSafely` if it still displays the same source. Do not delay Reform until after play, move the original between piles first, replace native Transform, or add a global transformation patch. Native effect timing, upgrade/enchantment inheritance, transformation hooks, and destination handling remain in their existing flow. Hand and discard transformations do not acquire an original play node through this branch.
+`AltheaReformLifecycle.Reform` captures the original `NCard` only when the source belongs to Play. After Transform has removed the source from state, the lifecycle returns the captured node with `QueueFreeSafely` if the node still displays the same source. The native transform retains its effect timing, upgrade and enchantment inheritance, transformation hooks, and destination handling.
 
-To reconstruct the temporary observation, mount the installed game PCK, BaseLib 3.4.7 PCK, and the mod resources in MegaDot 4.5.1.m.14 with the current mod DLL. Initialize native models and `NCard.InitPool`, use `SaveManager` with `MockGodotFileIo`, and isolate BaseLib's direct config writes inside the observation directory. Supply native UI containers while omitting full game startup and audio service startup. Create a mutable `AltheaWarriorStrike` in a live player's Play pile, place an actual initialized native `card.tscn` node for that model in `PlayContainer`, and call `AltheaRules.Reform` with Discard as its destination. Wait for the native card movement to finish. Assert the original model is removed, Siarcun is in Discard, and the original node is absent from the visible tree. Keep native Transform, pile movement, and node disposal unmodified. Use `dev.ps1 observe -ScriptPath <temporary-script>` for preparation, build, execution, and retained exit records; temporary code belongs outside formal test directories and is not a product acceptance test.
-
-The unchanged baseline reproduced the orphan twice. The same observation after the fix retained the correct replacement and reduced original play nodes from one to zero. An extended temporary observation passed five cases: base/upgraded self-Reform repeated twice each, and Discard-origin Reform with an unrelated visible Play card. It verified native pool return and reuse, compatible `Sharp 3` and upgrade inheritance, the preserved `DeckVersion` link, and the unchanged permanent deck. The unrelated Play card remained visible. Build warnings/errors and runtime errors before the observation verdict were zero. The isolated host still reports native pooled-resource/renderer leaks during shutdown after the verdict; this is not a clean full-game shutdown check.
-
-The existing `dev.ps1 card-tests` command also passed: 55 model states, 36 layout cases, and 18 native preview lifecycle cases, with zero failures. These preview checks do not cover playing or reforming a card. Game startup, saved runs, actual manual card input/attack execution, and network multiplayer are outside the isolated Reform observation. No formal tests, fixtures, or validation settings were added or changed. The fixed source was built and packaged locally; game installation and a manual gameplay confirmation were not performed.
+To check the interaction in the game, play Warrior Strike and let its Reform finish. The replacement Siarcun should be in Discard, and the original card should disappear from the play area. A transformation from another pile leaves any unrelated card in Play visible.
 
 ## 2026-10-25 참조 카드 표시
 
@@ -44,13 +40,11 @@ The existing `dev.ps1 card-tests` command also passed: 55 model states, 36 layou
 
 원작 `NHoverTipCardContainer.LayoutResizeAndReposition`은 미리보기를 세로로 쌓고, `NHoverTipSet.CorrectVerticalOverflow`는 전체를 위로 옮긴다. 2026-10-25 설치본 `sts2.dll` 제품 버전 `0.1.0+59260271157f76a2896f0eab5bc6ea1245d8b314`와 게임 PCK를 확인했다. `res://scenes/ui/card_hover_tip.tscn` 크기는 239×323이며, 간격 4를 포함한 네 장의 높이는 1,304이므로 720·1080 높이의 화면에서 일부가 잘린다. 공통 `CardHoverTipLayout`은 모드 카드가 포함된 미리보기 묶음이 화면 높이를 넘을 때 다음 열로 이어 배치한다. 카드 크기와 간격은 유지하며, 화면에 들어가는 묶음과 기본 게임 카드만 있는 묶음은 기존 배치를 따른다.
 
-`dev.ps1 build`의 기존 참조 검사와 C# 빌드는 통과했다. 임시 관찰에서 실제 모델의 `ExtraHoverTips`와 원작 팩터리를 실행해 기본·강화 상태, 미리보기 대상, 자기 참조 부재를 확인했다(55개 상태, 수정 전 37개 누락 → 수정 후 0개). 지역화된 키워드 텍스트 캐시는 임시 값으로 제공했으므로 문구 렌더링 검증은 아니다. MegaDot 4.5.1.m.14에서 원작 컨테이너와 Harmony 패치를 실행한 배치 관찰은 1280×720·1920×1080·2560×1440, 카드 1·2·4장, 모드·기본 게임 모델, 좌·우 정렬의 36개 조건이다. 카드 크기·겹침·화면 범위와 기본 게임 배치 유지를 확인했고, 수정 전 화면 넘침 4건이 수정 후 0건이 됐다. 이 관찰은 임시 진단이며 정식 테스트나 CI에 추가하지 않았다. 실제 게임 화면·저장 파일·설치 후 동작은 이번 검증 범위에 포함하지 않는다. 검증 중 NuGet 취약성 조회 실패와 엔진의 인증서 저장소 접근 메시지가 있었으며, 최종 빌드와 두 관찰 프로세스는 모두 종료 코드 0이었다.
-
-같은 날 후속 회고에서 사용자가 정식 테스트 추가를 승인했다. 이제 [카드 미리보기 테스트](/tests/card-previews/README.md)가 명시된 기대값으로 55개 모델 상태와 36개 배치 조건을 검사하며, `dev.ps1 card-tests`로 실행한다. 위 임시 관찰은 최초 수정 당시의 진단 기록이다.
+정식 [카드 미리보기 테스트](/tests/card-previews/README.md)는 모델 55개 상태와 배치 36개 조건을 검사한다. `dev.ps1 card-tests`로 실행한다.
 
 MegaDot 등 editor 기능을 가진 환경에서는 원작 `NCard.Reload`가 카드 노드 이름을 바꾼다. 배치 보정은 자식 `NCard`의 실제 모델 타입을 확인하므로 노드 이름 변경에도 적용된다.
 
-같은 날 사용자가 전사의 타격의 미리보기 범위 축소와 원작 카드 초기화 경로의 정식 통합 검사를 요청했다. 전사의 타격의 기본·강화 두 기대값을 시아르쿤 한 장으로 갱신했고, 통합 검사는 원작 `NHoverTipSet.CreateAndShow`가 실제 카드 씬을 생성하고 `NCard.Reload`가 노드 이름을 바꾼 뒤 검사한다. 대상 미정 재편 4종과 전사의 타격 기본·강화를 세 해상도·좌우 정렬에서 확인하는 18개 조건을 기존 로컬 명령에 연결했다. 저장 I/O는 메모리이며 실제 플레이나 스크린샷 화질 검사는 포함하지 않는다.
+통합 검사는 원작 `NHoverTipSet.CreateAndShow`가 생성한 카드 씬을 읽는다. 세 해상도와 좌우 정렬에서 대상 미정 재편 4종과 전사의 타격 기본형·강화형을 확인한다. 이 검사는 위의 `dev.ps1 card-tests`에 포함된다.
 
 ## 2026-10-24 적용
 
@@ -76,7 +70,7 @@ MegaDot 등 editor 기능을 가진 환경에서는 원작 `NCard.Reload`가 카
 
 - 한국어 표시 이름은 알테아, 영문 이름과 내부 식별자는 `Althea`다(캐릭터 모델 ID `STS2WD-ALTHEA`). 시작 덱은 **분노의 타격 1 / 타격 5 / 방어 4**, 시작 유물은 **윌드**다.
 - 승인한 검붉은 에너지 아이콘과 붉은 상단→검푸른 하단 카드 몸체를 연결했다. 기본 희귀도 리본·초상화 테두리와 고대 카드 표현은 유지한다. 전투 하단 에너지 카운터는 기존 캐릭터 임시 표현을 사용한다.
-- 카드 초상화·파워 아이콘·유물 아이콘은 기본 게임 그림을 임시 사용한다. 전용 일러스트가 완성된 상태는 아니다.
+- 기본 타격은 [전용 초상화](cards-assets.md#basic-strike-delivery-2026-11-11)를 쓰며, 전용 그림이 없는 초상화와 파워 아이콘은 기본 게임 리소스를 사용한다. 전용 유물 5종은 [적용된 아이콘](relics-assets.md)을 사용한다.
 - 한국어·영어 카드 설명, 강화 변화, 선택 문구, 키워드와 파워·유물 설명을 추가했다.
 
 ## 2026-10-23 추가·변경
@@ -146,39 +140,11 @@ MegaDot 등 editor 기능을 가진 환경에서는 원작 `NCard.Reload`가 카
 
 시트 행 번호를 저장 ID로 사용하지 않는다. 카드 타입을 전역으로 Curse로 바꾸거나 레아르타의 전용 강화·유산·수호를 알테아 규칙에 섞지 않는다. 기본 힘·민첩·약화·취약·손상·다음 공격 무료는 기존 효과를 사용한다.
 
-## 확인한 동작과 남은 검증
+## 망념의 그릇과 다음 드로우
 
-기존 정식 테스트는 추가·수정하지 않았다. 별도 임시 Godot 실행에서 실제 `CardModel.OnPlayWrapper`, 공격·파워·변형 명령으로 다음을 관찰했다.
+망념의 그릇의 망령은 `CardPileCmd.AddGeneratedCardToCombat`에 `CardPilePosition.Random`으로 전달된다. 원작은 현재 뽑을 더미 안에서 삽입 위치를 정한다. 뽑을 더미가 비어 있을 때 망령을 추가하면 다음 드로우는 해당 망령부터 뽑고, 뽑을 더미가 다시 비어야 버린 더미를 섞는다. `NCardPileScreen.OnPileContentsChanged`가 보여 주는 희귀도·카드 ID 순서는 뽑을 더미 화면의 표시 순서다.
 
-- 77개 모델 생성·강화와 시작 덱 1+5+4.
-- 윌드의 Attack+Curse 동시 판정, 전투 중 보존, 기본 `DarkstonePeriapt`의 저주 획득 반응.
-- 광란 양옆 예약·중복 방지, 에너지 1/2에서 수동 카드와 양옆 광란 모두 실행 후 에너지 0.
-- 재편의 강화·호환 인챈트 계승, 불실의 덱 원본 복원 및 전투 중 강화·비용 제외, 복사본 1회 생성.
-- 약화 3·취약 2는 2종, 적이 부여한 음수 힘은 별도 1종.
-- 망령 직접 소멸 시 1드로우.
-- 다음 공격 효과의 부여 카드 제외·다단 전체 적용·사용 후 소모.
-- 복수의 원혼의 추가 저주 판정과 N+1회, 겐 모르피 클라드의 종류별 반복.
-- 위업의 길·소멸·불실을 함께 적용할 때 토큰 소멸과 복사본 1장.
-
-- 집념의 타격의 저주 보유 조건·윌드 자기 판정, 기존 불실·소멸 제거.
-- 투쟁이 뽑을 더미의 공격만 자동 사용·소멸하고 눈속임이 1장을 뽑음.
-- 무쌍의 검의 약화 1.25배, 저력의 적용별 드로우·디버프 감소 제외, 적 음수 힘 반응, 극복의 턴 종료 방어도.
-- 망념의 그릇 X=3에서 에너지 3 소비·방어도 27·망령 3장 생성.
-- 망념의 그릇은 망령마다 기본 `CardPileCmd.AddGeneratedCardToCombat`에 `CardPilePosition.Random`을 전달한다. 설치 DLL도 같은 구현이었다. 고정 시드 24종에서 기존 카드 12장에 망령 4장이 분산 삽입됐으며 실제 후속 드로우가 그 순서를 따랐다. 다만 이는 빈 더미 조건을 포함하지 않았다. 후속 관찰은 실제 `CombatManager.DoTurnEnd`·`FlushPlayerHand`·`SetupPlayerTurn`을 사용해 시드 3종×뽑을 더미 0/1/6/12장×기존 손 망령 0/2장의 24개 조건을 실행했다. 뽑을 더미 0장·버린 더미 10장에 망령 4장을 추가하면, 다음 턴 시작에 망령 4장을 먼저 뽑은 뒤 버린 더미를 섞는 현상이 재현됐다. 무작위 삽입은 기존 뽑을 더미 안에서만 일어나고 망령을 추가하면 빈 더미가 아니게 되므로, 일반 드로우의 자동 재셔플이 그 뒤로 밀린다. 손에 남은 망령의 휘발성 소멸·추가 드로우도 실제 경로에 포함했다. 생성 전에 버린 더미를 섞도록 바꾸는 것은 추가 재셔플을 발생시키는 동작 변경이어서 사용자 결정 전까지 적용하지 않았다. 별개로 기본 `NCardPileScreen.OnPileContentsChanged`는 뽑을 더미 보기만 희귀도·카드 ID로 정렬하며 이는 실제 드로우 순서가 아니다.
-- 피의 속삭임의 추가 저주 취급 탐색, 모여드는 혼이 방금 생성한 망령도 계산함.
-- 전사의 신념의 자기 재삽입·힘 만료 훅, 혼의 군세의 광란 부여, 군도의 무예가 실제 소비 3에서 1을 환급함.
-- 앞서 재편한 카드도 이성의 의지로 2회 발동하고 턴 종료 시 만료됨.
-- 침식의 저주의 사망 방지·회복 훅에서 HP 70의 30%인 21 회복·힘 6·효과 제거.
-- 쉼없는 광기는 기본 게임의 훅 열거·플레이어 정리·승리 훅 순서에서 회복 누락을 재현한 뒤, 실행 시점 수정 후 9개 조건을 확인했다. 윌드 유무, 중첩 1/2, 최대 HP 제한, 소멸 더미만 남은 경우를 포함하며, 비소멸 저주 3장에서는 HP 30→33으로 회복한다.
-- 파워 25종 분리 후 각 효과의 훅을 임시 실행으로 확인했다. 날랜 걸음은 기본/강화와 뽑을 더미 0~3장의 8개 조건에서 즉시 드로우의 셔플을 반영하며, 바다의 전사는 선택 가능한 카드가 1장일 때 버린 더미에서 손으로 회수한다. 수동 선택 화면은 이 관찰 범위에 포함하지 않는다.
-- 해로운 효과의 종류 집계와 핏빛 바다·겐 모르피 클라드·극복의 반응을 임시 실행으로 확인했다. 저력이 드로우로 변경된 뒤에는 출처 없음·자신·아군·적 4종과 약화·취약·손상·방어도 획득 불가·음수 힘 5종의 20개 조합에서 2드로우·에너지 미지급을 다시 확인했다. 기본/강화 비용 1/0과 동일한 2드로우, 부여 중첩 수와 독립적인 1회 발동, 저력 2장 중첩 시 4드로우, Debuff 감소·자신의 재적용 제외, 손 10장 제한과 드로우 금지도 관찰했다.
-- 최신 추가분은 82개 카드 모델 생성·강화, 변경 피해 5쌍·드로우·자세 수치, 순수한 의지 소멸, 집념의 타격 자기 자신 제외, 무작위 겐의 총 타격 피해, 바다 가르기의 더미 이동에 따른 비용 회복·0 하한, 최후의 일격의 아군 공격 집계·턴 초기화, 영혼 장막의 모든 플레이어 생성·다른 캐릭터의 망령 소멸 드로우, 저주 장악의 소멸 더미 제외·원래 영구 덱 보존·전투 카드 비용 보존, 이전 턴 재편 카드의 환급·공격 중복 집계 방지, 투사의 형상의 성장·소유자별 셔플 초기화를 임시 실행으로 확인했다. 실제 네트워크 멀티플레이·카드 이동 UI 검증은 남아 있다.
-
-`dev.ps1 publish -ExecutionContextLabel escalated`가 종료 코드 0으로 완료됐다. .NET SDK 9.0.318, MegaDot 4.5.1.m.14에서 C# 빌드는 경고·오류 0개였다. 기존 리그 검사 41,864개 샘플과 인스턴스 격리 검사 4개 사례가 모두 PASS였다. 생성된 PCK를 별도 엔진에서 열어 카드 틀 598×844, 에너지 74×74·24×24, 타입 표시 재질과 한·영 카드명 각 77개를 불러왔다. 배포 파일은 `artifacts/mods/Sts2WD/`의 DLL·PDB·JSON·PCK 네 파일이다. 초기 구현의 검증 기준은 `fix/realta-balance-oct21`의 `9afea18`과 당시 작업 변경이었다. 후속 수치 조정은 `feat/althea-cards`에서 시작 HP 80·기본/강화 피해 7쌍·시작 덱 1+5+4를 임시 엔진 실행으로 다시 확인했다. 같은 환경에서 루트 `dev.ps1 doctor`로 경로를 확인한 뒤 `publish`로 재생성할 수 있다.
-
-이 관찰은 사용자가 플레이하며 승인한 제품 테스트를 대신하지 않는다. 실제 캠페인·멀티플레이·모든 카드 조합·최종 UI 가독성은 추가 플레이 확인이 필요하다. 바다의 전사 등 실제 선택 화면, 고대 유물 획득 전체 흐름과 전투 중 사망에서의 부활은 별도 플레이 확인이 남아 있다. 특히 외부 카드의 특수 동적 타격 횟수는 `Damage`/`Repeat` 이외의 독자 규칙을 쓸 수 있어 피해 참조 호환 점검이 남아 있다. Git 업로드와 게임 폴더 설치는 별도 요청 때 수행한다.
-
-2026-10-23 첫 패키징에서는 리그 검사 두 종류가 통과한 뒤 MegaDot의 내보내기 종료 단계에서 `EditorSettings::_EDITOR_GET` 설정 조회 오류로 실패했다. 동일 내보내기 명령을 분리 실행하고 전체 `publish`를 다시 실행했을 때는 설정·카드 코드 변경 없이 모두 종료 코드 0이었다. 재실행으로 패키징은 복구됐지만 오류의 원인이나 영구 해결을 입증한 것은 아니다. 실패와 최종 성공의 실행별 로그는 로컬 진단 자료이며 제품의 빌드 입력은 아니다. 오류 메시지·재실행 조건·종료 결과는 이 문단에 보존했다.
+공유 설치 범위는 [배포 기록](/docs/deployment-status.md)에 있다.
 
 
 ## 작성된 카드 목록

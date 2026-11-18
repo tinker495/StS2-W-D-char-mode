@@ -12,17 +12,16 @@
 |---|---|---|
 | Defect combat | [PNG](https://www.megacrit.com/images/steam_screenshot1_new.png), [press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | Downloaded 2560×1440 Defect vs. blue-creature scene; distinguish previous URL contents |
 | Four-player combat | [PNG](https://www.megacrit.com/images/steam_screenshot2_new.png), [launch post](https://megacrit.com/news/2026-03-05-early-access-launch/) | Downloaded 2560×1440 co-op frame, source for Ironclad/Necrobinder crops |
-| Silent animation | [GIF](https://www.megacrit.com/images/silent_anim.gif), [October 2024 post](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/) | Actual prelaunch animation material, distinct from early concepts in the same article |
+| Silent animation | [GIF](https://www.megacrit.com/images/silent_anim.gif), [October 2024 post](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/) | Published prelaunch combat animation |
 | Necrobinder/Osty combat | [GIF](https://www.megacrit.com/images/osty_poke3.gif), [October 2025 post](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/) | Combat poses/companion movement; historical card values are not current specifications |
 | Necrobinder selection | [PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [launch post](https://megacrit.com/news/2026-03-05-early-access-launch/) | Large illustration with different purpose/detail allowance from sprites |
 | Neow event | [PNG](https://www.megacrit.com/images/steam_screenshot5_new.png), [launch post](https://megacrit.com/news/2026-03-05-early-access-launch/) | Supporting evidence for organic curves and soft values, not combat proportions |
-| Early Silent explorations | [PNG](https://www.megacrit.com/images/the_silent_concepts_cropped.png), [October 2024 post](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/) | Unadopted, more cartoon-like exploration; excluded from final sprite proportions/rendering |
 
 The press kit separates animated reveals and gameplay. Do not assign the same density to reveal films, concepts, selection illustrations, and combat sprites. [Official press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/)
 
 ## 2. Direction Supported by Official Statements
 
-**Official statement:** Casey Yano describes difficulties conveying pose, grip, and expression through the first game's small humanoid sprites. The sequel strengthens clarity, playfulness, liveliness, and rich color while reducing painterliness. Marlowe Dobbe explains that the stronger cartoon direction in early Silent explorations was not adopted. [October 2024 post](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/)
+**Official statement:** Casey Yano describes difficulties conveying pose, grip, and expression through the first game's small humanoid sprites. The sequel strengthens clarity, playfulness, liveliness, and rich color while reducing painterliness. [October 2024 post](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/)
 
 **Project judgment:** this does not prescribe hard cel shading everywhere, exactly three colors per material, or a uniform black outline. Public materials did not establish universal production measurements, head ratios, contour weights, or light angles. Label Realta's numeric choices as project decisions.
 
@@ -80,7 +79,7 @@ These **image observations** concern the [downloaded frame](sts2-style-refs/offi
 
 These are **project judgments** for a costume/weapon absent from the original game, not official rules.
 
-| Part | Recommended treatment | Draft failure to avoid |
+| Part | Recommended treatment | Treatments to avoid |
 |---|---|---|
 | Face | Broad forehead/cheek light, major hat shadow, simple eyes/mouth conveying direction/confidence | Sparkles, multiple lashes, dense iris rings dominating an anime portrait; angular facial shards |
 | Red bob | Silhouette/flow first; a few major locks with limited light planes | Thin lines and spot highlights on every strand |
@@ -106,7 +105,7 @@ This is an art-observation sequence, not new tests or acceptance thresholds.
 
 ## 7. Installed-Build Spine Renders (2026-10-24)
 
-Scope differs from sections 1–6: these are renders of the locally installed game (`release_info.json`: v0.107.1, commit `59260271`), not public press material. They are observations only; the rendered PNGs are not redistributed. Regenerate them in a temporary output directory using the procedure below; no saved local render is required.
+This section describes the five official skeletons in `SlayTheSpire2.pck`, game v0.107.1, commit `59260271` in `release_info.json`. Use the procedure below to inspect their poses directly from the installed package.
 
 **Procedure:** `asset-pipeline.ps1 official-poses` ([pipeline observation tools](/.agents/skills/character-asset-pipeline/observation-tools.md#observation-and-conversion-tools)) loads the game's own `libspine_godot` extension in MegaDot 4.5.1 (OpenGL compatibility renderer), mounts `SlayTheSpire2.pck`, and renders time 0 of `idle_loop` from `res://animations/characters/<c>/<c>_skel_data.tres` and `relaxed_loop` from `res://animations/merchant/<c>/<c>_merchant_skel_data.tres` for Ironclad, Silent, Defect, Necrobinder and Regent. Each frame is rendered on a transparent viewport, converted from the viewport's premultiplied color to straight alpha, then framed to its rendered alpha bounds plus a uniform margin of 5% of the longer side. That framing only trims empty transparent canvas for research use ([ARTS.md 1.3](/ARTS.md#13-composition-principles-for-all-assets) item 4); nothing is repainted, scaled after capture, or removed. Each skeleton includes its own soft ground-shadow attachment, below alpha 128 in every render; `SubjectFit` measures subjects above that alpha so the shadow does not count as height.
 
@@ -133,6 +132,6 @@ Compared with the press-kit crops, these have no other characters overlapping, n
 
 - Public sources do not establish internal brushes, layer structure, texture resolution, rigs, exact color counts, or outline thickness.
 - Official GIFs are development-era combat material, not proof of identical frames in all released versions.
-- The web tool did not directly play GIFs. Record still-form observations separately from animation-timing observations.
+- Still frames support shape and layout observations. Animation timing requires a timed sequence.
 - Combat frames are not alpha-separated sprites; surrounding color can affect perceived edges.
 - Canonical approval and downstream-production approval remain with the user. Research does not replace approval or imply runtime application.

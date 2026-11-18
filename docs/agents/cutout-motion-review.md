@@ -4,6 +4,8 @@ Use this reference during the native-render review stage of [the cutout workflow
 
 ## Review matrix
 
+Check [in-game arm depth](/ARTS.md#51-combat-rest-and-merchant-standing-art) first. Trace each glove back to its anatomical shoulder at setup and wherever the arms cross the torso or each other.
+
 | Question | Inspect | Evidence to record |
 |---|---|---|
 | Does front/back order match physical placement throughout the motion? | Follow the weapon from grip to blade, crossing the face, hat, torso and legs. Follow the whole free arm in relaxed poses. Examine incoming/outgoing blend phases and held/released glove changes, not only isolated clips. | Clip/time and the intended object in front at every crossing; a matched-pose image before/after a layer change. A valid sibling index alone does not establish plausible depth. |

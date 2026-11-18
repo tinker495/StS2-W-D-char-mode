@@ -1,6 +1,6 @@
 # StS2 Card Illustration Density
 
-Agent reference for selecting card-art anchors and reviewing thumbnail density. Observed on 2026-10-28 after the user rejected a Realta card candidate as too detailed and requested a broad native-card comparison.
+Agent reference for selecting card-art anchors and reviewing thumbnail density. The native portrait sample was inspected on 2026-10-28.
 
 ## Source and scope
 
@@ -23,7 +23,7 @@ $referenceDirectory = Join-Path 'artifacts' ('card-reference-survey-' + [guid]::
 & .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 official-cards -CardIds @('ironclad/infernal_blade', 'ironclad/fiend_fire', 'ironclad/perfected_strike') -OutPath $referenceDirectory
 ```
 
-The command mounts the installed pack with Godot's `ProjectSettings.load_resource_pack`, loads the packed PNG paths as `Texture2D`, and saves each complete `get_image()` as PNG with a source manifest and process logs. Use those packed portrait paths: an `AtlasTexture` may still have a compressed atlas image. Inspect the extracts at equal displayed illustration sizes with `compare -CompareMode IndividualFit`. Keep game artwork and comparison sheets in ignored storage. The manifest identifies the current installation; the version and observations above describe the original survey, not every later extraction. A local task's old `drafts/` files are unnecessary for reproduction.
+The command mounts the installed pack with Godot's `ProjectSettings.load_resource_pack`, loads the packed PNG paths as `Texture2D`, and saves each complete `get_image()` as PNG. Use the packed portrait paths to load the individual images. Inspect them at equal displayed illustration sizes with `compare -CompareMode IndividualFit`. Keep temporary extracts and comparison sheets outside Git.
 
 ## Observed visual patterns
 
@@ -44,17 +44,4 @@ These are observations of the listed artwork and project judgments derived from 
 
 Survey a broad set before choosing production inputs. Group candidates by visual problem: actor/target composition, action/result, material, and background hierarchy. Select a small complementary set from the survey and assign each input a role. Passing every surveyed image into one generation call can mix conflicting compositions and obscure the intended reference.
 
-For Realta's rear-view Aeonglass bisection, the closest working set is `whirlwind` (rear-view figure/action hierarchy), `photon_cut` (recognizable separated sections), `grand_finale` (aftermath hierarchy), and `glasswork` (economical transparency). `echoing_slash` supplies an additional actor/target grouping example but uses foreground arms rather than a rear-view body. Preserve Realta's own composition and identity. These sources supply visual principles, not replacement actors, weapons, poses, or palette.
-
 Compare complete native illustration textures with the candidate at `250 × 190`. A whole card fitted into that rectangle makes its artwork much smaller and cannot support a fair density judgment. Examine where secondary edges and highlights attract attention, not only whether the subjects remain identifiable. Retain selective form shading when removing incidental detail; simplifying everything to equal polygon facets can introduce a different mismatch.
-
-## Session retrospective
-
-1. **Review did not drive correction:** the initial notes recognized excess debris and floor detail but treated it as an optional later revision because the small image remained readable. The user had to trigger the correction. The [pipeline's default loop](/.agents/skills/character-asset-pipeline/workflow.md#default-generatereviewcorrect-loop) now connects pixel observations to bounded, in-scope corrections and rechecks preserved features before a final recommendation.
-2. **Equipment depth was underspecified:** intact visible broom/blade ends were treated as sufficient evidence of a continuous weapon, without tracing the shaft through the body overlap and hand. The later request exposed that gap. Anatomical front/back and camera-near/far must be distinguished; local edit prompts now specify occluders and the object's continuous route. The user subsequently limited this turn to pipeline changes, so no revised shaft image was generated or verified.
-3. **Reference selection:** a single `Thrumming Hatchet` close-up was too narrow for a rear-view character confronting a giant target, and a whole-card comparison made the native artwork smaller than the candidate. The broader survey and equal-size portrait comparison address those distinct errors. Broad investigation and the smaller set of actual generation inputs are recorded separately.
-4. **Prompt priorities:** the initial prompt requested glass shards, droplets, chips, paving, ruined architecture, reflected light, and extensive equipment construction while also asking for economy. The concrete additions dominated the general simplification instruction. Compact card recipes now describe the action, visible identity cues, and allocation of detail; images supply construction. Local corrections use a narrow edit recipe instead of restarting the full brief.
-5. **Tool constraints:** a generation request exceeded the tool's five-local-image input limit. The invocation guidance now requires input-role selection within the active limit before calling the tool. A local overlap correction need not consume the full new-generation reference set.
-6. **Tool economy:** repeated broad file reads produced truncated outputs despite an existing bounded-read workflow. Use heading lookup followed by focused ranges and reuse observations of unchanged inputs; no additional always-loaded rule is needed.
-
-The repository already has a pre-commit build/reference check. It does not judge visual hierarchy. No new tests, validators, or automated density thresholds were introduced for this art correction.

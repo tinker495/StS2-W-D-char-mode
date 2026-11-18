@@ -2,10 +2,7 @@
 
 [Asset index](realta-assets.md).
 
-On 2026-10-24 the user approved applying all five relic refresh illustrations. Their 94 px small icons, 94 px outlines and 256 px large icons were copied unchanged to the model-ID filenames under Sts2WD/images/relics/ (15 PNGs). The overview retains the reviewed complete compositions and display sizes.
-
-
-**Applied relic artwork, 2026-10-24:** five approved illustrations are preserved in [approved deliveries](relic-candidates/2026-10-24). The folder mirrors the five existing model filenames in [relic file mapping](#filename-mapping-for-five-realta-relics): 94 x 94 small PNGs, matching white 2 px alpha-derived outlines, and 256 x 256 large PNGs in `big/` (15 assets total). `overview.png` shows the full compositions and 94/48 px readability on light/dark backgrounds. All images were generated separately using the built-in image tool and proportionally Fit-resized without cropping. Small icons fit the entire source canvas into 90 x 90 with 2 px transparent padding on all sides before outline generation, preserving clearance around the sword tip. All 15 delivered PNGs have the intended dimensions and transparent corners. Original-game relic/potion pixels supplied rendering density; the user's five subject references supplied the updated forms. The canine starter correction replaces the initial weapon proposal. The 15 selected PNGs are now copied to the matching runtime paths. Their conversion and transparency checks passed; package and installation verification are in [deployment status](/docs/deployment-status.md).
+The five approved relic illustrations were applied on 2026-10-24 at the [runtime paths below](#filename-mapping-for-five-realta-relics). Large icons fit the whole composition into 256 x 256. Small icons fit it into 90 x 90, centered in a 94 x 94 transparent canvas to give the white 2 px alpha-derived outline room around the silhouette. The user's references define the five subjects, including the canine starter icon. Original-game relic and potion artwork guides rendering density. See [deployment status](/docs/deployment-status.md) for local installation scope.
 
 ## Relic Icons (`RelicModel`, `CustomRelicModel`, `Sts2WDRelic`)
 

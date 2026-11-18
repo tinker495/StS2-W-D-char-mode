@@ -2,7 +2,7 @@
 
 ## Basic Strike Delivery (2026-11-11)
 
-The basic Strike portrait is [Sts2WD/images/card_portraits/althea/althea_strike.png](/Sts2WD/images/card_portraits/althea/althea_strike.png), an exact 1000 x 760 fully opaque PNG (`25:19`). Input roles and the production brief are in [the card art specification](cards-art.md#basic-strike-candidate-2026-10-25). `AltheaStrike` resolves `CustomPortraitPath` and `PortraitPath` to this runtime texture through the inherited `Sts2WDCard` portrait resolver, and `AltheaCardAppearance.ApplyPortrait` bypasses the temporary palette shader for mod-provided portraits.
+The basic Strike portrait is [Sts2WD/images/card_portraits/althea/althea_strike.png](/Sts2WD/images/card_portraits/althea/althea_strike.png), an exact 1000 x 760 fully opaque PNG (`25:19`). Input roles and the composition are in [the card art specification](cards-art.md#basic-strike-portrait). `AltheaStrike` resolves `CustomPortraitPath` and `PortraitPath` to this runtime texture through the inherited `Sts2WDCard` portrait resolver, and `AltheaCardAppearance.ApplyPortrait` bypasses the temporary palette shader for mod-provided portraits.
 
 ## Temporary Portrait Palettes
 
@@ -14,10 +14,10 @@ Native `NCard.Reload` assigns blur for undiscovered cards; the portrait treatmen
 
 The custom-portrait exclusion normalizes backslashes to forward slashes before comparing against `MainFile.ResPath`. On Windows, the shared portrait resolver can return a mixed-separator path such as `res://Sts2WD\images\card_portraits\althea\althea_strike.png`; the exclusion must still recognize the approved mod portrait and retain its original colors.
 
-A 840×520 comparison was rendered using complete native Ironclad Strike and Defend portraits at their actual 250×190 size, arranged as two rows and three rarity columns. The comparison checks the same shader/materials used at runtime; it is not a live card-node or gameplay check. Runtime source wiring and packaging are updated, but this portrait palette change has not been installed into the game folder. Earlier card/energy assets were installed on 2026-10-23.
+The palette wiring above describes the repository resources. See the [deployment record](/docs/deployment-status.md) for installed release scope.
 
 ## Wraith Token Portrait
 
 `AltheaCard.Art` selects the native `Soul` model for `AltheaWraith`; all other placeholder source selections remain as above. `AltheaCardAppearance.ApplyPortrait` selects `portrait_wraith.tres` before applying generic rarity palettes. This material shares `portrait_palette.gdshader` and maps luminance to shadow RGB `(0.025, 0.004, 0.012)`, middle `(0.48, 0.025, 0.065)`, and light `(0.98, 0.35, 0.32)`, with shadow hold `0.02` and middle point `0.55`. Native undiscovered-card blur and pooled-node reset are preserved.
 
-The native source is `res://images/atlases/card_atlas.sprites/token/soul.tres` in the installed Slay the Spire 2 PCK, observed at 250×190. Runtime references the original resource and applies the shader; no extracted native image is shipped. A 560×245 side-by-side preview rendered both complete portraits at 250×190 confirmed preserved composition with dark burgundy background and readable red spirit/hand silhouettes. The source and preview are optional local observations. `dev.ps1 publish -ExecutionContextLabel escalated` completed with exit code 0 and both existing rig checks passing. A separate engine loaded all four portrait materials, including Wraith, from the published PCK; a temporary native-model observation confirmed Wraith's `PortraitPath` points to Soul. Local game installation and live card-node visual review remain unperformed.
+The native source is `res://images/atlases/card_atlas.sprites/token/soul.tres` in the Slay the Spire 2 PCK. The game displays the original 250×190 composition with the model's recolor material.

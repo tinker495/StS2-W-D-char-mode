@@ -10,4 +10,4 @@ Keep the information area in connected dark teal/navy values. Avoid bright gold 
 
 The [native selection references](/docs/research/sts2-style-refs/character-select/README.md) guide linked gesture, major shapes and contrast. Exclude their character identities and gray observation backing. Preserve the complete painting with Fit conversion; no crop or Cover fitting.
 
-[Asset status](selection-assets.md) records the applied background and native-UI readability review.
+[Asset status](selection-assets.md) maps the applied background to its scene.

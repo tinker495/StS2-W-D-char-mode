@@ -9,7 +9,7 @@ Read the [five-character normal/locked study](/docs/research/sts2-character-sele
 - **Costume:** continuous ivory collar and partial paired pauldrons below. Preserve their construction without forcing off-camera chest, belt, pouch, weapon, and hands into the portrait.
 - **Values/background:** separate light skin, red-brown hair, and blue hat/collar. Use simple blue backing; no scenery, magic particles, or excessive vignette. Selection border, mask, and hover treatment belong to UI.
 - **Normal/locked:** generate one transparent face master, resize it whole, and share final alpha. Composite colored figure on blue and black figure on gray; both outputs have alpha 255. No eye glow, face values, lock glyphs, or confusion with deselection tint.
-- **Records:** state output dimensions, full-image use, colors, and decision rationale in the [UI asset guide](ui-assets.md). Prompts/comparisons are optional local records. Regenerate composition changes; follow [Recipe 4-A/B](/.agents/skills/character-asset-pipeline/ui.md#4-a-char_selectpng-132--195-opaque-tile).
+- **Records:** state the applied dimensions, full-image use, colors, and decision rationale in the [UI asset guide](ui-assets.md). Regenerate composition changes using [Recipe 4-A/B](/.agents/skills/character-asset-pipeline/ui.md#4-a-char_selectpng-132--195-opaque-tile).
 
 The current tile was generated from base identity and actual Defect/Silent face occupancy references, then whole-image Fit resized with partial hat, face, and lower collar. It was not extracted from standing art.
 

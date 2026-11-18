@@ -1,6 +1,6 @@
 # Mercurius UI and Standing Art
 
-The approved [base](base.png) owns identity, palette and equipment. The user selected tile B and calmer eyes; the current tile also fills the shoulders beneath the scarf. [Asset status](ui-assets.md) owns files and runtime mappings.
+The approved [base](base.png) owns identity, palette and equipment. The user selected a low-angle tile with relaxed eyes and shoulders extending below the scarf. [Asset status](ui-assets.md) owns files and runtime mappings.
 
 | Asset | Current direction |
 |---|---|
@@ -8,7 +8,7 @@ The approved [base](base.png) owns identity, palette and equipment. The user sel
 | Outline | White 2 px expansion of the final 128 px portrait alpha. |
 | Map marker | Chibi head and hat only; no scarf, neck, shoulders or pin border. |
 | Energy | Ochre-gold circular rim, deep teal inset and small leaf-like outer notch; quiet number area. Both sizes share one master. |
-| Selection tile B | Non-chibi close view, slightly low camera, left-facing three-quarter, raised chin, small smile and calm eyes. Navy shoulders and restrained ivory chest connect beneath the mustard scarf to the bottom edge. |
+| Selection tile | Non-chibi close view, slightly low camera, left-facing three-quarter, raised chin, small smile and calm eyes. Navy shoulders and restrained ivory chest connect beneath the mustard scarf to the bottom edge. |
 | Locked tile | Same resized alpha as the normal tile; black figure on gray, no independent generation. |
 | Standing | Whole approved base resized proportionally for shared combat/rest/merchant use. |
 

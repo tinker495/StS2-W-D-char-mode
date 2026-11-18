@@ -3,7 +3,7 @@
 - Research date: 2026-10-18 (Asia/Seoul).
 - Local base game: **v0.107.1 / commit 59260271**; not proof of identical assets in every version.
 - Purpose: compose Realta's `char_select.png` around the face and distinguish deselected from locked states.
-- Scope: five normal PNGs, five locked PNGs, and tiles in an official selection screen. Section 4 explains lessons from a waist-up composition without requiring its draft.
+- Scope: five normal PNGs, five locked PNGs, and tiles in an official selection screen.
 - Sources: [ten originals, resource paths, hashes](sts2-style-refs/character-select-tiles/README.md), [press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/), [Steam](https://store.steampowered.com/app/2868840/Slay_the_Spire_2/).
 
 ## 1. Source Images versus Actual Buttons
@@ -42,24 +42,11 @@ These are **manual approximate boxes on 132×195 originals**, not official masks
 
 **Image observation:** eye/mark locations vary. Originals do not establish universal "eyes at 45%" or "face exactly 70% tall" rules. Large face occupancy and uniform coordinates are different claims.
 
-**Project proposal:** generate a new face-close selection master directly using original camera distance, occupancy, and eye positioning, while preserving canonical age/anatomy. A draft with face height around half the tile or greater is a Realta starting point, not an official value or acceptance criterion. Design partial off-frame headwear at generation time instead of extracting/enlarging a region from full-body or waist-up art.
+**Project guidance:** Compose face-close selection masters at the target camera distance while preserving canonical age and proportions. Design partial off-frame headwear as part of the composition. [Realta selection art](/docs/characters/realta/selection-art.md)
 
 ## 4. Limits of Fitting the Whole Hat and Waist Equipment
 
-The initial tile design included waist-up body, complete hat top with margin, both pauldrons, breastplate, belt, and pouch. Those requirements reduce face occupancy in a narrow panel. The following reasoning needs no historical draft or prompt log.
-
-**Display-size implication:** a face occupying 17% of source height becomes roughly 33px in a 195px-tall tile. Higher source resolution does not change that ratio. A closer camera, rather than simultaneous hat/waist coverage, lets eyes, nose, and mouth read. This illustrates framing, not an acceptance threshold.
-
-**Project judgment:** excessive equipment/full-body information is the primary problem. Enlarging only eyes under waist-up/full-hat constraints risks chibi anatomy. Generate for the original face-close camera, following canonical proportions/age. Realta retains a youthful non-SD appearance.
-
-Remove these composition requirements:
-
-- Complete hat tip and brim.
-- Both pauldrons and full breastplate as an equipment catalog.
-- Waist, belt, pouch, and both arms.
-- The same camera distance as the full-body base.
-
-Equipment still exists outside the frame. Visible collar/shoulder portions must match canon.
+The 132×195 originals reserve most of the tile for the face, mask, and neck. A closer camera gives the eyes, nose, and mouth more space without changing facial proportions. Keep visible collar and shoulder details consistent with the approved character design. Let the hat tip and waist equipment extend outside the frame as needed.
 
 ## 5. Locked Originals Use Black Silhouettes
 
@@ -74,12 +61,3 @@ Equipment still exists outside the frame. Visible collar/shoulder portions must 
 **Image observation:** some normal sources have thin colored edge lines, while the selected tile in the finished screen has a gold frame/state effects. Source edges and UI frames/masks are distinct. [Official screen](https://www.megacrit.com/images/steam_screenshot3_new.png)
 
 **Project proposal:** keep gold borders, button frames, rounded corners, lock icons, letters, and numbers out of Realta's transparent master. Prioritize expression and head silhouette, then inspect how the runtime mask/frame affects eyes/ears. Off-frame headwear in originals guides the generation camera; it does not justify later cropping. Research screenshot crops and new-asset production remain distinct.
-
-## 7. Follow-Up Comparison
-
-1. Generate a new tile using original camera/face references and compare at the same display size.
-2. Check that hat boundaries support the canonical youthful face, red hair, and violet eyes. Do not shrink the face for whole-hat coverage or compensate with cropping/enlargement/Cover.
-3. Confirm normal/locked outputs derive from the same full-image Fit alpha; do not generate the locked figure separately.
-4. Inspect actual button masks/frames separately; reviewing PNGs does not establish runtime behavior.
-
-This research viewed original files, measured dimensions, and recorded approximate coordinates. It did not run the game or verify the new Realta button at runtime, and did not add/change automated tests or acceptance thresholds.

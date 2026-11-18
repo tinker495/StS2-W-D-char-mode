@@ -1,6 +1,6 @@
 # Althea Art Direction
 
-The user selected [base.png](base.png) as the draft visual base on 2026-10-24. It owns current appearance and equipment for further work; this is draft adoption, not final design lock. The approved runtime uses are routed through [asset status](althea-assets.md). Do not infer body, costume or equipment from the energy symbol's shape or color. [althea.md](althea.md) owns the domain draft, and [althea-history.md](althea-history.md) records prior decisions.
+The user selected [base.png](base.png) on 2026-10-24 as the current visual and equipment reference. [Asset status](althea-assets.md) lists its approved runtime uses. [Althea's design](althea.md) owns the domain decisions, and [art history](althea-history.md) records the decisions behind the applied assets.
 
 Labels *user-confirmed*, *reference-observed* and *provisional* follow [the source-label guidance](/.agents/skills/character-asset-pipeline/references.md#source-labels-and-character-orientation).
 
@@ -18,4 +18,4 @@ Labels *user-confirmed*, *reference-observed* and *provisional* follow [the sour
 
 Open only the requested topic, plus appearance/rendering when relevant. [ARTS.md](/ARTS.md) owns shared rendering and composition; [character-asset-pipeline](/.agents/skills/character-asset-pipeline/SKILL.md) routes production and review. Topics not yet specified follow the shared route and a new asset brief rather than borrowing an unrelated Althea symbol.
 
-Input roles: base owns identity/rendering for every new image. Official topbar/map screenshots guide small-size readability; native Silent/Defect tiles guide the revised tile; Silent/Regent selection art guides the revised background, with the complete Necrobinder screen informing approximate UI placement. No prior mod asset or rejected candidate was a generation input. Rejected combat candidates are excluded by the user's standing override.
+Use the base for identity and rendering. Official topbar and map references guide small-size readability. Native Silent and Defect tiles guide the selection tile, and Silent and Regent selection illustrations guide the background. Use the native Necrobinder selection screen to place the information areas.

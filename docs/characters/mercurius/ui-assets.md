@@ -1,6 +1,6 @@
 # 메르쿠리우스 UI·전신 적용 상태
 
-B 타일·차분한 눈매를 적용했고, 선택 타일은 목도리 아래 어깨·상체까지 이어지도록 보완했다. [외형 명세](ui-art.md), [선택 배경](selection-assets.md), [배포·검증 기록](/docs/deployment-status.md)을 따른다.
+선택 타일은 아래에서 얼굴을 올려다보는 구도다. 차분한 눈매와 목도리 아래로 이어지는 어깨와 상체를 담았다. [외형 명세](ui-art.md), [선택 배경](selection-assets.md), [배포 기록](/docs/deployment-status.md)을 따른다.
 
 ## 파일과 연결
 
@@ -34,5 +34,3 @@ PNG 경로는 `Sts2WD/images/charui/mercurius/`다.
 전투·상점 전신은 0.625배(240 × 360), 중심 (0, -152)로 발끝을 원점에 맞춘다. 휴식은 `ControlRoot/Visuals`에서 0.85배다. 히트박스와 각 기준점은 해당 장면이 정의한다.
 
 StS2 `0.1.0+59260271`, BaseLib `3.4.7+255b1531`에서 `CustomCharacterModel.RegisterSceneConversions()`가 전투·휴식·상점을 `NCreatureVisuals`·`NRestSiteCharacter`·`NMerchantCharacter`로 연결함을 확인했다. 전투는 `NCreatureVisuals._Ready()`의 필수 `Visuals`·`Bounds`·`IntentPos`·`CenterPos` 계약을 따른다.
-
-실제 크기 비교와 [선택 UI 합성 검토](selection-assets.md#ui-검토)를 완료했다. 실제 게임 입력·바닥 배치·히트박스·멀티플레이는 미검증이다.

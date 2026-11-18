@@ -1,5 +1,15 @@
 # 개발 검사와 조사 명령
 
+## PNG 투명도 검사
+
+Git이 추적하는 모든 PNG에서 8비트 알파가 0~8인 픽셀은 RGBA 네 채널을 모두 0으로 저장한다. 알파 9~255의 픽셀은 색과 투명도를 보존한다. 16비트 PNG에는 같은 비율인 0~2056을 적용한다.
+
+`dev.ps1 verify`, `build`, `check`, 커밋 훅과 GitHub CI에서 같은 기준을 검사한다. 새 PNG는 Git에 추가하기 전에도 `python scripts/check_png_alpha.py <파일>`로 확인할 수 있다. 파일 인수를 생략하면 저장소 전체를 검사한다. Python에 Pillow와 NumPy가 필요하며, 투명도를 가진 16비트 PNG에는 OpenCV도 필요하다.
+
+정리할 파일과 픽셀 수는 `python scripts/normalize_png_alpha.py`로 미리 본다. 파일 경로를 지정하면 해당 PNG만 대상으로 삼는다. C2PA 매니페스트가 있는 변경 대상은 따로 표시한다. 픽셀을 바꾸면 기존 서명의 대상 데이터도 달라진다.
+
+`python scripts/normalize_png_alpha.py --apply <파일>`은 임시 파일을 다시 읽어 각 프레임의 저알파 픽셀과 기준보다 높은 픽셀의 RGBA를 원본에서 계산한 기대값과 대조한다. 확인을 마친 파일부터 교체하며, 파일 인수를 생략하면 Git 추적 PNG 전체에 적용한다.
+
 ## 패키징 출력과 로그
 
 `dev.ps1 publish`와 `deploy`는 각 명령의 종료 결과와 전체 로그 경로를 표시한다. 표준 출력·오류 전체와 단계별 JSON 기록은 실행마다 생성하는 `artifacts/runtime/packaging-...` 폴더에 보존한다. 화면에는 진단 메시지를 최대 5줄, 실패 시 마지막 로그를 최대 8줄 표시하며 한 줄은 최대 400자로 줄인다. 종료 코드가 0이어도 인증서 저장소 접근 오류 같은 엔진 진단은 표시한다. 이는 출력 요약이며 기존 성공·실패 판정은 유지한다.
@@ -73,7 +83,7 @@ Invoke-RecordedCommand -Executable $Context.DotNet -Arguments @('--version') `
 
 기본 출력은 새 `artifacts/observation-<고유 ID>/` 폴더다. `-OutputDirectory`로 다른 새 폴더를 지정할 수 있으며, 기존 폴더는 덮어쓰지 않는다. 프로세스 로그와 `observation.json`에 전체 출력·실행 인수·프로세스 종료 코드가, `run.json`에 입력 스크립트 경로·SHA256·SDK 경로·실행 상태·오류 위치가 남는다. 외부 명령의 단계별 로그와 JSON도 같은 폴더에 저장된다.
 
-임시 관찰의 성공은 정식 테스트 통과나 사용자 승인으로 간주하지 않는다. 공유 문서에는 재현 조건과 확인한 결과를 기록하며, 이 로컬 실행 폴더를 필수 입력으로 삼지 않는다.
+임시 관찰 결과는 작업 보고에 남긴다. 공유 문서에는 현재 적용된 동작과 재현 절차를 기록한다. [공유 문서 작성 규칙](/AGENTS.md#shared-documentation)
 
 ## PR 자료 보관
 

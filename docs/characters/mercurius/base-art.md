@@ -1,6 +1,6 @@
 # Mercurius Canonical Standing Master
 
-[base.png](base.png) is the approved identity and rendering anchor. The user selected color-tone version v7 on 2026-10-31, then explicitly authorized transparent-margin trimming and proportional conversion to 1024 × 1536. Preserve the current complete painting rather than restoring an earlier candidate.
+[base.png](base.png) is the approved identity and rendering anchor. The user approved the current colors on 2026-10-31, then authorized trimming transparent margins and proportional conversion to 1024 × 1536. Preserve the complete painting.
 
 ## Identity and equipment
 
@@ -24,7 +24,7 @@ Ordinary standing/combat exports use the complete base with proportional Fit. Th
 
 ## Reference roles
 
-[refs/ref1.jpg](refs/ref1.jpg) supplies bard identity and flute construction; exclude its gray backdrop, floating crossed legs and dense embroidery. Current base pixels take precedence. Earlier attachments, candidates and sharpening studies are not required inputs.
+[refs/ref1.jpg](refs/ref1.jpg) supplies bard identity and flute construction. Use [base.png](base.png) for the applied standing pose, palette, and level of costume detail.
 
 Native Silent poses guide connected cloth, grounding and silhouette separation; Silent/Ironclad colors guide warm-light/cool-shadow balance. Exclude their identities, weapons and costume palettes. Observations used installed StS2 `59260271`, `idle_loop`/`relaxed_loop` at time 0, rendered with MegaDot `4.5.1.m.14`; reproduce native references with `asset-pipeline.ps1 official-poses`.
 

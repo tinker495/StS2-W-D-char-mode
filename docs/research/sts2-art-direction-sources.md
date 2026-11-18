@@ -1,9 +1,5 @@
 # Slay the Spire 2 Art Direction: Official Sources
 
-> Rechecked on 2026-10-18: the V1 URL `steam_screenshot1_new.png` now returns a 2560×1440 Defect combat image, not the Ironclad image described in the earlier observation. Do not use V1 as evidence for the current file. Prefer the [combat-style reinspection](sts2-combat-style-study.md) and [downloaded image/frame index](sts2-style-refs/README.md). "Less painterly" does not mean removing all texture or using exactly three flat colors.
-
-> The V3 URL `steam_screenshot4_new.png` also returned a Silent merchant screen rather than a map in this download. For maps, prefer the `map_qol.jpg` observation in the [future-asset study](sts2-future-asset-reference-study.md). For large selection illustrations, also read the [five-character composition study](sts2-character-select-composition-study.md).
-
 - Research date: 2026-10-18 (Asia/Seoul).
 - Purpose: separate the original game's visual language from this mod's production decisions in root `ARTS.md`.
 - Scope: Mega Crit development posts, official press kit, distributed screenshots/card images, and the official Steam product page.
@@ -54,18 +50,13 @@ The brief direct quotation below supplements those original category names:
 
 ## 4. Direct Observations of Game Screens
 
-These are **visual observations** of specific images opened with the web tool, not universal rendering rules. The V1/V3 observations below are historical; their URLs no longer return the described images, as noted above.
+These observations are based on the specific game screens cited below. Additional comparison material is indexed in the [combat style study](sts2-combat-style-study.md), [selection composition study](sts2-character-select-composition-study.md), and [downstream asset study](sts2-future-asset-reference-study.md).
 
 ### V1. Combat: Different Density for Character, Background, Hand, and Relics
 
-Historical source URL: [official combat PNG](https://www.megacrit.com/images/steam_screenshot1_new.png).
-
-- Red cape/trousers and a light Ironclad mask separated from green/teal stone. Local colors contrasted with the environment without uniform black contours.
-- Direction and value separated arm/sword and torso/cape; weapon length and body lean established action.
-- Background depth/ornament coexisted with larger value masses near the figure. Environmental depth and character simplification differed.
+- Defect's gold armor and broad blue cloth forms stay readable against the arena and the opponent. The figure uses larger value masses than the surrounding scenery. [Official combat snapshot](sts2-style-refs/official-combat.png), [Defect crop and production observations](sts2-combat-style-study.md#3-observations-of-the-downloaded-combat-frame)
 - The hand fanned across the bottom. Art occupied small upper windows; cost, title, and description occupied separate UI.
-- Top-bar relics read as individual objects with less information than character faces, fingers, or folds.
-- Health, intent, and status sat near the figure. Painting them into character art would duplicate information.
+- Top-bar relics and status UI use compact symbols and distinct value groups at the display size. [Relics and status observations](sts2-future-asset-reference-study.md#2-relic-and-status-information-density)
 
 **Project recommendation:** center standing art on character form, card art on one action, and relics on one object. Check weapon/hat/hem overlap with status UI after integration.
 
@@ -83,12 +74,7 @@ Source: [official Necrobinder selection PNG](https://www.megacrit.com/images/ste
 
 ### V3. Map: Textured Parchment and Simple Symbols
 
-Historical source URL: [official map PNG](https://www.megacrit.com/images/steam_screenshot4_new.png).
-
-- Light ochre parchment, rough borders, and faint patterns contrasted with simple clear icons/routes.
-- Green, red, and blue rooms also differed in shape, avoiding color-only identification.
-- Dotted paths and stamped route marks suggested hand drawing without photoreal leather/paper throughout.
-- Dark purple surroundings and separate top/side panels did not justify applying parchment texture to characters.
+The official map reference places simple room symbols and dotted paths on textured parchment. Room symbols differ in both color and shape. [Map reference snapshot](sts2-style-refs/future-assets/ui-map-qol.jpg)
 
 **Project recommendation:** use one or two marker identifiers such as hat-tip shape or hair color, rather than full-body facial detail and dozens of fur marks.
 
@@ -157,20 +143,15 @@ These are **project recommendations**, not an official production manual.
 ## 7. Avoiding First-Game, Sequel, and Development-Image Confusion
 
 - **Official statement:** S1 is the direct comparison. A relative reduction in painterliness does not mean no brushwork. [S1](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/)
-- **Official statement:** some early Silent concepts explored a more cartoon-like direction, not a final norm. [Early concepts](https://www.megacrit.com/images/the_silent_concepts_cropped.png)
-- **Visual observation:** those concepts explore elongated skulls, simple bright-green cloaks, and exaggerated eyes. Do not treat their exploratory range as final in-game proportions. [Image](https://www.megacrit.com/images/the_silent_concepts_cropped.png)
 - **Official statement:** the press kit distinguishes animated reveal, gameplay, and Early Access trailers. Reveal-film staging is not a combat-sprite specification. [S6](https://www.megacrit.com/press-kits/slay-the-spire-2/)
 - **Official statement:** news includes Community Roundup/Community Corner fan art. Hosting on the official site does not make an image an official game asset. [S3](https://www.megacrit.com/news/2025-7-16-neowsletter-issue-12/)
 
 ## 8. Research Limits and Follow-Up
 
 1. Public primary sources did not establish universal head ratios, exact HEX palettes, line weights, light angles, shading counts, or rig/layer specifications. Any such ARTS.md values are **project starting points**.
-2. The web tool could not play GIFs for Silent, Flail Knight, or some VFX. Animation scope/liveliness was cited from developer prose; this pass did not observe playback or inter-frame motion.
-3. Official YouTube gameplay links were found but not played/frame-analyzed. Detailed color/edge/composition observations rely on successfully viewed PNG/JPG files.
-4. `screenshot2_new.png` failed to fetch in this initial pass and was not used for its detailed observations.
-5. Color analysis was qualitative, without sampling or color-space validation; do not present project HEX values as official colors.
-6. Images were public development/launch materials, not a full audit of installed card/relic originals or every latest-patch screen. Steam describes Early Access and planned changes. [S7](https://store.steampowered.com/app/2868840/Slay_the_Spire_2/)
-7. This pass was document research. It did not run the game, verify in-game readability, execute automated tests, or change tests/acceptance criteria.
+2. Developer statements support the animation direction. The still images support color, edges, and composition.
+3. Color observations are qualitative. Project HEX values are design choices.
+4. The cited materials describe the particular scenes and versions identified in each source.
 
 ## 9. Reusable Source-Review Procedure
 

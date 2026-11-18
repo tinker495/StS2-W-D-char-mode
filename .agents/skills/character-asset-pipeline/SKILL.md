@@ -26,7 +26,7 @@ Resolve `<char>` through [character naming and layout](/docs/conventions/charact
 
 - `docs/characters/<char>/<char>-art.md` routes the requested asset's brief, reference roles and visible identity, palette and equipment. If it is a topic index, open only the matching specification. Read character identity only when the character, body parts or canonical equipment appear; a standalone card-specific object needs its object/theme brief.
 - `<char>-assets.md` routes filenames, dimensions, runtime mappings and current status. If it is an index, follow the matching delivery page and only the needed inventory; open API references when integration work requires them.
-- `<char>.md` and [GLOSSARY.md](/GLOSSARY.md) own card/relic/power effects and themes; read the relevant definitions. `<char>-history.md` is needed only for past decisions or rejected versions.
+- `<char>.md` and [GLOSSARY.md](/GLOSSARY.md) own card, relic, and power effects and themes. Read the relevant definitions. Use `<char>-history.md` for the rationale behind adopted art decisions.
 - [ARTS.md](/ARTS.md) owns rendering and composition. The route names the applicable sections and official pixels. Preserve common chibi scope: portrait/outline/map marker use chibi; selection tiles, standing art, cards and selection scenes keep canonical proportions.
 
 For a missing guide or base, follow [Owners Without Art Guides](/docs/conventions/documentation/character-guides.md#owners-without-art-guides). Keep character-specific content in its topic pages. Drafts, prompts and observation sheets may remain in ignored `drafts/`; approved bases, runtime assets and necessary specifications must stand on their own.

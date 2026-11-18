@@ -22,7 +22,7 @@ Raw `refs/` may differ in costume, rendering, and camera. Resolve conflicts into
 | This document | Shared rendering, information density, materials, asset compositions, and UI safe zones |
 | `<char>-art.md` in the [character directory](docs/characters/) | Short index to the relevant appearance, palette, equipment, reference roles, constraints and prompt specifications in same-folder `<topic>-*.md` documents |
 | `<char>-assets.md` in the same directory | Short index to topic delivery paths, dimensions and status; separate API references and inventories when needed |
-| `<char>-history.md` in the same directory | Past exploration, choices, rejections, deliveries, and observations |
+| `<char>-history.md` in the same directory | Rationale for adopted art decisions |
 | `base.png` and `refs/` in the same directory | Approved visual canon and raw references |
 | Optional `drafts/` in the same directory | Git-ignored drafts, prompts, comparisons, and other local records; never required to understand shared documents |
 | [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) | Production branches, records, previews, conversion, promotion, and packaging |
@@ -137,6 +137,8 @@ These are production starting points, checked against actual UI/frames and chara
 
 ### 5.1 Combat, Rest, and Merchant Standing Art
 
+Establish arm depth first when painting or layering an in-game player character. In the standard three-quarter game view, the character's anatomical right arm is closest to the camera and the anatomical left arm and hand are farthest. Where the silhouettes overlap, draw the left shoulder, sleeve, forearm and glove behind the body, and the right arm in front of the body and left arm. Follow each arm from its shoulder when the hands cross on screen. Pose the near arm clear of a face that needs to read. A gripping finger can cover the shaft at its contact point.
+
 Branch B first inspects the approved base's actual pose. Use the complete `base.png` with proportional Fit conversion for ordinary standing. If it already depicts a suitable combat-ready stance, reuse that export for combat by default. Generate a separate combat pose only when the base is a noncombat/everyday pose or the user requests a distinct combat pose; use the base and original-game combat references for weapon readiness, grounding, weight and credible hand contacts. Preserve canonical identity and rendering. Character guides own filenames, dimensions and shared or separate scene mappings.
 
 Include the entire character and tool, planning roughly 3–5% transparent margins at the extremities. Distinguish combat-forward from camera-facing. Preserve facial anatomy, apparent age, and identifying features while deriving rotation from original-game references for the requested use case. Facial identity does not require a frontal head or two fully visible eyes. Orientation prompt fields are defined in [Recipe 1](.agents/skills/character-asset-pipeline/references.md#source-labels-and-character-orientation). Character-specific face, pose, and direction belong in the target specification.
@@ -228,8 +230,10 @@ Compare the original, previous candidate, and new candidate at the same display 
 
 ## 8. Production Records and Verification
 
-Shared documents must explain production criteria without drafts, prompts, or comparison images. State current appearance and constraints in the art specification, dimensions/conversion/status in the asset guide, and decision rationale in history. Do not substitute version IDs or "same as the previous image." Share the base, runtime assets, and necessary specifications; optionally keep drafts and logs in Git-ignored `drafts/`. Tracking every intermediate is unnecessary.
+All tracked PNGs use transparent black for pixels with alpha at or below `8/255` (inclusive). Set all four RGBA channels to zero in that range and preserve every channel above it. Apply this after the final resize or filter, including to outlines and effect sprites. The local verification command checks stored pixels. See [development tools](/docs/development-tools.md#png-투명도-검사).
 
-Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards preserve whole paintings; choose shared-scale preservation, individual-Fit, or equal-subject-height style comparisons through the [pipeline observation tools](.agents/skills/character-asset-pipeline/observation-tools.md#observation-and-conversion-tools). Boards may remain local observations. State their conclusions and visual reasons directly in shared documents.
+State current appearance and constraints in the art specification, applied assets and runtime mappings in the asset guide, and the rationale for adopted choices in history. Follow the [shared documentation rules](/AGENTS.md#shared-documentation) for evidence used in tracked Markdown.
+
+Inspect actual-size previews on light `#E8E2D5` and dark `#1B1924` backgrounds for transparency edges, halos, and readability. Comparison boards preserve whole paintings. Choose shared-scale preservation, individual-Fit, or equal-subject-height style comparisons through the [pipeline observation tools](.agents/skills/character-asset-pipeline/observation-tools.md#observation-and-conversion-tools). Keep those boards with the task's review materials.
 
 Distinguish file dimensions, conversions, and PCK-loading observations from actual game verification. Packaging/installation follow the [pipeline](.agents/skills/character-asset-pipeline/SKILL.md) scope; tests and validation assets follow [AGENTS.md](AGENTS.md).

@@ -1,10 +1,10 @@
-# Althea Appearance and Draft Base
+# Althea Appearance and Canonical Base
 
-Canonical draft: [base.png](base.png). Supporting bust: [ref1.jpg](refs/ref1.jpg).
+The [canonical base](base.png) defines current appearance, with the [bust reference](refs/ref1.jpg) supplying upper-body details.
 
-## Adopted Draft Base — 2026-10-24
+## Adopted Base — 2026-10-24
 
-The user selected `base.png` as the preferred visual base and explicitly confirmed preference for its clean 2D rendering, bright silver-white/white/navy palette, facial appeal, and graceful proportions over the subsequent `style-pure` (compact-proportion / compressed-pewter) experiment, which was rejected as too crude and clunky (`투박함`). Preserve the complete `base.png` painting unchanged: bright silver-white half-tied hair, pale young adult face and blue eyes, navy collar and lining, white split tabard with red cross, clean silver plates with gold accents, grounded right-facing three-quarter stance, drawn straight sword up-right, and the opposite hand supporting an empty sheath. The current draft includes its lower costume and equipment interpretation; weapon naming and final construction remain undecided.
+The user selected `base.png` for its clean 2D rendering, bright silver-white, white and navy palette, and graceful proportions. Preserve the complete painting, including half-tied hair, calm blue eyes, navy collar and lining, white split tabard with red cross, gold-accented silver plates, and the grounded right-facing three-quarter stance. The drawn straight sword angles up-right while the opposite hand supports the empty sheath. Weapon naming and final construction are open design decisions.
 
 Use `base.png` directly as the image input anchor for identity, facial appeal, proportions, palette, and surface rendering in downstream work. The narrow right sword-tip margin (`12px`) remains a known characteristic of the unedited `base.png` master; do not silently crop or repaint `base.png`.
 
@@ -12,11 +12,11 @@ Use `base.png` directly as the image input anchor for identity, facial appeal, p
 
 | Input | Adopted | Excluded or unconfirmed |
 |---|---|---|
-| `base.png` (user-selected draft base, generated with `refs/ref1.jpg` as direct image input) | User-confirmed visual anchor: graceful young-adult proportions, facial appeal, calm resolute blue eyes, bright silver-white half-tied hair in clean flowing locks, dark cross earring, navy collar with gold clasp, clean silver plate armor, white split tabard with red cross and gold trim | Do not replace with text-only (`style-pure`) transcription, compact `6–6.5`-head proportions, or muted ash/pewter recoloring |
+| `base.png` | User-confirmed visual anchor: graceful young-adult proportions, calm blue eyes, bright silver-white half-tied hair, dark cross earring, navy collar with gold clasp, clean silver plate armor, white split tabard with red cross and gold trim | Weapon naming and final construction |
 | `refs/ref1.jpg` (user-supplied semi-realistic painted bust) | Supporting reference for upper-body identity cues (face, blue eyes, diagonal fringe, half-tied silver-white hair, dark cross earring, high navy collar, gold clasp, silver pauldrons, white tabard with red cross) | Photorealistic individual hair strands, noisy micro-speculars, dark vignette background, and lower-left signature |
 | Official combat references ([ARTS.md 2.3](/ARTS.md#23-actual-official-image-anchors-and-priority)) | Three-quarter combat camera, grounded stance, and grouping high-frequency surface noise into clean 2D planes | Each official character's robot/warrior build, stocky proportions, dark/muted palette, masks, skulls, horns, weapons, and ground shadow |
 
-Always pass `base.png` (and `refs/ref1.jpg` when referencing raw bust details) **directly as image inputs** so the generator preserves Althea's facial appeal, hair flow, clean palette brightness, and natural proportions. Withholding character image inputs in favor of text-only transcription (`style-pure`) degrades facial appeal and makes the figure look crude and clunky.
+Pass `base.png` directly as an image input to preserve Althea's facial features, hair flow, palette, and proportions. Include `refs/ref1.jpg` when the requested work uses its bust details.
 
 ## Full-Body Base Specification
 
@@ -25,7 +25,7 @@ Always pass `base.png` (and `refs/ref1.jpg` when referencing raw bust details) *
 - **Gaze (user-confirmed):** pupils toward the enemy at screen right, independent of head rotation. Changing the head angle does not change body direction, the drawn sword or either hand.
 - **Weapon state (user-confirmed):** one straight sword, fully drawn. The screen-right hand grips the hilt with the tip pointing up-right and clear space between face and blade. The other hand supports the empty scabbard at the waist; the scabbard holds no second hilt or blade. No extra weapons, shield or magic effects.
 - **Sword form and name (provisional):** follows the design's sword/scabbard theme; unique shape and name are undecided.
-- **Lower body (adopted in draft base, provisional canon):** navy inner garment, white split skirts with gold trim, clean silver knee and shin plates, silver sabatons.
+- **Lower body (current base):** navy inner garment, white split skirts with gold trim, clean silver knee and shin plates, silver sabatons.
 - **Construction (production rule):** tip, blade, guard center, grip and pommel share one straight axis. Gauntlet and vambrace, fingers and grip, belt and scabbard ring each read separately. No floating metal pieces or duplicate guards. Hems and gold trim follow continuous cloth edges. Armor resolves into clean plates with clear overlaps.
 - **Canvas:** generate a vertical 2:3 transparent canvas containing the whole figure and equipment, with ARTS.md 5.1 margins at every extremity; do not crop or extract regions. Check whole-image Fit previews at `240 × 360` and `326 × 490`.
 

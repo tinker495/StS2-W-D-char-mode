@@ -1,8 +1,8 @@
 # Althea Card Portrait Art
 
-## Basic Strike candidate (2026-10-25)
+## Basic Strike Portrait
 
-The user requested a weapon-focused Strike based on the character image. Production brief: the straight silver double-edged sword, angular gold guard, navy-black grip and faceted gold pommel sweeping diagonally across a crimson/burgundy background with a pale blue/ivory crescent. Preserve the complete blade, tip and hilt; use broad clean cel-shaded planes, no person, text, frame or UI. [base.png](base.png) supplied weapon construction; native `StrikeIronclad`/`StrikeSilent` portraits supplied staging and density. The built-in image generator produced a new complete landscape composition. At 250 x 190 the long straight blade and gold hilt remain distinct, with a brighter and sharper slash than native Ironclad's orange arc. Pending user review.
+The applied portrait shows the straight silver double-edged sword, angular gold guard, navy-black grip, and faceted gold pommel sweeping diagonally through a pale blue and ivory arc over crimson. Keep the blade, tip, and hilt distinct with broad cel-shaded planes. [base.png](base.png) supplies the sword design, and native `StrikeIronclad` and `StrikeSilent` portraits guide the framing and visual density. See [portrait integration](cards-assets.md#basic-strike-delivery-2026-11-11) for the tracked texture.
 
 ## Temporary Card Portrait Palettes
 
@@ -16,4 +16,4 @@ Keep card bodies, rarity banners, portrait borders, text, cost icons, source alp
 
 The user requested the base-game Necrobinder Soul token portrait with only a dark crimson color treatment. Reference `Soul.PortraitPath`, currently `res://images/atlases/card_atlas.sprites/token/soul.tres`; preserve the complete skull-shaped spirit, supporting skeletal hand, background spirits, framing, and source alpha. Use blackened burgundy shadows, blood-red midtones, and coral-red highlights. Wraith uses this dedicated palette instead of the generic grayscale Token palette. This is a selected-source, code-native recolor under pipeline Branch D; no character body design or new painting is established.
 
-[Portrait integration](cards-assets.md) owns the applied materials, source selection and observations.
+[Portrait integration](cards-assets.md) owns the applied materials and source mapping.

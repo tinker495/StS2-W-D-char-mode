@@ -84,6 +84,8 @@ if ($Task -in @('verify', 'build', 'check')) {
     # Human requester: wjdrb, 2026-10-29, retrospective item 1: connect final
     # card dimensions/alpha checks to the existing local validation route.
     & (Join-Path $projectRoot '.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1') check-cards
+    & python (Join-Path $projectRoot 'scripts/check_png_alpha.py')
+    if ($LASTEXITCODE -ne 0) { throw 'PNG alpha check failed.' }
     if ($Task -eq 'verify') { return }
 }
 

@@ -17,7 +17,7 @@ Apply this procedure to implementation, asset delivery, and requests to create o
 
    | Affected work | Existing entry points |
    |---|---|
-   | Tracked documentation, links and resource references | `dev.ps1 verify` checks tracked references and runtime card PNG dimensions/opacity. |
+   | Tracked documentation, links, resource references and PNGs | `dev.ps1 verify` checks tracked references, transparent-black pixels in the low-alpha range, and runtime card PNG dimensions/opacity. |
    | C# implementation | `dev.ps1 build` includes those checks and the C# build. `dev.ps1 check` is the existing locked-restore build route. |
    | Runtime images, scenes or localization | Use the reference/PNG checks above and `dev.ps1 publish` for Godot import and packaging, then the applicable loading observations. Follow the existing deployment procedure when installation is requested. |
    | Card previews, API lookup or animation | Use the applicable existing commands and specifications linked from [development tools](/docs/development-tools.md) and the affected topic. |
@@ -54,7 +54,7 @@ Keep temporary scripts outside formal test directories and do not commit them. T
 
 ## PR Evidence
 
-Create PR-only screenshots, comparison renders, evidence notes, and one-off render scripts under the ignored `artifacts/pr-<task>/` directory from the start. Keep product assets and reusable specifications in their normal tracked locations. Attach PR evidence directly to the PR when upload is available, or show local artifacts in the completion report. Keep evidence files out of Git even when upload is unavailable.
+Create PR-only screenshots, comparison renders, evidence notes, and one-off render scripts under the ignored `artifacts/pr-<task>/` directory from the start. Keep product assets and reusable specifications in their normal tracked locations. Attach PR evidence directly to the PR when upload is available, or show local artifacts in the completion report. Apply the [shared documentation rules](/AGENTS.md#shared-documentation) when describing the applied change in tracked Markdown.
 
 Before staging, confirm that each PR-only output is ignored with `git check-ignore -- <path>` and that `git ls-files -- <path>` returns no entries. Stage explicit product and documentation paths. For human-facing procedures, see [development tools](/docs/development-tools.md#pr-자료-보관).
 
@@ -73,4 +73,4 @@ Git can create rewritten commits before a failed final check; the check prevents
 
 ## Shared Deployment Records
 
-[Deployment status](/docs/deployment-status.md) owns cross-character package, installation and verification records. Character asset guides own their file mappings and asset-specific application status, and link to the shared record. A historical deployment describes its original environment; it does not establish installation status for the current checkout.
+[Deployment status](/docs/deployment-status.md) owns cross-character game installation records and the verification performed for each installation. State the environment and verification scope for each deployment. Keep standalone packaging and trial results in the task report. Character asset guides own their runtime file mappings and link to the shared record.
