@@ -1,7 +1,13 @@
-# 메르쿠리우스 아트 주요 결정
+# Mercurius Art Decision History
 
-- **2026-10-31 베이스** 사용자가 승인한 색조와 자세를 [base.png](base.png)에 보존했다. 투명 여백을 정리하고 1024 × 1536 세로형 캔버스에 맞춰 비례 확대했다.
-- **2026-10-31 UI** 아래에서 올려다보는 선택 타일과 차분한 눈매를 적용했다. 베이스 전신을 전투·휴식·상점에서 공용으로 쓴다.
-- **2026-11-12 타일 보완:** 목도리 아래 빈 영역을 어깨·상체로 채우고 잠금 타일도 같은 윤곽으로 갱신하도록 요청했다.
+## Canonical Base and Shared Standing
 
-현재 기준은 [베이스 명세](base-art.md), [UI 명세](ui-art.md), [적용 상태](ui-assets.md)에 있다.
+[base.png](base.png) adopts warm ivory, cool navy, ochre-gold, and muted teal color harmony with natural non-chibi bard proportions. Outer transparent-margin trimming before proportional conversion to `1024 × 1536` was explicitly authorized for `base.png` alone so the standing figure fills the vertical canvas cleanly without altering painted pixels; later assets do not inherit this crop exception.
+
+Because `base.png` already stages planted boots, rightward attention, and connected transverse-flute hands on a transparent canvas, the complete painting is reused proportionally across combat, merchant, and rest scenes rather than generating separate standing paintings.
+
+## Selection Tile and Illustration
+
+The selection tile uses a low-angle camera and relaxed eyes to convey a calm, observant bard instead of an aggressive combat pose. Navy shoulders and an ivory chest fill the space beneath the mustard scarf down to the bottom edge so the portrait reads as grounded at `132 × 195` without a floating collar gap, and the locked tile derives from the same resized alpha so both silhouettes match identically.
+
+See [base art](base-art.md), [UI art](ui-art.md), [selection art](selection-art.md), and [UI assets](ui-assets.md) for current specifications and runtime mappings.

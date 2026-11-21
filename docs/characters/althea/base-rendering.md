@@ -1,6 +1,6 @@
 # Althea Rendering and Palette
 
-On 2026-10-24 the user approved the clean 2D rendering, bright palette, and natural proportions in [base.png](base.png).
+The user approved the clean 2D rendering, bright palette, and natural proportions in [base.png](base.png).
 
 - **Hair:** bright, clean silver-white hair grouped into flowing connected locks with soft cool-gray shadows; do not darken into muddy ash/pewter or fragment into photorealistic individual strands.
 - **Body cloth:** clean warm-ivory / white split tabard with smooth-turning shadow planes, navy collar and inner lining, crisp gold trim bands, and a dark red cross emblem on the left chest.

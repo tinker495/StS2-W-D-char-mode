@@ -6,7 +6,7 @@ The tracked game resources use the full approved [base.png](base.png) for the sh
 
 ## Cards and Power Icons
 
-The 2026-10-28 local installation included 81 character cards, three internal Tune options, and five character relics with their runtime icons. Use the [deployment record](/docs/deployment-status.md#2026-10-28-메르쿠리우스-카드유물-로컬-설치) for the installed package scope.
+See [deployment status](/docs/deployment-status.md) for recorded local installation scope.
 
 The basic Strike portrait uses the opaque 1000 x 760 texture [mercurius_strike.png](/Sts2WD/images/card_portraits/mercurius/mercurius_strike.png). `MercuriusStrike` inherits the model-ID based lookup in `Sts2WDCard` through `MercuriusCard`. Cards without a dedicated texture and the power icons use the native placeholders. The Tune options use the native Acrobatics, Hologram, and Reboot artwork. See [Mercurius's mechanics](mercurius.md) for the generation rules and saved IDs.
 

@@ -1,0 +1,966 @@
+{
+  "canvas": [
+    1152,
+    1728
+  ],
+  "baseSha256": "b132189a48fbf282568f24385f9466542899eb7afe5dfe605d623294f07fcff0",
+  "coordinates": "source pixels, origin top left, viewer-left/right",
+  "bones": [
+    {
+      "name": "root",
+      "parent": null,
+      "pivot": [
+        722,
+        1565
+      ],
+      "tip": [
+        772,
+        1565
+      ]
+    },
+    {
+      "name": "pelvis",
+      "parent": "root",
+      "pivot": [
+        724,
+        870
+      ],
+      "tip": [
+        720,
+        935
+      ]
+    },
+    {
+      "name": "chest",
+      "parent": "pelvis",
+      "pivot": [
+        722,
+        857
+      ],
+      "tip": [
+        699,
+        660
+      ]
+    },
+    {
+      "name": "head",
+      "parent": "chest",
+      "pivot": [
+        699,
+        650
+      ],
+      "tip": [
+        725,
+        543
+      ]
+    },
+    {
+      "name": "hat",
+      "parent": "head",
+      "pivot": [
+        675,
+        502
+      ],
+      "tip": [
+        620,
+        328
+      ]
+    },
+    {
+      "name": "hat_tip",
+      "parent": "hat",
+      "pivot": [
+        549,
+        406
+      ],
+      "tip": [
+        431,
+        427
+      ]
+    },
+    {
+      "name": "hair_r",
+      "parent": "head",
+      "pivot": [
+        614,
+        552
+      ],
+      "tip": [
+        575,
+        634
+      ]
+    },
+    {
+      "name": "hair_l",
+      "parent": "head",
+      "pivot": [
+        781,
+        498
+      ],
+      "tip": [
+        796,
+        656
+      ]
+    },
+    {
+      "name": "upper_arm_r",
+      "parent": "chest",
+      "pivot": [
+        609,
+        705
+      ],
+      "tip": [
+        545,
+        823
+      ]
+    },
+    {
+      "name": "forearm_r",
+      "parent": "upper_arm_r",
+      "pivot": [
+        545,
+        823
+      ],
+      "tip": [
+        432,
+        835
+      ]
+    },
+    {
+      "name": "hand_r",
+      "parent": "forearm_r",
+      "pivot": [
+        432,
+        835
+      ],
+      "tip": [
+        394,
+        834
+      ]
+    },
+    {
+      "name": "upper_arm_l",
+      "parent": "chest",
+      "pivot": [
+        791,
+        725
+      ],
+      "tip": [
+        846,
+        861
+      ]
+    },
+    {
+      "name": "forearm_l",
+      "parent": "upper_arm_l",
+      "pivot": [
+        846,
+        861
+      ],
+      "tip": [
+        909,
+        980
+      ]
+    },
+    {
+      "name": "hand_l",
+      "parent": "forearm_l",
+      "pivot": [
+        909,
+        980
+      ],
+      "tip": [
+        926,
+        1061
+      ]
+    },
+    {
+      "name": "weapon",
+      "parent": "hand_r",
+      "pivot": [
+        394,
+        834
+      ],
+      "tip": [
+        334,
+        107
+      ]
+    },
+    {
+      "name": "ribbon",
+      "parent": "weapon",
+      "pivot": [
+        351,
+        586
+      ],
+      "tip": [
+        337,
+        608
+      ]
+    },
+    {
+      "name": "ribbon_long",
+      "parent": "ribbon",
+      "pivot": [
+        339,
+        601
+      ],
+      "tip": [
+        239,
+        866
+      ]
+    },
+    {
+      "name": "ribbon_short",
+      "parent": "ribbon",
+      "pivot": [
+        339,
+        601
+      ],
+      "tip": [
+        240,
+        750
+      ]
+    },
+    {
+      "name": "coat_back",
+      "parent": "pelvis",
+      "pivot": [
+        718,
+        878
+      ],
+      "tip": [
+        694,
+        1358
+      ]
+    },
+    {
+      "name": "coat_r",
+      "parent": "pelvis",
+      "pivot": [
+        685,
+        872
+      ],
+      "tip": [
+        382,
+        1320
+      ]
+    },
+    {
+      "name": "coat_l",
+      "parent": "pelvis",
+      "pivot": [
+        766,
+        884
+      ],
+      "tip": [
+        995,
+        1327
+      ]
+    },
+    {
+      "name": "thigh_r",
+      "parent": "pelvis",
+      "pivot": [
+        684,
+        947
+      ],
+      "tip": [
+        673,
+        1203
+      ]
+    },
+    {
+      "name": "shin_r",
+      "parent": "thigh_r",
+      "pivot": [
+        673,
+        1203
+      ],
+      "tip": [
+        623,
+        1401
+      ]
+    },
+    {
+      "name": "foot_r",
+      "parent": "shin_r",
+      "pivot": [
+        623,
+        1401
+      ],
+      "tip": [
+        656,
+        1544
+      ]
+    },
+    {
+      "name": "thigh_l",
+      "parent": "pelvis",
+      "pivot": [
+        752,
+        945
+      ],
+      "tip": [
+        833,
+        1191
+      ]
+    },
+    {
+      "name": "shin_l",
+      "parent": "thigh_l",
+      "pivot": [
+        833,
+        1191
+      ],
+      "tip": [
+        867,
+        1384
+      ]
+    },
+    {
+      "name": "foot_l",
+      "parent": "shin_l",
+      "pivot": [
+        867,
+        1384
+      ],
+      "tip": [
+        995,
+        1516
+      ]
+    }
+  ],
+  "parts": [
+    {
+      "name": "coat_back",
+      "bone": "coat_back",
+      "rect": [
+        299,
+        854,
+        730,
+        528
+      ],
+      "path": "coat_back.png"
+    },
+    {
+      "name": "thigh_r",
+      "bone": "thigh_r",
+      "rect": [
+        617,
+        894,
+        139,
+        339
+      ],
+      "path": "thigh_r.png"
+    },
+    {
+      "name": "thigh_l",
+      "bone": "thigh_l",
+      "rect": [
+        703,
+        879,
+        176,
+        351
+      ],
+      "path": "thigh_l.png"
+    },
+    {
+      "name": "shin_r",
+      "bone": "shin_r",
+      "rect": [
+        587,
+        1145,
+        131,
+        291
+      ],
+      "path": "shin_r.png"
+    },
+    {
+      "name": "shin_l",
+      "bone": "shin_l",
+      "rect": [
+        780,
+        1134,
+        128,
+        289
+      ],
+      "path": "shin_l.png"
+    },
+    {
+      "name": "boot_r",
+      "bone": "foot_r",
+      "rect": [
+        567,
+        1375,
+        126,
+        198
+      ],
+      "path": "boot_r.png"
+    },
+    {
+      "name": "boot_l",
+      "bone": "foot_l",
+      "rect": [
+        832,
+        1359,
+        188,
+        180
+      ],
+      "path": "boot_l.png"
+    },
+    {
+      "name": "coat_r",
+      "bone": "coat_r",
+      "rect": [
+        285,
+        835,
+        485,
+        538
+      ],
+      "path": "coat_r.png"
+    },
+    {
+      "name": "coat_l",
+      "bone": "coat_l",
+      "rect": [
+        724,
+        835,
+        313,
+        516
+      ],
+      "path": "coat_l.png"
+    },
+    {
+      "name": "neck",
+      "bone": "head",
+      "rect": [
+        674,
+        601,
+        51,
+        83
+      ],
+      "path": "neck.png"
+    },
+    {
+      "name": "torso",
+      "bone": "chest",
+      "rect": [
+        589,
+        643,
+        225,
+        249
+      ],
+      "path": "torso.png"
+    },
+    {
+      "name": "upper_arm_l",
+      "bone": "upper_arm_l",
+      "rect": [
+        748,
+        688,
+        135,
+        209
+      ],
+      "path": "upper_arm_l.png"
+    },
+    {
+      "name": "upper_arm_r",
+      "bone": "upper_arm_r",
+      "rect": [
+        504,
+        678,
+        146,
+        182
+      ],
+      "path": "upper_arm_r.png"
+    },
+    {
+      "name": "breastplate",
+      "bone": "chest",
+      "rect": [
+        629,
+        670,
+        176,
+        178
+      ],
+      "path": "breastplate.png"
+    },
+    {
+      "name": "pelvis",
+      "bone": "pelvis",
+      "rect": [
+        601,
+        831,
+        211,
+        89
+      ],
+      "path": "pelvis.png"
+    },
+    {
+      "name": "pouch",
+      "bone": "pelvis",
+      "rect": [
+        575,
+        847,
+        120,
+        117
+      ],
+      "path": "pouch.png"
+    },
+    {
+      "name": "pauldron_l",
+      "bone": "chest",
+      "rect": [
+        765,
+        669,
+        76,
+        91
+      ],
+      "path": "pauldron_l.png"
+    },
+    {
+      "name": "pauldron_r",
+      "bone": "chest",
+      "rect": [
+        531,
+        654,
+        132,
+        97
+      ],
+      "path": "pauldron_r.png"
+    },
+    {
+      "name": "hat_back",
+      "bone": "hat",
+      "rect": [
+        437,
+        427,
+        543,
+        205
+      ],
+      "path": "hat_back.png"
+    },
+    {
+      "name": "collar",
+      "bone": "chest",
+      "rect": [
+        564,
+        620,
+        223,
+        103
+      ],
+      "path": "collar.png"
+    },
+    {
+      "name": "head",
+      "bone": "head",
+      "rect": [
+        570,
+        448,
+        260,
+        219
+      ],
+      "path": "head.png"
+    },
+    {
+      "name": "hair_r",
+      "bone": "hair_r",
+      "rect": [
+        555,
+        541,
+        75,
+        103
+      ],
+      "path": "hair_r.png"
+    },
+    {
+      "name": "hair_l",
+      "bone": "hair_l",
+      "rect": [
+        764,
+        486,
+        69,
+        190
+      ],
+      "path": "hair_l.png"
+    },
+    {
+      "name": "eye_r-neutral",
+      "bone": "head",
+      "slot": "eye_r",
+      "state": "neutral",
+      "rect": [
+        694,
+        526,
+        62,
+        60
+      ],
+      "path": "eye_r-neutral.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_r-closed",
+      "bone": "head",
+      "slot": "eye_r",
+      "state": "closed",
+      "rect": [
+        697,
+        531,
+        56,
+        52
+      ],
+      "path": "eye_r-closed.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_r-hurt",
+      "bone": "head",
+      "slot": "eye_r",
+      "state": "hurt",
+      "rect": [
+        700,
+        534,
+        60,
+        48
+      ],
+      "path": "eye_r-hurt.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_r-attack",
+      "bone": "head",
+      "slot": "eye_r",
+      "state": "attack",
+      "rect": [
+        694,
+        528,
+        64,
+        55
+      ],
+      "path": "eye_r-attack.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_r-ponder",
+      "bone": "head",
+      "slot": "eye_r",
+      "state": "ponder",
+      "rect": [
+        696,
+        532,
+        60,
+        50
+      ],
+      "path": "eye_r-ponder.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_r-fallen",
+      "bone": "head",
+      "slot": "eye_r",
+      "state": "fallen",
+      "rect": [
+        694,
+        526,
+        62,
+        60
+      ],
+      "path": "eye_r-fallen.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_l-neutral",
+      "bone": "head",
+      "slot": "eye_l",
+      "state": "neutral",
+      "rect": [
+        753,
+        543,
+        35,
+        53
+      ],
+      "path": "eye_l-neutral.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_l-closed",
+      "bone": "head",
+      "slot": "eye_l",
+      "state": "closed",
+      "rect": [
+        753,
+        552,
+        32,
+        45
+      ],
+      "path": "eye_l-closed.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_l-hurt",
+      "bone": "head",
+      "slot": "eye_l",
+      "state": "hurt",
+      "rect": [
+        755,
+        551,
+        31,
+        42
+      ],
+      "path": "eye_l-hurt.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_l-attack",
+      "bone": "head",
+      "slot": "eye_l",
+      "state": "attack",
+      "rect": [
+        753,
+        543,
+        34,
+        49
+      ],
+      "path": "eye_l-attack.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_l-ponder",
+      "bone": "head",
+      "slot": "eye_l",
+      "state": "ponder",
+      "rect": [
+        754,
+        544,
+        32,
+        52
+      ],
+      "path": "eye_l-ponder.png",
+      "textureScale": 3
+    },
+    {
+      "name": "eye_l-fallen",
+      "bone": "head",
+      "slot": "eye_l",
+      "state": "fallen",
+      "rect": [
+        753,
+        543,
+        35,
+        53
+      ],
+      "path": "eye_l-fallen.png",
+      "textureScale": 3
+    },
+    {
+      "name": "mouth-neutral",
+      "bone": "head",
+      "slot": "mouth",
+      "state": "neutral",
+      "rect": [
+        716,
+        595,
+        42,
+        28
+      ],
+      "path": "mouth-neutral.png",
+      "textureScale": 3
+    },
+    {
+      "name": "mouth-closed",
+      "bone": "head",
+      "slot": "mouth",
+      "state": "closed",
+      "rect": [
+        721,
+        602,
+        31,
+        17
+      ],
+      "path": "mouth-closed.png",
+      "textureScale": 3
+    },
+    {
+      "name": "mouth-hurt",
+      "bone": "head",
+      "slot": "mouth",
+      "state": "hurt",
+      "rect": [
+        713,
+        597,
+        43,
+        27
+      ],
+      "path": "mouth-hurt.png",
+      "textureScale": 3
+    },
+    {
+      "name": "mouth-attack",
+      "bone": "head",
+      "slot": "mouth",
+      "state": "attack",
+      "rect": [
+        711,
+        592,
+        45,
+        42
+      ],
+      "path": "mouth-attack.png",
+      "textureScale": 3
+    },
+    {
+      "name": "mouth-ponder",
+      "bone": "head",
+      "slot": "mouth",
+      "state": "ponder",
+      "rect": [
+        731,
+        603,
+        27,
+        19
+      ],
+      "path": "mouth-ponder.png",
+      "textureScale": 3
+    },
+    {
+      "name": "mouth-fallen",
+      "bone": "head",
+      "slot": "mouth",
+      "state": "fallen",
+      "rect": [
+        716,
+        595,
+        42,
+        28
+      ],
+      "path": "mouth-fallen.png",
+      "textureScale": 3
+    },
+    {
+      "name": "hat",
+      "bone": "hat",
+      "rect": [
+        424,
+        302,
+        550,
+        309
+      ],
+      "path": "hat.png"
+    },
+    {
+      "name": "forearm_l",
+      "bone": "forearm_l",
+      "rect": [
+        795,
+        820,
+        146,
+        187
+      ],
+      "path": "forearm_l.png"
+    },
+    {
+      "name": "hand_l",
+      "bone": "hand_l",
+      "rect": [
+        886,
+        972,
+        73,
+        123
+      ],
+      "path": "hand_l.png"
+    },
+    {
+      "name": "forearm_r",
+      "bone": "forearm_r",
+      "rect": [
+        402,
+        756,
+        192,
+        151
+      ],
+      "path": "forearm_r.png"
+    },
+    {
+      "name": "weapon",
+      "bone": "weapon",
+      "rect": [
+        229,
+        104,
+        358,
+        1481
+      ],
+      "path": "weapon.png"
+    },
+    {
+      "name": "ribbon_long",
+      "bone": "ribbon_long",
+      "rect": [
+        202,
+        570,
+        158,
+        303
+      ],
+      "path": "ribbon_long.png"
+    },
+    {
+      "name": "ribbon_short",
+      "bone": "ribbon_short",
+      "rect": [
+        202,
+        568,
+        165,
+        187
+      ],
+      "path": "ribbon_short.png"
+    },
+    {
+      "name": "ribbon",
+      "bone": "ribbon",
+      "rect": [
+        323,
+        559,
+        65,
+        81
+      ],
+      "path": "ribbon.png"
+    },
+    {
+      "name": "hand_r",
+      "bone": "hand_r",
+      "rect": [
+        351,
+        784,
+        93,
+        99
+      ],
+      "path": "hand_r.png"
+    },
+    {
+      "name": "hand_l-casting",
+      "bone": "hand_l",
+      "slot": "hand_l",
+      "state": "casting",
+      "rect": [
+        891,
+        975,
+        118,
+        156
+      ],
+      "path": "hand_l-casting.png"
+    },
+    {
+      "name": "hand_r-ground",
+      "bone": "hand_r",
+      "slot": "hand_r",
+      "state": "ground",
+      "rect": [
+        424,
+        809,
+        151,
+        54
+      ],
+      "path": "hand_r-ground.png"
+    }
+  ]
+}

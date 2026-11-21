@@ -1,6 +1,6 @@
 # Althea Art Direction
 
-The user selected [base.png](base.png) on 2026-10-24 as the current visual and equipment reference. [Asset status](althea-assets.md) lists its approved runtime uses. [Althea's design](althea.md) owns the domain decisions, and [art history](althea-history.md) records the decisions behind the applied assets.
+The user selected [base.png](base.png) as the current visual and equipment reference. [Asset status](althea-assets.md) lists its approved runtime uses. [Althea's design](althea.md) owns the domain decisions, and [art history](althea-history.md) records the decisions behind the applied assets.
 
 Labels *user-confirmed*, *reference-observed* and *provisional* follow [the source-label guidance](/.agents/skills/character-asset-pipeline/references.md#source-labels-and-character-orientation).
 
@@ -17,5 +17,3 @@ Labels *user-confirmed*, *reference-observed* and *provisional* follow [the sour
 | Relic object or paired upgrade | [Relic art](relics-art.md) |
 
 Open only the requested topic, plus appearance/rendering when relevant. [ARTS.md](/ARTS.md) owns shared rendering and composition; [character-asset-pipeline](/.agents/skills/character-asset-pipeline/SKILL.md) routes production and review. Topics not yet specified follow the shared route and a new asset brief rather than borrowing an unrelated Althea symbol.
-
-Use the base for identity and rendering. Official topbar and map references guide small-size readability. Native Silent and Defect tiles guide the selection tile, and Silent and Regent selection illustrations guide the background. Use the native Necrobinder selection screen to place the information areas.

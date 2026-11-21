@@ -11,6 +11,15 @@ Use the character's decided English name for owned paths and identifiers. `<Char
 
 Ancients and other visual owners retain their native role and existing code/resource roots. For example, Aselige uses `Sts2WDCode/Ancients/Aselige/` and ancient-event resources; sharing a documentation layout does not make it a playable `CharacterModel` or move it into `Characters/`.
 
+## Paired Limb and Part Naming
+
+Paired anatomical and garment identifiers (bones, slots, regions, attachment images, and animation channels such as `eye_r`/`eye_l`, `hair_r`/`hair_l`, `pauldron_r`/`pauldron_l`, `upper_arm_r`/`upper_arm_l`, `forearm_r`/`forearm_l`, `cuff_r`/`cuff_l`, `hand_r`/`hand_l`, `coat_r`/`coat_l`, `skirt_hem_r`/`skirt_hem_l`, `thigh_r`/`thigh_l`, `shin_r`/`shin_l`, `foot_r`/`foot_l`, `boot_r`/`boot_l`) always use the **character's anatomical perspective**:
+
+- `_r` = character's right side (near/foreground side for a character facing viewer-right)
+- `_l` = character's left side (far/background side for a character facing viewer-right)
+
+Never use screen/viewer left-right for `_l`/`_r` suffixes. Non-bilateral prop appendages or stacked layers (such as weapon ribbons or sigil rings) use descriptive suffixes (`_long`/`_short`, `_outer`/`_inner`, `_front`/`_back`) instead of `_l`/`_r`.
+
 ## Rename Compatibility
 
 Model IDs are `STS2WD-` plus the UPPER_SNAKE class name. Renaming a model class changes its saved ID; moving folders or namespaces leaves IDs untouched. A model rename also carries the `STS2WD-<CHAR>.*` keys in `Sts2WD/localization/*/characters.json` and `ancients.json`, and the preset's `characterId`.

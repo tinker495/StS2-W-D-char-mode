@@ -4,7 +4,7 @@
 
 ## Additional Eleven Cards and Current Portrait Sources
 
-The cards below currently override `PortraitPath`, `CustomPortraitPath`, and `BetaPortraitPath` to reuse the listed Realta card's existing placeholder artwork. No new illustration PNGs were created for this implementation. When dedicated art is delivered, use the intended filename and restore the normal `Sts2WDCard` path resolution for that card. All eleven use the standard `1000 x 760` composition.
+The cards below currently override `PortraitPath`, `CustomPortraitPath`, and `BetaPortraitPath` to reuse the listed Realta card's existing placeholder artwork. When dedicated art is delivered, use the intended filename and restore the normal `Sts2WDCard` path resolution for that card. All eleven use the standard `1000 x 760` composition.
 
 | # | C# class | Korean card name | Rarity / type | Intended filename | Current portrait source |
 |---|---|---|---|---|---|

@@ -1,6 +1,5 @@
 extends SceneTree
-## Native observation tool. Inputs: variant clip|all output_directory [absolute_pck].
-## Uses the whole fixed viewport; captures do not define acceptance criteria.
+## Observation-only native capture; retains the full fixed viewport and never defines acceptance criteria.
 
 const CLIPS := ["idle_loop", "attack", "hurt", "cast", "die", "relaxed_loop", "revive"]
 const FPS := 24.0

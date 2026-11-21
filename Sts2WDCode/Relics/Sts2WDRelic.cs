@@ -6,7 +6,6 @@ using Sts2WD.Sts2WDCode.Extensions;
 
 namespace Sts2WD.Sts2WDCode.Relics;
 
-// Shared artwork behavior. Inherit a character-specific relic base to assign its pool.
 public abstract class Sts2WDRelic : CustomRelicModel
 {
     public override string PackedIconPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".RelicImagePath();

@@ -10,7 +10,6 @@ using MegaCrit.Sts2.Core.Models.Powers;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// A one-shot delivery timer; the granted Vigor is always the base-game power.
 public sealed class RealtaVigorNextTurnPower : Sts2WDPower
 {
     public override PowerType Type => PowerType.Buff;

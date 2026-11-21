@@ -12,7 +12,7 @@ param(
     [string]$BackgroundColor,
     [string]$LockedBackgroundColor,
     [string]$LayoutPath = (Join-Path $PSScriptRoot 'character-select-layout.json'),
-    # Legacy compatibility: inspect now always returns a PSCustomObject.
+    # Retained as a compatibility no-op; inspect always returns a PSCustomObject.
     [switch]$AsObject,
     [int]$Width = 0,
     [int]$Height = 0,
@@ -124,7 +124,6 @@ function Get-AlphaBounds([System.Drawing.Bitmap]$bmp, [int]$alphaThreshold = 8) 
     $margins = if ($bboxW -gt 0) {
         [pscustomobject]@{ Left = $minX; Top = $minY; Right = $bmp.Width - 1 - $maxX; Bottom = $bmp.Height - 1 - $maxY }
     } else { $null }
-    # Horizontal margins are relative to width and vertical margins to height.
     $minMarginRatio = if ($margins) {
         [math]::Round(([math]::Min([math]::Min($margins.Left, $margins.Right) / [double]$bmp.Width,
                 [math]::Min($margins.Top, $margins.Bottom) / [double]$bmp.Height)) * 100, 1)
@@ -235,7 +234,6 @@ switch ($Command) {
                     $bg = if ($locked) { $LockedBackgroundColor } else { $BackgroundColor }
                     $g.Clear([Drawing.ColorTranslator]::FromHtml($bg))
                     if ($locked) {
-                        # Preserve the exact resized alpha; only RGB changes for the silhouette.
                         for ($y = 0; $y -lt $Height; $y++) { for ($x = 0; $x -lt $Width; $x++) {
                             $alpha.SetPixel($x,$y,[Drawing.Color]::FromArgb($alpha.GetPixel($x,$y).A,0,0,0))
                         }}
@@ -303,8 +301,6 @@ switch ($Command) {
                 $images += [pscustomobject]@{ Path = $resolvedSources[$i]; Label = $label; Bitmap = $bitmap; Bounds = $bounds }
             }
 
-            # SharedScale preserves relative canvas sizes; IndividualFit fits each full canvas;
-            # SubjectFit fits each alpha bounding box and aligns its bottom to one baseline.
             $maxWidth = ($images | ForEach-Object { $_.Bitmap.Width } | Measure-Object -Maximum).Maximum
             $maxHeight = ($images | ForEach-Object { $_.Bitmap.Height } | Measure-Object -Maximum).Maximum
             $scale = [math]::Min($DisplayWidth / [double]$maxWidth, $DisplayHeight / [double]$maxHeight)
@@ -355,7 +351,6 @@ switch ($Command) {
                 $drawW = [math]::Max(1, [int][math]::Round($entry.Bitmap.Width * $imageScale))
                 $drawH = [math]::Max(1, [int][math]::Round($entry.Bitmap.Height * $imageScale))
                 if ($CompareMode -eq 'SubjectFit') {
-                    # Center the subject horizontally and place its lowest visible pixel 5% above the cell bottom.
                     $x = $left + [int][math]::Round(($cellWidth / 2.0) - (($bounds.BBoxX + ($bounds.BBoxWidth / 2.0)) * $imageScale))
                     $yOffset = [int][math]::Round(($DisplayHeight * 0.95) - (($bounds.BBoxY + $bounds.BBoxHeight) * $imageScale))
                 } else {

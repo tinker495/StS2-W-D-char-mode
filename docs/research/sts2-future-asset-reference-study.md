@@ -3,7 +3,7 @@
 - Research date: 2026-10-18 (Asia/Seoul).
 - Purpose: collect/classify actual cards, relics, status icons, character UI, and selection illustrations before producing assets beyond the standing base.
 - Files: [future-assets](sts2-style-refs/future-assets/README.md), including source URLs, publications, dimensions, and crop coordinates.
-- Scope: Mega Crit articles and press-kit images, excluding fan art and unofficial redistribution. This research did not change generated images, runtime files, tests, or validation assets.
+- Scope: Mega Crit articles and press-kit images, excluding fan art and unofficial redistribution.
 
 ## 1. Coverage and Limits
 
@@ -12,12 +12,12 @@
 | Relics | Three new relics/three potions; combat top-bar crop | Universal color/outline measurements |
 | Power/status icons | Actual Block, health, and status display crop | Complete transparent buff/debuff library; **Power card art and status icons are different** |
 | Standard Attack cards | Thrumming Hatchet, Bodyguard, Bone Shards, Blight Strike | Historical values equal current values |
-| Standard Skill cards | Scrawl, Soul, Grave Warden | Painting frame/text UI into Realta illustrations |
+| Standard Skill cards | Scrawl, Soul, Grave Warden | Painting frame/text UI into character card illustrations |
 | Standard Power cards | Rolling Boulder, Automation, Neurosurge | Shrinking a Power card suffices for a status icon |
 | Ancient/full-art cards | **No official public original obtained** | Substituting Quest cards or Ancient events as Ancient-card sources |
-| Large selection illustration | Full Necrobinder screen and left-UI crop | Separated background source or runtime layer structure in this research pass |
+| Large selection illustration | Full Necrobinder screen and left-UI crop; five local skeleton renders and background layers in [selection composition study](sts2-character-select-composition-study.md) | Universal runtime UI coordinates across resolutions/scales |
 | Two chibi UI uses | Official face-icon/map-node readability references | An official chibi standard for `character_icon`/`map_marker` |
-| Canonical-proportion selection UI | Tile group, selected/deselected crops | Deselected and locked states are identical |
+| Canonical-proportion selection UI | Tile group, selected/deselected crops; ten local normal/locked originals in [selection-tile study](sts2-character-select-tile-study.md) | Deselected and locked states are identical |
 | Energy/other UI | Defect combat energy crop, top bar, End Turn | Independent energy texture without composited numbers |
 
 **Official statement:** the August 2025 article identifies the top three objects as relics and bottom three as potions, explaining that small potions now have distinct sprites. [Article](https://www.megacrit.com/news/2025-8-14-neowsletter-issue-13/)
@@ -48,11 +48,7 @@
 
 **Image observation:** [Rolling Boulder](sts2-style-refs/future-assets/card-power-rolling-boulder.png) combines a large rolling rock, green creature, and red direction lines. [Automation](sts2-style-refs/future-assets/card-power-automation.png) uses repeated golden machinery and blue background for rotation. [Neurosurge](sts2-style-refs/future-assets/card-attack-power-blight-strike-neurosurge.png) centers a bright blue brain/skull. Power cards are not restricted to static emblems. [Boulder](https://www.megacrit.com/images/2025_07_boulder.png), [Automation](https://www.megacrit.com/images/2025_07_automation.png), [Neurosurge](https://www.megacrit.com/images/blightstrike_neurosurge.png)
 
-**Project judgment:** choose one main action/object and direction per Realta card. Design a close camera around blade, protective hand, or spell center during generation rather than repeating small full-body figures or cropping a finished base. Card title, cost, frame, and rules text remain UI. Reference images of complete cards are not illustration-file dimensions.
-
-### Rechecked Card URLs
-
-The Hatchet, Boulder, and Bodyguard/Bone Shards URLs downloaded successfully, and saved contents matched their names. `topbar_qol.jpg` was also viewed. Development-era numbers/text are not adopted as current game specifications.
+**Project judgment:** choose one main action/object and direction per card. Design a close camera around the weapon, active hand, or focal spell/effect during generation rather than repeating small full-body figures or cropping a finished base. Card title, cost, frame, and rules text remain UI. Reference images of complete cards are not illustration-file dimensions.
 
 ## 4. Ancient Cards, Other Frames, and Large Events
 
@@ -60,7 +56,7 @@ The Hatchet, Boulder, and Bodyguard/Bone Shards URLs downloaded successfully, an
 
 **Image observation:** [Byrdonis Egg](sts2-style-refs/future-assets/card-quest-byrdonis-egg.png) has a nest, glowing egg, orange title area, and rocky border: an alternative frame, **not an Ancient card**. [Tezcatara frame](sts2-style-refs/future-assets/ancient-tezcatara-frame0.png) is an **Ancient event scene** with a large central being, candles, and warm halo; no card frame/text/full-art ratio is visible. [Egg original](https://www.megacrit.com/images/byrdonis_egg.png), [Tezcatara original](https://www.megacrit.com/images/tezcatara_v2.gif)
 
-**Project judgment:** these sources alone do not establish Realta's Ancient/full-art style. Check an actual Ancient-card screen supplied by the user or publicly released before claiming original-game ratios, frame overlap, or text margins. Quest/event images are not substitute evidence. Production can still proceed under explicit project choices; those choices are not verified official specifications.
+**Project judgment:** these sources alone do not establish Ancient/full-art card layout rules. Check an actual Ancient-card screen supplied by the user or publicly released before claiming original-game ratios, frame overlap, or text margins. Quest/event images are not substitute evidence. Production can still proceed under explicit project choices; those choices are not verified official specifications.
 
 ## 5. Two Chibi UI Uses and Canonical-Proportion Selection UI
 
@@ -68,15 +64,15 @@ The Hatchet, Boulder, and Bodyguard/Bone Shards URLs downloaded successfully, an
 
 **Image observation:** the [portrait crop](sts2-style-refs/future-assets/ui-character-portrait-crop.png) focuses on Silent's mask, hood color, and broad contour rather than a miniature full body. The [map](sts2-style-refs/future-assets/ui-map-qol.jpg) distinguishes room types by color and symbol; no player-character marker was identified. [Top bar](https://www.megacrit.com/images/topbar_qol.jpg), [map original](https://www.megacrit.com/images/map_qol.jpg)
 
-**Project judgment:** chibi for these two uses is the user's shared project rule, **not an official chibi standard**. A few identifiers such as large hat, red hair, and violet eyes can follow official small-icon clarity. Portrait/marker have different cameras, margins, and visible information, so generate each for its purpose instead of extracting one from the other.
+**Project judgment:** chibi for these two uses is the user's shared project rule, **not an official chibi standard**. A few strong character identifiers (such as headwear, hair silhouette, and eyes) can follow official small-icon clarity. Portrait/marker have different cameras, margins, and visible information, so generate each for its purpose instead of extracting one from the other.
 
 ### Selection Tile and Locked Variant
 
 **Image observation:** the [tile group](sts2-style-refs/future-assets/ui-select-tiles-crop.png) gives faces/upper bodies substantial occupancy. [Selected Necrobinder](sts2-style-refs/future-assets/ui-select-tile-active-crop.png) is bright with a gold frame; [deselected Silent](sts2-style-refs/future-assets/ui-select-tile-inactive-crop.png) retains internal mask/hood forms despite darkening. This screenshot alone does not establish locked state or full-body head ratios. [Official screen](https://www.megacrit.com/images/steam_screenshot3_new.png)
 
-**Follow-up source inspection:** [ten local normal/locked originals](sts2-style-refs/character-select-tiles/README.md) now establish close-face normal art and black silhouettes on gray for locked art. See the [tile study](sts2-character-select-tile-study.md). Do not reproduce deselection tint as the locked variant.
+**Local-resource reference:** [ten local normal/locked originals](sts2-style-refs/character-select-tiles/README.md) establish close-face normal art and black silhouettes on gray for locked art; see the [tile study](sts2-character-select-tile-study.md). Do not reproduce deselection tint as the locked variant.
 
-**Project judgment:** generate a new face-close tile using original occupancy, gaze, and density while preserving the approved youthful non-SD anatomy. Fit-resize the whole master and use the same alpha for a black locked silhouette. Regenerate wrong compositions rather than cropping/enlarging/Cover fitting. Follow ARTS.md section 1.3/5.2.1 and Recipe 4-A/B.
+**Project judgment:** generate a new face-close tile using original occupancy, gaze, and density while preserving canonical non-SD anatomy. Fit-resize the whole master and use the same alpha for a black locked silhouette. Regenerate wrong compositions rather than cropping/enlarging/Cover fitting. Follow ARTS.md section 1.3/5.2.1 and Recipe 4-A/B.
 
 ## 6. Selection Illustration Base and UI Space
 
@@ -84,9 +80,9 @@ The Hatchet, Boulder, and Bodyguard/Bone Shards URLs downloaded successfully, an
 
 **Image observation:** the [information crop](sts2-style-refs/future-assets/ui-select-info-safe-area-crop.png) contains title, health/gold, character description, and starting relic over translucent dark UI. In this 2560×1440 source, text overlaps approximately `x=350~1430,y=450~960`; lower tiles approximately `x=870~1700,y=1180~1360`. These describe **one screen**, not universal runtime coordinates across resolution, localization, or UI scale. The reference index records actual extraction rectangles separately.
 
-**Project judgment:** design Realta's selection scene separately from the combat PNG. Keep face, violet eyes, hat buckle, and weapon socket clear of text. Continue broad forms/colors behind information without competitive tiny runes/ornament. Check face/weapon-tip collisions with lower tiles, arrows, and buttons in actual UI.
+**Project judgment:** design the character's selection scene separately from the combat PNG. Keep the face, eyes, and primary identifying equipment/action clear of text. Continue broad forms/colors behind information without competitive tiny ornament. Check face and weapon-tip collisions with lower tiles, arrows, and buttons in actual UI.
 
-**Project judgment:** selection art supports more scene lighting, secondary objects, and brushwork than sprites. This public-screenshot pass did not obtain a separate background source; do not infer file boundaries/layer implementation from it. Later local-resource observations are documented separately.
+**Project judgment:** selection art supports more scene lighting, secondary objects, and brushwork than sprites. A composited public screenshot does not establish runtime file boundaries or layer structure; see the [selection composition study](sts2-character-select-composition-study.md) for local skeleton and background-layer observations.
 
 ## 7. Energy, Merchant, and Supporting UI
 
@@ -95,10 +91,3 @@ The Hatchet, Boulder, and Bodyguard/Bone Shards URLs downloaded successfully, an
 **Image observation:** the download from `steam_screenshot4_new.png` was a **Silent merchant screen**, not the historical map. The [saved file](sts2-style-refs/future-assets/ui-merchant-screenshot.png) places character left and merchant right among awning, violet lantern, and props. The map reference was obtained separately as `map_qol.jpg`. [Distributed URL](https://www.megacrit.com/images/steam_screenshot4_new.png)
 
 **Project judgment:** do not paint game-rendered numbers into energy art. Preserve core color/contour between large and inline energy while adjusting density. Review merchant standing art, selection scenes, and portraits in their own layouts/sizes.
-
-## 8. Checks Performed in This Research
-
-- Downloads/dimensions were checked; saved PNG/JPG/GIF stills were opened to verify content/classification.
-- Observation crops used original pixels without resizing, repainting, or text removal. GIF frames were extracted without claiming full timing analysis.
-- Four previous card URLs were rechecked. Changed public URL contents were recorded alongside actual saved snapshots.
-- No game execution, UI runtime verification, or code tests were performed in this research. It does not replace base/downstream production or application approval.

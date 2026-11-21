@@ -1,6 +1,6 @@
 # 메르쿠리우스 선택 배경 적용 상태
 
-사용자가 채택한 차분한 눈매 수정본을 적용했다. [외형 명세](selection-art.md), [UI 파일 매핑](ui-assets.md), [배포 기록](/docs/deployment-status.md)을 따른다.
+차분한 눈매 구도의 선택 배경을 적용한다. [외형 명세](selection-art.md), [UI 파일 매핑](ui-assets.md), [배포 기록](/docs/deployment-status.md)을 따른다.
 
 | 항목 | 상태 |
 |---|---|

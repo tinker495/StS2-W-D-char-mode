@@ -14,15 +14,13 @@ This index routes file mappings, current application status and native integrati
 | Relic icons | [Deliveries, API and filenames](relics-assets.md) | [Relic art](relics-art.md) |
 | Power icons and display titles | [Presentation and API](powers-assets.md), [filename table](powers-inventory.md) | [Power art](powers-art.md) |
 
-The card inventory covers 81 design cards. The separate basic models use a dedicated Strike portrait and the native Defend portrait. The relic set has five models. The power set has 24 mod-supplied icons for 21 custom and three native powers. ForgeHeat uses native art. See [deployment status](/docs/deployment-status.md) for local installation scope, including the 2026-10-24 card, relic, and Aselige release.
+The card inventory covers 81 design cards. The separate basic models use a dedicated Strike portrait and the native Defend portrait. The relic set has five models. The power set has 24 mod-supplied icons for 21 custom and three native powers. ForgeHeat uses native art. See [deployment status](/docs/deployment-status.md) for local installation scope.
 
 ## Shared References
 
 - [Resource paths, import/PCK packaging and model IDs](shared-resources.md): use when adding files or investigating missing resources.
-- [Asset model inheritance](shared-models.md): use when changing which model owns a visual override.
 - [Character property API](shared-character-api.md): use when selecting a native or BaseLib extension point.
 - [Delivery conversion](shared-conversion.md): use when producing UI/standing/selection PNGs.
-- [Cross-category dimensions and extension points](shared-specifications.md): use for planning across asset families.
 
 These pages retain the StS2 / BaseLib 3.4.7 observations and link to [mod code](/Sts2WDCode/), [runtime images](/Sts2WD/images/) and [project dependencies](/Sts2WD.csproj). Identify external APIs by assembly, type and member, not personal cache paths. Follow [ARTS.md](/ARTS.md) for shared style.
 

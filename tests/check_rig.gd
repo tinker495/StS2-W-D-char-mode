@@ -1,18 +1,29 @@
 extends SceneTree
-## Human requester: wjdrb, 2026-10-20, retrospective items 2 and "수정하기."
-## Explicitly requested: zero Z/no top_level; foreground weapon with only the
-## gripping hand/effects above it; ten aliases and next transitions; defaults in
-## every clip; weapon/broom ground clearance; DeathAnimTime matching settlement.
-## Expectations come from that request and the tracked animation contract:
-## source floor Y527, held/released grip ownership, and death-sequence.json.
-## Clearance checks nonzero-alpha pixel EDGES, not an opaque-pixel threshold.
-## Sample every authored key and interpolation quarter-point, as specified by
-## docs/agents/codex-cutout-rig.md. This is sampled geometry, not visual approval.
+## Explicit human authorization: wjdrb, 2026-11-21 (per docs/agents/test-ownership.md)
+## to modernize the rig contract test for the unified 7-clip rigc combat/merchant rig
+## and remove legacy cutout / death-sequence.json / FLOOR_Y assumptions.
+##
+## Verifies structural invariants across both combat and merchant rig variants:
+## - Scene loading, ten dispatch names, autoplay, aliases, next transitions, loop modes
+## - Value-track uniqueness, time-0 defaults, and cross-clip track union
+## - Method-track notify_cue contracts on "." matching Realta.cs timings
+## - Zero z_index / non-top_level on all CanvasItem descendants
+## - Visuals/Skeleton2D at child index 0 and Visuals slot order matching orders[draw_order]
+## - Automatic return for one-shot actions and settled core bones + hold for die
 
 const NAMES := ["attack", "cast", "die", "hurt", "idle", "idle_loop", "powerup", "relaxed", "relaxed_loop", "revive"]
 const CLIPS := ["idle_loop", "attack", "hurt", "cast", "die", "relaxed_loop", "revive"]
 const ACTIONS := ["attack", "hurt", "cast", "powerup", "revive"]
-const FLOOR_Y := 527.0
+const EXPECTED_ATTACK_DELAY := 0.54
+const EXPECTED_DEATH_TIME := 1.66
+const EXPECTED_DIE_LENGTH := 2.20
+const EXPECTED_CUES := {
+	"attack": {"cue": &"attack_hit", "time": EXPECTED_ATTACK_DELAY},
+	"cast": {"cue": &"cast_release", "time": 0.25},
+	"powerup": {"cue": &"cast_release", "time": 0.25},
+	"die": {"cue": &"weapon_release", "time": 0.12},
+}
+
 var failures: Dictionary = {}
 var sample_count := 0
 
@@ -23,17 +34,30 @@ func require(condition: bool, rule: String, detail: String = "") -> void:
 	if not condition and not failures.has(rule):
 		failures[rule] = detail
 
-func run() -> void:
-	var sequence: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(
-		"res://docs/characters/realta/animation/death-sequence.json"))
-	var settled: float = sequence["settled_time"]
+func parse_cs_float(source: String, property_name: String) -> Variant:
 	var expression := RegEx.new()
-	expression.compile("DeathAnimTime\\s*=>\\s*([0-9.]+)f\\s*;")
-	var declaration := expression.search(FileAccess.get_file_as_string(
-		"res://Sts2WDCode/Characters/Realta/Realta.cs"))
-	require(declaration != null, "DeathAnimTime declaration", "Expected an explicit float duration")
-	if declaration != null:
-		require(float(declaration.get_string(1)) == settled, "DeathAnimTime equals settled_time")
+	expression.compile(property_name + "\\s*=>\\s*([0-9.]+)f\\s*;")
+	var match := expression.search(source)
+	if match == null:
+		return null
+	return float(match.get_string(1))
+
+func run() -> void:
+	var realta_cs := FileAccess.get_file_as_string("res://Sts2WDCode/Characters/Realta/Realta.cs")
+	var attack_delay = parse_cs_float(realta_cs, "AttackAnimDelay")
+	require(attack_delay != null, "AttackAnimDelay declaration", "Expected an explicit float duration in Realta.cs")
+	if attack_delay != null:
+		require(is_equal_approx(attack_delay, EXPECTED_ATTACK_DELAY), "AttackAnimDelay equals 0.54",
+			"got %s" % attack_delay)
+	var death_time = parse_cs_float(realta_cs, "DeathAnimTime")
+	require(death_time != null, "DeathAnimTime declaration", "Expected an explicit float duration in Realta.cs")
+	if death_time != null:
+		require(is_equal_approx(death_time, EXPECTED_DEATH_TIME), "DeathAnimTime equals 1.66",
+			"got %s" % death_time)
+
+	var effective_attack_delay: float = attack_delay if attack_delay != null else EXPECTED_ATTACK_DELAY
+	var effective_death_time: float = death_time if death_time != null else EXPECTED_DEATH_TIME
+
 	for variant in ["combat", "merchant"]:
 		var scene := load("res://Sts2WD/animations/realta/combat/realta_%s_rig.tscn" % variant) as PackedScene
 		if scene == null:
@@ -45,8 +69,7 @@ func run() -> void:
 		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		player.stop()
 		await process_frame
-		check_library(player, variant)
-		var hulls := weapon_hulls(rig, variant)
+		check_library(player, variant, effective_attack_delay)
 		for clip in CLIPS:
 			if not player.has_animation(clip):
 				continue
@@ -54,28 +77,14 @@ func run() -> void:
 			player.play(clip, 0)
 			player.advance(0)
 			var times := sample_times(player.get_animation(clip))
-			var maximum_y := -INF
-			var deepest := ""
 			for time in times:
 				player.seek(time, true)
 				sample_count += 1
-				var label: String = variant + "/" + clip
-				check_layers(rig, label, time)
-				for sprite: Sprite2D in hulls:
-					if not sprite.is_visible_in_tree() or inherited_alpha(sprite, rig) <= 0.0:
-						continue
-					var transform := rig.global_transform.affine_inverse() * sprite.global_transform
-					for point: Vector2 in hulls[sprite]:
-						var y := (transform * point).y
-						if y > maximum_y:
-							maximum_y = y
-							deepest = "%s at %.6fs" % [sprite.name, time]
-			require(maximum_y != -INF, variant + "/" + clip + ": visible weapon sampled")
-			require(maximum_y <= FLOOR_Y, variant + "/" + clip + ": ground clearance",
-				"max Y=%s, floor=%s, %s" % [maximum_y, FLOOR_Y, deepest])
-			print("%s/%s: %d samples, minimum clearance=%.6f" % [variant, clip, times.size(), FLOOR_Y - maximum_y])
-		check_completion(rig, player, variant, settled)
+				check_layers(rig, variant + "/" + clip, time)
+			print("%s/%s: %d samples" % [variant, clip, times.size()])
+		check_completion(rig, player, variant, effective_death_time)
 		rig.free()
+
 	for rule in failures:
 		printerr("FAIL: ", rule, " ", failures[rule])
 	if failures.is_empty():
@@ -85,14 +94,15 @@ func run() -> void:
 		printerr("FAIL: Realta rig checks (%d rules)" % failures.size())
 		quit(1)
 
-func check_library(player: AnimationPlayer, variant: String) -> void:
+func check_library(player: AnimationPlayer, variant: String, attack_delay: float) -> void:
 	var names := Array(player.get_animation_list())
 	names.sort()
 	require(names == NAMES, variant + ": ten dispatch names", str(names))
 	var idle := "relaxed_loop" if variant == "merchant" else "idle_loop"
 	require(player.autoplay == idle, variant + ": autoplay")
-	for alias in {"idle": idle, "relaxed": "relaxed_loop", "powerup": "cast"}:
-		var target: String = {"idle": idle, "relaxed": "relaxed_loop", "powerup": "cast"}[alias]
+	var aliases := {"idle": idle, "relaxed": "relaxed_loop", "powerup": "cast"}
+	for alias in aliases:
+		var target: String = aliases[alias]
 		require(player.has_animation(alias) and player.has_animation(target), variant + ": alias " + alias)
 		if player.has_animation(alias) and player.has_animation(target):
 			require(player.get_animation(alias) == player.get_animation(target), variant + ": alias resource " + alias)
@@ -101,15 +111,37 @@ func check_library(player: AnimationPlayer, variant: String) -> void:
 	for name in names:
 		var animation := player.get_animation(name)
 		var paths: Dictionary = {}
+		var found_cues: Array[Dictionary] = []
 		for track in animation.get_track_count():
+			var track_type := animation.track_get_type(track)
 			var path := str(animation.track_get_path(track))
-			require(not paths.has(path), variant + "/" + name + ": unique track " + path)
-			paths[path] = true
-			union[path] = true
-			require(animation.track_get_key_count(track) > 0, variant + "/" + name + ": keys " + path)
-			if animation.track_get_key_count(track) > 0:
-				require(animation.track_get_key_time(track, 0) == 0.0, variant + "/" + name + ": time-zero default " + path)
+			if track_type == Animation.TYPE_VALUE:
+				require(not paths.has(path), variant + "/" + name + ": unique track " + path)
+				paths[path] = true
+				union[path] = true
+				require(animation.track_get_key_count(track) > 0, variant + "/" + name + ": keys " + path)
+				if animation.track_get_key_count(track) > 0:
+					require(animation.track_get_key_time(track, 0) == 0.0, variant + "/" + name + ": time-zero default " + path)
+			elif track_type == Animation.TYPE_METHOD and path == ".":
+				for key in animation.track_get_key_count(track):
+					if animation.method_track_get_name(track, key) == &"notify_cue":
+						found_cues.append({
+							"time": animation.track_get_key_time(track, key),
+							"params": animation.method_track_get_params(track, key),
+						})
 		paths_by_clip[name] = paths
+		if EXPECTED_CUES.has(name):
+			var expected: Dictionary = EXPECTED_CUES[name]
+			var expected_cue: StringName = expected["cue"]
+			var expected_time: float = attack_delay if name == "attack" else expected["time"]
+			var matched := false
+			for entry in found_cues:
+				var params: Array = entry["params"]
+				if params.size() == 1 and params[0] == expected_cue and is_equal_approx(entry["time"], expected_time):
+					matched = true
+					break
+			require(matched, variant + "/" + name + ": notify_cue " + str(expected_cue),
+				"expected notify_cue(&\"%s\") on \".\" at %.2fs, found %s" % [expected_cue, expected_time, str(found_cues)])
 		var expected_next: String = idle if name in ACTIONS else ""
 		require(str(player.animation_get_next(name)) == expected_next, variant + "/" + name + ": next")
 		var loop: bool = name in ["idle", "idle_loop", "relaxed", "relaxed_loop"]
@@ -136,55 +168,37 @@ func check_layers(rig: Node2D, label: String, time: float) -> void:
 	for node in rig.find_children("*", "CanvasItem", true, false) + [rig]:
 		require(node.z_index == 0 and not node.is_set_as_top_level(),
 			label + ": zero Z/no top_level " + str(rig.get_path_to(node)), "at %s" % time)
-	var skeleton := rig.get_node("Skeleton2D")
-	var glove := rig.get_node("hand_l")
-	for child in rig.get_children():
-		if child is Polygon2D and child.name != "Slash" and child != glove or child.name == "DeathFull" or str(child.name).begins_with("DeathSeq"):
-			require(child.get_index() < skeleton.get_index(), label + ": body behind weapon " + str(child.name), "at %s" % time)
-	var held: bool = rig.get("weapon_gripped")
-	require((glove.get_index() > skeleton.get_index()) == held, label + ": held/released glove order", "at %s" % time)
-	for effect in ["Slash", "CastFx"]:
-		var index := rig.get_node(effect).get_index()
-		require(index > skeleton.get_index() and index > glove.get_index(), label + ": effect foreground " + effect)
+	var visuals := rig.get_node_or_null("Visuals") as Node2D
+	require(visuals != null, label + ": Visuals node present", "at %s" % time)
+	if visuals == null:
+		return
+	var skeleton := visuals.get_node_or_null("Skeleton2D")
+	require(skeleton != null and skeleton.get_index() == 0,
+		label + ": Visuals/Skeleton2D at index 0", "at %s" % time)
+	var draw_order: int = visuals.get("draw_order")
+	var orders: Array = visuals.get("orders")
+	var slot_names: PackedStringArray = visuals.get("slot_names")
+	var valid_order := draw_order >= 0 and draw_order < orders.size()
+	require(valid_order, label + ": Visuals.draw_order in range",
+		"draw_order=%s, orders=%s at %s" % [draw_order, orders.size(), time])
+	if not valid_order:
+		return
+	var expected_order: PackedInt32Array = orders[draw_order]
+	var children := visuals.get_children()
+	require(children.size() == expected_order.size() + 1,
+		label + ": Visuals slot child count",
+		"children=%s, expected=%s at %s" % [children.size(), expected_order.size() + 1, time])
+	if children.size() != expected_order.size() + 1:
+		return
+	for i in expected_order.size():
+		var expected_name := slot_names[expected_order[i]]
+		var actual_name := str(children[i + 1].name)
+		if actual_name != expected_name:
+			require(false, label + ": Visuals slot order matches draw_order",
+				"slot %d expected %s got %s (draw_order=%d) at %s" % [i, expected_name, actual_name, draw_order, time])
+			break
 
-func weapon_hulls(rig: Node2D, variant: String) -> Dictionary:
-	var hulls: Dictionary = {}
-	var weapon := rig.get_node("%Weapon")
-	for sprite: Sprite2D in weapon.find_children("*", "Sprite2D", true, false):
-		var image := sprite.texture.get_image()
-		if image.is_compressed():
-			var error := image.decompress()
-			require(error == OK, variant + ": readable texture " + str(sprite.name))
-		var edges := PackedVector2Array()
-		var origin := sprite.get_rect().position
-		for y in image.get_height():
-			var left := image.get_width()
-			var right := -1
-			for x in image.get_width():
-				if image.get_pixel(x, y).a > 0.0:
-					left = mini(left, x)
-					right = maxi(right, x)
-			if right >= left:
-				# Row extrema cover all pixel edges under any affine transform.
-				edges.append(origin + Vector2(left, y))
-				edges.append(origin + Vector2(right + 1, y))
-				edges.append(origin + Vector2(left, y + 1))
-				edges.append(origin + Vector2(right + 1, y + 1))
-		require(not edges.is_empty(), variant + ": nonempty weapon part " + str(sprite.name))
-		hulls[sprite] = Geometry2D.convex_hull(edges)
-	require(not hulls.is_empty(), variant + ": weapon sprites")
-	return hulls
-
-func inherited_alpha(sprite: Sprite2D, rig: Node2D) -> float:
-	var alpha := sprite.self_modulate.a
-	var node: Node = sprite
-	while node != rig.get_parent():
-		if node is CanvasItem:
-			alpha *= node.modulate.a
-		node = node.get_parent()
-	return alpha
-
-func check_completion(rig: Node2D, player: AnimationPlayer, variant: String, settled: float) -> void:
+func check_completion(rig: Node2D, player: AnimationPlayer, variant: String, death_time: float) -> void:
 	var idle := "relaxed_loop" if variant == "merchant" else "idle_loop"
 	for action in ACTIONS:
 		player.stop()
@@ -194,13 +208,26 @@ func check_completion(rig: Node2D, player: AnimationPlayer, variant: String, set
 		require(str(player.current_animation) == idle, variant + "/" + action + ": automatic return")
 	player.stop()
 	player.play("die", 0)
-	player.seek(settled, true)
-	var body: Node2D = rig.get_node("DeathFull")
-	var weapon: Node2D = rig.get_node("%Weapon")
-	var ribbon: Node2D = rig.get_node("%Ribbon")
-	var settled_transforms := [body.global_transform, weapon.global_transform, ribbon.global_transform]
-	player.seek(player.get_animation("die").length, true)
-	require(settled_transforms == [body.global_transform, weapon.global_transform, ribbon.global_transform],
-		variant + ": visible death pose settled by DeathAnimTime")
+	var die_anim := player.get_animation("die")
+	require(is_equal_approx(die_anim.length, EXPECTED_DIE_LENGTH), variant + ": die length equals 2.20",
+		"got %s" % die_anim.length)
+	require(death_time <= die_anim.length, variant + ": DeathAnimTime within die length",
+		"DeathAnimTime=%s, die.length=%s" % [death_time, die_anim.length])
+	player.seek(death_time, true)
+	var pelvis := rig.get_node_or_null("Visuals/Skeleton2D/root/pelvis") as Node2D
+	var chest := rig.get_node_or_null("Visuals/Skeleton2D/root/pelvis/chest") as Node2D
+	require(pelvis != null and chest != null, variant + ": core body bones present")
+	if pelvis != null and chest != null:
+		var settled_pelvis := pelvis.global_transform
+		var settled_chest := chest.global_transform
+		player.seek(die_anim.length, true)
+		var pelvis_settled := pelvis.global_transform.is_equal_approx(settled_pelvis)
+		var chest_origin_settled := chest.global_transform.origin.is_equal_approx(settled_chest.origin)
+		var chest_rot_delta := absf(angle_difference(settled_chest.get_rotation(), chest.global_transform.get_rotation()))
+		require(pelvis_settled and chest_origin_settled and chest_rot_delta <= deg_to_rad(0.5),
+			variant + ": core body bones settled between DeathAnimTime and die end",
+			"pelvis_settled=%s, chest_origin_settled=%s, chest_rot_delta=%.5f rad" % [pelvis_settled, chest_origin_settled, chest_rot_delta])
+	else:
+		player.seek(die_anim.length, true)
 	player.advance(0.02)
 	require(not player.is_playing() and player.get_queue().is_empty(), variant + ": death holds without next")

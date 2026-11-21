@@ -5,16 +5,16 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 ## 현재 상태
 
-- `Realta`, `Althea`, `CharacterThree`, `CharacterFour` 캐릭터 뼈대
+- `Realta`, `Althea`, `Mercurius`, `CharacterFour` 캐릭터 모델
 - 캐릭터별 카드·유물·포션 풀과 추상 기본 클래스
 - 캐릭터별 UI 이미지 경로, 영어·한국어 캐릭터 텍스트 및 고대인 대사
 - .NET 9 / MegaDot 4.5.1 / BaseLib 기반 빌드·패키징
 
-`CharacterThree`·`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 이 둘은 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다.
+`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다.
 
-레아르타(`Realta`)의 카드·유물 구성은 설계 합의([`docs/characters/realta/realta.md`](docs/characters/realta/realta.md))를 따릅니다. 타격·수비는 레아르타 전용 카드이며, 시작 덱은 타격 4장·수비 4장·비행 글레이브·담금질의 총 10장입니다. 수호는 카드별 방어도를 누적해서 높이고, 개선·유산·주문·역작·결투·용맹 효과를 지원합니다. 1단계 캐릭터 UI와 정적 전신 스탠딩은 정본 베이스([`docs/characters/realta/base.png`](docs/characters/realta/base.png))를 기준으로 적용되어 있으며, 카드·유물·파워 개별 아이콘은 순차 교체합니다. 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
+레아르타(`Realta`)의 카드·유물 설계와 리소스 적용 상태는 [설계 합의](docs/characters/realta/realta.md)와 [에셋 가이드](docs/characters/realta/realta-assets.md)를 따르며, 공통 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
-알테아의 카드·유물 구성과 내부 식별자 결정은 설계 합의([`docs/characters/althea/althea.md`](docs/characters/althea/althea.md))를 따릅니다.
+알테아(`Althea`)의 설계 합의와 식별자 결정은 [`docs/characters/althea/althea.md`](docs/characters/althea/althea.md), 메르쿠리우스(`Mercurius`)의 설계 합의는 [`docs/characters/mercurius/mercurius.md`](docs/characters/mercurius/mercurius.md)를 따릅니다.
 
 ## 소개문·대화 작성
 
@@ -36,7 +36,7 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 .\dev.ps1 check              # 로컬 참조 검사 후 잠긴 패키지 복원으로 C# 빌드
 .\dev.ps1 card-tests         # 참조 카드 55개 상태 + 화면 배치 36개 조건 검사
 .\dev.ps1 rebase             # origin/main 위로 리베이스한 뒤 기존 프리커밋 검사
-.\dev.ps1 anim attack        # 작성 → import → bake → 검사 → 렌더 → 비교 시트
+.\dev.ps1 anim attack        # rig-c 소스 컴파일 → 게임 리그 반영 → import·검사·렌더
 .\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
 .\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
 .\dev.ps1 editor             # MegaDot 편집기 열기
@@ -52,36 +52,17 @@ powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 
 `hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 일반 `git commit`을 실행할 때 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 로컬 참조 검사나 C# 컴파일·기존 ModAnalyzers가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드는 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
 
-리베이스는 작업 트리를 정리하고 `git fetch origin`으로 원격 정보를 갱신한 뒤 `.\dev.ps1 rebase`로 시작합니다. 다른 기준은 `-Upstream <대상>`으로 지정합니다. 이 명령은 커밋 순서를 유지하고 Git 작업 목록 끝에 저장소의 기존 `pre-commit` 검사를 넣습니다. 변경할 커밋이 없어도 검사하며, 충돌을 해결한 뒤 `git rebase --continue`로 이어가도 마지막에 같은 검사가 실행됩니다. 검사 실패 시 리베이스가 멈추고, 수정 사항을 해당 커밋에 반영한 뒤 다시 `git rebase --continue`하면 검사를 재실행합니다. 중간 커밋이 이미 생성될 수 있지만, 검사를 통과해야 전체 작업이 성공으로 끝납니다. 자동 fetch·stash·push는 수행하지 않습니다.
+리베이스는 작업 트리를 정리하고 `git fetch origin`으로 원격 정보를 갱신한 뒤 `.\dev.ps1 rebase`(다른 기준은 `-Upstream <대상>`)로 시작합니다. 리베이스 끝에 기존 `pre-commit` 검사가 자동 실행되며 자동 fetch·stash·push는 수행하지 않습니다. 일반 `git rebase`로 진행한 경우에는 완료 후 `git -c core.hooksPath=.githooks hook run pre-commit`으로 직접 검사하세요.
 
-일반 `git rebase`로 이미 시작한 작업에는 이 검사가 추가되지 않습니다. 그런 경우 리베이스 후 `git -c core.hooksPath=.githooks hook run pre-commit`으로 직접 검사하세요. 훅별 실행 시점은 [Git 공식 문서](https://git-scm.com/docs/githooks)에 설명되어 있습니다.
+게임 설치 상태와 확인한 범위는 [배포 상태](docs/deployment-status.md)에 기록합니다. 각 캐릭터 에셋 문서에는 게임에서 사용하는 리소스와 연결 경로를 기록합니다.
 
-게임 설치 이력과 설치본에서 확인한 범위는 [배포 상태](docs/deployment-status.md)에 기록합니다. 각 캐릭터 에셋 문서에는 게임에서 사용하는 리소스와 연결 경로를 기록합니다.
-
-`verify`는 [검사 스크립트](scripts/check-tracked-references.ps1)로 Git index의 추적 파일 전체를 매번 확인합니다. Markdown 링크·이미지는 추적 파일이나 그 상위 디렉터리를 가리켜야 합니다. 문서와 코드의 구체적인 초안·개인 캐시·미추적 파일 참조, 로컬 절대 경로, 누락된 저장소 소유 `res://` 리소스와 `.import` 원본도 검사합니다. 삭제된 파일은 대상 집합에서 빼므로 참조 문서를 수정하지 않은 삭제도 잡습니다. 새 입력 파일은 `git add` 후 검사하세요. 오류에는 파일·행·대상·사유가 표시됩니다.
-
-내부 문서 링크·이미지·참조형 링크에서 `../`처럼 상위 폴더로 이동하는 `..` 경로 요소는 검사에서 거부합니다. 이런 참조는 `/docs/agents/workflow.md`처럼 저장소 루트부터 씁니다. 같은 폴더·하위 폴더·`./` 연결과 루트 기준 링크를 허용하며, 같은 문서의 `#앵커`, 외부 URL과 Godot `res://`는 각 표기 방식으로 처리합니다.
-
-폴더 관례와 자리표시자·와일드카드, 표준 로컬 도구 경로, 고정 빌드 출력 경로는 문서에서 사용할 수 있습니다. 외부 출처 식별용 `sts2.dll`, `BaseLib.dll`, `SlayTheSpire2.pck` 파일명도 허용하지만, 같은 위치에 실제 미추적 파일이 있거나 경로가 붙으면 검사합니다. 공유 문서에 남길 근거는 [문서 작성 규칙](AGENTS.md#shared-documentation)을 따릅니다. 인프라 파일의 도구·출력·개인 설정 경로도 허용하지만, 설치 경로 기본값은 환경변수나 저장소 기준 경로로 작성합니다. GitHub Actions는 push와 pull request마다 게임 DLL 없이 같은 검사를 실행합니다.
-
-스킬 원문은 유지합니다. `.agents/skills/`의 Markdown은 일반 예시 경로의 존재·ignore 추정만 제외합니다. 실제 링크·이미지, 명시적 저장소 경로, 구체적인 초안·임시 결과·개인 캐시·절대 경로는 계속 검사하며, 스킬의 실행 스크립트에도 코드 검사 규칙을 적용합니다.
+`verify`는 [검사 스크립트](scripts/check-tracked-references.ps1)로 Git 추적 파일의 링크·이미지·`res://` 리소스와 미추적 참조를 검사합니다. 문서 링크에는 `..` 대신 저장소 루트 기준 경로(`/docs/...`)나 같은 폴더·하위 경로를 사용하며, 세부 기준은 [문서 작성 규칙](AGENTS.md#shared-documentation)을 따릅니다. 새 파일은 `git add` 후 검사하고, GitHub Actions도 push와 pull request마다 같은 검사를 실행합니다.
 
 레아르타의 반복 작업은 [애니메이션 작업 절차](docs/characters/realta/animation/reproduction.md)를 따릅니다. `anim`은 bake 후 [리그 기계 검사](tests/rig-checks.md)와 [인스턴스 간 상태 독립성 테스트](tests/README.md)를 실행하며, 실패하면 이후 렌더를 중단합니다. `check`, `publish`, `deploy`는 이 애니메이션 검사를 실행하지 않습니다. `anim`의 패키지 모드는 이미 생성한 PCK를 독립적으로 렌더합니다.
 
-MegaDot 로그는 실행마다 `artifacts/` 아래에 따로 저장됩니다. 메모리 접근 오류 창이나 인증서 오류가 나타나면 [빌드 진단 절차](docs/agents/build-troubleshooting.md)에 따라 해당 실행의 로그와 종료 코드를 확인합니다.
+코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요하며 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. 게임에 반영하려면 게임이 종료된 상태에서 `deploy`를 실행하세요. `deploy`는 패키징 성공과 네 파일(DLL·PCK·manifest·PDB)을 확인한 뒤 기존 설치본을 `artifacts/runtime/local-install-backup-<UTC 시각>-<고유 ID>/`에 백업하고 `mods/Sts2WD`에 복사해 SHA256을 비교합니다(자동 롤백 없음). 실행 환경을 구분해 남길 때는 `-ExecutionContextLabel local|sandbox|escalated`를 지정할 수 있습니다.
 
-`build`와 `publish` 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. `deploy`는 패키징 성공과 네 파일의 존재를 확인하고 게임 실행 중에는 설치를 중단합니다. 기존 네 파일은 `artifacts/runtime/local-install-backup-<UTC 시각>-<고유 ID>/`에 백업하고, 게임의 `mods/Sts2WD`에 설치한 뒤 SHA256을 비교합니다. 다른 모드 파일은 복사 대상이 아닙니다. 설치 도중 실패하면 출력된 백업 경로와 현재 설치 파일을 확인하세요. 자동 롤백은 하지 않습니다.
-코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요합니다. 게임에 반영하려면 `deploy`를 사용합니다.
-
-`publish`와 `deploy`는 실행마다 `artifacts/runtime/packaging-<UTC 시각>-<고유 ID>/`에 진단 자료를 남깁니다. `run.json`에는 브랜치·커밋·작업 트리 변경 목록·경로·실행 결과가, 단계별 JSON에는 실행 파일·인수·작업 디렉터리·종료 코드가 저장됩니다. 단계별 UTF-8 로그와 버전 로그로 SDK 및 MegaDot 출력도 확인할 수 있습니다. 설치 성공 기록에는 백업 경로와 네 파일의 해시가 포함됩니다.
-
-Godot 내보내기는 실제 종료 코드와 오류 메시지를 구분합니다. 샌드박스의 `Failed to read the root certificate store.` 메시지는 로그에 남기되 내보내기 실패로 판정하지 않습니다. 그 외 `ERROR:`, 스크립트·파싱 오류와 비정상 종료는 계속 실패로 처리하며, `dev.ps1`은 `savepack` 완료 메시지도 확인합니다. MSBuild 기본 `Exec`는 프로세스가 0으로 종료해도 출력에서 오류를 인식하면 -1을 보고할 수 있으므로, -1만으로 엔진 충돌을 단정하지 마세요. [MSBuild Exec 공식 문서](https://learn.microsoft.com/en-us/visualstudio/msbuild/exec-task)
-
-리그 검사 두 단계는 같은 진단 폴더에 `*.stdout.log`, `*.stderr.log`, `*.engine.log`, `*.exitcode`를 남깁니다. 두 PASS 메시지와 종료 코드 0을 모두 확인해야 검사 성공입니다.
-
-실행 환경을 알고 있다면 `-ExecutionContextLabel local`, `sandbox`, `escalated`로 기록할 수 있습니다. 기본값은 `unspecified`이며 이 옵션은 권한을 부여하거나 자동 판별하지 않습니다. 진단 자료에는 로컬 경로와 도구 출력이 포함되므로 공유 전에 내용을 확인하세요.
-
-패키징 실패 시 해당 실행의 파일은 설치하지 않고 실패 단계 로그부터 확인합니다. 다시 성공했더라도 원인 수정이 입증된 것은 아닙니다. 작업 복구 여부와 원인 확인 여부를 구분해 기록하세요. 설치 후 게임에서 BaseLib와 이 모드를 활성화해야 하며, 파일 해시 일치는 게임 내 동작 확인을 대신하지 않습니다.
+패키징·설치 로그 구성과 진단 절차는 [패키징 출력과 로그](docs/development-tools.md#패키징-출력과-로그)와 [빌드 진단 절차](docs/agents/build-troubleshooting.md)를 참고하세요. 패키징에 실패한 산출물은 설치하지 않으며, 설치 후 게임에서 BaseLib와 Sts2WD를 활성화해야 합니다. 파일 해시 일치는 게임 내 동작 확인을 대신하지 않습니다.
 
 IDE에서는 `Sts2WD.sln`을 엽니다. SDK 경로를 직접 지정해야 한다면 `.tools/dotnet/dotnet.exe`를 선택합니다. Godot용 솔루션은 `.sln` 형식을 유지합니다.
 
@@ -103,7 +84,7 @@ Sts2WDCode/
   Characters/
     Realta/                # 캐릭터 모델, 풀, Cards/Relics/Potions 기본 클래스
     Althea/
-    CharacterThree/
+    Mercurius/
     CharacterFour/
   Cards/                   # 공통 카드 이미지 경로 처리
   Relics/
@@ -112,7 +93,7 @@ Sts2WDCode/
 Sts2WD/
   images/charui/realta/           # 캐릭터별 선택 아이콘, 지도 아이콘, 에너지
   images/charui/althea/
-  images/charui/character_three/
+  images/charui/mercurius/
   images/charui/character_four/
   images/card_portraits/        # 공통 카드 이미지, big/은 큰 이미지
   localization/eng/

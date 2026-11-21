@@ -2,9 +2,7 @@
 
 [Asset index](realta-assets.md).
 
-The linked original-card tables and [additional card sources](cards-inventory-additional.md) cover the 81 cards in the design specification. The separate basic models are `RealtaStrike`, which uses [realta_strike.png](/Sts2WD/images/card_portraits/realta/realta_strike.png), and `RealtaDefend`, which uses the native Defend portrait.
-- Recommended resolution for the 79 standard-layout Basic, Token, Common, Uncommon, and Rare cards: **`1000 x 760`** (or `500 x 380` / `250 x 190`, ratio `25:19`).
-- Recommended resolution for the two `Ancient` cards (`realta_iordina_mac_bethlehem.png`, `realta_genius_inspiration.png`): **`606 x 852`** (full art; small-thumbnail reference `250 x 350`).
+The linked original-card tables and [additional card sources](cards-inventory-additional.md) cover the 81 cards in the design specification. The separate basic models are `RealtaStrike`, which uses [realta_strike.png](/Sts2WD/images/card_portraits/realta/realta_strike.png), and `RealtaDefend`, which uses the native Defend portrait. Portrait dimensions, opacity, and runtime resolution standards live in [delivered portraits](cards-assets.md).
 
 | Rarity / scope | Mapping |
 |---|---|

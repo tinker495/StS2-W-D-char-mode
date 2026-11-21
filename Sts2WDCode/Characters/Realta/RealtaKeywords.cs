@@ -5,7 +5,6 @@ namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
 public static class RealtaKeywords
 {
-    // 유산: exempt from the one-enchantment limit, so it can take the same enchantment repeatedly.
     [CustomEnum("REALTA_LEGACY")] [KeywordProperties(AutoKeywordPosition.After)]
     public static CardKeyword Legacy;
 

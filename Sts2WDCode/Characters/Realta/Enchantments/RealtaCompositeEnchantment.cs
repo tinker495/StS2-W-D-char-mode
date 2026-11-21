@@ -72,7 +72,6 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
     public override bool ShouldGlowRed => Children.Any(c => c.ShouldGlowRed);
     protected override IEnumerable<IHoverTip> ExtraHoverTips => Children.SelectMany(c => c.HoverTips);
 
-    // Same enchantment + same scope stacks into one entry; anything else becomes a new entry.
     public EnchantmentModel Add(EnchantmentModel enchantment, int amount, bool temporary, bool modifyCard = true)
     {
         Entry? same = _entries.FirstOrDefault(e => e.Temporary == temporary && e.Model.GetType() == enchantment.GetType());
@@ -108,7 +107,7 @@ public sealed class RealtaCompositeEnchantment : CustomEnchantmentModel
         return _entries.Where(e => !e.Temporary).Any(e => e.Model.CanEnchant(card));
     }
 
-    // Runs OnEnchant for entries added since the composite was put in the slot.
+    // CardModel.EnchantInternal only triggers OnEnchant when the composite first enters the slot; entries added afterward need ModifyCard called explicitly.
     public void ModifyPendingEntries()
     {
         if (!HasCard) return;

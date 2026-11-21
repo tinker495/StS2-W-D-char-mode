@@ -6,7 +6,6 @@ using MegaCrit.Sts2.addons.mega_text;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// Realta's visual pool owns its cost label and painted-frame treatment.
 internal static class RealtaCardAppearance
 {
     internal static void ApplyTo(NCard card)

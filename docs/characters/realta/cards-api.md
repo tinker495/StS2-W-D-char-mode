@@ -2,13 +2,13 @@
 
 [Asset index](realta-assets.md).
 
-## Card Reload Ownership (2026-11-17)
+## Card Reload Ownership
 
-The shared [`CardAppearance`](/Sts2WDCode/Cards/CardAppearance.cs) owns the single mod postfix on native `NCard.Reload`. It resets the mod's common energy/type-label overrides and portrait-border modulation, applies `ICardPoolAppearance` from `model.VisualCardPool`, invokes the actual model's `Sts2WDCard.ApplyPortraitAppearance`, then refreshes cost autosizing. The existing Realta and Althea pools supply the two pool-specific implementations; shared presentation code does not reference character-owned types. Realta's style values remain in `RealtaCardAppearance`, with their resource mapping in [frame integration](cards-frames.md).
+Shared [`CardAppearance`](/Sts2WDCode/Cards/CardAppearance.cs) owns the single mod postfix on native `NCard.Reload`. It resets common mod overrides (energy/type labels and portrait-border modulation), applies `ICardPoolAppearance` from `model.VisualCardPool`, calls `Sts2WDCard.ApplyPortraitAppearance`, and refreshes cost autosizing so shared presentation code never references character-owned types. Realta's pool appearance lives in `RealtaCardAppearance` (see [frame integration](cards-frames.md)).
 
 Inspection of installed `sts2.dll` product version `0.1.0+cc1f9462ca6c602e88f83f3bd7e2d084d4d4f8d7` established that `NCard.Model` and `NCard.Visibility` call `Reload`, which restores the native frame, type-plaque and portrait materials. BaseLib 3.4.7 `CustomCardModel` exposes frame/banner material and portrait selection, but no cost-label geometry/autosizing or post-Reload styling operation. The existing postfix is retained only for that presentation gap. Native material restoration still owns rarity and visibility; the mod does not duplicate it.
 
-The visual-pool selection and model portrait selection are intentionally independent. `RealtaGuard` keeps its native Token pool and its Realta visual-pool override. An Althea card keeps its portrait treatment when its visual pool changes. No card model IDs, textures, materials or visible style values were changed by this ownership refactor.
+The visual-pool selection and model portrait selection are intentionally independent. `RealtaGuard` keeps its native Token pool and its Realta visual-pool override. An Althea card keeps its portrait treatment when its visual pool changes.
 
 ## Card Portraits and Frames (`CardModel`, `CustomCardModel`, `CustomCardPoolModel`)
 
@@ -18,7 +18,7 @@ The visual-pool selection and model portrait selection are intentionally indepen
   - `sts2.dll: MegaCrit.Sts2.Core.Nodes.Screens.NInspectCardScreen`
   - `sts2.dll: MegaCrit.Sts2.Core.Models.ModelDb`
   - `BaseLib.dll` (`BaseLib.Abstracts.CustomCardModel`, `CustomCardPortrait`, `CustomCardPortraitPath`, `CustomCardPortraitPngPath`, `CustomCardFrame`, `CustomCardPoolModel`, `CustomCardPoolMaterialPatch`)
-  - `Sts2WDCode/Cards/Sts2WDCard.cs` (lines `11-26`)
+  - [`Sts2WDCard.cs`](/Sts2WDCode/Cards/Sts2WDCard.cs)
 
 ## Portrait Resolution in `CardModel` and `CustomCardModel`
 
@@ -45,31 +45,7 @@ The visual-pool selection and model portrait selection are intentionally indepen
      - `CustomCardPortrait` (`CardModel.Portrait` getter Prefix): returns `CustomPortrait` if set; otherwise, if `CustomPortraitPath` is not `null`, returns `ResourceLoader.Load<Texture2D>(CustomPortraitPath, null, CacheMode.Reuse)`. Only a `null` `CustomPortraitPath` falls through to vanilla `CardModel.Portrait`, which loads `PortraitPath`.
      - `CustomCardPortraitPngPath` (`CardModel.PortraitPngPath` getter Prefix): when `CustomPortraitPath != null`, replaces `PortraitPngPath` with `CustomPortraitPath`, making `HasPortrait` check `ResourceLoader.Exists(CustomPortraitPath)`.
      - `CustomCardPortraitPath` (`CardModel.PortraitPath` base getter Prefix): when `CustomPortraitPath != null`, makes the base `CardModel.PortraitPath` implementation return the `ResourcePath` of `CustomPortraitPath`.
-4. **Default dual-path lookup in `Sts2WDCard.cs` and a proposed broader improvement:**
-   - Cards listed in [delivered portraits](cards-assets.md) are exceptions: each model's `CustomPortraitPath` and `PortraitPath` resolve its character-owned portrait. The defaults and future proposal below describe other cards; a general automatic resolver has not been added.
-   - Template-derived code in `Sts2WDCode/Cards/Sts2WDCard.cs:17-25` currently overrides **both** `CustomPortraitPath` (`BigCardImagePath()` -> `images/card_portraits/big/<id>.png`) and `PortraitPath` (`CardImagePath()` -> `images/card_portraits/<id>.png`).
-   - Consequences:
-     1. At startup, `ModelDb.Preload()` (`ModelDb.cs:453`) calls `allCard.AllPortraitPaths` -> virtual `Sts2WDCard.PortraitPath`, looking for `images/card_portraits/<id>.png`. Missing files produce `"Could not find card image path: ..."` messages and return `images/card_portraits/card.png` (`250x190`). The eleven newer cards reuse the properties listed in [additional portrait sources](cards-inventory-additional.md).
-     2. During rendering, `NCard.Reload()` (`NCard.cs:1192`) calls `Model.Portrait` -> `CustomCardPortrait` patch -> `Sts2WDCard.CustomPortraitPath`. It **loads only `images/card_portraits/big/<id>.png`**, falling back to `images/card_portraits/big/card.png` (`1000x760`). The `PortraitPath` override is not used for screen rendering.
-   - **Proposed integration: automatic mapping and fallback under `Sts2WD/images/card_portraits/realta/<card_name>.png`:**
-     - To manage all 81 Realta cards (79 standard, including the `RealtaGuard` token, plus two Ancient cards) in one directory, with unfinished artwork falling back to `card.png` or `big/card.png`, adapt `StringExtensions.cs` and `RealtaCard.cs` / `RealtaGuard.cs` (or `Sts2WDCard.cs`) as follows:
-     ```csharp
-     // Add to Sts2WDCode/Extensions/StringExtensions.cs, or adapt CardImagePath:
-     public static string CharacterCardImagePath(this string path, string characterFolder)
-     {
-         string charPath = Path.Join(MainFile.ResPath, "images", "card_portraits", characterFolder, path);
-         if (ResourceLoader.Exists(charPath)) return charPath;
-
-         string flatBigPath = Path.Join(MainFile.ResPath, "images", "card_portraits", "big", path);
-         if (ResourceLoader.Exists(flatBigPath)) return flatBigPath;
-
-         string flatPath = Path.Join(MainFile.ResPath, "images", "card_portraits", path);
-         if (ResourceLoader.Exists(flatPath)) return flatPath;
-
-         return Path.Join(MainFile.ResPath, "images", "card_portraits", "big", "card.png");
-     }
-     ```
-     - Point `CustomPortraitPath` to the same resolved path in `RealtaCard.cs` and `RealtaGuard.cs` (or detect an `Id.Entry` beginning with `"STS2WD-REALTA_"` in `Sts2WDCard.cs`), then unify `PortraitPath => CustomPortraitPath;`.
-       - One PNG per card (`Sts2WD/images/card_portraits/realta/<card_name>.png`, `1000 x 760` or `606 x 852` for Ancient cards) then serves both normal and inspect views (`NInspectCardScreen`).
-       - Unfinished cards fall back to `res://Sts2WD/images/card_portraits/big/card.png` (`1000 x 760`) without per-card code changes.
-       - `RealtaGuard` (`[Pool(typeof(TokenCardPool))]`) directly inherits `Sts2WDCard`, not `RealtaCard`. Apply shared behavior in `Sts2WDCard` or include overrides in `RealtaGuard` so the token is not missed.
+4. **Live portrait resolution in [`Sts2WDCard.cs`](/Sts2WDCode/Cards/Sts2WDCard.cs):**
+   - `Sts2WDCard.ResolvePortraitPath()` caches by `Id.Entry`, resolves `res://Sts2WD/images/card_portraits/<char>/<slug>.png`, and unifies `CustomPortraitPath`, `PortraitPath`, and `BetaPortraitPath` so normal and inspect views share one PNG while missing files fall back via `FallbackPortraitPath`.
+   - `RealtaCard` overrides `FallbackPortraitPath` to base-game Strike/Defend art, whereas `RealtaGuard` inherits directly from `Sts2WDCard` to stay in `[Pool(typeof(TokenCardPool))]` (using `Sts2WDCard.FallbackPortraitPath` if its dedicated `realta_guard.png` is missing).
+   - Explicit per-card overrides remain only for `RealtaDefend` (native Defend art) and the eleven alias cards listed in [additional portrait sources](cards-inventory-additional.md).

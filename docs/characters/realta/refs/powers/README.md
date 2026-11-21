@@ -1,6 +1,6 @@
 # User-Provided Power Motif References
 
-The user supplied these 19 named PNG symbols on 2026-10-20 as composition and motif references for dedicated power icons. They are raw references, not approved runtime artwork or acceptance fixtures. Filenames follow the associated existing power model, while the Korean names preserve the user's mapping. Do not reinterpret symbols based on the power name alone: for example, 영웅의 뒷모습 deliberately uses a campfire, and 강철 포식자 uses a defensive impact rather than a wolf. Black symbols are transparent and should be inspected on a light background.
+These 19 named PNG symbols serve as composition and motif references for dedicated power icons. They are raw references, not approved runtime artwork or acceptance fixtures. Filenames follow the associated existing power model, while the Korean names preserve the user's mapping. Do not reinterpret symbols based on the power name alone: for example, 영웅의 뒷모습 deliberately uses a campfire, and 강철 포식자 uses a defensive impact rather than a wolf. Black symbols are transparent and should be inspected on a light background.
 
 | Power title | Reference file | Required primary motif |
 |---|---|---|
@@ -24,6 +24,6 @@ The user supplied these 19 named PNG symbols on 2026-10-20 as composition and mo
 | 이동식 대장간 | `realta_portable_forge_power.png` | Plain broad anvil |
 | 영웅의 뒷모습 | `realta_heros_silhouette_power.png` | Campfire over crossed logs |
 
-Generate complete square transparent emblems directly from these references and the same-use base-game status reference identified in [ARTS.md](/ARTS.md). Follow the character art specification's power-icon rules: simple connected shapes, restrained material shading, distinct silhouettes, and a quiet lower-right stack-number area. Keep the full painting for proportional conversion to 256px and 64px. A reference-guided generation request does not authorize replacing runtime icon paths or changing gameplay.
+Generate complete square transparent emblems from these references using the power-icon rules in [powers-art.md](/docs/characters/realta/powers-art.md) and the base-game status reference in [ARTS.md](/ARTS.md), keeping the full painting for proportional conversion to 256×256 and 64×64.
 
-The user's subsequent correction supersedes the original bead for 요정 장인 and curved barrier for 강철 포식자: use green wings with a rectangular artisan hammer, without eye-like circles, and a sword visibly snapping against a straight intact wall. Preserve the raw reference PNGs as supplied; follow the updated direction in `realta-art.md` for production.
+Preserve these raw reference PNGs as supplied. For active production overrides on 요정 장인 and 강철 포식자, follow [powers-art.md](/docs/characters/realta/powers-art.md).

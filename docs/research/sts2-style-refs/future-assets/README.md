@@ -59,5 +59,5 @@ SHA-256 for the 2026-10-18 download snapshots:
 
 - No original explicitly identified as an **Ancient/full-art card** was found in these Mega Crit public articles. Do not misclassify Quest, ordinary Rare cards, or Ancient events as such.
 - No complete transparent buff/debuff icon library was obtained. Combat crops provide limited examples, not universal colors, frames, or symbols.
-- This public-article pass did not obtain separate selection backgrounds or locked tiles. Later local-game research obtained [selection resources](/docs/research/sts2-style-refs/character-select/README.md) and [ten normal/locked tiles](/docs/research/sts2-style-refs/character-select-tiles/README.md). Deselected screenshot crops remain distinct from locked originals.
+- Separate selection backgrounds and locked tiles are not part of these public articles; see the local-game [selection resources](/docs/research/sts2-style-refs/character-select/README.md) and [ten normal/locked tiles](/docs/research/sts2-style-refs/character-select-tiles/README.md). Deselected screenshot crops remain distinct from locked originals.
 - Chibi for `character_icon` and `map_marker` is a user/project decision. Official portrait/map-node references do not prove an original-game chibi standard.

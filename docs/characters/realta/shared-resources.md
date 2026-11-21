@@ -19,22 +19,9 @@
     - `process/fix_alpha_border=true`, `process/premult_alpha=false`
     - `detect_3d/compress_to=1`
 
-## Path Helpers (`Sts2WDCode/Extensions/StringExtensions.cs:6-88`)
+## Path Helpers
 
-`Sts2WD.Sts2WDCode.Extensions.StringExtensions` builds paths relative to `MainFile.ResPath` (`res://Sts2WD`). For checked resource helpers, a missing file (`!ResourceLoader.Exists(path)`) produces a log message and falls back to the shared placeholder PNG.
-
-| Extension method (`StringExtensions.cs`) | Lines | Resolved path when `ResourceLoader.Exists` succeeds | Fallback when `Exists` fails |
-|---|---|---|---|
-| `ImagePath(this string path)` | `8-11` | `res://Sts2WD/images/{path}` | No fallback; returns the path unchanged |
-| `CardImagePath(this string path)` | `13-20` | `res://Sts2WD/images/card_portraits/{path}` | `res://Sts2WD/images/card_portraits/card.png` |
-| `BigCardImagePath(this string path)` | `22-29` | `res://Sts2WD/images/card_portraits/big/{path}` | `res://Sts2WD/images/card_portraits/big/card.png` |
-| `PowerImagePath(this string path)` | `31-38` | `res://Sts2WD/images/powers/{path}` | `res://Sts2WD/images/powers/power.png` |
-| `BigPowerImagePath(this string path)` | `40-47` | `res://Sts2WD/images/powers/big/{path}` | `res://Sts2WD/images/powers/big/power.png` |
-| `RelicImagePath(this string path)` | `49-56` | `res://Sts2WD/images/relics/{path}` | `res://Sts2WD/images/relics/relic.png` |
-| `BigRelicImagePath(this string path)` | `58-65` | `res://Sts2WD/images/relics/big/{path}` | `res://Sts2WD/images/relics/big/relic.png` |
-| `PotionImagePath(this string path)` | `67-74` | `res://Sts2WD/images/potions/{path}` | `res://Sts2WD/images/potions/potion.png` |
-| `PotionOutlineImagePath(this string path)` | `76-83` | `res://Sts2WD/images/potions/{path}` | `res://Sts2WD/images/potions/outline/potion.png` |
-| `CharacterUiPath(this string path)` | `85-88` | `res://Sts2WD/images/charui/{path}` | No fallback; returns the path unchanged |
+[StringExtensions.cs](/Sts2WDCode/Extensions/StringExtensions.cs) resolves mod asset paths relative to `MainFile.ResPath` (`res://Sts2WD`). Checked category helpers (`CardImagePath`, `PowerImagePath`, `RelicImagePath`, `PotionImagePath`, and their `Big*`/`Outline*` variants) test `ResourceLoader.Exists` and log before falling back to a shared placeholder PNG, while `ImagePath` and `CharacterUiPath` return paths without a fallback.
 
 ## ID Generation (`ModelDb` + `BaseLib`)
 
@@ -45,7 +32,3 @@
    - Resulting `Id.Entry`: `"STS2WD-REALTA_FLYING_GLAIVE"`.
 3. `BaseLib.Extensions.StringExtensions.RemovePrefix(this string id)` (`BaseLib.dll`) takes the substring after the first `'-'`; `.ToLowerInvariant()` then produces the filename stem.
    - Result: `"realta_flying_glaive"`.
-
-## How to Read the Image Inventory
-
-Use [[runtime image inventory](ui-assets.md#canonical-base-and-runtime-images)](ui-assets.md#canonical-base-and-runtime-images) for the current base/runtime production basis and dimensions. [topic asset index](realta-assets.md) and [asset specification table](shared-specifications.md) map files and dimensions for assets still to be produced. Work from current delivery paths and integration contracts rather than historical file inventories.

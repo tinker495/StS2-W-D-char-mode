@@ -6,7 +6,7 @@ This index owns navigation to Realta's visual specifications. Open the topic nee
 |---|---|
 | Base identity, costume, canonical weapon or body parts | [Appearance and identity](base-appearance.md) |
 | Palette, materials, face or hair rendering | [Palette and rendering](base-rendering.md) |
-| Standing, combat, merchant motion or attack trails | [Standing and animation art](animation-art.md) |
+| Standing, combat and merchant poses, casting gestures or facial expressions | [Standing and animation art](animation-art.md) |
 | Portrait, outline or map marker | [Character icons and UI art](ui-art.md) |
 | Card-cost or combat energy emblem | [Flame-heart energy art](ui-energy-art.md) |
 | Card frame and rarity treatment | [Heated-iron frame art](cards-frame-art.md) |
@@ -22,4 +22,4 @@ The approved [base.png](base.png) establishes the youthful appearance, open fore
 
 Insert only relevant prompt material into `<CHARACTER_ANCHOR>`, `<PROPORTION_BRIEF>`, `<PALETTE>` and `<ASSET_SUBJECT>`; limit equipment descriptions to visible parts. The base owns identity and official images guide style/composition. Assemble new requests from the applicable topic and recipes without old logs.
 
-[realta-history.md](realta-history.md) explains equipment, age, gaze, weapon-ratio and composition decisions. Current appearance and production constraints live in the topic specifications above. Versioned originals and execution logs remain optional working material.
+[realta-history.md](realta-history.md) explains equipment, age, gaze, weapon-ratio and composition decisions. Current appearance and production constraints live in the topic specifications above.

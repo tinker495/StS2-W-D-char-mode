@@ -13,7 +13,7 @@ The four originals in [refs/](refs) have distinct adopted/excluded roles.
 
 ## Canonical Base Specification
 
-[base.png](base.png) is the user-approved 1152×1728 RGBA master and **single visual identity anchor**. Preserve the complete character, weapon, canvas, and transparent margins. The current combat/rest/merchant image is a proportional reduction of that whole file. The user reverted the separately generated combat pose; generating another pose is not part of the current delivery. Generate UI/selection scenes separately with purpose-specific cameras while preserving the following identity. Dimensions/conversions/status belong in the [asset guide](ui-assets.md).
+[base.png](base.png) is the user-approved 1152×1728 RGBA master and **single visual identity anchor**. Preserve the complete character, weapon, canvas, and transparent margins. Animated combat/rest/merchant scenes are mapped in [animation-assets.md](animation-assets.md); generate UI and selection scenes separately with purpose-specific cameras while preserving the following identity. Dimensions, conversions, and delivery status belong in [ui-assets.md](ui-assets.md).
 
 1. **Head, face, ears:** apparent age around 13–14, short soft jaw/cheeks, short copper-red bob parted toward both temples to expose a broad forehead and eyebrows. Violet eyes, a clearly pointed ear visible through the hair on the left side of the image, confident half-smile. Keep a two-eye three-quarter face and forward gaze without an extreme profile.
 2. **Witch hat:** broad brim, crown bent/drooping left-back, deep petrol blue. Brown leather band and near-round bronze/brass front buckle. Dark navy-violet underside (`#253748`) supports the face.
@@ -34,7 +34,7 @@ The four originals in [refs/](refs) have distinct adopted/excluded roles.
 
 **A youthful 13–14 appearance and exposed forehead in natural full-body proportions.** This is apparent age, not a new canonical age declaration. Non-SD does not mean adult; do not default prompts to `adult`.
 
-- **Face/build:** short soft lower face, mildly round cheeks, small simple nose, slightly larger head/body relationship and petite build, without the icon's2–2.5-head chibi anatomy. Preserve playfulness, confidence, violet eyes, and pointed ears. Judge age visually rather than by head count alone.
+- **Face/build:** short soft lower face, mildly round cheeks, small simple nose, slightly larger head/body relationship and petite build, without the icon's 2–2.5-head chibi anatomy. Preserve playfulness, confidence, violet eyes, and pointed ears. Judge age visually rather than by head count alone.
 - **Hair/hat:** open part, hair swept toward temples, forehead visible from central hairline to brows. Long diagonal bangs or a low brim must not cover it again.
 - **Style/equipment:** `base.png` owns broad connected planes, selected angular values, low surface noise, blue/bronze palette, paired shoulders, continuous collar, and single broom polearm.
 - **Forward/head direction:** battle-forward is screen-right. Keep both eyes, short jaw, and open forehead while directing pupils forward. Large head rotation into profile changes identity. Follow [ARTS.md section 5.1](/ARTS.md#51-combat-rest-and-merchant-standing-art) and the [standing-art constraints](animation-art.md).

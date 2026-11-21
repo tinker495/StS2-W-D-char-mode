@@ -23,7 +23,7 @@ The press kit separates animated reveals and gameplay. Do not assign the same de
 
 **Official statement:** Casey Yano describes difficulties conveying pose, grip, and expression through the first game's small humanoid sprites. The sequel strengthens clarity, playfulness, liveliness, and rich color while reducing painterliness. [October 2024 post](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/)
 
-**Project judgment:** this does not prescribe hard cel shading everywhere, exactly three colors per material, or a uniform black outline. Public materials did not establish universal production measurements, head ratios, contour weights, or light angles. Label Realta's numeric choices as project decisions.
+**Project judgment:** this does not prescribe hard cel shading everywhere, exactly three colors per material, or a uniform black outline. Public materials did not establish universal production measurements, head ratios, contour weights, or light angles. Label character-specific numeric choices as project decisions.
 
 ## 3. Observations of the Downloaded Combat Frame
 
@@ -56,7 +56,7 @@ These **image observations** concern the [downloaded frame](sts2-style-refs/offi
 
 **Image observation:** [Neow's event](https://www.megacrit.com/images/steam_screenshot5_new.png) shows broad soft transitions on a rounded teal body and firmer eyes/ornaments. This contradicts an interpretation that StS2 has no gradients.
 
-**Project judgment:** reduce selection-scene ornament density for Realta's combat base. Large color planes must not turn organic faces/bodies into folded-paper shards. Vary transition softness by skin, cloth, leather, and metal.
+**Project judgment:** reduce selection-scene ornament density for character combat bases. Large color planes must not turn organic faces/bodies into folded-paper shards. Vary transition softness by skin, cloth, leather, and metal.
 
 ### Additional Animation Still Observations
 
@@ -73,37 +73,9 @@ These **image observations** concern the [downloaded frame](sts2-style-refs/offi
 - **[Necrobinder combat crop](sts2-style-refs/necro-combat-crop.png):** long simple neck/ribcage/shoulder and robe forms. Pale bone, dark robe interior, and blue flame read before face detail. Foreground Ironclad/sword occlude parts; do not claim to observe hidden anatomy. [Original frame](https://www.megacrit.com/images/steam_screenshot2_new.png)
 - **[Defect combat crop](sts2-style-refs/defect-combat-crop.png):** cloth groups into broad curved folds; yellow armor combines gradual curvature with clear planes. Chest reflections/emission are stronger. Making all materials identical matte three-step surfaces would erase this hierarchy. [Original frame](https://www.megacrit.com/images/steam_screenshot1_new.png)
 
-**Project judgment:** match the reading order rather than merely the presence/absence of lines or texture: silhouette/major values → materials/key overlaps → quiet brushwork/lines. For Realta's bronze pauldrons, use Ironclad's simple plate structure and Defect's broad curvature without copying their armor shapes.
+**Project judgment:** match the reading order rather than merely the presence/absence of lines or texture: silhouette/major values → materials/key overlaps → quiet brushwork/lines. For armored characters, use Ironclad's simple plate structure and Defect's broad curvature without copying their armor shapes. Apply shared rendering rules, material treatment, and comparison workflows from [ARTS.md](/ARTS.md).
 
-## 5. Concrete Translation for Realta
-
-These are **project judgments** for a costume/weapon absent from the original game, not official rules.
-
-| Part | Recommended treatment | Treatments to avoid |
-|---|---|---|
-| Face | Broad forehead/cheek light, major hat shadow, simple eyes/mouth conveying direction/confidence | Sparkles, multiple lashes, dense iris rings dominating an anime portrait; angular facial shards |
-| Red bob | Silhouette/flow first; a few major locks with limited light planes | Thin lines and spot highlights on every strand |
-| Blue hat/coat | Broad blue planes and overlap shadows; folds motivated by bending cloth | Repeated armor-like light/dark triangles or uniform tiny folds |
-| Bronze armor | Broad value changes explaining rounded shoulder/chest curvature; selective rim reflection | Unrelated brown patches, rust/scratches everywhere, glossy plastic |
-| Collar/fur trim | Continuous ivory mass with a few outer tufts; retain both shoulders and connected neck structure | Each hair outlined until the white edge fragments |
-| Wood shaft | Aged medium brown, major values, a few directional grain lines, slight bow | Dense cracks/knots, repeated black lines, protruding nodes, severe zigzags |
-| Broom straw | Large fan silhouette split into a few bundles with limited outer separation | Hundreds of fine strands that shimmer or blur when reduced |
-| Glaive blade | Broad dark metal and selected bright cutting edge | Chrome/plastic covered in white shine; many ornamental fragments |
-| Socket | Preserve bronze socket, two rivets, red ribbon as simple masses | Replacing construction with cloth/leather or adding hardware during material cleanup |
-
-## 6. Comparison Procedure for Subsequent Generation
-
-This is an art-observation sequence, not new tests or acceptance thresholds.
-
-1. Compare an actual official combat figure and candidate at similar displayed heights, not only enlarged.
-2. Trace silhouette: distinguish hat, head, both shoulders, gripping hand, shaft, and both legs.
-3. Compare fragmentation of costume planes; ask whether they explain major form rather than counting fragments.
-4. Avoid uniformly hard or uniformly blurred shadows. Retain curvature on armor/skin and clear overlaps.
-5. If broom/fur/wood lines attract attention first at small size, reduce their line density and contrast.
-6. Preserve identity/expression. Similarity does not require copying an official mask or skull face.
-7. Specify the main observed differences for the next revision. Do not merely repeat "StS2 style" or keep editing rejected candidates.
-
-## 7. Installed-Build Spine Renders (2026-10-24)
+## 5. Installed-Build Spine Renders
 
 This section describes the five official skeletons in `SlayTheSpire2.pck`, game v0.107.1, commit `59260271` in `release_info.json`. Use the procedure below to inspect their poses directly from the installed package.
 
@@ -128,7 +100,7 @@ Compared with the press-kit crops, these have no other characters overlapping, n
 - **Proportions:** official skeletons vary widely by character concept (crouched masked rogues, floating liches, bulky armor). Do not force sleek human knight/mage designs into squat 6–6.5-head proportions or oversized boots/gauntlets; preserve the character's canonical 7–7.5-head silhouette and judge readability through clear limb/weapon spacing at `240 × 360`.
 - **Trim and ornament:** consolidate micro-noise into clean, readable color bands and sharp emblem shapes that survive downscaling.
 
-## 8. Limitations
+## 6. Limitations
 
 - Public sources do not establish internal brushes, layer structure, texture resolution, rigs, exact color counts, or outline thickness.
 - Official GIFs are development-era combat material, not proof of identical frames in all released versions.

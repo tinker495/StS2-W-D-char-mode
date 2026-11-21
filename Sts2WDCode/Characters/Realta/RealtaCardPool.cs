@@ -23,7 +23,6 @@ public class RealtaCardPool : CustomCardPoolModel, ICardPoolAppearance
     public override Texture2D CustomFrame(CustomCardModel card) =>
         PreloadManager.Cache.GetTexture2D("cards/realta/frame.png".ImagePath());
 
-    //Color of small card icons
     public override Color DeckEntryCardColor => new("e76f51");
 
     public override bool IsColorless => false;

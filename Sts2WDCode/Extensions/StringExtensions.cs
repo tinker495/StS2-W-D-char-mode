@@ -2,7 +2,6 @@ using Godot;
 
 namespace Sts2WD.Sts2WDCode.Extensions;
 
-//Mostly utilities to get asset paths.
 public static class StringExtensions
 {
     public static string ImagePath(this string path)

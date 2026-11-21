@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 청동의 번견: 수호 5 at the start of combat. Uses the same timing as Fencing Manual, the base-game combat-start Forge relic.
+// Uses AfterSideTurnStart (turn <= 1) to match Fencing Manual, the base-game combat-start Forge relic.
 public sealed class RealtaBronzeWatchdog : RealtaRelic
 {
     private const string GuardVar = "Guard";

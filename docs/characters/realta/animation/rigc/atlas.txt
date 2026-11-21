@@ -1,0 +1,236 @@
+skeleton.png
+size: 2048, 2048
+filter: Linear, Linear
+pma: false
+boot_l
+bounds: 1203, 1692, 188, 180
+offsets: 0, 0, 188, 180
+rotate: 0
+boot_r
+bounds: 1772, 538, 126, 198
+offsets: 0, 0, 126, 198
+rotate: 0
+breastplate
+bounds: 548, 708, 176, 178
+offsets: 0, 0, 176, 178
+rotate: 0
+coat_back
+bounds: 2, 1487, 730, 528
+offsets: 0, 0, 730, 528
+rotate: 0
+coat_l
+bounds: 364, 2, 313, 516
+offsets: 0, 0, 313, 516
+rotate: 0
+coat_r
+bounds: 1283, 315, 485, 538
+offsets: 0, 0, 485, 538
+rotate: 0
+collar
+bounds: 1252, 857, 223, 103
+offsets: 0, 0, 223, 103
+rotate: 0
+eye_l-attack
+bounds: 1541, 1254, 102, 147
+offsets: 0, 0, 102, 147
+rotate: 0
+eye_l-closed
+bounds: 1934, 165, 96, 135
+offsets: 0, 0, 96, 135
+rotate: 0
+eye_l-fallen
+bounds: 1934, 2, 105, 159
+offsets: 0, 0, 105, 159
+rotate: 0
+eye_l-hurt
+bounds: 1675, 857, 93, 126
+offsets: 0, 0, 93, 126
+rotate: 0
+eye_l-neutral
+bounds: 1375, 1876, 105, 159
+offsets: 0, 0, 105, 159
+rotate: 0
+eye_l-ponder
+bounds: 1504, 1455, 96, 156
+offsets: 0, 0, 96, 156
+rotate: 0
+eye_r-attack
+bounds: 1772, 740, 192, 165
+offsets: 0, 0, 192, 165
+rotate: 0
+eye_r-closed
+bounds: 1203, 1876, 168, 156
+offsets: 0, 0, 168, 156
+rotate: 0
+eye_r-fallen
+bounds: 1458, 1012, 186, 180
+offsets: 0, 0, 186, 180
+rotate: 0
+eye_r-hurt
+bounds: 364, 860, 180, 144
+offsets: 0, 0, 180, 144
+rotate: 0
+eye_r-neutral
+bounds: 364, 522, 186, 180
+offsets: 0, 0, 186, 180
+rotate: 0
+eye_r-ponder
+bounds: 364, 706, 180, 150
+offsets: 0, 0, 180, 150
+rotate: 0
+forearm_l
+bounds: 1391, 1264, 146, 187
+offsets: 0, 0, 146, 187
+rotate: 0
+forearm_r
+bounds: 1479, 857, 192, 151
+offsets: 0, 0, 192, 151
+rotate: 0
+hair_l
+bounds: 1902, 538, 69, 190
+offsets: 0, 0, 69, 190
+rotate: 0
+hair_r
+bounds: 1968, 859, 75, 103
+offsets: 0, 0, 75, 103
+rotate: 0
+hand_l
+bounds: 1968, 732, 73, 123
+offsets: 0, 0, 73, 123
+rotate: 0
+hand_l-casting
+bounds: 1395, 1668, 118, 156
+offsets: 0, 0, 118, 156
+rotate: 0
+hand_r
+bounds: 1772, 909, 93, 99
+offsets: 0, 0, 93, 99
+rotate: 0
+hand_r-back
+bounds: 1675, 987, 93, 99
+offsets: 0, 0, 93, 99
+rotate: 0
+hand_r-ground
+bounds: 1458, 1196, 151, 54
+offsets: 0, 0, 151, 54
+rotate: 0
+hat
+bounds: 1380, 2, 550, 309
+offsets: 0, 0, 550, 309
+rotate: 0
+hat_back
+bounds: 736, 286, 543, 205
+offsets: 0, 0, 543, 205
+rotate: 0
+head
+bounds: 1772, 315, 260, 219
+offsets: 0, 0, 260, 219
+rotate: 0
+mouth-attack
+bounds: 1484, 1828, 135, 126
+offsets: 0, 0, 135, 126
+rotate: 0
+mouth-closed
+bounds: 1869, 909, 93, 51
+offsets: 0, 0, 93, 51
+rotate: 0
+mouth-fallen
+bounds: 497, 1399, 126, 84
+offsets: 0, 0, 126, 84
+rotate: 0
+mouth-hurt
+bounds: 364, 1399, 129, 81
+offsets: 0, 0, 129, 81
+rotate: 0
+mouth-neutral
+bounds: 1484, 1958, 126, 84
+offsets: 0, 0, 126, 84
+rotate: 0
+mouth-ponder
+bounds: 1869, 964, 81, 57
+offsets: 0, 0, 81, 57
+rotate: 0
+neck
+bounds: 681, 2, 51, 83
+offsets: 0, 0, 51, 83
+rotate: 0
+pauldron_l
+bounds: 1252, 1477, 76, 91
+offsets: 0, 0, 76, 91
+rotate: 0
+pauldron_r
+bounds: 548, 890, 132, 97
+offsets: 0, 0, 132, 97
+rotate: 0
+pelvis
+bounds: 1120, 1599, 211, 89
+offsets: 0, 0, 211, 89
+rotate: 0
+pouch
+bounds: 1517, 1615, 120, 117
+offsets: 0, 0, 120, 117
+rotate: 0
+ribbon
+bounds: 627, 1399, 65, 81
+offsets: 0, 0, 65, 81
+rotate: 0
+ribbon_long
+bounds: 932, 1011, 158, 303
+offsets: 0, 0, 158, 303
+rotate: 0
+ribbon_short
+bounds: 1335, 1477, 165, 187
+offsets: 0, 0, 165, 187
+rotate: 0
+shin_l
+bounds: 1120, 1306, 128, 289
+offsets: 0, 0, 128, 289
+rotate: 0
+shin_r
+bounds: 1094, 1011, 131, 291
+offsets: 0, 0, 131, 291
+rotate: 0
+sigil_core
+bounds: 879, 1703, 320, 320
+offsets: 0, 0, 320, 320
+rotate: 0
+sigil_inner
+bounds: 364, 1011, 384, 384
+offsets: 0, 0, 384, 384
+rotate: 0
+sigil_outer
+bounds: 736, 495, 512, 512
+offsets: 0, 0, 512, 512
+rotate: 0
+thigh_l
+bounds: 752, 1011, 176, 351
+offsets: 0, 0, 176, 351
+rotate: 0
+thigh_r
+bounds: 736, 1703, 139, 339
+offsets: 0, 0, 139, 339
+rotate: 0
+thrust_flash
+bounds: 736, 1399, 380, 300
+offsets: 0, 0, 380, 300
+rotate: 0
+thrust_streak
+bounds: 736, 2, 640, 280
+offsets: 0, 0, 640, 280
+rotate: 0
+torso
+bounds: 1229, 1011, 225, 249
+offsets: 0, 0, 225, 249
+rotate: 0
+upper_arm_l
+bounds: 1252, 1264, 135, 209
+offsets: 0, 0, 135, 209
+rotate: 0
+upper_arm_r
+bounds: 554, 522, 146, 182
+offsets: 0, 0, 146, 182
+rotate: 0
+weapon
+bounds: 2, 2, 358, 1481
+offsets: 0, 0, 358, 1481
+rotate: 0

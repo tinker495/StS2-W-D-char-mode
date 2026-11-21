@@ -1,8 +1,6 @@
 extends Node2D
-## Realta's character-select background: the unchanged 1920x1080 painting on a UV-fixed mesh with
-## local cape/ribbon/hat-tip motion, a pulse on the existing cyan magic, a few magic motes and blinks.
-## The face, both hands, the blade and the canvas border stay fixed. The parent Control is laid out
-## full-rect; this node covers it like TextureRect KEEP_ASPECT_COVERED (the previous static scene).
+## Keeps the face, hands, blade, and canvas border fixed while animating only interior cloth and glow.
+## Replicates TextureRect KEEP_ASPECT_COVERED inside the full-rect parent Control.
 
 const DURATION := 8.0
 const COLUMNS := 128
@@ -153,7 +151,6 @@ func _cloth_weight(p: Vector2, outline: PackedVector2Array, inset: float, fallof
 	return smoothstep(inset, falloff, distance)
 
 func apply_pose() -> void:
-	# Only the precomputed cloth interiors need per-frame work; the background is copied verbatim.
 	var vertices := setup.duplicate()
 	for i in moving_vertices:
 		var p := setup[i]
@@ -168,7 +165,7 @@ func apply_pose() -> void:
 	motes.queue_redraw()
 
 func _draw_motes() -> void:
-	# Small deterministic motes rising from the existing cyan magic, tied to the player's timeline.
+	# Driven by the AnimationPlayer timeline so motes loop seamlessly and stay deterministic under seek().
 	for i in MOTES:
 		var age := fposmod(mote_time / 4.0 + float(i) / MOTES, 1.0)
 		var opacity := sin(PI * age) * 0.34

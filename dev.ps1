@@ -13,6 +13,7 @@ param(
     [string]$OutputDirectory,
     [string]$Baseline,
     [string]$PackagePath,
+    [string]$SeedParts,
     [string]$Upstream = 'origin/main',
     [Alias('Type')]
     [string]$TypeName,
@@ -79,7 +80,8 @@ if ($Task -eq 'rebase') {
 
 # Human requester: wjdrb, 2026-10-24: run the full tracked-reference validator
 # in pre-commit (through build), check, and the SDK/game-independent verify task.
-if ($Task -in @('verify', 'build', 'check')) {
+# Human requester: wjdrb, 2026-11-22, retrospective item 2: run verify gates before publish and deploy as well.
+if ($Task -in @('verify', 'build', 'check', 'publish', 'deploy')) {
     & (Join-Path $projectRoot 'scripts/check-tracked-references.ps1')
     # Human requester: wjdrb, 2026-10-29, retrospective item 1: connect final
     # card dimensions/alpha checks to the existing local validation route.
@@ -145,6 +147,113 @@ function Invoke-RigChecks([string]$GodotExecutable, [string]$LogDirectory) {
     }
 }
 
+# Human requester: wjdrb, 2026-11-22, retrospective item 1: gate the `anim`
+# source-build workflow with `rigc render --folds` at 24 fps so mesh folds
+# fail on the compiled rig-c output before baking into runtime assets.
+function Invoke-RigFoldCheck([string]$CompiledDirectory, [string]$LogDirectory, [string]$RequestedClip, [string]$RequestedVariant) {
+    $buildDir = Join-Path $CompiledDirectory 'build'
+    $modelPath = Join-Path $buildDir 'skeleton.model.json'
+    if (-not (Test-Path -LiteralPath $modelPath -PathType Leaf)) {
+        throw "Compiled rig model not found: $modelPath"
+    }
+    $model = Get-Content -LiteralPath $modelPath -Encoding UTF8 -Raw | ConvertFrom-Json
+    $authoredClips = @()
+    if ($null -ne $model.animations) {
+        if ($model.animations -is [System.Array]) {
+            $authoredClips = @($model.animations | ForEach-Object { $_.name } | Where-Object { $_ })
+        } elseif ($model.animations.PSObject.Properties['name']) {
+            $authoredClips = @($model.animations.name)
+        } else {
+            $authoredClips = @($model.animations.PSObject.Properties.Name | Where-Object { $_ })
+        }
+    }
+    if ($authoredClips.Count -eq 0) {
+        throw "Compiled rig model has no authored animations: $modelPath"
+    }
+
+    $mappedClips = switch ($RequestedClip) {
+        'all' { $authoredClips }
+        'idle' {
+            switch ($RequestedVariant) {
+                'merchant' { @('relaxed_loop') }
+                'combat' { @('idle_loop') }
+                'both' { @('idle_loop', 'relaxed_loop') }
+                default { throw "Unsupported animation variant '$RequestedVariant'." }
+            }
+        }
+        'relaxed' { @('relaxed_loop') }
+        'powerup' { @('cast') }
+        default { @($RequestedClip) }
+    }
+
+    $targetClips = @()
+    foreach ($clipName in @($mappedClips)) {
+        if ($clipName -cnotin $targetClips) {
+            if ($clipName -cnotin $authoredClips) {
+                throw "Target clip '$clipName' (from -Clip '$RequestedClip', -Variant '$RequestedVariant') is not in $modelPath (available: $($authoredClips -join ', '))"
+            }
+            $targetClips += $clipName
+        }
+    }
+
+    $hasPhysics = (@($model.physics | Where-Object { $null -ne $_ }).Count -gt 0) -or
+        (@($model.constraints | Where-Object { $null -ne $_ -and $_.type -eq 'physics' }).Count -gt 0)
+    $powershell = (Get-Command powershell.exe -ErrorAction Stop).Source
+    $rigWrapper = Join-Path $projectRoot '.tools/rig-c/setup/run.ps1'
+
+    foreach ($targetClip in $targetClips) {
+        $foldOut = Join-Path $LogDirectory ('folds-' + $targetClip)
+        $logPrefix = Join-Path $LogDirectory ('folds-' + $targetClip)
+        $rigArgs = @(
+            'rigc', 'render',
+            '--candidate', $buildDir,
+            '--animation', $targetClip,
+            '--fps', '24',
+            '--max', '1024',
+            '--folds',
+            '--out', $foldOut
+        )
+        if ($hasPhysics -and $targetClip.EndsWith('_loop', [StringComparison]::Ordinal)) {
+            $rigArgs += @('--preroll', '1')
+        }
+        # Invoke through -Command with single-quoted literals because powershell.exe -File
+        # parses --out as an ambiguous common parameter (-OutVariable/-OutBuffer) on run.ps1.
+        $quotedTokens = @($rigWrapper) + $rigArgs | ForEach-Object { "'" + ($_ -replace "'", "''") + "'" }
+        $command = "`$ErrorActionPreference = 'Stop'; & " + ($quotedTokens -join ' ') + '; exit $LASTEXITCODE'
+        Invoke-AnimationProcess $powershell @('-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-Command', $command) $logPrefix
+
+        $foldsPath = Join-Path (Join-Path $foldOut ($targetClip + '@24fps')) 'folds.json'
+        if (-not (Test-Path -LiteralPath $foldsPath -PathType Leaf)) {
+            throw "Missing mesh-fold report '$foldsPath' for clip '$targetClip'; read $logPrefix.*.log"
+        }
+        $folds = Get-Content -LiteralPath $foldsPath -Encoding UTF8 -Raw | ConvertFrom-Json
+        if ($folds.spec -cne 'rigc-folds/1') {
+            throw "Unexpected mesh-fold report spec '$($folds.spec)' in $foldsPath; read $logPrefix.*.log"
+        }
+        if ($null -eq $folds.meshes) {
+            throw "Invalid mesh-fold report (missing 'meshes') in $foldsPath; read $logPrefix.*.log"
+        }
+        $meshes = @($folds.meshes | Where-Object { $null -ne $_ })
+        $foldedDetails = @()
+        foreach ($mesh in $meshes) {
+            $foldedFrames = @($mesh.frames | Where-Object { $null -ne $_ })
+            if ($foldedFrames.Count -gt 0 -or $null -ne $mesh.worst) {
+                $frameIndices = @($foldedFrames | ForEach-Object {
+                    if ($null -ne $_.index) { $_.index } else { $_ }
+                })
+                if ($frameIndices.Count -eq 0 -and $null -ne $mesh.worst -and $null -ne $mesh.worst.index) {
+                    $frameIndices = @($mesh.worst.index)
+                }
+                $foldedDetails += "$($mesh.slot)/$($mesh.attachment) (frames: $($frameIndices -join ', '))"
+            }
+        }
+        if ($foldedDetails.Count -gt 0) {
+            throw "Mesh fold detected in clip '$targetClip': $($foldedDetails -join '; '). Inspect $foldsPath and $logPrefix.*.log"
+        }
+        Write-Host "PASS: Realta mesh folds ($($targetClip): 0/$($meshes.Count) meshes folded at 24 fps)"
+    }
+}
+
 Push-Location -LiteralPath $projectRoot
 try {
     if ($Task -eq 'restore') {
@@ -184,6 +293,14 @@ try {
         $python = (Get-Command python -ErrorAction Stop).Source
         if ($Baseline) { $Baseline = (Resolve-Path -LiteralPath $Baseline).ProviderPath }
         if ($PackagePath) { $PackagePath = (Resolve-Path -LiteralPath $PackagePath).ProviderPath }
+        if ($SeedParts) {
+            if ($PackagePath) { throw '-SeedParts applies only to source builds and cannot be combined with -PackagePath.' }
+            if (-not (Test-Path -LiteralPath $SeedParts -PathType Container)) {
+                throw "SeedParts directory not found: $SeedParts"
+            }
+            $SeedParts = (Resolve-Path -LiteralPath $SeedParts).ProviderPath
+            if ($SeedParts.Length -gt 3) { $SeedParts = $SeedParts.TrimEnd('\', '/') }
+        }
         if ($OutputDirectory) {
             $animationOutput = if ([System.IO.Path]::IsPathRooted($OutputDirectory)) {
                 [System.IO.Path]::GetFullPath($OutputDirectory)
@@ -206,13 +323,18 @@ try {
             Copy-Item -LiteralPath $renderScript -Destination (Join-Path $renderProject 'render_clip.gd')
             $renderScript = Join-Path $renderProject 'render_clip.gd'
         } else {
-            Invoke-AnimationProcess $python @('-X', 'utf8', '-B', (Join-Path $animationSource 'author_clips.py')) `
-                (Join-Path $animationOutput 'author')
+            $compiled = Join-Path $animationOutput 'compiled'
+            $buildArguments = @('-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass',
+                '-File', (Join-Path $animationSource 'rigc/build.ps1'), '-Output', $compiled)
+            if ($SeedParts) { $buildArguments += @('-SeedParts', $SeedParts) }
+            Invoke-AnimationProcess (Get-Command powershell.exe).Source $buildArguments (Join-Path $animationOutput 'author')
+            # Human requester: wjdrb, 2026-11-22, retrospective item 1: run the
+            # 24 fps mesh-fold gate right after rig-c compilation.
+            Invoke-RigFoldCheck $compiled $animationOutput $Clip $Variant
+            Invoke-AnimationProcess $python @('-X', 'utf8', '-B', (Join-Path $projectRoot 'scripts/realta/import_game_rig.py'),
+                $compiled, (Join-Path $projectRoot 'Sts2WD/animations/realta/combat')) (Join-Path $animationOutput 'bake')
             Invoke-AnimationProcess $paths.GodotPath @('--headless', '--editor', '--path', $projectRoot, '--import', '--quit') `
                 (Join-Path $animationOutput 'import') -Engine
-            Invoke-AnimationProcess $paths.GodotPath @('--headless', '--path', $projectRoot, '--script',
-                (Join-Path $animationSource 'build_combat_rig.gd'), '--', $animationSource) `
-                (Join-Path $animationOutput 'bake') 'baked res://Sts2WD/animations/realta/combat/realta_merchant_rig.tscn -> OK' -Engine
             Invoke-RigChecks $paths.GodotPath $animationOutput
         }
         $frames = Join-Path $animationOutput 'frames'
@@ -231,7 +353,6 @@ try {
         return
     }
 
-    # Import textures before exporting a PCK on a fresh checkout.
     New-Item -ItemType Directory -Path (Join-Path $projectRoot 'artifacts') -Force | Out-Null
     New-Item -ItemType File -Path (Join-Path $projectRoot 'artifacts/.gdignore') -Force | Out-Null
     if ($Task -eq 'check') {
@@ -263,6 +384,7 @@ try {
         Invoke-RecordedCommand -Executable $dotnet -Arguments @('--version') -LogDirectory $diagnosticRoot -Step 'dotnet-version' -Summary
         Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--version') -LogDirectory $diagnosticRoot -Step 'megadot-version' -Summary
         Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
+        # Import textures before exporting a PCK on a fresh checkout.
         Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--log-file', (Join-Path $diagnosticRoot 'import.engine.log'),
             '--headless', '--editor', '--path', $projectRoot, '--import', '--quit') -LogDirectory $diagnosticRoot -Step 'import' -Summary
         $importLog = Get-Content -LiteralPath (Join-Path $diagnosticRoot 'import.log') -Encoding UTF8 -Raw

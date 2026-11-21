@@ -20,7 +20,7 @@
 | S2 | [2024-11-07 UI update](https://www.megacrit.com/news/2024-11-07-neowsletter-issue-4/) | Rare-card effects, map colors/size, top-bar improvements | Explicitly work in progress; do not copy historical pixel values as current mod specifications |
 | S3 | [July 2025 Q&A and cards](https://www.megacrit.com/news/2025-7-16-neowsletter-issue-12/) | Face concealment as a visual choice; actual Colorless cards | URL says July 16, article says July 15; distinguish fan art from game assets |
 | S4 | [2025-10-16 Necrobinder reveal](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/) | Character/companion roles, cards, presentation | Effects and numbers were in development; analyze presentation only |
-| S5 | [2026-03-05 Early Access launch](https://megacrit.com/news/2026-03-05-early-access-launch/) | Launch context, three official screenshots, possible future changes | Distributed screenshots do not necessarily represent every latest asset on 2026-10-18 |
+| S5 | [2026-03-05 Early Access launch](https://megacrit.com/news/2026-03-05-early-access-launch/) | Launch context, three official screenshots, possible future changes | Distributed screenshots do not necessarily represent every latest asset at inspection time |
 | S6 | [Official press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | Trailer links, distributed images, game description | Animated reveals and actual in-game still assets serve different purposes |
 | S7 | [Official Steam page](https://store.steampowered.com/app/2868840/Slay_the_Spire_2/) | Mega Crit developer/publisher, Early Access status, game description | User tags are not official art direction |
 
@@ -40,7 +40,7 @@ The brief direct quotation below supplements those original category names:
 
 **Official statement:** in the July 2025 Q&A, Casey describes humanoid face concealment as a visual choice supporting player identification, not an in-world reason. [S3](https://www.megacrit.com/news/2025-7-16-neowsletter-issue-12/)
 
-**Project recommendation:** removing Realta's eyes/expression is unnecessary for fidelity. Violet eyes, copper-red hair, and confidence may remain. Use hat shadow and large costume masses to control facial contrast/detail. Necrobinder's dark face belongs to that character and should not be copied.
+**Project recommendation:** concealing a character's eyes or expression is unnecessary for fidelity. Preserve each character's canonical eyes, hair, and expression, using headwear shadow and large costume masses to control facial contrast and detail. Necrobinder's dark face belongs to that character and should not be copied.
 
 ### 3.3 UI Prioritizes Recognition and Selection
 
@@ -70,13 +70,13 @@ Source: [official Necrobinder selection PNG](https://www.megacrit.com/images/ste
 - Shared violet hues do not imply equal values/saturation; light pink cloth and pale bone create focus.
 - Full illustration, left information panel, and bottom portraits have distinct scales and roles.
 
-**Project recommendation:** design a separate selection composition that can emphasize face, hat, and weapon, rather than enlarging a transparent combat sprite. Maintain identity through costume structure, colors, and accessories.
+**Project recommendation:** design a separate selection composition that can emphasize face, headwear, and equipment, rather than enlarging a transparent combat sprite. Maintain identity through costume structure, colors, and accessories.
 
 ### V3. Map: Textured Parchment and Simple Symbols
 
 The official map reference places simple room symbols and dotted paths on textured parchment. Room symbols differ in both color and shape. [Map reference snapshot](sts2-style-refs/future-assets/ui-map-qol.jpg)
 
-**Project recommendation:** use one or two marker identifiers such as hat-tip shape or hair color, rather than full-body facial detail and dozens of fur marks.
+**Project recommendation:** use one or two marker identifiers such as headwear silhouette or hair color, rather than full-body facial detail and fine surface texture.
 
 ### V4. Event: Strangeness through Scale, Shape, and Color
 
@@ -97,7 +97,7 @@ Source: [official card PNG](https://www.megacrit.com/images/2025_07_hatchet.png)
 
 **Visual observation:** the hatchet crosses diagonally; blue curves and fragmented light convey motion. Dark background and bright metal establish focus. Wood and metal differ in color/highlight shape. Cost/title belong to the frame.
 
-**Project recommendation:** a large blade/handle/attack-arc relationship can read better than a tiny full-body combat scene for broom-glaive attacks. Keep trails and sparkles from obscuring the weapon.
+**Project recommendation:** a large weapon/handle/attack-arc relationship can read better than a tiny full-body combat scene for melee Attack cards. Keep trails and sparkles from obscuring the weapon.
 
 ### V6. Rolling Boulder: Mass from a Limited Subject
 
@@ -105,7 +105,7 @@ Source: [official card PNG](https://www.megacrit.com/images/2025_07_boulder.png)
 
 **Visual observation:** a large rounded rock, fragments, and dust dominate. Angular planes vary in value without black lines on every crack. Background, dust, and subject directions group into advancing mass.
 
-**Project recommendation:** Guard, armor, and defense cards can focus on one action/material: a dominant subject, supporting effect, and simple background. This is not an official object-count rule.
+**Project recommendation:** defensive and armor cards can focus on one action/material: a dominant subject, supporting effect, and simple background. This is not an official object-count rule.
 
 ### V7. Bodyguard / Bone Shards: Related Themes, Different Scenes
 
@@ -113,7 +113,7 @@ Source: [official two-card PNG](https://www.megacrit.com/images/bodyguard_bonesh
 
 **Visual observation:** one scene emphasizes a broad palm protecting a figure; the other emphasizes radiating bone fragments. Violet clothes and pale bones connect the theme while action silhouettes and backgrounds differ. Pink, teal, and yellow coexist; art is not restricted to its frame color.
 
-**Project recommendation:** do not wash Realta's entire card family in blue. Preserve recurring blue clothes, copper-red hair, and bronze details while selecting accents for Flame, Guard, Spell, or the relevant scene.
+**Project recommendation:** do not wash a character's entire card family in a single frame hue. Preserve canonical costume, hair, and material identifiers while selecting scene-appropriate accents for distinct mechanics and effects.
 
 ### V8. Top Bar: Assets Read with Neighboring Information
 
@@ -121,44 +121,17 @@ Source: [official top-bar JPG](https://www.megacrit.com/images/topbar_qol.jpg), 
 
 **Visual observation:** portrait, health, coins, potions, map, and deck have distinct shapes. Bright internal symbols and dark boundaries separate small icons. Unannounced relics were blurred, so their materials/silhouettes cannot be inferred.
 
-**Project recommendation:** reorganize eyes/hair/hat for portrait recognition and background contrast. A relic such as 청동의 번견 must read as an object's silhouette, not merely as tiny metal scratches.
+**Project recommendation:** reorganize eyes, hair, and headwear for portrait recognition and background contrast. Relics must read as an isolated object silhouette, not merely through tiny surface scratches.
 
-## 6. Translating Observations into ARTS.md
-
-These are **project recommendations**, not an official production manual.
-
-| Area | Recommended description | Unsupported claim to avoid |
-|---|---|---|
-| Overall | Slightly eerie, strange fantasy with playfulness/confidence; clear small-scale form/action | Everything must be dark and muddy like horror |
-| Lines/edges | Separate color/value/overlap; add dark lines selectively and scale their weight | Always use thick pure-black outlines |
-| Painting | Establish major values, then limited gradients/material detail | More rough brush marks mean greater fidelity |
-| Materials | Distinguish major reflection shapes and edges of metal/leather/cloth/fur | Use identical cel shading or oil texture everywhere |
-| Proportions | Allow simplification/exaggeration for identity and action | All official characters share a fixed head ratio |
-| Face | Preserve reference eyes/expression, organized by hat shadow and major values | Eyes/mouth must disappear |
-| Color | Separate local/background colors; use accents for role/focus | Every card/effect of a character uses one color |
-| Light | Form-defining key light and selective magical light, adapted to scene | Official light is always upper-left with two shading steps |
-| Cards | Readable main action/object; cost/text/frame remain UI | Paint the entire card UI into the illustration |
-| Animation | Readable preparation/contact/recovery and quick combat flow | A still image establishes official rig specifications |
-
-## 7. Avoiding First-Game, Sequel, and Development-Image Confusion
+## 6. Avoiding First-Game, Sequel, and Development-Image Confusion
 
 - **Official statement:** S1 is the direct comparison. A relative reduction in painterliness does not mean no brushwork. [S1](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/)
 - **Official statement:** the press kit distinguishes animated reveal, gameplay, and Early Access trailers. Reveal-film staging is not a combat-sprite specification. [S6](https://www.megacrit.com/press-kits/slay-the-spire-2/)
 - **Official statement:** news includes Community Roundup/Community Corner fan art. Hosting on the official site does not make an image an official game asset. [S3](https://www.megacrit.com/news/2025-7-16-neowsletter-issue-12/)
 
-## 8. Research Limits and Follow-Up
+## 7. Research Limits and Follow-Up
 
-1. Public primary sources did not establish universal head ratios, exact HEX palettes, line weights, light angles, shading counts, or rig/layer specifications. Any such ARTS.md values are **project starting points**.
+1. Public primary sources did not establish universal head ratios, exact HEX palettes, line weights, light angles, shading counts, or rig/layer specifications. Any such [ARTS.md](/ARTS.md) values are **project starting points**.
 2. Developer statements support the animation direction. The still images support color, edges, and composition.
 3. Color observations are qualitative. Project HEX values are design choices.
 4. The cited materials describe the particular scenes and versions identified in each source.
-
-## 9. Reusable Source-Review Procedure
-
-1. Confirm that Mega Crit or the actual creator owns the source.
-2. Separate game reveals from fan-art sections.
-3. Distinguish written intent from visual interpretation.
-4. Record image purpose: combat, selection, card, relic, map, or event.
-5. Record date/status: development concept or distributed launch screenshot.
-6. Label ARTS.md numbers, palettes, and exclusions as sourced official facts or project recommendations.
-7. Have a person review new drafts at final size and within original-game UI. A polished enlarged standalone image does not establish integration suitability.

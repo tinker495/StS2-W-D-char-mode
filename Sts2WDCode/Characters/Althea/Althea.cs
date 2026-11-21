@@ -47,7 +47,6 @@ public class Althea : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<AltheaRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<AltheaPotionPool>();
 
-    // The user selected the unchanged base painting for all three standing contexts.
     public override string CustomVisualPath => "res://Sts2WD/scenes/althea/combat.tscn";
     public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/althea/rest_site.tscn";
     public override string CustomMerchantAnimPath => "res://Sts2WD/scenes/althea/merchant.tscn";

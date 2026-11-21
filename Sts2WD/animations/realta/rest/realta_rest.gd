@@ -1,11 +1,7 @@
 extends Node2D
-## Realta's seated rest-site animation: one unchanged painting on a UV-fixed mesh, deformed by five
-## controls that a single AnimationPlayer keys (breathing, head + cheek-supporting hand, hat tip,
-## both coat ends). The three Act loops share the motion and differ in ambient light, as observed in
-## the official rest scenes. A small eye patch rides the same vertices for blinks.
-##
 ## The game only dispatches act clips and light_off to direct SpineSprite children, so
 ## Sts2WDCode/Characters/Realta/RealtaSceneBridge.cs calls play_variant()/set_light_off().
+## As in official rest scenes, the three Act loops share motion and differ only in ambient tint.
 
 const DURATION := 8.0
 const GRID := 25
@@ -15,7 +11,6 @@ const ACT_TINT := {
 	"hive_loop": Color(1.0, 0.94, 0.83),
 	"glory_loop": Color(0.83, 0.96, 1.0),
 }
-## Two quick blinks per 8 s loop (open -> closed -> open), shared by every Act.
 const BLINKS := [[2.6, 2.69], [6.2, 6.28]]
 
 @export var master: Texture2D

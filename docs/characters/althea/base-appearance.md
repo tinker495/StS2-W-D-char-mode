@@ -2,7 +2,7 @@
 
 The [canonical base](base.png) defines current appearance, with the [bust reference](refs/ref1.jpg) supplying upper-body details.
 
-## Adopted Base — 2026-10-24
+## Adopted Base
 
 The user selected `base.png` for its clean 2D rendering, bright silver-white, white and navy palette, and graceful proportions. Preserve the complete painting, including half-tied hair, calm blue eyes, navy collar and lining, white split tabard with red cross, gold-accented silver plates, and the grounded right-facing three-quarter stance. The drawn straight sword angles up-right while the opposite hand supports the empty sheath. Weapon naming and final construction are open design decisions.
 

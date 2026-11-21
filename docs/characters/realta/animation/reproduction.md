@@ -1,69 +1,41 @@
-# Rebuild and inspect Realta animations
+# Rebuild and inspect the Realta combat and merchant rigs
 
-Use this workflow when changing combat/merchant authoring inputs or reviewing generated scenes. All executable tools are tracked: `dev.ps1`, the authoring/baking sources in this directory, `tools/render_clip.gd`, `tools/review_frames.py`, and the checks under `tests/`. Runtime PNGs and coordinate manifests are the production inputs. Every directory under `artifacts/` below is created by the command or explicitly selected as an optional comparison input.
+Begin at the repository root with the [development environment](/README.md#새-pc에서-준비하기) and the [local rig-c toolchain](/docs/agents/rig-c-local.md). The source build uses PowerShell, the repository's locked rig-c and Bun profile, Python with NumPy, OpenCV and Pillow, and the configured MegaDot executable. These inputs drive both runtime variants. [Authoring files](/docs/characters/realta/animation-sources.md#inputs-and-ownership)
 
-## Setup
-
-Complete the root [development setup](/README.md#새-pc에서-준비하기): .NET 9, MegaDot 4.5.1.m.14, installed game assemblies and the locked BaseLib dependency. `dev.ps1 doctor` resolves project paths; no script contains a personal checkout path. Authoring and review sheets also require Python with NumPy and Pillow. The verified environment is Python 3.12.4, NumPy 2.3.1 and Pillow 11.3.0. For a matching Python environment, install `numpy==2.3.1` and `Pillow==11.3.0` with that interpreter's `python -m pip install`.
-
-Run from the repository root in PowerShell. Command examples use a process-scoped execution-policy option, preserving machine settings.
-
-## Iterate through one entry point
+## Author and apply the rig
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-before
 ```
 
-The source workflow performs author → import → bake → mechanical and isolation checks → native render → GIF/review sheets. Authoring writes `rig.json` and the descriptive `authoring-report.json`; baking writes both runtime scenes. Inspect those diffs after an input change. Runtime PNGs, manifests, meshes and the frozen `rig-base.json` are inputs, not destinations of draft conversion.
+Source mode performs these steps in order.
 
-`-Clip` accepts all ten dispatch names and `all` (seven distinct clips). `-Variant` accepts `combat` (default), `merchant`, or `both`. The second positional argument is the clip, so `anim attack` and `anim -Clip attack` are equivalent. Omitting `-OutputDirectory` creates a unique `artifacts/animation-*` directory. An explicit output directory must be new; the command never clears a previous run.
+1. [build.ps1](rigc/build.ps1) unpacks the atlas parts (applying any explicit `-SeedParts <ignored-dir>` PNG overrides), compiles all seven motions into `realta_skeleton.png`, and bakes the Godot skeleton and animation library (see [inputs and ownership](/docs/characters/realta/animation-sources.md#inputs-and-ownership)). `dev.ps1 anim` immediately gates the compiled rig-c output with `rigc render --folds` at 24 fps for the requested clip(s) (adding `--preroll 1` on looping clips when physics constraints exist), stopping on any mesh fold before tracked runtime assets change.
+2. [The game importer](/scripts/realta/import_game_rig.py) binds the combat and merchant variants to the shared skeleton and syncs [atlas.txt](rigc/atlas.txt), then Godot imports the updated tracked resources before checks run.
+3. `anim` runs the existing [rig checks](/tests/rig-checks.md) and [instance isolation check](/tests/README.md). A failure in either the pre-import `rigc render --folds` mesh-fold gate or these post-import Godot checks stops source-mode capture. Read the failed condition alongside the current [clip and part contract](/docs/characters/realta/animation-sources.md). Report a specification conflict with the exact result through the [test-ownership procedure](/docs/agents/test-ownership.md).
+4. The renderer captures the requested clip, followed by native-frame sheets and a playback GIF for each selected variant.
 
-After an edit, compare at identical sample times:
+Edit the owning authoring file listed in [inputs and ownership](/docs/characters/realta/animation-sources.md#inputs-and-ownership). To seed new or replaced part PNGs into `realta_skeleton.png` while keeping the tracked `rigc/` tree free of loose PNGs, pass `-SeedParts <ignored-dir>` to `dev.ps1 anim` or [build.ps1](rigc/build.ps1); [build.ps1](rigc/build.ps1) fails fast if a stray `parts` folder containing PNGs exists under `rigc/`. For a compile that writes only to a separate directory, call [build.ps1](rigc/build.ps1) from the repository root with `-Output` pointing to a fresh output directory (and optional `-SeedParts <ignored-dir>`).
+
+## Compare native playback
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-after -Baseline artifacts/attack-before/frames
 ```
 
-The baseline is optional and is produced by the first command; there is no dependency on a private capture. Baseline/current metadata must agree on variant, clip, FPS, camera, viewport and renderer. Changed clip lengths show missing frame positions explicitly.
+`-Clip` accepts the seven names in the [motion table](/docs/characters/realta/animation-sources.md#clips-and-dispatch), the three BaseLib aliases and `all`. `-Variant` accepts `combat`, `merchant` or `both`. An explicit output directory must be fresh. The optional baseline must use the same variant, clip, frame rate, camera and renderer for a meaningful comparison.
 
-Each run contains:
+Read each run's `capture.json` for the actual viewport, positions, display scale and frame count. The GL compatibility renderer samples at 24 fps and retains the entire frame. The [review tool](tools/review_frames.py) produces dark and light sheets and optional registered before/after pairs. To check an exact event between display samples, compare the neighboring frames and inspect the native player at the cue time. [Motion review matrix](/docs/agents/cutout-motion-review.md)
 
-- Per-stage `*.stdout.log`, `*.stderr.log`, `*.exitcode` and engine logs. Native process results are recorded before decoding output as UTF-8; Python runs with `-X utf8 -B`.
-- `frames/<variant>/<clip>/0000.png` onward, with `capture.json` describing the engine, camera, timing and frame count.
-- `review/<variant>/<clip>/playback.gif` and numbered `dark-*.png` / `light-*.png` sheets. Sheets include every captured frame at native resolution, with before/after pairs when requested. Whole frames are retained without cropping.
-
-The fixed viewport is 640×420, with source origin at (120,32), scale .625, transparent background, and GL compatibility rendering. The helper window runs hidden/offscreen. Frame n is n/24 seconds, ending before the clip endpoint. The seven current clip lengths produce 396 frames per variant; this describes the sampling recipe, not an acceptance threshold. Frame capture requires a renderer; the numerical tests use headless mode.
-
-Review at normal speed and by frame using [the motion review matrix](/docs/agents/cutout-motion-review.md). The isolated capture stops autoplay, drains its deferred random seek, disconnects only phase selection and plays with zero blend; the controller's mixer handling remains active. For revive it starts from the final death pose. This isolates authored frames and does not demonstrate live transitions.
-
-## Mechanical checks and publishing
+## Publish and render the PCK
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim <clip>
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
-```
-
-`anim` runs [the mechanical rig checks](/tests/rig-checks.md) and [instance isolation test](/tests/README.md) after bake; require exit 0 and both PASS summaries before treating a rig change as checked. `check`, `publish` and `deploy` skip these animation checks; `publish` still imports resources before exporting the PCK. Pre-commit runs the tracked-reference validator followed by the C# build through `dev.ps1 build`; `dev.ps1 verify` runs only the reference validator. Test scripts are excluded from game resource import/export by `tests/.gdignore` and remain explicitly executable with `--script`.
-
-For native startup crashes, certificate-store errors, access denial, or separate log-display failures, follow [Build execution and diagnostics](/docs/agents/build-troubleshooting.md). It owns the shared handling procedure; certificate settings stay unchanged.
-
-## Inspect only the published package
-
-After a successful publish:
-
-```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim all -Variant both -PackagePath artifacts/mods/Sts2WD/Sts2WD.pck
 ```
 
-Package mode creates a fresh host with only `project.godot` (`config_version=5`) and a copy of the tracked renderer. The renderer mounts the specified PCK before resolving scenes. No source `Sts2WD/` directory or source import cache exists in that host. This mode renders and creates review sheets without reauthoring or rebaking source inputs. It accepts the same optional baseline and fresh output-directory arguments. It demonstrates packaged resource loading, not BaseLib's root conversion, combat dispatch or multiplayer playback.
+Package mode copies the tracked renderer into a fresh Godot host and mounts the specified PCK before resolving either rig. This directly exercises textures, animation resources and variant names present in the package. Source-mode rig checks, mounting the PCK, running BaseLib scene conversion, and observing a game encounter each provide different evidence. For a local installation use the [deployment procedure](/README.md) and record the verified scope in the [shared deployment history](/docs/deployment-status.md).
 
-## Observe live transitions separately
+## Live transitions
 
-For a temporary live observation, instantiate the runtime rig, retain `animation_started` and `mixer_applied` connections, and set the AnimationPlayer processing mode to manual. Use `play(target)` with no blend override. After advancing, allow a process frame so the controller records the displayed loop phase.
-
-- Start `relaxed_loop` (also `relaxed`, and merchant `idle`), allow initial deferred phase selection, then seek to source phase 0, 3.375 or 6.25. Play `idle_loop`, `attack`, `hurt`, `cast`/`powerup` or `die`; advance in 1/60 s steps through the transition. Read actual `upper_arm_r`, `forearm_r`, `coat`, `coat-front`, `hand_l` and `Skeleton2D` sibling indices alongside native overlap images.
-- Let actions and revive complete through `advance` and observe the variant's default loop. Let die pass its endpoint and observe the held pose. Seeking alone does not exercise completion.
-- Observe die → revive, including the invisible reset at .20 s. Read `lower_mode`, `weapon_gripped`, `free_arm_back`, body/cel visibility and rig alpha alongside the image.
-- While a loop plays, allow a process frame, record `current_animation_position`, call `stop()` then `play()` with the same name, and allow the deferred callback. Repeat with aliases sharing the same resource. Observe saved phase restoration separately from ordinary resource changes.
-
-These transition observations supplement the automated checks. In the verification report, identify the inputs, observed behavior, and scope. Document the applied ownership and timing rules in [animation sources](/docs/characters/realta/animation-sources.md). For official comparisons, identify the installation, version, and resources using [the animation study](/docs/research/sts2-official-animation-comparison.md).
+Play clips through the `AnimationPlayer` under each game wrapper and let them advance past the endpoint. For combat, check returns to the standing loop. For the merchant, check the crouching loop through autoplay, `idle`, `relaxed` and return from action. Check attack contact at 0.54 s, cast release at 0.25 s and right-hand release at 0.12 s of `die`. Advance the full death animation, then trigger `revive` and observe both sides of its hidden pose change at 0.20 s. Test interruption by invoking the next game alias while the preceding action is still active. Use the native callbacks exercised by the [BaseLib integration](/docs/characters/realta/animation-api.md).

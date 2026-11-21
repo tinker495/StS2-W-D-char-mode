@@ -4,9 +4,9 @@ Use this one-shot instruction when converting an approved standing image into a 
 
 ## Inputs and output scope
 
-- `IDENTITY_IMAGE`: `docs/characters/realta/base.png`.
-- `POSE_IMAGE`: `Sts2WD/images/charui/realta/combat.png`.
-- `OUTPUT_DIRECTORY`: a fresh version under `docs/characters/realta/drafts/`.
+- `IDENTITY_IMAGE`: `docs/characters/<char>/base.png`.
+- `POSE_IMAGE`: the target character's approved full-resolution standing/combat reference (`docs/characters/<char>/base.png` or the standing pose defined in `<char>-assets.md`). Existing combat/merchant edits start from the character's tracked production layout and part images (see `<char>`'s `animation-sources.md`, such as Realta's [production layout and part images](/docs/characters/realta/animation-sources.md#inputs-and-ownership)).
+- `OUTPUT_DIRECTORY`: a fresh Git-ignored directory under `docs/characters/<char>/drafts/`.
 - Goal: transparent parts, explicit ownership and rig manifests, native Godot playback, and an evidence-backed comparison with official combat and scene variants. Resolve actual clip names from the runtime; the observed official set is `idle_loop`, `attack`, `hurt`, `cast`, `die`, and `relaxed_loop`.
 - Start with a reviewable standalone candidate. Promote assets or replace the runtime scene only when the user's requested scope authorizes application. Installation is a separate action.
 
@@ -14,11 +14,11 @@ Use this one-shot instruction when converting an approved standing image into a 
 
 Read the domain documentation before exploring code. Locate the character's visual scene property, the scene's required node names/types, layout markers, and the installed framework's animation interface. Record exact repository paths and members; distinguish observed contracts from assumptions.
 
-`Realta.CustomVisualPath` points to `res://Sts2WD/scenes/realta/combat.tscn`. Its `Node2D` root provides `Bounds`, `CenterPos`, `IntentPos`, `OrbPos`, `TalkPos`, and `FormVfx`. The rig is a child of the unique `Sprite2D` named `Visuals`, at `(0, -155)` with scale `0.625`. Preserve the scene contract documented in the [runtime asset guide](/docs/characters/realta/animation-assets.md).
+Read the character's scene path, required `Node2D` layout markers (`Bounds`, `CenterPos`, `IntentPos`, `OrbPos`, `TalkPos`, `FormVfx`), `Visuals` container transform, and scene contract from the target's `animation-assets.md` (for example, Realta's [runtime asset guide](/docs/characters/realta/animation-assets.md)).
 
 Find actual attack, damage, death, and return-to-idle dispatch before wiring clips. A playable standalone `AnimationPlayer` does not establish that game events invoke it. If the framework dispatch is unresolved, deliver the standalone candidate and state that limit explicitly.
 
-BaseLib 3.4.7 uses a separate [non-Spine dispatch contract](/docs/research/sts2-cutout-runtime-contract.md). Combat needs `idle`/`relaxed`/`powerup` aliases for official-style names, explicit completion transitions, and an intentional death wait. Merchant searches `idle` before `relaxed_loop`, so its idle alias must represent the merchant pose. Rest Act/light-off and rest game-over do not automatically reach non-Spine players. Combat/rest factories replace the original scene root. Place persistent controllers below a retained child and confirm the contract for the installed version before promotion.
+Confirm the installed framework's [non-Spine dispatch contract](/docs/research/sts2-cutout-runtime-contract.md) before promotion: non-Spine rigs must supply BaseLib clip aliases (`idle`/`relaxed`/`powerup`, with merchant `idle` mapped to the merchant pose), explicit completion transitions back to idle, a `revive` clip (because custom player discovery suppresses the 0.2 s default fade fallback even when `revive` is missing), an intentional death wait, and custom bridging for rest Act/light-off and non-combat game-over. Because combat/rest factories replace the original scene root, place persistent controllers below a retained child such as `Visuals`.
 
 ## 2. Preserve visible pixels; generate only missing artwork
 
@@ -81,23 +81,23 @@ Write an `AnimationLibrary` and `AnimationPlayer`. Author setup/reset values for
 
 Let the native player own clip state and time. A script that calls `seek()` every frame can display correct previews while overriding external `Play()` calls. Bake joint motion and key any attachment-controller state/time on the same player; reserve `seek()` for scrubbing. Observe automatic return with `advance()` and the real engine clock, since seeking to a clip's end does not exercise completion. Repeated `play()` of the already-playing clip does not establish a fresh time-zero sample: stop/reset or observe accumulated time explicitly.
 
-Keep the controller under the retained `Visuals` child when the framework replaces scene roots. Resolve adjacent resources relative to the script directory and reimport after relocation. Combat `idle` and merchant `idle` need different underlying poses. Define return-to-idle transitions explicitly. The game's default revive fades out for 0.2 seconds, resets to idle, and fades in for 0.2 seconds. Custom player discovery can suppress that fallback even when a `revive` clip is missing. Exercise `revive` and interruption during the fade. See the [runtime contract](/docs/research/sts2-cutout-runtime-contract.md) for the inspected version and members.
+Resolve adjacent resources relative to the script directory and reimport after relocation. Follow the [runtime contract](/docs/research/sts2-cutout-runtime-contract.md) for retained-child controller placement, alias mapping, return-to-idle transitions, and explicit `revive` / mid-fade interruption checks.
 
 Check prop clearance numerically: transform the rigid weapon's alpha pixels by FK at every key and at interpolation quarter-points and compare with the source floor. When it fails, redesign the grip path first (lift during wind-up and recovery); a per-key angle correction that spreads into the anticipation or the event pose is a regression. Put expressions and VFX (texture swaps, trail/sigil alpha and scale) on the same player as the joints, and key their defaults at t=0 of every clip so an interrupted clip never leaves a stale face or effect.
 
-Resolve effect time separately from clip length. The observed official characters use `AttackAnimDelay = 0.15`, while their full attack clips are much longer. Confirm Realta's actual call path, then place the strike accordingly. Offset the head, hat tip, ribbon and coat settling instead of giving every part identical key times. Merchant needs a visibly relaxed pose, rest needs its seated pose/three Act lighting variants and light-off behavior, and selection needs its own composition. Do not count renamed identical loops as completed variants.
+Resolve effect time separately from clip length. Observed official characters default to `AttackAnimDelay = 0.15`, while custom attacks and casts override delays to match their actual contact or release frame; check the character's `animation-api.md` (such as Realta's [model and clip timings](/docs/characters/realta/animation-api.md)) whenever a motion changes. Offset secondary attachments (headwear, ribbons, coats) to settle after the torso. Keep combat, merchant, rest (including Act lighting variants), and selection compositions distinct.
 
 Native Godot data requires no Spine conversion. Only if importing a verified Spine schema, convert Y and rotation signs once, respecting setup-relative translation/rotation, multiplicative scale, attachment transforms, draw-order timelines and curve semantics. Record the schema/version and supported features. Negating all numbers is not a complete Spine importer; unsupported meshes, constraints or timelines must be reported.
 
 ## 5. Verify and report
 
-Use the [motion review matrix](cutout-motion-review.md) for each affected action and record evidence for every applicable row. For Realta iteration, follow the tracked [animation procedure](/docs/characters/realta/animation/reproduction.md); its `dev.ps1 anim` command owns authoring, import, baking, capture and review-sheet creation.
+Use the [motion review matrix](cutout-motion-review.md) for each affected action and record evidence for every applicable row. For Realta, `dev.ps1 anim` compiles the registered rig-c inputs, applies the native resources, imports and checks the game scene, then captures both variants when requested. Its package mode reads the PCK independently. [Animation procedure](/docs/characters/realta/animation/reproduction.md)
 
 Serialize scalar rotation key values as floating-point literals, including `0.0`. Sample actual joint properties during playback; integer-valued keys can round small rotations to zero even when clip names and durations load correctly.
 
 Load and instantiate the candidate with the repository's Godot version. Exercise every clip and inspect setup, overlap, grip, planted feet, clipping and silhouette on light/dark backgrounds at 240×360. Save an animated preview and the original comparison. Treat exploratory scripts and rendered observations as informal verification, not new acceptance tests; preserve all protected tests and validators.
 
-Use actual Godot renders for final comparisons. The Python preview is useful during extraction but is not evidence of engine playback. Compare with official resources for the same scene, using a fixed camera throughout each clip; include normal-speed sequences, event-time poses and attachment-transition neighbors. Record which version and renderer produced each image. The observed installation is v0.107.1 / commit 59260271; re-check this for another installation.
+Use actual Godot renders for final comparisons. The Python preview is useful during extraction but is not evidence of engine playback. Compare with official resources for the same scene, using a fixed camera throughout each clip; include normal-speed sequences, event-time poses and attachment-transition neighbors. Record the active installation version and renderer for each capture.
 
 At every verification iteration, open a relevant external primary source and connect its technique to the current defect. Keep the source, tested approach, edits, renders, timing, and remaining defects in the task's working records. Prefer one shared source-coordinate manifest, local regeneration, and topology reuse. Use the [shared documentation rules](/AGENTS.md#shared-documentation) when recording an applied decision.
 

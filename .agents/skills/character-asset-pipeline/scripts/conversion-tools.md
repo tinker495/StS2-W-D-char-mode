@@ -15,9 +15,7 @@ $info = & $pipeline inspect -Path $normal
 $info.Width
 ```
 
-`inspect` always returns a `PSCustomObject`, suitable for property access or `ConvertTo-Json -Depth 4`. `-AsObject` is retained as a compatibility no-op. Apply `Format-List` only when displaying the result, never before serialization.
-
-`VisiblePixelRatio` counts pixels above `VisibleAlphaThreshold` (8); the bounding box and margins use that same visibility threshold. `OpaquePixelRatio` counts only alpha-255 pixels. Both percentages are rounded for display: use `FullyOpaque` (every pixel is alpha 255) and `MinAlpha` for exact opacity decisions. An opaque letterbox has no alpha margin; these measurements do not establish painted scene coverage.
+See [observation-tools.md](/.agents/skills/character-asset-pipeline/observation-tools.md) for `inspect` return fields, alpha thresholds, and serialization rules.
 
 ## Card export and review
 

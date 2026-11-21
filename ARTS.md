@@ -1,6 +1,6 @@
 # Shared Art Direction
 
-Shared Slay the Spire 2 rendering and information-density rules for characters, cards, relics, powers, UI, backgrounds, and VFX. Character names, appearance, palettes, equipment, counts, decisions, and dedicated prompts belong in `docs/characters/<char>/`. Updated: 2026-10-28.
+Shared Slay the Spire 2 rendering and information-density rules for characters, cards, relics, powers, UI, backgrounds, and VFX. Character names, appearance, palettes, equipment, counts, decisions, and dedicated prompts belong in `docs/characters/<char>/`.
 
 **Shared chibi scope:** apply chibi to `character_icon.png`, `character_icon_outline.png`, and `map_marker.png`. Selection tiles/locked variants, standing art, cards, and selection illustrations retain canonical proportions. Character specifications define faces, costumes, colors, and chibi details. Non-SD proportions do not imply an adult appearance.
 
@@ -43,7 +43,7 @@ Before creating or revising an asset, follow its owner's art and asset indexes t
 
 ### 2.1 Target Direction
 
-A game name alone can produce muddy colors, uniform black contours, or excessive brush texture. Translate Mega Crit's Playful, Crisp, Liveliness, Cinematic, and Colorfuler goals into the concrete rules below, combining official combat silhouette/readability observations ([study section 7](docs/research/sts2-combat-style-study.md#7-installed-build-spine-renders-2026-10-24)) with the crisp, clean 2D character rendering established in approved character bases (`docs/characters/althea/base.png`, `docs/characters/realta/base.png`). These are project rules, not quotations of internal production specifications. [Evidence](docs/research/sts2-art-direction-sources.md)
+A game name alone can produce muddy colors, uniform black contours, or excessive brush texture. Translate Mega Crit's Playful, Crisp, Liveliness, Cinematic, and Colorfuler goals into the concrete rules below, combining official combat silhouette/readability observations ([study section 5](docs/research/sts2-combat-style-study.md#5-installed-build-spine-renders)) with the crisp, clean 2D character rendering established in approved character bases (`docs/characters/althea/base.png`, `docs/characters/realta/base.png`). These are project rules, not quotations of internal production specifications. [Evidence](docs/research/sts2-art-direction-sources.md)
 
 - **Crisp, clean 2D cel-plus-soft-form shading:** build each mass from a clear base color, one distinct shadow family, and selective light planes with smooth, clean transitions. Avoid muddy or chalky dry-brush blotches, heavy canvas grain, or dirty over-textured surfaces that make characters look clunky or weathered when their design calls for clean fabric and polished steel.
 - **Readable material values:** keep light materials clean and distinct (crisp warm ivory/cream for white cloth, bright silver-gray for polished steel, luminous silver-white for hair) without blowing out into flat pure-white `#FFFFFF` fill or crushing everything into dull mid-gray/pewter. Contrast concentrates on the face, silhouette, action, and hand contacts.
@@ -70,7 +70,7 @@ These values are project starting points. Check actual paths, dimensions, scales
 
 ### 2.3 Actual Official Image Anchors and Priority
 
-Reinvestigated on 2026-10-18; combat anchors updated 2026-10-24; downstream anchors expanded 2026-10-28. Do not put only a game name in the prompt. Every production branch follows a three-step official-reference discipline:
+Do not put only a game name in the prompt. Every production branch follows a three-step official-reference discipline:
 
 1. **Open same-use-case official pixels first:** before drafting a prompt, open the actual official StS2 reference image(s) for that exact asset category from [sts2-style-refs](docs/research/sts2-style-refs/README.md) (or render/extract from the installed `SlayTheSpire2.pck` into a temporary directory).
 2. **Pass official references as style and density anchors:** supply the same-use-case official reference alongside `base.png` and any rough/object reference. Explicitly separate what to adopt (camera distance, silhouette separation, stroke economy, 2–3 value grouping, safe-zone framing) from what to exclude (the official asset's specific character/item identity, UI frame, composited digits, or GIF dithering).

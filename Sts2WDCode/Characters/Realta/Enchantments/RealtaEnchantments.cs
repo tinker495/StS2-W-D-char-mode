@@ -48,7 +48,6 @@ public static class RealtaEnchantments
 
     private static bool IsLegacy(CardModel card) => card.Keywords.Contains(RealtaKeywords.Legacy);
 
-    // Whether a Legacy card must hold the new enchantment in a composite rather than in the plain slot.
     private static bool NeedsComposite(CardModel card, EnchantmentModel enchantment)
     {
         return IsLegacy(card)

@@ -1,5 +1,3 @@
-"""Image-space helpers for parting a painted character into rig-c sprites."""
-
 from __future__ import annotations
 
 from collections.abc import Callable, Mapping, Sequence
@@ -20,11 +18,7 @@ def align_inpaint_plate(
     crop_box: tuple[int, int, int, int],
     exclude_mask_local: np.ndarray,
 ) -> np.ndarray:
-    """Align a white-background plate into its crop box on the base RGBA canvas.
-
-    Alpha is extracted strictly from raw white-bg distance BEFORE color-bias compensation
-    so faint color bias never materializes gray haze on #FFFFFF background pixels.
-    """
+    """Extract alpha from raw #FFFFFF distance before color-bias compensation so bias never creates gray haze on the background."""
     x0, y0, x1, y1 = crop_box
     cw, ch = x1 - x0, y1 - y0
     ref_rgba = base_arr[y0:y1, x0:x1]
@@ -49,13 +43,11 @@ def align_inpaint_plate(
     ).astype(np.float32)
     print(f"Aligned {raw_path.name}: ECC={cc:.5f}, dx={warp[0,2]:+.2f}, dy={warp[1,2]:+.2f}")
 
-    # 1. Alpha strictly against #FFFFFF on al_raw (before bias!)
     dist_white = np.linalg.norm(255.0 - al_raw, axis=2)
     alpha_f = np.clip((dist_white - 18.0) / 34.0, 0.0, 1.0)
     alpha_u8 = np.clip(np.round(alpha_f * 255.0), 0, 255).astype(np.uint8)
     alpha_u8[alpha_u8 < 16] = 0
 
-    # 2. Smooth color-bias alignment ONLY on foreground pixels
     al = al_raw.copy()
     valid = (ref_rgba[:, :, 3] >= 220) & (~exclude_mask_local) & (np.abs(al_raw - ref_rgb).max(axis=2) < 30.0)
     if valid.sum() >= 50:
@@ -91,10 +83,7 @@ def refine_visible_ownership(
     coarse_masks: Mapping[str, np.ndarray],
     part_order: Sequence[str],
 ) -> tuple[dict[str, np.ndarray], np.ndarray]:
-    """Return exclusive visible masks and their label map for a base RGBA image.
-
-    Parts later in part_order take priority at overlapping coarse masks.
-    """
+    """Parts later in part_order take priority where coarse masks overlap."""
     fg = base_arr[:, :, 3] > 0
     lab = cv2.cvtColor(base_arr[:, :, :3], cv2.COLOR_RGB2LAB).astype(np.float32)
     gx = cv2.Sobel(lab, cv2.CV_32F, 1, 0, ksize=3)
@@ -144,8 +133,6 @@ def paint_anatomical_cap(
     smooth_sigma: float = 3.5,
     extra_sample_filter: np.ndarray | None = None,
 ) -> np.ndarray:
-    """Extend a limb/garment into `cap_region` strictly clipped to `allowed_hidden`,
-    sampling color strictly from `sample_region`."""
     out = part_rgba.copy()
     valid_src = (part_rgba[:, :, 3] >= 220) & sample_region
     if extra_sample_filter is not None:
@@ -177,8 +164,6 @@ def blend_inpaint_into_part(
     color_filter: np.ndarray | None = None,
     min_inp_alpha: int = 16,
 ) -> np.ndarray:
-    """Composite inpainted hidden surface into `part_rgba` strictly inside
-    `(fill_mask & allowed_hidden)` and where `inpaint_rgba` has valid non-transparent pixels."""
     out = part_rgba.copy()
     existing_opaque = out[:, :, 3] >= 245
     inp_valid = inpaint_rgba[:, :, 3] >= min_inp_alpha
@@ -216,7 +201,6 @@ def write_debug_roi(
     images: Mapping[str, np.ndarray],
     classify_materials: Callable[[str, np.ndarray], Mapping[str, np.ndarray]],
 ) -> Path:
-    """Dump nonempty RGBA crops, their material masks, and pixel counts at source resolution."""
     x0, y0, x1, y1 = box
     if not (0 <= x0 < x1 and 0 <= y0 < y1):
         raise ValueError(f"Invalid ROI bounds: {box}")

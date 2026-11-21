@@ -1,6 +1,6 @@
 # Realta Card Illustration Art
 
-Card portraits are automatically bound at runtime via convention: `res://Sts2WD/images/card_portraits/realta/<card_name>.png`. Delivered textures are the single source of truth; post-delivery visual narratives are pruned to prevent documentation bloat.
+Card portraits are automatically bound at runtime via convention: `res://Sts2WD/images/card_portraits/realta/<card_name>.png`. Delivered textures are the single source of truth.
 
 ## Generative Art Direction & Native Reference Weighting
 

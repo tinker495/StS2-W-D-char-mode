@@ -29,7 +29,7 @@ Apply this procedure to implementation, asset delivery, and requests to create o
 
 ## Read Within an Output Budget
 
-- Use `rg --files` to locate files. For a topic index, open only the requested topic and its necessary dependencies; keep API references and inventories separate from routine production reads. Use `rg -n` to select headings or symbols within a longer reference, then retrieve the relevant UTF-8 line range.
+- Use `git ls-files` to locate tracked files. For a topic index, open only the requested topic and its necessary dependencies; keep API references and inventories separate from routine production reads. Use PowerShell `Select-String` to select headings or symbols within a longer reference, then retrieve the relevant UTF-8 line range.
 - Reuse instructions already read in this session. Reread only changed sections or context that is no longer available.
 - Resolve each skill once: honor an explicit user-provided path; for named dependencies, use the invoking skill's source (repository or plugin). Keep the resolved paths in task context and reuse their content. Consult another installed copy only when the selected source is unavailable.
 - Parallelize independent reads, but budget their combined output below the tool response limit. Narrow each result before printing it; do not concatenate several complete long files into one response.
@@ -44,7 +44,10 @@ Apply this procedure to implementation, asset delivery, and requests to create o
 
 ## Local Shell
 
-Run repository scripts through `dev.ps1` or `powershell.exe` (Windows PowerShell 5.1); `pwsh` is not installed on this PC. CI runs the tracked-reference check under PowerShell 7, so keep shared scripts compatible with both.
+Run repository scripts through `dev.ps1` or `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass` (Windows PowerShell 5.1), and search with `git ls-files` or PowerShell `Select-String`; neither `pwsh` nor `rg` is installed on this PC. Including `-NonInteractive` fails fast on missing mandatory parameters instead of hanging on an interactive prompt. CI runs the tracked-reference check under PowerShell 7, so keep shared scripts compatible with both.
+
+- Pipe multiline or quote-heavy Python through a single-quoted PowerShell here-string (`@' ... '@ | python -B -`, with the closing `'@` at column 1) instead of `python -c` to avoid PowerShell 5.1 quoting hazards.
+- Serialize edits to the same file on Windows; parallel writes to one path trigger `user-mapped section open` file-lock errors.
 
 ## Temporary Observations
 

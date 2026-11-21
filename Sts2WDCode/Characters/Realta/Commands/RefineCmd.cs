@@ -8,9 +8,6 @@ using MegaCrit.Sts2.Core.Models.Enchantments;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// 개선 N: choose a card in hand; attacks get temporary Sharp N, everything else temporary Adroit N.
-// Eligibility is the shared enchantment rule (RealtaEnchantments): an already enchanted normal card cannot be
-// chosen, while 유산 can be refined repeatedly. With no valid target only the refine fizzles.
 public static class RefineCmd
 {
     private static int _internalUpgradeDepth;

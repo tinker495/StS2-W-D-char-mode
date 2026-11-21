@@ -9,7 +9,6 @@ using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// Replaces Bronze Watchdog: Guard 10 at combat start; retrieve Guard cards at turn end with leftover energy.
 public sealed class RealtaKuu : RealtaRelic
 {
     private const string CombatStartGuardVar = "CombatStartGuard";

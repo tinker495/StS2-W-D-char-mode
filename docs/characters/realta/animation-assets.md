@@ -1,40 +1,22 @@
-# Realta Scene Connections and Standing Fallback
+# 레아르타의 장면과 애니메이션 리소스
 
-[Asset index](realta-assets.md).
+전투와 상점은 [기준 원화](base.png)를 파팅한 같은 리그를 사용한다. 전투 대기는 서서 한 손으로 창을 든 자세이고, 상점 대기는 턱을 괴고 쪼그려 앉은 자세다. 장면마다 기본으로 재생하는 클립과 행동이 끝난 뒤 돌아갈 클립을 따로 연결한다. [클립별 동작](animation-art.md) · [제작 소스](animation-sources.md)
 
-As of 2026-10-20, the nine Branch B runtime PNGs, heated-iron card body, flame-heart combat energy counter, and dedicated power icons coexist with the four animated Realta scenes. `combat.png` remains the canonical standing still and fallback; the combat, rest, and merchant scenes use their animation resources. [runtime image inventory](ui-assets.md#canonical-base-and-runtime-images) and [scene connections](#current-scene-and-property-connections) map the images and scenes; [card frame application](cards-frames.md), [combat energy counter](ui-assets.md#lower-left-combat-energy-counter) and [power presentation status](powers-assets.md#power-display-titles-and-runtime-icon-status) describe the newer presentation resources.
+<a id="current-scene-and-property-connections"></a>
 
-The 2026-10-20 combat/merchant rig places the weapon and ribbon in front of all body and death cels. Only the gripping hand and VFX appear above them; the released hand moves behind the weapon during death. Existing PNGs, meshes, and bone paths are preserved. The tree order and death ribbon angle are recorded in [animation-sources.md](animation-sources.md).
+## 게임에서 불러오는 장면
 
-Merchant `relaxed_loop` and its `idle`/`relaxed` aliases place the entire free arm behind the body. Clip keys switch the tree order of `upper_arm_r` and `forearm_r`; the wrist moves slightly outward so the glove edge remains visible beside the coat. Return-to-combat and death ordering changes occur when the arm and coat no longer overlap. Existing PNGs, meshes, and rest/selection resources are preserved. See Merchant free arm order in [animation-sources.md](animation-sources.md) for key timing and blend details.
-
-Merchant refinement on 2026-10-19 replaces the native eight-second `relaxed_loop` with independently authored planted-foot IK, a lower fixed shaft grip, free glove by the belt and viewer-left leg support. The same resource serves merchant autoplay/idle and combat relaxed aliases. `author_clips.py` owns the pose; `build_combat_rig.gd` owns live-phase blends to idle/death; the runtime controller suppresses phase randomization when changing loops. Alpha-only cleanup of `combat/parts/weapon-rigid.png` and `foot_l.png` preserves their canvas/offset registration and all RGB. No new paintings or rest/selection edits are part of this refinement. Reproduction and verification scope are documented in [animation-sources.md](animation-sources.md).
-
-The four Realta scenes use a combat and merchant cutout rig, a seated rest mesh, and an animated selection painting. [Animation sources](animation-sources.md) owns the runtime files, layer ownership, and reproduction. [Runtime dispatch research](/docs/research/sts2-cutout-runtime-contract.md) identifies the native game and BaseLib entry points. The base-derived `combat.png` remains the canonical standing still and portrait source.
-
-The 2026-10-18 standing delivery reverted the separate combat pose and removed the extra `standing.png`. The base-derived `combat.png` retains the youthful appearance, open forehead, both pauldrons, continuous collar, and upright one-handed stance of the approved base. The selection illustration retains the blade-inspection scene. The scene table below and [delivery conversion](shared-conversion.md) explain the current state without local generation masters or historical logs.
-
-## Current Scene and Property Connections
-
-`Realta.cs` returns these `.tscn` paths under `res://Sts2WD/scenes/realta/`. Animated content lives under `res://Sts2WD/animations/realta/` (see [animation-sources.md](animation-sources.md)).
-
-| Property | Scene | Current structure / display placement |
+| 모델 속성 | 장면 | 화면에 표시되는 내용 |
 |---|---|---|
-| `CustomVisualPath` | `combat.tscn` | `Node2D` + `%Visuals` (empty `Sprite2D` at `(0,-155)`, scale 0.625) → `Rig` instance of `realta_combat_rig.tscn` at `(-192,-288)`; `Bounds`, dialogue/intent/orb anchors and `%FormVfx` unchanged. Displayed 240×360 |
-| `CustomRestSiteAnimPath` | `rest_site.tscn` | `Node2D` → `ControlRoot` (flip/seat point) → `Visuals` (`realta_rest.gd`, position `(-258,-285)`, scale 0.4), `%Hitbox`, `%ThoughtBubbleLeft/Right` |
-| `CustomMerchantAnimPath` | `merchant.tscn` | `Node2D` + `%Visuals` → `Rig` instance of `realta_merchant_rig.tscn` (autoplay and `idle` = `relaxed_loop`) |
-| `CustomCharacterSelectBg` | `char_select_bg_realta.tscn` | `Control` (FullRect, clips, ignores input) → `Illustration` (`realta_select.gd`) covering the rect like `KEEP_ASPECT_COVERED`, using `char_select_bg.png` |
+| `CustomVisualPath` | [combat.tscn](/Sts2WD/scenes/realta/combat.tscn) | `Visuals/Rig`의 전투 변형. `idle_loop` 대기와 공격, 피격, 시전, 쓰러짐, 부활을 재생한다. |
+| `CustomMerchantAnimPath` | [merchant.tscn](/Sts2WD/scenes/realta/merchant.tscn) | 같은 골격·그림을 쓰는 상점 변형. 자동 재생과 `idle` 별칭은 `relaxed_loop`에 연결된다. |
+| `CustomRestSiteAnimPath` | [rest_site.tscn](/Sts2WD/scenes/realta/rest_site.tscn) | `ControlRoot/Visuals`에 앉은 그림을 표시한다. 막별 불빛과 소등, 좌우 대화 위치는 휴식 장면이 담당한다. |
+| `CustomCharacterSelectBg` | [char_select_bg_realta.tscn](/Sts2WD/scenes/realta/char_select_bg_realta.tscn) | 전체 화면 `Control`의 `Illustration`이 칼날을 살펴보는 그림과 눈 깜박임을 표시한다. |
 
-Combat `Bounds` span `(-120,-360)~(120,0)`; the rest `Hitbox` spans `(-195,-280)~(195,200)`. `CustomIconOutlineTexturePath` connects the portrait-outline PNG. The combat energy counter uses the [flame-heart treatment](ui-assets.md#lower-left-combat-energy-counter). The four scenes use the animations listed above; multiplayer hands retain their existing defaults.
+[Realta 모델](/Sts2WDCode/Characters/Realta/Realta.cs)이 이 경로를 반환한다. 전투의 `Bounds`는 x −120~120, y −360~0이며 `CenterPos`, `IntentPos`, `OrbPos`, `TalkPos`, `FormVfx`는 게임의 이펙트·의도·대화 위치를 제공한다. 원화의 접지선 중앙 (576, 1581)은 게임 좌표 (0, −6.25)에 놓인다. 게임 바닥 기준은 y=−5.625이고 원화 1픽셀은 게임의 5/24픽셀에 해당한다. 앞발의 보폭과 창끝은 전투 `Bounds` 밖으로 뻗을 수 있다. [장면 변환 API](animation-api.md)
 
-## Standing and Combat Split
+## 런타임 그림
 
-The separate runtime combat pose was reverted at the user's request. The former base-derived `standing.png` now occupies `Sts2WD/images/charui/realta/combat.png`; `standing.png` and `standing.png.import` have been removed. At that stage, combat, rest, and merchant scenes all referenced the restored `combat.png`, with their previous anchors and scales unchanged. No C# property changes were needed for this rollback. [scene connections](#current-scene-and-property-connections) describes the subsequent animation integration.
+전투와 상점에 등록된 두 장면은 `realta_body.tscn`의 본과 2048×2048 `realta_skeleton.png`를 함께 쓴다. 스켈레톤 시트에는 몸과 장비, 여섯 표정의 눈·눈썹과 입, 세 겹의 시전 마법진 파츠(55개)만 들어 있다. 표정별 눈과 입은 원화 1픽셀당 3텍셀로 보관한다. 전투와 상점의 `revive`는 별도 전신 이미지 없이 실제 골격 전체를 `Visuals:group_alpha`의 Godot `CanvasGroup` 합성 페이드로 전환해 각각 선 자세와 쪼그려 앉은 자세를 복원한다. [공통 골격](/Sts2WD/animations/realta/combat/realta_body.tscn) · [스켈레톤 시트](/Sts2WD/animations/realta/combat/realta_skeleton.png) · [전투 리그](/Sts2WD/animations/realta/combat/realta_combat_rig.tscn) · [상점 리그](/Sts2WD/animations/realta/combat/realta_merchant_rig.tscn)
 
-The restored 384×576 RGBA image has SHA-256 `0372A0C097D3EF52CF90858889BAB0DAFE068D3B3171027902E6C0A9C1A7AE6B`, matching the former standing file exactly. This is the current character-specific delivery even though the generic Branch B workflow supports separate poses.
-
-See the [deployment record](/docs/deployment-status.md) for local installation scope.
-
-## Attack Trail (2026-10-20)
-
-The attack `Slash` retains `slash-trail.png` and uses a `Polygon2D` built from blade-tip/edge contours sampled at 240 Hz. `author_clips.py`, `build_combat_rig.gd` and `slash_reveal.gdshader` own the path, mesh and progressive reveal. This applies to both combat and merchant rigs; reproduction is in [animation-sources.md](animation-sources.md).
+정지 전신 스틸은 [combat.png](/Sts2WD/images/charui/realta/combat.png)에 보관한다. 초상화·에너지 카운터·선택 화면 리소스는 [UI 목록](ui-assets.md#canonical-base-and-runtime-images)에서, 로컬 설치와 게임 확인 범위는 [공통 배포 기록](/docs/deployment-status.md)에서 확인할 수 있다.

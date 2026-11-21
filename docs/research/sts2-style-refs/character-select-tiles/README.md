@@ -42,10 +42,6 @@ SHA-256:
 - **Deselected tile in a screen:** source art with game deselection treatment, visible in the [official screen crop](/docs/research/sts2-style-refs/future-assets/ui-select-tiles-crop.png).
 - **Locked source tile:** black silhouette on gray, distinct from merely darkening colored art.
 
-Distinguish thin color lines in source PNGs from game selection frames, masks, and focus effects. These references do not instruct painting gold borders, lock icons, or button corners into Realta's master.
+Distinguish thin color lines in source PNGs from game selection frames, masks, and focus effects. These references do not instruct painting gold borders, lock icons, or button corners into a character's master.
 
-## Application to Realta Production
-
-Use original camera distance, face occupancy, and expression to **generate new selection-tile art directly**. Do not default to extracting/enlarging full-body or waist-up rectangles or discarding surroundings with Cover. Fit-resize the complete generated master and share its alpha for normal/locked compositing. Revise generation composition when face occupancy is wrong.
-
-Clipped horns/headwear in originals are observed composition choices. Use them to design intentional frame boundaries during generation, not to authorize post-generation cropping. Distinguish research screenshot crops from asset production. This is an explicit project workflow, not verified knowledge of Mega Crit's internal process.
+For selection-tile composition rules and shared-alpha normal/locked production, see [ARTS.md section 5.2.1](/ARTS.md#521-selection-tiles) and the [selection-tile study](/docs/research/sts2-character-select-tile-study.md).

@@ -41,10 +41,6 @@ public class CharacterFour : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<CharacterFourRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<CharacterFourPotionPool>();
 
-    /*  PlaceholderCharacterModel will utilize placeholder basegame assets for most of your character assets until you
-        override all the other methods that define those assets.
-        These are just some of the simplest assets, given some placeholders to differentiate your character with.
-        You don't have to, but you're suggested to rename these images. */
     public override Control CustomIcon
     {
         get

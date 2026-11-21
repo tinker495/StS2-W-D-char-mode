@@ -85,6 +85,11 @@ Invoke-RecordedCommand -Executable $Context.DotNet -Arguments @('--version') `
 
 임시 관찰 결과는 작업 보고에 남긴다. 공유 문서에는 현재 적용된 동작과 재현 절차를 기록한다. [공유 문서 작성 규칙](/AGENTS.md#shared-documentation)
 
+### Godot 경로 조회와 오프스크린 캡처
+
+- **MegaDot 경로 조회**: MegaDot 실행 파일 경로는 로컬 설정 파일([local.props.example](/local.props.example) 참고)이나 고정 경로를 직접 가정하지 않고, [dev-workflow.ps1](/scripts/dev-workflow.ps1)의 `Initialize-DevelopmentDotNet` + `Get-DevelopmentPaths`(`$paths.GodotPath`, MSBuild 프로퍼티 조회) 또는 `.\dev.ps1 doctor`로 확인한다.
+- **오프스크린 프레임 캡처**: `SubViewport`와 `RenderingServer.frame_post_draw`를 사용하는 일회성 프레임 캡처 스크립트는 `--headless`로 실행하면 더미 렌더러에서 `frame_post_draw`가 발생하지 않아 무한 대기한다. `dev.ps1 anim`과 동일하게 `--rendering-method gl_compatibility --position -10000,-10000 --log-file <워크스페이스 로그>`로 실행한다(`--log-file`로 워크스페이스 로그를 지정해야 권한 제한 환경에서 기본 AppData 로그 순환 중 발생하는 시작 크래시를 피할 수 있다).
+
 ## PR 자료 보관
 
 PR에만 사용하는 캡처·비교 렌더·설명 메모·일회성 렌더 스크립트는 생성할 때부터 `artifacts/pr-<작업명>/`에 둔다. 이 폴더는 기존 `.gitignore`의 `artifacts/` 규칙으로 제외된다. 제품에 필요한 그림과 재현에 필요한 공유 명세는 기존 제품·문서 경로에 둔다.

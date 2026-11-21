@@ -1,50 +1,25 @@
-# Character Scene Factory Integration (BaseLib 3.4.7)
+# Realta animation dispatch and scene factories
 
-[Asset index](realta-assets.md).
+This contract uses BaseLib 3.4.7. `Realta.CustomVisualPath`, `CustomMerchantAnimPath` and `CustomRestSiteAnimPath` return the game scenes listed in the [resource mapping](animation-assets.md#current-scene-and-property-connections). The rig-c authoring source is compiled to a native Godot scene before packaging. The game presents the finished skeleton through `Visuals/Rig/AnimationPlayer`. [Runtime dispatch research](/docs/research/sts2-cutout-runtime-contract.md)
 
-## Overriding Combat, Rest, Merchant, and Energy-Counter Visuals
+## Combat and merchant
 
-BaseLib's `PostModInitPatch.RegisterSceneConversions` (`BaseLib.dll`, `[HarmonyPatch(typeof(ModelDb), "Preload")]`) and `SceneConversionPatch` (`[HarmonyPatch(typeof(PackedScene), "Instantiate")]`) use `CustomCharacterModel.RegisterSceneConversions()` to convert ordinary Godot `.tscn` scenes at these four paths into game-specific node types at runtime:
-- `CustomVisualPath` -> `NCreatureVisuals` (`NCreatureVisualsFactory`)
-- `CustomRestSiteAnimPath` -> `NRestSiteCharacter` (`NRestSiteCharacterFactory`)
-- `CustomMerchantAnimPath` -> `NMerchantCharacter` (`NMerchantCharacterFactory`)
-- `CustomEnergyCounterPath` -> `NEnergyCounter` (`NEnergyCounterFactory`)
+`CustomCharacterModel.RegisterSceneConversions()` registers the preload paths. When `PackedScene.Instantiate` runs, `NCreatureVisualsFactory` converts the combat root and retains the `Visuals` child and its rig. Keep the root-level `Bounds`, `IntentPos` and the unique `CenterPos`, `OrbPos`, `TalkPos` and `FormVfx`. The merchant factory uses its own root conversion and looks for an idle animation in the retained children. Both scenes expose one primary native player. [Combat wrapper](/Sts2WD/scenes/realta/combat.tscn) · [Merchant wrapper](/Sts2WD/scenes/realta/merchant.tscn)
 
-1. **Basic static-PNG combat visuals (`CreateCustomVisuals` override):**
-   - To display a combat figure from one PNG without a `.tscn`, use `NCreatureVisualsFactory.CreateBareFromResource` (`NCreatureVisualsFactory.cs:25-66`).
-   ```csharp
-   public override NCreatureVisuals? CreateCustomVisuals() =>
-       NodeFactory<NCreatureVisuals>.CreateFromResource("charui/realta/combat_sprite.png".ImagePath());
-   ```
-   - `NCreatureVisualsFactory` automatically creates `Visuals` (`Sprite2D`, position `(0, -height * 0.5)`), `Bounds` (`Control`, size `size * 1.1`), `CenterPos` (`Marker2D`), `IntentPos` (`Marker2D`), and `FormVfx` (`Control`).
-2. **Godot `.tscn` combat visuals using Sprite2D / AnimatedSprite2D / AnimationPlayer / AnimationTree:**
-   - Create a `Node2D`-rooted scene in Godot, such as `res://Sts2WD/scenes/realta/realta_visuals.tscn`, with these children:
-     - `%Visuals` (`Node2D` / `Sprite2D` / `AnimatedSprite2D`)
-     - `Bounds` (`Control`, default `Size = (240, 280), Position = (-120, -280)`)
-     - `%CenterPos` (`Marker2D`, hit-VFX spawn position)
-     - `IntentPos` (`Marker2D`, above the head)
-     - Optional: `%OrbPos` (`Marker2D`), `%TalkPos` (`Marker2D`), `%FormVfx` (`Control`)
-   - `CustomAnimation` (`BaseLib.Utils.CustomAnimation`, `CustomAnimationPatch.cs:142-170`) searches below the root in the order `AnimationTree` -> `AnimationPlayer` -> `AnimatedSprite2D`, then automatically plays animations with these names:
-     - Idle: `"Idle"`, `"idle"`
-     - Attack: `"Attack"`, `"attack"`
-     - Skill/power cast: `"Cast"`, `"cast"`
-     - Hit: `"Hit"`, `"Hurt"`, `"hit"`, `"hurt"`
-     - Death: `"Dead"`, `"Die"`, `"dead"`, `"die"` (waits for `DeathAnimTime` during playback)
-     - Revive: `"revive"`, `"Revive"`
-   - Override `public override string CustomVisualPath => "res://Sts2WD/scenes/realta/realta_visuals.tscn";` in `Realta.cs`; `RegisterSceneConversions()` converts it into `NCreatureVisuals` automatically.
-   - **Preloading constraint (`CharacterModel.cs:188`):** `CharacterModel.AssetPaths` preloads `VisualsPath` through `PreloadManager` when a run starts. If overriding only `CreateCustomVisuals()` while inheriting `PlaceholderCharacterModel`, retain the default Ironclad scene in `CustomVisualPath` to avoid a preload error.
-3. **Spine-skeleton combat visuals:**
-   - Point `CustomVisualPath` to a `.tscn` whose `%Visuals` node is a `SpineSprite`.
-   - If animation names differ from the defaults (`idle_loop`, `cast`, `attack`, `hurt`, `die`, `relaxed_loop`), override `SetupCustomAnimationStates(MegaSprite controller)` and return `CustomCharacterModel.SetupAnimationState(controller, idleName: "...", deadName: "...", hitName: "...", attackName: "...", castName: "...", relaxedName: "...")`.
-4. **Rest site (`CustomRestSiteAnimPath`) and merchant (`CustomMerchantAnimPath`):**
-   - **Rest site:** Return a `.tscn` path with a single textured `Sprite2D` root from `CustomRestSiteAnimPath`. `NRestSiteCharacterFactory.ConvertScene` (`NRestSiteCharacterFactory.cs:79-92`) creates `ControlRoot`, `%Hitbox`, `%SelectionReticle`, `%ThoughtBubbleLeft`, `%ThoughtBubbleRight`, and `Visuals` automatically.
-   - **Merchant:** `NMerchantCharacterFactory` (`NMerchantCharacterFactory.cs:16-45`) wraps a `Texture2D` in `Visuals` only when called through `NodeFactory<NMerchantCharacter>.CreateFromResource(texturePath)`. Because `CustomMerchantAnimPath` goes through `PreloadManager.Cache.GetScene`, point it to a `.tscn` with a `Node2D` root and `Sprite2D` (or `AnimationPlayer` / `AnimatedSprite2D`, using `"idle"` / `"Idle"` / `"relaxed_loop"` and `"Die"` / `"die"` animations); see `MerchantCharacterAnimPatch.cs:60-71`.
-5. **Combat energy counter (`CustomEnergyCounter` or `CustomEnergyCounterPath`):**
-   - With five `256 x 256` layer PNGs (`layer_1.png`–`layer_5.png`; layers 2 and 3 rotate), override the following in `Realta.cs` without a `.tscn` (`NEnergyCounterFactory.cs:235-295`):
-     ```csharp
-     public override CustomEnergyCounter? CustomEnergyCounter => new CustomEnergyCounter(
-         layer => $"charui/realta/energy_orb/layer_{layer}.png".ImagePath(),
-         outlineColor: new Color("5c2214"),
-         burstColor: Realta.Color
-     );
-     ```
+For a non-Spine character, `CustomAnimationPatch.SendTriggerToOtherAnimators` forwards `NCreature.SetAnimationTrigger` to `CustomAnimation.PlayCustomAnimation`. `CustomAnimation` searches for an `AnimationTree`, `AnimationPlayer` or `AnimatedSprite2D` in that order. The registered player supplies these names.
+
+| Game event | Name resolved by BaseLib | Realta action |
+|---|---|---|
+| Idle | `idle` | Combat `idle_loop`; merchant `relaxed_loop`. |
+| Attack | `attack` | Two-handed lunge with contact at 0.54 s. |
+| Hit | `hurt` | Recoil with the hurt face. |
+| Cast / PowerUp | `cast` / `powerup` | One cast clip, sigil release at 0.25 s. |
+| Relaxed | `relaxed` | Crouching merchant loop. |
+| Dead | `die` | The body reaches the floor at 1.66 s. The hair and clothing settle through the 2.20 s endpoint. |
+| Revive | `revive` | 0.40 s pose fade and return to the variant's default loop. |
+
+`CharacterModel.AttackAnimDelay` dates the game action relative to the trigger. Realta overrides it to 0.54 s. The inherited `CastAnimDelay` is 0.25 s. BaseLib's `AdjustTime` and `WaitCustomAnim` use `Realta.DeathAnimTime` (1.66 s) for the non-Spine death wait. The animation lengths and held endpoints are independent of those delays. [Realta.cs](/Sts2WDCode/Characters/Realta/Realta.cs) · [Authored clip timings](animation-sources.md#clips-and-dispatch)
+
+## Other scene owners
+
+The rest site uses its own seated figure under `ControlRoot/Visuals`, hitbox and thought-bubble anchors. `RealtaSceneBridge` forwards the Act-specific lighting and rest game-over events. Character selection displays the full-screen `Illustration` in its own scene. The combat energy counter uses `RealtaEnergyCounterAppearance` against the native `NEnergyCounter`; its UI resource belongs to the energy-counter guide. [Scene connections](animation-assets.md#current-scene-and-property-connections) · [Energy counter](ui-assets.md#lower-left-combat-energy-counter)

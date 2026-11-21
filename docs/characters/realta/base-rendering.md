@@ -48,7 +48,7 @@ HEX values are project anchors for consistent color relationships with the base 
 
 ## Face and Hair Preferences
 
-Combat expression heads retain the original head silhouette, hair, hat and alpha. Closed uses gently shut eyelids and a small relaxed closed mouth. Hurt uses tightly squeezed crinkled lids, furrowed brows, clenched teeth and faint strain blush; it must remain clearly distinct from the peaceful closed state at scale 0.625. Attack uses focused violet eyes, downward-angled brows and an open shouting mouth. Composite generated facial skin as one continuous surface bounded by the hairline, cheeks and jaw; avoid inset cheek patches and retain the original dark chin/hair junction. Skin-color selection must not leave original eye fragments in closed expressions.
+Combat and merchant facial expressions follow [combat expressions](animation-verification.md#combat-expressions) while retaining the original head silhouette, hair, hat, and alpha. Composite generated facial skin as one continuous surface bounded by the hairline, cheeks, and jaw; avoid inset cheek patches, retain the original dark chin/hair junction, and ensure skin-color selection leaves no original eye fragments in closed expressions.
 
 Raw references establish identity, not every rendering method. Official masks/skulls do not require erasing Realta's face. Adapt its information to combat size.
 

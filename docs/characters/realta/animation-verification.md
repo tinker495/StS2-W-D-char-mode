@@ -1,11 +1,22 @@
-# Realta Animation and UI Observation Scope
+# 레아르타 애니메이션 확인 범위
 
-[Asset index](realta-assets.md).
+<a id="combat-expressions"></a>
 
-## Combat Expressions
+## 전투와 상점의 표정
 
-The combat and merchant rigs use `head-closed.png`, `head-hurt.png`, and `head-attack.png` under `Sts2WD/animations/realta/combat/parts/`. The textures share the 188×126 RGBA rectangle at source offset `(140,99)` with `head.png`. A connected facial-skin mask preserves the silhouette, hair, hat, and jaw junction across the texture swaps. Use [animation sources](animation-sources.md) for the tracked coordinate manifests and bake procedure.
+머리 그림이 코·얼굴 윤곽·머리카락을 담당하고, `eye_r`(캐릭터 오른눈·화면 왼쪽)·`eye_l`(캐릭터 왼눈·화면 오른쪽)이 각 표정의 눈썹·눈꺼풀을, `mouth`가 입을 담당한다. 여섯 상태의 좌표 등록과 3텍셀 아틀라스 추출 계약은 [제작 소스](animation-sources.md#inputs-and-ownership)를 따른다.
 
-## Verification Scope
+| 상태 | 확인할 동작과 얼굴 |
+|---|---|
+| `neutral` | 대기 중 눈을 뜬 얼굴. 눈썹 끝이 앞머리 방향을 따른다. |
+| `closed` | 눈을 감은 상태. 전투 대기의 눈 깜박임은 양 눈만 바꾸고 기본 입을 유지한다. |
+| `hurt` | 피격 때 좁힌 눈과 찡그린 눈썹, 달라진 입. |
+| `attack` | 공격과 시전 중 힘을 준 눈·눈썹과 입. |
+| `ponder` | 상점에서 턱을 괴고 흥얼거리는 얼굴. |
+| `fallen` | 쓰러진 뒤 양 눈이 감기고 눈썹이 안쪽으로 당겨진다. 조금 벌어진 입으로 숨을 내쉰다. |
 
-The tracked [rig checks](/tests/rig-checks.md) verify scene structure, dispatch, and authored motion. [Scene connections](animation-assets.md#current-scene-and-property-connections) identifies how the game selects each resource. Installation and play observations belong in the [deployment record](/docs/deployment-status.md).
+## 동작을 확인하는 위치
+
+준비와 찌르기 정점에서는 두 주먹과 자루, 양쪽 완갑의 끝, 견갑과 팔꿈치를 함께 본다. 앞발이 닿을 때 치마 안감과 앞자락의 옆선이 함께 움직이고 무릎은 앞트임 안쪽에 보여야 한다. 시전 때는 왼팔이 몸통 뒤에서 뻗고, 편 검지·중지와 접은 약지·새끼손가락의 윤곽이 보이고 손끝에서 마법진이 나오는지 확인한다. 쓰러질 때는 풀리는 오른손과 먼저 떨어지는 창, 바닥에 닿는 모자·뺨·손바닥을 확인한다. 부활은 반투명해지는 동안 갑옷 아래 팔이나 치마 뒤 다리가 비치는지 살핀다. [모션과 타이밍](animation-sources.md#clips-and-dispatch)
+
+제작 소스에서 재생하는 동작과 PCK에서 읽은 장면은 각각 렌더해 확인한다. BaseLib가 실제 게임에서 전투·상점 동작을 호출했는지, 설치본에서 어떤 동작까지 보았는지는 해당 배포의 설치 기록을 따른다. [재현 절차](animation/reproduction.md) · [게임의 애니메이션 호출 경로](/docs/research/sts2-cutout-runtime-contract.md) · [공통 배포 기록](/docs/deployment-status.md)

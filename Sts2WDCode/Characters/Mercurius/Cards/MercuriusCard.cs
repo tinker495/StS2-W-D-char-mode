@@ -6,7 +6,6 @@ using MegaCrit.Sts2.Core.Models.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Mercurius;
 
-// Inherit this class to add a card to this character's pool.
 [Pool(typeof(MercuriusCardPool))]
 public abstract class MercuriusCard(int cost, CardType type, CardRarity rarity, TargetType target)
     : Sts2WDCard(cost, type, rarity, target)

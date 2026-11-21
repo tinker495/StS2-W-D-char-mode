@@ -1,6 +1,6 @@
 # Realta Visual Themes and Recurring Objects
 
-Use consistent symbols across 70 cards, relics, and powers so imagery communicates theme membership. Korean names below are localized product terms, preserved literally.
+Use consistent symbols across cards, relics, and powers so imagery communicates theme membership. Korean names below are localized product terms, preserved literally.
 
 ## Ten Theme Translations
 

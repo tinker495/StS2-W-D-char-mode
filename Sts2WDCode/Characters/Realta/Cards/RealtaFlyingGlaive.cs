@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// Legacy upgrades keep adding damage.
 public sealed class RealtaFlyingGlaive() : RealtaCard(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy)
 {
     public override IEnumerable<CardKeyword> CanonicalKeywords => [RealtaKeywords.Legacy];

@@ -8,6 +8,7 @@ These conventions apply to every mod character and shared implementation. Open o
 | Gameplay, commands, models, UI, localization or resource extensions | [Native StS2 integration](docs/conventions/native/features.md) |
 | Descriptions that reference concrete cards | [Native card previews](docs/conventions/ui/card-previews.md) |
 | Character documentation or artwork records | [Topic-based character guides](docs/conventions/documentation/character-guides.md) |
+| Code comments and Markdown documentation | [Comments and Markdown documentation](docs/conventions/documentation/comments-and-docs.md) |
 | Architectural review | [Architecture review criteria](docs/conventions/review/architecture.md) |
 
 Existing automated checks own mechanical validation. These documents do not authorize changes to tests or acceptance criteria; [test ownership](docs/agents/test-ownership.md) governs execution authority. Spec reviews also follow [domain guidance](docs/agents/domain.md#spec-review).

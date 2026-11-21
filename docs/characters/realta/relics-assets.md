@@ -2,7 +2,7 @@
 
 [Asset index](realta-assets.md).
 
-The five approved relic illustrations were applied on 2026-10-24 at the [runtime paths below](#filename-mapping-for-five-realta-relics). Large icons fit the whole composition into 256 x 256. Small icons fit it into 90 x 90, centered in a 94 x 94 transparent canvas to give the white 2 px alpha-derived outline room around the silhouette. The user's references define the five subjects, including the canine starter icon. Original-game relic and potion artwork guides rendering density. See [deployment status](/docs/deployment-status.md) for local installation scope.
+The five Realta relic illustrations live at the [runtime paths below](#filename-mapping-for-five-realta-relics) (visual subjects belong in [relics-art.md](relics-art.md)). Large icons fit the whole composition into 256 × 256; small icons fit it into 90 × 90 centered inside a 94 × 94 transparent canvas so the white 2 px alpha-derived outline has room around the silhouette. See [deployment status](/docs/deployment-status.md) for local installation scope.
 
 ## Relic Icons (`RelicModel`, `CustomRelicModel`, `Sts2WDRelic`)
 
@@ -26,7 +26,7 @@ The five approved relic illustrations were applied on 2026-10-24 at the [runtime
    - Outline for relic hover/highlight and compendium display.
    - **Resolution:** **`94 x 94`** (`Format32bppArgb`, RGBA PNG).
    - Current path: `Sts2WD/images/relics/<relic_name>_outline.png`.
-   - **Proposed code improvement (`StringExtensions.cs:49-56`):** `Sts2WDRelic.PackedIconOutlinePath` currently calls `RelicImagePath()`, so a missing `<relic_name>_outline.png` falls back to `relic.png` instead of `relic_outline.png`. A separate `RelicOutlineImagePath` in `StringExtensions.cs` would supply the appropriate `relic_outline.png` fallback.
+   - **Fallback quirk:** `Sts2WDRelic.PackedIconOutlinePath` calls `RelicImagePath()`, so a missing `<relic_name>_outline.png` falls back to `relic.png` rather than `relic_outline.png`.
 3. **`protected virtual string BigIconPath`** (`RelicModel.cs:134, 148-170`, `Sts2WDRelic.cs:14`):
    - Loaded by `RelicModel.BigIcon` (`PreloadManager.Cache.GetTexture2D(ResolvedBigIconPath)`).
    - High-resolution icon for relic inspection popups and detail views.

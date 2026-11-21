@@ -54,13 +54,13 @@ if ($buildWrapperExit -ne 0) {
 }
 ```
 
-For direct PowerShell native commands, save `$LASTEXITCODE` immediately after the command. For `Start-Process -Wait -PassThru`, use the returned process's `ExitCode`. Report the process result, script/resource errors, and any log-display problem separately. Inspect the relevant error section from the raw log; an abbreviated tail may omit an earlier error. When a wrapper alone fails, recover the recorded process result before deciding whether another build is needed.
+For direct PowerShell native commands, save `$LASTEXITCODE` immediately after the command. For `Start-Process -Wait -PassThru`, use the returned process's `ExitCode`. Report the process result, script/resource errors, and any log-display problem separately. Inspect the relevant error section from the raw log; an abbreviated tail may omit an earlier error. When a wrapper alone fails, recover the recorded process result before deciding whether another build is needed. MSBuild's default `Exec` task can report `-1` when it matches an error pattern in output even if the child process exited `0`; do not infer an engine crash from `-1` alone ([MSBuild Exec documentation](https://learn.microsoft.com/en-us/visualstudio/msbuild/exec-task)).
 
 ## MegaDot crashes while opening its default log
 
 On MegaDot `4.5.1.m.14.mono.custom_build`, a Windows memory-write error with process exit `0xC0000005` (signed `-1073741819`) can occur before project scripts execute. The identifying backtrace is `RefCounted::unreference` / `Ref<FileAccess>::unref` → `RotatedFileLogger::rotate_file` → `Main::setup`. Match the backtrace before applying this diagnosis to another crash.
 
-A minimal `SceneTree` script that only prints a startup marker and calls `quit(0)` reproduced this failure twice consecutively with the repository's SDK environment. The same command succeeded twice outside the sandbox. Inside the sandbox, adding only `--log-file` with a fresh absolute path under the workspace also succeeded twice. This isolates the failure to default-log handling under restricted permissions; it occurs independently of rig loading or rendering. The observed default user-data directory was `%APPDATA%/Godot/app_userdata/Sts2WD`.
+This crash stems from default log rotation under restricted sandbox permissions (default user-data directory `%APPDATA%/Godot/app_userdata/Sts2WD`), independently of rig loading or rendering. Passing `--log-file` with a fresh writable absolute path under the workspace avoids it.
 
 Use a new writable engine log for each process:
 

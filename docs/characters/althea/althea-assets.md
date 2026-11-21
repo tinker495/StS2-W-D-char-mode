@@ -13,4 +13,4 @@ This index maps the adopted base, applied files, and native integration. [Art di
 | Card portraits, temporary palettes or Wraith source | [Portrait integration](cards-assets.md) | [Portrait art](cards-art.md) |
 | Relic filenames, approval or conversion | [Relic deliveries](relics-assets.md) | [Relic art](relics-art.md) |
 
-See [deployment status](/docs/deployment-status.md) for the installed card, relic, and Aselige release scope. The linked topics above document the current standing, UI, and selection resources wired in the repository.
+See [deployment status](/docs/deployment-status.md) for recorded local installations.

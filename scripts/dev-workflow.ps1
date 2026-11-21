@@ -1,5 +1,3 @@
-# Shared development paths, packaging diagnostics and local installation.
-
 function Initialize-DevelopmentDotNet([string]$ProjectRoot) {
     $toolsRoot = Join-Path $ProjectRoot '.tools'
     $dotnet = Join-Path $toolsRoot 'dotnet/dotnet.exe'

@@ -40,11 +40,13 @@ public class Realta : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<RealtaRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<RealtaPotionPool>();
 
-    // The body finishes settling at 1.4 s; the released broom settles earlier (~1.13 s).
-    public override float DeathAnimTime => 1.4f;
+    // The glaive lands on the attack_hit cue.
+    public override float AttackAnimDelay => 0.54f;
 
-    // Animated scenes (Sts2WD/animations/realta): baked cutout rig for combat/merchant, seated mesh for
-    // the rest site, animated painting for character select. RealtaSceneBridge forwards Spine-only events.
+    // The body reaches its fallen pose by 1.66 s. Hair and clothing settle through 2.2 s.
+    public override float DeathAnimTime => 1.66f;
+
+    // Godot-native animation scenes (not Spine); RealtaSceneBridge forwards Spine-only game events to them.
     public override string CustomVisualPath => "res://Sts2WD/scenes/realta/combat.tscn";
     public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/realta/rest_site.tscn";
     public override string CustomMerchantAnimPath => "res://Sts2WD/scenes/realta/merchant.tscn";

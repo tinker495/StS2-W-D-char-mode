@@ -8,8 +8,6 @@ using Sts2WD.Sts2WDCode.Characters.Realta;
 
 namespace Sts2WD.Sts2WDCode.Ancients.Aselige;
 
-// Run-independent eligibility, weighting and dialogue priority shared by the
-// event adapter and its native room-generation bridge.
 internal static class AseligeRules
 {
     internal static bool ShouldReplaceNeow(int actIndex, IEnumerable<CharacterModel> party) =>
@@ -18,9 +16,7 @@ internal static class AseligeRules
     private static bool IsModCharacter(CharacterModel character) =>
         character is Realta or Sts2WD.Sts2WDCode.Characters.Althea.Althea or Mercurius or CharacterFour;
 
-    // The three pools are independent. The recipient's eligibility, rather
-    // than another party member's character, controls the exclusive flute.
-    // Mercurius is bound to Mercurius by the event adapter.
+    // The recipient's own eligibility—not another party member's character—controls Dragon Flute.
     internal static IReadOnlyList<IReadOnlyList<AseligeGiftOption>> GiftPools(
         ActModel firstAct, bool recipientCanReceiveDragonFlute)
     {

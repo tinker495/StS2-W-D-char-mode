@@ -35,7 +35,9 @@ $poseOutput = Join-Path ([IO.Path]::GetTempPath()) ('sts2-official-poses-' + [gu
 
 Returned scale and display dimensions are observations, not quality scores.
 
-`inspect -Path <png>` always returns structured measurements; `-AsObject` remains a compatibility no-op. `VisiblePixelRatio` describes occupied alpha above 8, `OpaquePixelRatio` describes alpha-255 pixels, and `FullyOpaque` is the exact all-pixels predicate. Pipe to `Format-List` only at the display boundary. Cards use `export-card` into a temporary candidate, then review and promotion; `check-cards` checks runtime dimensions/alpha. Use `tile-pair`, `export -BackgroundColor <hex>` only for non-card contracts permitting Fit margins, and `ui-preview` for layout observations. See [conversion-tools.md](scripts/conversion-tools.md) for commands and the temporary-output-first sequence.
+`inspect -Path <png>` always returns a `PSCustomObject` suitable for property access or `ConvertTo-Json -Depth 4` (`-AsObject` remains a compatibility no-op); pipe to `Format-List` only at the display boundary, never before serialization. `VisiblePixelRatio` counts pixels above `VisibleAlphaThreshold` (8), matching the bounding box and margins; `OpaquePixelRatio` counts only alpha-255 pixels. Because both percentages are rounded for display, use `FullyOpaque` (every pixel is alpha 255) and `MinAlpha` for exact opacity decisions; an opaque letterbox has no alpha margin and does not establish painted scene coverage.
+
+For tile pairs, full-bleed card export/validation, opaque Fit exports, and UI layout previews, see [conversion-tools.md](scripts/conversion-tools.md).
 
 - Are canonical identity, equipment, proportions, and the selected change axis preserved?
 - Do major values, silhouette, expression, and action read at actual size?

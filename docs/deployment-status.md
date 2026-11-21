@@ -1,31 +1,13 @@
 # 공통 배포 상태
 
-게임 설치를 완료한 배포의 범위와 당시 확인한 사항을 기록한다. 캐릭터별 에셋 경로와 적용 범위는 각 에셋 가이드에서 관리한다. 아래 기록의 설치 상태는 각 배포 당시의 로컬 환경에 해당한다.
+현재 로컬 게임에 설치된 배포의 범위와 확인한 사항을 기록한다. 새 설치를 완료하면 이전 항목을 누적하지 않고 현재 상태를 갱신한다. 캐릭터별 에셋 경로와 적용 범위는 각 에셋 가이드에서 관리한다. [빌드·설치 절차](/.agents/skills/build-install/SKILL.md)
 
-## 2026-10-28 메르쿠리우스 카드·유물 로컬 설치
+## 현재 로컬 설치
 
-`fix/aselige-relic-description`의 `02ba5d9` 위에 있는 미커밋 작업을 포함해 설치했다. 메르쿠리우스 완성 카드 79종과 전용 기본 타격·수비 2종, 조율 선택지 3종, 전용 유물 5종 및 연결된 유물 아이콘을 포함한다. 결말의 실제 드로우 강화와 최신 카드 효과·설명도 반영했다. 이 기록은 원격 main이나 Git에 업로드된 버전을 뜻하지 않는다.
+- **소스:** `codex/update-rig-c`의 `24895a7` 위에 있는 미커밋 작업 포함 (로컬 설치본 기준이며 원격 `main`이나 Git 업로드 버전을 뜻하지 않음)
+- **적용 범위:** 레아르타 `rig-c` 기반 전투 컷아웃 리그(단일 `2048x2048` 58파츠 `Sts2WD/animations/realta/combat/realta_skeleton.png`, 라이브 `CanvasGroup` `revive`/`revive_merchant`, 캐릭터 시점 `_r`/`_l` 명명, 풀바디 기준 `hand_l-casting`·`hand_r-ground`, 가속 찌르기 스플라인과 관통 FX `thrust_streak`·`thrust_flash`) 및 기존 레아르타·알테아·메르쿠리우스·아셀리게 반영분 포함
+- **설치 대상 및 검증:** `dev.ps1 deploy`로 Steam 설치 폴더의 `mods/Sts2WD/`에 DLL·PCK·JSON manifest·PDB를 설치했고, 네 파일의 SHA-256이 배포 패키지와 일치함을 확인
+- **환경:** .NET SDK 9.0.318, MegaDot 4.5.1.m.14 (`4.5.1.m.14.mono.custom_build`), BaseLib 3.4.7
+- **확인 범위:** `dev.ps1 verify`(추적 참조·카드 초상화·PNG 알파), `dev.ps1 build`(경고 0·오류 0), `dev.ps1 anim attack -Variant both`(Godot `tests/check_rig.gd` 및 `tests/realta_instance_isolation.gd` 통과, `rigc render --folds` 0/16), `dev.ps1 deploy` 설치 파일 및 SHA-256 일치까지. 실제 게임 내 런 실행 및 육안 확인은 별도 수행 필요.
 
-`dev.ps1 deploy`로 Steam 설치 폴더의 `mods/Sts2WD/`에 DLL·PCK·JSON manifest·PDB를 설치했고 네 파일의 SHA-256이 배포 패키지와 일치했다. .NET SDK 9.0.318, MegaDot 4.5.1.m.14, BaseLib 3.4.7을 사용했으며 Steam Workshop에 BaseLib 3.4.7도 설치되어 있었다.
-
-확인 범위는 설치 파일까지다. 게임의 모드 목록에서 BaseLib와 Sts2WD를 활성화하고 새 메르쿠리우스 런을 시작해야 현재 기본 덱 구성이 적용된다.
-
-## 2026-10-25 최신 main 및 유물 정정 배포
-
-`origin/main`의 `13bab91`까지 갱신하고 로컬의 빛나는 피막 발아(`Sown`) 정정 및 재생의 은총 한·영 설명 수정을 함께 설치했다. 이전 설치는 알테아 아트 반영 전의 `06870eb`에 기반했으므로 최신 이미지가 빠져 있었다. 재생의 은총의 한국어 설명은 “? 방에서 휴식 장소를 발견할 수 있습니다. 체력이 낮으면, 더 높은 확률로 발견합니다.”이며 확률 계산은 변경하지 않았다.
-
-`dev.ps1 deploy`로 Steam 게임의 `mods/Sts2WD/`에 DLL·PCK·manifest·PDB를 설치했고 네 파일의 SHA-256이 배포 패키지와 일치했다. 설치한 PCK에 알테아 UI·전신 그림 7개, 전투·휴식·상점·캐릭터 선택 장면과 두 언어의 수정 유물 설명이 포함됐음을 확인했다. 확인 범위는 설치 파일과 그 안의 리소스까지다.
-
-## 2026-10-24 카드·유물·아셀리게 배포
-
-| 항목 | 기록 |
-|---|---|
-| 소스 | `feat/aselige-relics-althea-update`, 기준 `origin/main` 커밋 `f48f6da` |
-| 적용 범위 | 당시 카드 밸런스, 알테아 신규 카드 3종, 레아르타·알테아 각각 유물 일러스트 5종, Retain 강조 표시, 아셀리게 조우 |
-| 배포 파일 | DLL, PCK, JSON manifest, PDB |
-| 설치 대상 | 설치된 게임의 `mods/Sts2WD/` 디렉터리 |
-| 설치 확인 | 배포 파일 4개와 설치본의 SHA-256 일치 |
-
-설치한 PCK에 유물 텍스처 72개, 대화 아이콘 2개, 언어별 대사 34줄과 고대의 존재 전체 그림이 포함됐다. 확인 범위는 설치 파일과 그 안의 리소스까지다. [빌드·설치 절차](/.agents/skills/build-install/SKILL.md)
-
-현재 캐릭터별 리소스는 각 가이드에서 확인할 수 있다. [레아르타](characters/realta/realta-assets.md), [알테아](characters/althea/althea-assets.md), [아셀리게](characters/aselige/aselige-assets.md)
+현재 캐릭터별 리소스는 각 가이드에서 확인할 수 있다. [레아르타](characters/realta/realta-assets.md), [알테아](characters/althea/althea-assets.md), [메르쿠리우스](characters/mercurius/mercurius-assets.md), [아셀리게](characters/aselige/aselige-assets.md)

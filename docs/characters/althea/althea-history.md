@@ -1,11 +1,11 @@
 # Althea Art Decision History
 
-## Base and Shared Standing (2026-10-24)
+## Base and Shared Standing
 
-The user adopted [base.png](base.png) for its clean 2D rendering, natural young-adult proportions, and bright silver and ivory palette. The direct bust reference establishes facial features and costume, while native combat references guide full-body camera, pose, and rendering density. These choices are documented in [art direction](althea-art.md).
+[base.png](base.png) was chosen for its clean 2D rendering, natural young-adult proportions, and bright silver-and-ivory palette rather than darker, stockier native builds. The direct bust reference establishes facial identity and costume, while native combat references guide camera angle, grounding, and rendering density.
 
-The standing pose shows the drawn sword, with the other hand supporting the empty scabbard. The right-facing three-quarter view retains the far eye and directs the gaze toward the enemy. The user approved a whole-image Fit export of the base for combat, merchant, and rest. See [standing delivery](animation-standing.md#delivery-and-integration).
+Because `base.png` already holds an active right-facing three-quarter combat stance with the sword drawn and the far eye visible toward the enemy, it is reused directly across combat, merchant, and rest scenes via whole-image Fit instead of generating separate standing paintings. See [art direction](althea-art.md) and [standing delivery](animation-standing.md#delivery-and-integration).
 
-## Selection and UI (2026-10-24)
+## Selection and UI
 
-The user approved the chibi portrait and outline, map marker, and energy icon pair. For the selection tile they chose a high camera and a concentrated expression. The selection background shows the instant before drawing, with both hands engaged and curse currents gathering at the closed scabbard throat. The locked tile derives from the same resized alpha as the normal tile. See [UI assets](ui-assets.md) and [selection delivery](selection-assets.md).
+The selection tile uses a high camera angle and concentrated expression to preserve non-chibi adult presence at small tile scale, contrasting with the chibi portrait and map marker used for compact HUD readability. The selection background stages the coiled instant just before drawing so both hands stay engaged and curse currents read clearly without cluttering the left UI area. Deriving the locked tile from the normal tile's resized alpha keeps both silhouettes identical. See [UI assets](ui-assets.md) and [selection delivery](selection-assets.md).

@@ -8,6 +8,5 @@ The approved refined forest painting, matching cute dialogue head and fourteen r
 | Dialogue/history/map icon and outline | [UI assets](ui-assets.md) |
 | Fourteen relics, filename mapping and sizes | [Relic assets](relics-assets.md) |
 | Native/BaseLib wiring, effects and dialogue | [Runtime integration](event-api.md) |
-| Local installation scope | [Verification scope](shared-verification.md) |
 
-[Deployment status](/docs/deployment-status.md) owns package installation and shared verification, including the 2026-10-24 card/relic/Aselige release. Historical observations do not establish installation status for the current checkout.
+[Deployment status](/docs/deployment-status.md) owns package installation and shared verification. Historical observations do not establish installation status for the current checkout.

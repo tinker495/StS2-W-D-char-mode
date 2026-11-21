@@ -1,6 +1,6 @@
 # Mercurius Canonical Standing Master
 
-[base.png](base.png) is the approved identity and rendering anchor. The user approved the current colors on 2026-10-31, then authorized trimming transparent margins and proportional conversion to 1024 × 1536. Preserve the complete painting.
+[base.png](base.png) is the canonical identity and rendering anchor at 1024 × 1536, preserving the complete painting after explicitly authorized outer transparent-margin trimming and proportional scaling.
 
 ## Identity and equipment
 

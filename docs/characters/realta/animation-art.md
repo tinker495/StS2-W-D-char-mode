@@ -1,24 +1,20 @@
-# Realta Standing and Animation Art
+# 레아르타의 전투·상점 동작
 
-Realta's large pauldron and the glove holding the shaft on the viewer's left in [base.png](base.png) identify her anatomical right arm, closest to the camera. The small pauldron and open glove on the viewer's right identify her anatomical left arm, behind her torso and coat. Carry those identities through the pose when the hands change screen position. [Shared in-game arm depth](/ARTS.md#51-combat-rest-and-merchant-standing-art)
+기본 자세는 화면 오른쪽을 향해 서서 빗자루창을 한 손으로 든 모습이다. 화면 왼쪽의 큰 견갑과 자루를 쥔 장갑이 레아르타의 오른팔이다. 화면 오른쪽의 작은 견갑과 편 장갑은 왼팔이다. 몸을 비틀어 화면에서 두 손의 위치가 바뀌어도 큰 견갑 쪽이 가까운 팔이다. [기준 원화](base.png) · [전투 인물의 앞뒤 관계](/ARTS.md#51-combat-rest-and-merchant-standing-art)
 
-- **Combat/merchant weapon depth:** draw the complete broom-glaive and ribbon in front of every body part, including head, hat and face. Only the hand enclosing the shaft and VFX sit above them. The released weapon also falls in front of the body during death and rests on the floor; its ribbon first streams toward the hat and then down so it avoids the eyes. The final blade lies below the face. [Animation ownership](animation-sources.md) defines tree order, release and revival transitions.
-- **Merchant free arm:** place the viewer-right free sleeve, cuff, forearm and glove behind the torso, front/back coat and legs. Show only a little forearm and glove edge beside the coat so the hand reads as resting behind the hip. In a two-handed combat grip, let the far fingers meet the exposed shaft outside the body's silhouette.
+## 공격
 
-- **Combat rig contacts and motion:** preserve the visible face, clothing and equipment while completing the hidden sleeve, thigh, knee, ankle, neck and wrist surfaces. The attack encloses the shaft with the back of the gripping hand visible; hurt adds a small pelvis recoil; early death brings both knees forward into a folded pose. Front coat and ivory fur sit over the thighs; shoulder plates remain attached to the torso. [Animation ownership](animation-sources.md) defines authoring inputs, coordinates, weights and clip contracts.
+오른손으로 빗자루창을 얼굴과 흉갑 앞으로 내려 칼날을 전방으로 돌린다. 이때 칼날과 금속 소켓은 원화의 굽은 윤곽과 하이라이트를 그대로 뒤집어 보여 준다. 왼손이 자루의 앞쪽을 받으면 무릎을 접어 몸과 창을 한 차례 당겨 모았다가 앞발을 강하게 내디디며 허리와 두 손을 빠르게 찔러 넣는다. 0.54초에 칼끝이 가장 멀리 나가며 날을 감싸는 관통 기류(`thrust_streak`)와 칼끝 섬광(`thrust_flash`)이 터진 뒤, 짧게 정지했다가 팔을 회수하며 왼손을 놓고 다시 오른손으로 창을 세운다.
 
-- **Merchant cutout animation:** the native `relaxed_loop` now uses a narrow planted stance with weight toward the viewer-left leg, the free glove resting by the belt/hip, and a low one-handed shaft grip. Keep the upper arm/elbow visible at full source length. The broom-glaive rests beside her with bristles just above floor support, the blade high, and its ribbon knot clearly outside the hat brim. Preserve the complete prop and fixed grip attachment. Use two restrained breaths over eight seconds with slow weight sway and small warmed spring motion; retain the youthful confident face. This animation-specific staging supersedes the old relaxed source keys, while the canonical base and standing still retain their approved composition. Technical coordinates, aliases and transition behavior are in [animation-sources.md](animation-sources.md).
+큰 견갑 아래의 오른쪽 소매와 팔꿈치는 흉갑 앞으로 나온다. 작은 견갑 쪽 팔은 몸 뒤에 남고, 자루를 감싼 왼손 손가락은 나무 앞으로 보인다. 양 손목에서 청동 완갑의 끝이 가죽 장갑 안으로 들어가고, 자루는 두 주먹 사이로 이어진다. 치마 앞자락은 들린 무릎을 따라 올라가고 밑단은 앞발 쪽으로 다시 늘어진다. 다리는 두 크림색 앞단 사이와 밑단 아래로 보인다. [파츠와 겹침](animation-sources.md#completed-parts-and-overlap-ownership)
 
-- **Shared standing image:** use the complete [base.png](base.png), including transparent margins, without regeneration. `combat.png`, 384×576 RGBA, is shared by combat, rest, and merchant scenes. There is no separate runtime `standing.png`.
-- **Current pose:** retain the base's upright, one-handed broom-glaive stance, youthful face, open forehead, paired pauldrons, and continuous collar. The separately generated two-handed combat pose was removed at the user's request. This character-specific delivery overrides the generic Branch B split until the user requests otherwise.
-- **Application status:** combat/merchant display at 240×360 with scale 0.625; rest displays at 326.4×489.6 with scale 0.85. See the [asset guide](animation-assets.md) for the rollback and verification limits.
-- **Composition/margins:**
-  - Three-quarter standing idle toward screen-right. **Forward means the body's battle direction, not facing the camera.**
-  - Specify head and pupils separately. Look toward the opponent, not the viewer. Preserve both eyes, face width, forehead, and short jaw; do not rotate into profile or erase the far eye. Limit necessary head adjustment and do not force body/nose/pupils to identical angles.
-  - Keep roughly 3–5% fully transparent margins beyond blade tip, soles, broom, and brim; prevent boundary clipping.
-  - Retain the base's one-handed grip and keep the shaft and socket away from the face.
-- **Scene wiring/placement:** the [asset guide](animation-assets.md) owns current runtime anchors. This section owns face, pose, and margins.
+## 표정과 다른 동작
 
-## Attack Trail
+- **전투 대기와 피격.** 대기 중에는 발을 디딘 채 숨을 쉬고 눈을 깜박인다. 피격 때는 눈매와 입이 함께 일그러지고 골반과 무릎이 반동을 받는다. 각 눈 위의 눈썹은 해당 표정의 눈꺼풀에 맞춰 바뀐다.
+- **시전.** 몸을 숙여 기운을 모은 뒤 왼팔을 몸통 뒤에서 화면 오른쪽으로 뻗는다. 몸 밖으로 드러난 왼손은 검지와 중지를 뻗고 약지와 새끼손가락을 손바닥 쪽으로 접는다. 0.25초에 크기와 회전이 다른 마법진 세 겹이 손끝에서 나온다.
+- **상점.** 쪼그려 앉아 오른손으로 턱을 괴고 흥얼거리듯 몸을 흔든다. 빗자루창은 손을 떠나 인물 옆에 떠 있다.
+- **쓰러짐과 부활.** 오른손을 펴서 빗자루창을 놓고 무릎으로 한 차례 버틴 뒤 앞으로 쓰러진다. 모자는 머리에서 떨어져 얼굴 앞쪽 바닥에 눕고, 빗자루창은 솔이 왼쪽을 향한 채 눕는다. 눈을 꼭 감은 얼굴은 지친 눈썹과 조금 벌어진 입으로 통증을 드러낸다. 뺨과 편 장갑이 바닥에 닿은 자세가 잠시 유지된다. 부활하면 전투에서는 창을 들고 선 자세, 상점에서는 턱을 괴고 앉은 자세가 돌아온다.
 
-Extend the existing teal/ivory trail along the actual blade path. Reveal it behind the blade tip in sequence, with a thick leading section and a tapered tail. Retain the path through the 0.15-second hit until 0.25 seconds, and remove it at 0.34 seconds. Keep the face visible and draw the trail above the weapon.
+## 전신 스틸과 장면
+
+전신 스틸 `combat.png`는 1152×1728 기준 원화를 여백까지 포함해 384×576 RGBA로 축소한 그림이다. 전투와 상점은 같은 원화에서 나눈 관절 리그를 사용한다. 휴식 장면에는 앉은 일러스트, 캐릭터 선택 화면에는 칼날을 살펴보는 일러스트가 따로 있다. [장면별 리소스](animation-assets.md#current-scene-and-property-connections)

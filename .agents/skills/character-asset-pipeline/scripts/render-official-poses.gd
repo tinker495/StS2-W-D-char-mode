@@ -1,8 +1,6 @@
 extends SceneTree
-# Renders the first frame of each official character's combat idle and merchant
-# relaxed pose from the installed SlayTheSpire2.pck. Run through
-# `asset-pipeline.ps1 official-poses`, which prepares the host project.
-# User args: <pck path> <output directory>.
+# Must be invoked via `asset-pipeline.ps1 official-poses`, which creates the temporary host
+# project containing `res://local_spine.gdextension` and passes `<pck path> <output directory>`.
 
 const CHARACTERS = ["ironclad", "silent", "defect", "necrobinder", "regent"]
 const VIEWPORT_SIZE = 1400

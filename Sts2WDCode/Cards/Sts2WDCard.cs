@@ -9,7 +9,6 @@ using Sts2WD.Sts2WDCode.Extensions;
 
 namespace Sts2WD.Sts2WDCode.Cards;
 
-// Shared artwork behavior. Inherit a character-specific card base to assign its pool.
 public abstract class Sts2WDCard(int cost, CardType type, CardRarity rarity, TargetType target) :
     CustomCardModel(cost, type, rarity, target)
 {

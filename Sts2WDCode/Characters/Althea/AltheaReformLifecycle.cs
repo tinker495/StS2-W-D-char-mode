@@ -10,7 +10,6 @@ using MegaCrit.Sts2.Core.Nodes.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Althea;
 
-// Owns Reform's deferred execution and provenance for the lifetime of each player's combat state.
 internal static class AltheaReformLifecycle
 {
     private sealed class State
@@ -73,7 +72,7 @@ internal static class AltheaReformLifecycle
         if (source.Enchantment is { } enchantment && enchantment.CanEnchant(replacement))
             CardCmd.Enchant((EnchantmentModel)enchantment.ClonePreservingMutability(), replacement, enchantment.Amount);
         replacement.DeckVersion = source.DeckVersion;
-        // Preserve the native self-Reform visual fix documented in althea-card-implementation-plan.md.
+        // CardCmd.Transform removes a self-reforming card from Play without freeing its NCard node, so OnPlayWrapper skips play-area cleanup; return the stale node to the pool once Transform removes the source.
         var playedCard = source.Pile.Type == PileType.Play ? NCard.FindOnTable(source) : null;
         await CardCmd.Transform(source, replacement);
         if (source.HasBeenRemovedFromState && playedCard?.Model == source) playedCard.QueueFreeSafely();

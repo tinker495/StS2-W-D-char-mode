@@ -1,6 +1,6 @@
 # Aselige UI Assets
 
-The [approved dialogue head](ui-art.md) and its outline are applied to dialogue, history and map presentation as of 2026-10-24.
+The [approved dialogue head](ui-art.md) and its outline are applied to dialogue, history and map presentation.
 
 | Role | Path | Dimensions / wiring |
 |---|---|---|

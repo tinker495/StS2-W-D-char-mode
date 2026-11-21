@@ -1,10 +1,10 @@
 # Slay the Spire 2 공식 애니메이션 비교
 
-2026-10-19에 Mega Crit의 공개 영상과 게임 `v0.107.1`의 장면, Spine 리소스, 상태 전환 코드를 조사했다. 레아르타의 장면 연결과 클립 계약은 [런타임 연결 계약](sts2-cutout-runtime-contract.md)에서 확인할 수 있다.
+Mega Crit의 공개 영상과 게임 `v0.107.1`의 장면, Spine 리소스, 상태 전환 코드를 조사한 결과다. 비-Spine 장면 연결과 클립 계약은 [런타임 연결 계약](sts2-cutout-runtime-contract.md)에서 확인할 수 있다.
 
 ## 1. 출처와 관찰 범위
 
-| 자료 | 1차 출처 | 이번에 확인한 내용과 한계 |
+| 자료 | 1차 출처 | 확인한 내용과 한계 |
 |---|---|---|
 | Silent 개발 영상 | [2024년 10월 공식 글](https://www.megacrit.com/news/2024-10-02-neowsletter-issue-3/), [원본 GIF](https://www.megacrit.com/images/silent_anim.gif) | 저장된 600×495 GIF의 121프레임, 각 20ms, 전체 2.42초. 피격·대기·공격을 직접 프레임 비교. 출시 전 자료이므로 설치판과 동일하다고 간주하지 않음 |
 | Necrobinder/Osty 영상 | [2025년 10월 공식 글](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/), [원본 GIF](https://www.megacrit.com/images/osty_poke3.gif) | 700×432, 130프레임, 각 30ms, 전체 3.90초. 카드 선택·공격·피격 효과가 함께 들어간 화면이며 클립 단독 길이가 아님 |
@@ -33,12 +33,12 @@
 
 아래 코드 관찰의 1차 자료는 설치판 `sts2.dll`이다. 이름과 멤버를 그대로 기록해 같은 버전에서 다시 확인할 수 있게 했다. 디컴파일된 코드는 구현을 읽는 수단이며 Mega Crit가 공개 배포한 소스 저장소를 뜻하지 않는다.
 
-| 범위 | 관찰한 형식·멤버 | 확인한 동작 | Realta에 주는 의미 |
+| 범위 | 관찰한 형식·멤버 | 확인한 동작 | 컷아웃 리그에 주는 의미 |
 |---|---|---|---|
-| 기본 전투 | `MegaCrit.Sts2.Core.Models.CharacterModel.GenerateAnimator` | `Idle→idle_loop`, `Attack→attack`, `Hit→hurt`, `Dead→die`, `Cast/PowerUp→cast`, `Relaxed→relaxed_loop`. attack/cast/hurt 뒤 idle 큐 등록 | 게임 트리거 이름과 동작 완료 뒤의 전이를 레아르타 전투 리그에서 연결 |
-| 캐릭터별 행동 | `Ironclad`, `Silent`, `Defect`, `Necrobinder`, `Regent`의 `GenerateAnimator` | 각각 `attack_heavy`, `shiv`, `process`, `cast_mighty`, `attack_sovereign` 같은 별도 상태가 있음 | 모든 공식 클립을 Realta에 복제할 필요는 없음. Realta의 실제 카드 행위가 필요한 구분을 소유해야 함 |
-| 상태 전환 | `MegaCrit.Sts2.Core.Animation.CreatureAnimator.SetNextState`, `AddNextState`, `OnAnimationCompleted` | 실제 애니메이션 존재 여부 확인, 다음 상태 큐, 완료 신호 처리, 경우에 따라 bounds 갱신 | 비-Spine 레아르타 리그에서는 `AnimationPlayer`가 행동 뒤 대기 전이를 담당 |
-| 대기 위상 | 같은 형식의 생성자·`OffsetLoopingAnimation` | 초기 idle 위상 무작위화, 반복 시간 배율 0.9~1.1 및 작은 위상 변동 | 여러 캐릭터가 똑같은 박자로 움직이지 않음. 이 수치는 관찰한 구현이며 Realta 품질 합격선이 아님 |
+| 기본 전투 | `MegaCrit.Sts2.Core.Models.CharacterModel.GenerateAnimator` | `Idle→idle_loop`, `Attack→attack`, `Hit→hurt`, `Dead→die`, `Cast/PowerUp→cast`, `Relaxed→relaxed_loop`. attack/cast/hurt 뒤 idle 큐 등록 | 게임 트리거 이름과 동작 완료 뒤의 전이를 전투 리그에서 연결 |
+| 캐릭터별 행동 | `Ironclad`, `Silent`, `Defect`, `Necrobinder`, `Regent`의 `GenerateAnimator` | 각각 `attack_heavy`, `shiv`, `process`, `cast_mighty`, `attack_sovereign` 같은 별도 상태가 있음 | 모든 공식 클립을 복제할 필요는 없으며, 캐릭터의 실제 카드 행위가 필요한 구분만 소유 |
+| 상태 전환 | `MegaCrit.Sts2.Core.Animation.CreatureAnimator.SetNextState`, `AddNextState`, `OnAnimationCompleted` | 실제 애니메이션 존재 여부 확인, 다음 상태 큐, 완료 신호 처리, 경우에 따라 bounds 갱신 | 비-Spine 리그에서는 `AnimationPlayer`가 행동 뒤 대기 전이를 담당 |
+| 대기 위상 | 같은 형식의 생성자·`OffsetLoopingAnimation` | 초기 idle 위상 무작위화, 반복 시간 배율 0.9~1.1 및 작은 위상 변동 | 여러 캐릭터가 똑같은 박자로 움직이지 않음. 이 수치는 관찰한 구현이며 품질 합격선이 아님 |
 | 상점 | `CharacterModel.MerchantAnimPath`, `NMerchantCharacter._Ready/PlayAnimation` | 별도 `merchant/characters/<id>_merchant` 씬; 첫 자식 MegaSprite에 `relaxed_loop` 반복·무작위 위상 | 상점은 전투 공격 대기를 그대로 호출하는 경로가 아님 |
 | 상점 사망 | `NGameOverScreen.MoveCreaturesToDifferentLayerAndDisableUi` | 상점 플레이어 visuals에 `PlayAnimation("die")` 호출 후 옮김 | 상점 변형에도 사망 경로를 고려해야 함 |
 | 휴식 | `CharacterModel.RestSiteAnimPath`, `NRestSiteCharacter._Ready` | 별도 rest 씬; Act index 0/1/2에 `overgrowth_loop` / `hive_loop` / `glory_loop`; 자식 SpineSprite들에 재생·무작위 위상 | 휴식은 단일 combat idle 복제가 아님. 이름만으로 세 자세가 얼마나 다른지는 알 수 없음 |
@@ -47,7 +47,7 @@
 | 선택 화면 | `CharacterModel.CharacterSelectBg`, `NCharacterSelectScreenBg.OnWindowChange` | 별도 `screens/char_select/char_select_bg_<id>` 씬과 화면비별 배율 처리 | 전투 리그 확대와 별도로 구도·UI·화면비 확인 필요 |
 | 선택 화면의 개별 상호작용 | `NRegentCharacterSelectBg._Ready/SetSkin` | 특정 hover 영역과 skin 전환을 연결 | 선택 화면의 모든 변형이 본체 애니메이션 하나라는 가정은 틀림. 다른 캐릭터에 동일 기능이 필수라는 뜻은 아님 |
 
-위 표는 **코드 계약**이다. 이를 시각적 관찰과 연결하기 위해 Ironclad와 Silent의 실제 설치판 리소스를 아래 방법으로 렌더했다. 기존 [선택 구도 조사](sts2-character-select-composition-study.md)의 다섯 캐릭터 정지 렌더와 이번 시간 표본을 구분한다.
+위 표는 **코드 계약**이다. 이를 시각적 관찰과 연결하기 위해 Ironclad와 Silent의 실제 설치판 리소스를 아래 방법으로 렌더했다. [선택 구도 조사](sts2-character-select-composition-study.md)의 다섯 캐릭터 정지 렌더와 아래 시간 표본 렌더를 구분한다.
 
 ### 설치판을 직접 렌더한 씬 비교
 
@@ -77,14 +77,14 @@
 | 휴식 `overgrowth_loop` / `hive_loop` / `glory_loop` 각각 | 6.667 | 8.000 |
 | 선택 `animation` | 5.333 | 11.667 |
 
-수치는 `SpineSkeletonDataResource.get_animations()`와 `SpineAnimation.get_duration()`의 반환값을 소수 셋째 자리로 반올림했다. 전투·상점 Spine 버전은 `4.2.43`, 휴식은 `4.2.37`, 선택은 `4.2.40`이다. 이 값들은 조사한 두 캐릭터·설치 버전의 관찰치이며, Realta에 동일 길이를 강제하는 요구사항이 아니다. 긴 relaxed/rest loop와 짧은 전투 loop가 함께 존재하므로 모든 씬을 동일한 2.4초 반복으로 맞추는 것은 공식과 같은 설계라고 볼 수 없다.
+수치는 `SpineSkeletonDataResource.get_animations()`와 `SpineAnimation.get_duration()`의 반환값을 소수 셋째 자리로 반올림했다. 전투·상점 Spine 버전은 `4.2.43`, 휴식은 `4.2.37`, 선택은 `4.2.40`이다. 이 값들은 조사한 두 캐릭터·설치 버전의 관찰치이며, 모드 캐릭터에 동일 길이를 강제하는 요구사항이 아니다. 긴 relaxed/rest loop와 짧은 전투 loop가 함께 존재하므로 모든 씬을 동일한 2.4초 반복으로 맞추는 것은 공식과 같은 설계라고 볼 수 없다.
 
 ## 4. 동작 시간은 전체 길이와 효과 시점을 나눠야 한다
 
 **코드 관찰:** 기본 다섯 캐릭터의 `AttackAnimDelay`는 0.15초다. `CastAnimDelay`는 Ironclad/Silent/Defect/Regent가 0.25초, Necrobinder가 0.4초다. `AttackCommand.FromCard`가 이 값을 선택하고, 실행 경로에서 `CreatureCmd.TriggerAnim`을 기다린 뒤 타격 효과 등의 처리를 진행한다. `CreatureCmd.TriggerAnim`의 `waitTime`은 재생 시작 뒤 기다리는 시간이다. 따라서 이 값을 전체 animation duration으로 해석해서는 안 된다. `AttackCommand.FromOsty`의 기본값은 별도 0.3초다.
 
-레아르타 전투 리그에서 공격 접촉은 0.15초, 주문 문양이 나오는 시점은 0.25초다. 두 클립의 전체 길이는 각각 1.05초, 1.3초다. [레아르타 클립 계약](/docs/characters/realta/animation-sources.md#clips-and-dispatch)
+캐릭터별 공격·시전 지연과 전체 클립 길이는 각 캐릭터의 애니메이션 명세에서 관리한다(예: [레아르타 클립 계약](/docs/characters/realta/animation-sources.md#clips-and-dispatch)).
 
 ## 5. 리그 제작 근거
 
-Esoteric Software의 파츠 준비 가이드는 관절의 겹침을 둥글게 만들고, 움직일 때 드러나는 면을 그리며, 앞뒤로 움직이는 천을 별도 레이어로 두는 방식을 설명한다. Godot의 2D 스켈레톤 가이드는 굽히는 부분에 내부 정점과 가중치를 배치하는 방법을 다룬다. 레아르타의 현재 파츠 구성은 소매 아래 어깨와 무릎 뒤의 가림을 보완하고 관절과 천에 가중치를 둔다. [Spine 파츠 준비](https://eu.esotericsoftware.com/blog/How-to-cut-your-assets-for-animation), [Godot 2D 스켈레톤](https://docs.godotengine.org/en/4.5/tutorials/animation/2d_skeletons.html), [레아르타 파츠 구성](/docs/characters/realta/animation-sources.md#completed-parts-and-overlap-ownership)
+Esoteric Software의 파츠 준비 가이드는 관절의 겹침을 둥글게 만들고, 움직일 때 드러나는 면을 그리며, 앞뒤로 움직이는 천을 별도 레이어로 두는 방식을 설명한다. Godot의 2D 스켈레톤 가이드는 굽히는 부분에 내부 정점과 가중치를 배치하는 방법을 다룬다. 캐릭터별 파츠 구성은 각 캐릭터의 `animation-sources.md`에서 관리한다(예: [레아르타 파츠 구성](/docs/characters/realta/animation-sources.md#completed-parts-and-overlap-ownership)). [Spine 파츠 준비](https://eu.esotericsoftware.com/blog/How-to-cut-your-assets-for-animation), [Godot 2D 스켈레톤](https://docs.godotengine.org/en/4.5/tutorials/animation/2d_skeletons.html)

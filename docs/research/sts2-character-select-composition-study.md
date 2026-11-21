@@ -1,4 +1,4 @@
-# Base-Game Selection Compositions and Their Application to Realta
+# Base-Game Character Selection Compositions
 
 - Research date: 2026-10-18 (Asia/Seoul).
 - Purpose: make the selection screen convey character and power, beyond placing a full-body figure in a large background.
@@ -34,79 +34,24 @@ Use these to read pose, arrangement, and major symbols, not as complete game cap
 
 These are **image observations** of the five original-resource PNGs. UI-free images do not establish actual text overlap.
 
-| Character | Pose, expression, occupancy | Symbol and background | Adopt / do not import into Realta |
+| Character | Pose, expression, occupancy | Symbol and background | Adopt / do not import |
 |---|---|---|---|
 | Ironclad | Large mask/shoulders/arms at right foreground; raised sword beside face; lowered head, glowing eyes, tight grips convey threat | Dark red flow and black masses extend heat/danger without requiring a literal castle/cave | Connect face/hands/weapon and extend emotional color; do not copy mask, demonic red forms, or red eyes |
 | Silent | Twisted body, one dagger behind and one forward; huge cloak sweeps left; pale mask, green eyes, and blades link focus | Separate background has broad green/blue shifts and long scratched diagonals aligned with movement | Prepared action, sweeping cloth, two or three linked focal points; do not copy skull, dual daggers, or blade-like motifs |
 | Defect | Exaggerated claw hand in left foreground; head/chest at right; perspective scale precedes full-leg visibility | Blue field, lightning, luminous chest, and blue rim extend electrical power rather than architecture | Enlarge working hand/object and extend ability light; do not require a mechanical hand or lightning |
-| Regent | Reclines in throne, crossed legs, relaxed raised hand; attitude reads through head/shoulder/hand/leg pose despite a small eye | Orange flow and gold constellations connect throne and star face without a literal palace | Convey personality through tension, ease, or work posture; do not substitute throne, constellations, or orange cosmos for Realta's identity |
+| Regent | Reclines in throne, crossed legs, relaxed raised hand; attitude reads through head/shoulder/hand/leg pose despite a small eye | Orange flow and gold constellations connect throne and star face without a literal palace | Convey personality through tension, ease, or work posture; do not substitute throne, constellations, or orange cosmos for a character's own identity |
 | Necrobinder | Raised hand and tilted head connect to huge Osty; companion hand becomes the larger subject mass | Pink/violet flow, bone, robe, and flame express strange power together | Two major forms showing character/tool or power relationship; do not copy Osty or skull motifs |
 
 **Project judgment:** the common structure is closer to **one pose, one characteristic major form, and a background extending that power through color/motif** than a full-body figure before a large landscape. More environment detail alone does not create personality. Requiring face, whole hat, entire weapon, and boots in every selection frame prevents bold close cameras. Design such framing during generation; observed off-frame shapes do not authorize later cropping.
 
 Separate layers were also viewed: [Silent's background](sts2-style-refs/character-select/silent-selection-background.png) has broad green/blue shifts and rough diagonals; [Necrobinder's](sts2-style-refs/character-select/necrobinder-selection-background.png) has pink/violet flow and dark curves. Neither layer contains a literal stone fortress/forge set. A separate layer does not establish the absence of additional effects in the finished screen.
 
-## 2. Necrobinder: Character and Power Fill the Screen
+## 2. UI Overlap and Left-Panel Safe Space (Necrobinder Screen)
 
-The following are **image observations** of the [official-screen snapshot](sts2-style-refs/future-assets/ui-select-screenshot.png).
+**Image observations** of the complete [official-screen snapshot](sts2-style-refs/future-assets/ui-select-screenshot.png):
 
-### Composition and Occupancy
+- Necrobinder's skull and upper body anchor the right side while giant Osty extends behind the left information panel, matching their shared companion presentation ([October 2025 article](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/)).
+- Broad bone planes and dark gaps continue behind the left text panel. Safe space works by avoiding **high-frequency detail and strong focal points competing with text**, rather than leaving an empty rectangle.
+- Lower character-selection tiles overlay the illustration directly instead of sitting inside blank cutout regions.
 
-- Skull/upper body are large on the right; face, long neck, hand, and robe take priority over showing the full body.
-- Giant Osty is a major mass, not an accessory; its form/colors extend behind the left information panel.
-- Pale skull, raised hand, and giant bone hand link character and power. Even without the face, hand/costume/silhouette sustain the subject.
-
-### Expression, Pose, and Symbols
-
-- Skull tilt, hand gesture, and neck angle convey attitude rather than realistic micro-expression.
-- Pink robe, dark inner face, violet flame, and pale bone form a coherent theme rather than scattered tiny symbols.
-- The scale contrast between Osty and the character conveys an unusual relationship more directly than extra background ornaments.
-
-### Background and UI
-
-- Background extends the character's colors and symbols rather than presenting a generic dungeon first.
-- Bone planes and dark gaps remain under the left panel. Safe space avoids **high-frequency details and strong focal points competing with text**, rather than remaining empty.
-- Lower tiles overlay the illustration; the artwork does not end in empty rectangles around them.
-
-**Official statement:** Necrobinder was introduced with the giant reanimated hand Osty as a companion, matching their shared screen occupancy. [October 2025 article](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/)
-
-**Project judgment:** adopt the relationship between character and second major form, not the coordinates "hero right, giant hand left." Skull, Osty, and violet flame remain Necrobinder's identity.
-
-## 3. Sequence for Designing a New Selection Scene
-
-These are **project proposals**, not new canon or substitute user approval.
-
-Generate directly for 16:9 and proportionally resize the whole image. Revise generation when UI overlap, face occupancy, or action placement is wrong. Do not solve composition by extracting/enlarging rectangles or Cover fitting (ARTS.md section 1.3).
-
-### Write One Scene Sentence First
-
-Example: "Realta infuses her well-used broom-glaive with improvement magic, expressing confidence in her craft."
-
-This connects existing infusion, Legacy, and Refine themes without inventing companions or lore. It is an example of scene construction, not a requirement to reuse that exact scene. [Character design](/docs/characters/realta/realta.md)
-
-### Connect Face, Hand, and Workpiece
-
-- Link close face/gaze, active magical hand, and the improved weapon.
-- Release the requirement to show full body and weapon. Selection art is not an equipment-check master. Plan off-frame extremities during generation and inspect the result with UI.
-- Let light arise from the character's work rather than an unrelated background furnace.
-
-### Choose One Characteristic Major Symbol
-
-- Consider the glaive curve, magic flowing through a workpiece, or bronze protective form.
-- The starting relic 청동의 번견 may inform a motif; its name alone does not establish a new companion's appearance or existence. Resolve that canon/staging decision separately before introducing one.
-- Add supporting tools/environment after the major symbol. Do not pile on castles, books, runes, flames, summons, and floating weapons as substitutes for identity.
-
-### Establish Safe Space through Contrast and Hierarchy
-
-- Keep face, essential finger action, and brightest magical contact clear of the left panel and lower tiles.
-- Broad workbench or dark weapon shapes can continue behind information; reduce detail/contrast there and inspect actual text.
-- Check language, aspect ratio, and UI scaling. One screenshot's coordinates are not universal runtime specifications.
-
-## 4. Comparison Questions
-
-- **Identity:** both shoulders, connected collar, red bob, violet eyes, hat, and weapon construction preserved?
-- **Rendering:** do major values, selective contours, soft curvature, and quiet brushwork support the reading order?
-- **Scene:** what stops making sense if another character replaces Realta? If nothing changes, the action/background is still generic.
-- **UI:** was space created merely by shrinking the figure, or by keeping major forms and controlling contrast behind text?
-
-These questions guide visual observation, not automated tests or acceptance thresholds. Final canonical approval remains with the user.
+**Project judgment:** adopt the relationship between character, second major form, and contrast-managed safe zones—not fixed coordinates ("hero right, giant hand left") or Necrobinder's skull, Osty, and violet-flame motifs. For selection-scene composition rules, safe-zone checks, and production recipes, see [ARTS.md section 5.7](/ARTS.md#57-selection-illustrations) and [the UI asset route](/.agents/skills/character-asset-pipeline/ui.md).

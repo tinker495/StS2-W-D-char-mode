@@ -15,7 +15,6 @@ using Sts2WD.Sts2WDCode.Cards;
 
 namespace Sts2WD.Sts2WDCode.Characters.Althea;
 
-// Inherit this class to add a card to this character's pool.
 [Pool(typeof(AltheaCardPool))]
 public abstract class AltheaCard(AltheaCardKind kind) : Sts2WDCard(
     AltheaCardDefinitions.All[kind].Cost, AltheaCardDefinitions.All[kind].Type,

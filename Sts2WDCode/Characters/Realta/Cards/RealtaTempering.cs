@@ -8,7 +8,6 @@ using MegaCrit.Sts2.Core.ValueProps;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-// Block is gained even when the refine has no valid target.
 public sealed class RealtaTempering() : RealtaCard(1, CardType.Skill, CardRarity.Basic, TargetType.Self)
 {
     private const string RefineVar = "Refine";
