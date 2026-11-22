@@ -20,4 +20,4 @@ The base's planted boots, rightward attention and connected flute gesture supply
 
 - [Official UI references](/docs/research/sts2-style-refs/future-assets/README.md) guide small-scale value separation and quiet energy centers; exclude digits and native character identities.
 - [Native selection tiles](/docs/research/sts2-style-refs/character-select-tiles/README.md) guide close camera and density. Compare normal/locked pairs at 132 × 195.
-- Review portraits/markers at 48–85 px, energy at 24/74 px and standing at 240 × 360 on light/dark backgrounds. Keep shared chibi scope separate from non-chibi tiles and standing art.
+- Review portraits/markers at 48–85 px, energy at 24/74 px and standing at the Combat, Merchant, and Rest display budgets in [ARTS.md](/ARTS.md#22-color-line-and-detail-budgets-by-display-size) on light/dark backgrounds. Keep shared chibi scope separate from non-chibi tiles and standing art.

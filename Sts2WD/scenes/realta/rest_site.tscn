@@ -10,7 +10,7 @@
 mouse_filter = 2
 
 [node name="Visuals" type="Node2D" parent="ControlRoot"]
-position = Vector2(-258, -285)
+position = Vector2(-258, -237)
 scale = Vector2(0.4, 0.4)
 script = ExtResource("1_rest")
 master = ExtResource("2_master")
@@ -20,22 +20,22 @@ blink_offset = Vector2(718, 276)
 [node name="Hitbox" type="Control" parent="ControlRoot"]
 unique_name_in_owner = true
 offset_left = -195.0
-offset_top = -280.0
+offset_top = -232.0
 offset_right = 195.0
-offset_bottom = 200.0
+offset_bottom = 248.0
 
 [node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
 unique_name_in_owner = true
 offset_left = -90.0
-offset_top = -250.0
+offset_top = -202.0
 offset_right = -90.0
-offset_bottom = -250.0
+offset_bottom = -202.0
 mouse_filter = 2
 
 [node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
 unique_name_in_owner = true
 offset_left = 150.0
-offset_top = -245.0
+offset_top = -197.0
 offset_right = 150.0
-offset_bottom = -245.0
+offset_bottom = -197.0
 mouse_filter = 2

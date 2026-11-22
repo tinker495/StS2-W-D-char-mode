@@ -27,7 +27,7 @@ Pass `base.png` directly as an image input to preserve Althea's facial features,
 - **Sword form and name (provisional):** follows the design's sword/scabbard theme; unique shape and name are undecided.
 - **Lower body (current base):** navy inner garment, white split skirts with gold trim, clean silver knee and shin plates, silver sabatons.
 - **Construction (production rule):** tip, blade, guard center, grip and pommel share one straight axis. Gauntlet and vambrace, fingers and grip, belt and scabbard ring each read separately. No floating metal pieces or duplicate guards. Hems and gold trim follow continuous cloth edges. Armor resolves into clean plates with clear overlaps.
-- **Canvas:** generate a vertical 2:3 transparent canvas containing the whole figure and equipment, with ARTS.md 5.1 margins at every extremity; do not crop or extract regions. Check whole-image Fit previews at `240 × 360` and `326 × 490`.
+- **Canvas:** generate a vertical 2:3 transparent canvas containing the whole figure and equipment, with ARTS.md 5.1 margins at every extremity; do not crop or extract regions. Check whole-image Fit previews against the Combat, Merchant, and Rest display budgets in [ARTS.md](/ARTS.md#22-color-line-and-detail-budgets-by-display-size) and [standing delivery](animation-standing.md#delivery-and-integration).
 
 ## Prompt Material
 

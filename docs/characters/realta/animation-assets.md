@@ -13,7 +13,7 @@
 | `CustomRestSiteAnimPath` | [rest_site.tscn](/Sts2WD/scenes/realta/rest_site.tscn) | `ControlRoot/Visuals`에 앉은 그림을 표시한다. 막별 불빛과 소등, 좌우 대화 위치는 휴식 장면이 담당한다. |
 | `CustomCharacterSelectBg` | [char_select_bg_realta.tscn](/Sts2WD/scenes/realta/char_select_bg_realta.tscn) | 전체 화면 `Control`의 `Illustration`이 칼날을 살펴보는 그림과 눈 깜박임을 표시한다. |
 
-[Realta 모델](/Sts2WDCode/Characters/Realta/Realta.cs)이 이 경로를 반환한다. 전투의 `Bounds`는 x −120~120, y −360~0이며 `CenterPos`, `IntentPos`, `OrbPos`, `TalkPos`, `FormVfx`는 게임의 이펙트·의도·대화 위치를 제공한다. 원화의 접지선 중앙 (576, 1581)은 게임 좌표 (0, −6.25)에 놓인다. 게임 바닥 기준은 y=−5.625이고 원화 1픽셀은 게임의 5/24픽셀에 해당한다. 앞발의 보폭과 창끝은 전투 `Bounds` 밖으로 뻗을 수 있다. [장면 변환 API](animation-api.md)
+[Realta 모델](/Sts2WDCode/Characters/Realta/Realta.cs)이 이 경로를 반환한다. 전투의 `Bounds`는 x −120~120, y −310~0이며 `CenterPos`, `IntentPos`, `OrbPos`, `TalkPos`, `FormVfx`는 게임의 이펙트·의도·대화 위치를 제공한다. 원화의 접지선 중앙 (576, 1581)은 게임 좌표 (0, −7.97)에 놓인다(8비트 `α > 128` 발끝 하단 `y ≈ −9`). 게임 바닥 기준은 y=−7.285이고 원화 1픽셀은 게임의 137/600(약 0.2283)픽셀에 해당한다. 앞발의 보폭과 창끝은 전투 `Bounds` 밖으로 뻗을 수 있으며, 방별 `Visuals` 스케일·오프셋과 앵커는 위 링크된 `.tscn` 장면이 직접 소유한다. [장면 변환 API](animation-api.md) · [방별 스케일 계약](/docs/research/sts2-cutout-runtime-contract.md#room-scale-and-ground-line-contract)
 
 ## 런타임 그림
 

@@ -6,6 +6,6 @@
 
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -155)
-scale = Vector2(0.625, 0.625)
+position = Vector2(0, -217)
+scale = Vector2(0.576, 0.576)
 texture = ExtResource("1_sprite")

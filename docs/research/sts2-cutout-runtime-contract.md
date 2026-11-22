@@ -10,7 +10,7 @@ BaseLib는 비-Spine 전투 트리거를 전투·상점의 `Visuals/Rig/Animatio
 
 | 대상 | 확인한 버전·식별자 | 재확인할 파일·멤버 |
 |---|---|---|
-| 설치 게임 | `v0.107.1`, commit `59260271`, 빌드 일시 `2026-06-18T15:43:56-07:00` | 설치 폴더 `release_info.json`, `sts2.dll`, `SlayTheSpire2.pck` |
+| 설치 게임 | `v0.107.1`, commit `59260271`, 빌드 일시 `2026-06-18T15:43:56-07:00` (방별 스케일·접지선 계약은 `v0.113.1`, commit `d09d48e5` 기준 추가 확인) | 설치 폴더 `release_info.json`, `sts2.dll`, `SlayTheSpire2.pck` |
 | BaseLib | 프로젝트 의존성 `Alchyr.Sts2.BaseLib 3.4.7`; 조사 소스 commit `c070755d11ec062f6c97c4dda1a205d975ed066a` | [프로젝트 의존성](/Sts2WD.csproj), [BaseLib 저장소](https://github.com/Alchyr/BaseLib-StS2/tree/c070755d11ec062f6c97c4dda1a205d975ed066a) |
 | 렌더러·SDK | MegaDot `4.5.1.m.14.mono.custom_build`, `Godot.NET.Sdk/4.5.1`, `net9.0` | [프로젝트 SDK](/Sts2WD.csproj) |
 | 기준 구현 예시 | `Realta : PlaceholderCharacterModel : CustomCharacterModel` | [Realta.cs](/Sts2WDCode/Characters/Realta/Realta.cs) |
@@ -62,7 +62,30 @@ NCreature.SetAnimationTrigger(trigger)
 
 `CustomCharacterModel.RegisterSceneConversions()`는 combat/rest/merchant 경로를 각각 `NCreatureVisuals`, `NRestSiteCharacter`, `NMerchantCharacter`로 등록한다. `NodeFactory.TryAutoConvert`는 `PackedScene.Instantiate` 이후 등록된 root를 변환한다. source: `Abstracts/CustomCharacterModel.cs`, `Utils/NodeFactories/NodeFactory.cs`.
 
-`NodeFactory.TransferAndCreateNodes`에서 `FlexibleStructure == false`면 자식을 새 root에 이전하고 이전 root를 `QueueFree`한다. combat은 고정 경로 `Bounds`, `IntentPos`, rest는 `ControlRoot` 때문에 이 분기다. 원래 root script, custom 상태, root에 연결한 signal을 보존한다고 가정하면 안 된다. merchant factory는 named node 요구가 없어 원래 root를 자식으로 보존하는 분기다. 장면마다 변환 결과가 다르므로 자식 리그를 일관된 경계로 두는 편이 안전하다.
+`NodeFactory.TransferAndCreateNodes`에서 `FlexibleStructure == false`면 자식을 새 root에 이전하고 이전 root를 `QueueFree`한다. combat은 고정 경로 `Bounds`, `IntentPos`, rest는 `ControlRoot` 때문에 이 분기다. 원래 root script, custom 상태, root에 연결한 signal을 보존한다고 가정하면 안 된다. 반면 `NMerchantCharacterFactory`는 named node 요구가 없어 `FlexibleStructure == true` 분기를 탄다. 이 분기는 원본 root의 `Scale`·`Position`을 새 `NMerchantCharacter`에 복사한 뒤 원본 root를 자식으로 그대로 유지하므로, `merchant.tscn` 루트 노드에 스케일을 넣으면 최종 배율이 `s²`로 제곱되고 위치가 두 배로 적용된다. 따라서 모든 `merchant.tscn` 루트 노드는 항등 변환(`position = (0, 0)`, `scale = (1, 1)`)을 유지하고, 상점 스케일·접지선 오프셋은 반드시 자식 `Visuals` 노드에만 배치한다.
+
+<a id="room-scale-and-ground-line-contract"></a>
+
+## 방별 스케일 및 접지선 계약 (`v0.113.1`)
+
+설치 게임 `v0.113.1`(commit `d09d48e5`)의 룸 씬과 `sts2.dll`에서 확인한 룸 컨테이너 변환 소유권은 다음과 같다. 기준 뷰포트는 `1920 × 1080`(`+Y` 아래 방향), 불투명 영역 측정 기준은 8비트 `α > 128`이다.
+
+| 룸 | 씬 / 컨테이너 | 컨테이너 변환 | 런타임 배치 동작 |
+|---|---|---|---|
+| 전투 | `res://scenes/rooms/combat_room.tscn` → `AllyContainer` | `scale = (1, 1)` | 각 캐릭터 씬의 `Visuals`가 전투 스케일·접지선 소유 |
+| 상점 (일반·블리츠) | `res://scenes/rooms/standard_merchant_room.tscn`, `blitz_merchant_room.tscn` → `%CharacterContainer` | `scale = (1, 1)`, 중앙 기준 `offset = (-396, +226)` (화면 `(564, 766)`) | `NMerchantRoom.AfterRoomIsLoaded`는 1–4인 슬롯 위치(앞줄 `(0, 0)`·`(-275, 0)`, 뒷줄 `(-140, -50)`·`(-415, -50)`)와 뒷줄 `Modulate`만 설정. 원작 캐릭터는 각 `*_merchant.tscn`에서 `SpineSprite`를 전투 대비 `1.62×–1.84×`로 확대 |
+| 휴식 | `res://scenes/rooms/rest_site_room.tscn` → `BgContainer/Character_1..4` | `scale = (0.5, 0.5)` | `NRestSiteRoom._Ready`가 0-기반 홀수 인덱스(`i % 2 == 1` → 우측 `Character_2`, `Character_4`)에 `FlipX()` 호출. `ControlRoot`는 `x = 0` 대칭 유지 |
+
+원작 5캐릭터 실측을 기준으로 모드 캐릭터는 아래 공통 목표와 공식을 따른다. 캐릭터별 실제 수치는 각 캐릭터의 `.tscn` 씬 파일이 단일 진실 원천(SSOT)이다.
+
+- **전투(`combat.tscn`):** 두개골–발끝(긴 무기·모자·깃털 돌출 허용) 기준 표준/성인 체형 `~275 px`, 소형 체형 `~245–250 px`, 접지 `y ≈ -9`, `Bounds` 높이 `244–335 px` · `offset_bottom = 0.0`.
+- **상점(`merchant.tscn`):** 원작 배율 대역 `1.62×–1.84×`(기본 `~1.65×`, 웅크림·넓은 망토 예외 허용), 접지 `y ≈ +16`. 루트 항등 변환 유지, 자식 `Visuals` 전용 스케일.
+- **휴식(`rest_site.tscn`):** `Character_1..4`의 `0.5×` 적용 후 최종 화면 높이 `225–235 px`(원작 접지 앉은 대역 `214–259 px` 내), 하단 `y ≈ +120`.
+- **정지 전신 PNG(`640 × 960`, Tier 2 Lossy WebP `0.85`, `mipmaps/generate=false`, 기본 `LINEAR`, 중심 원점 `(320, 480)`) 공식:**
+  - `dy_foot = y_feet - H / 2` (`y_top`, `y_feet`는 8비트 `α > 128` 상·하단, `y_skull`은 모자·깃털·무기 아래 두개골 상단)
+  - 전투: `s_combat = H_body / (y_feet - y_skull)`, `Visuals.position.y = round(y_ground - s_combat * dy_foot)`
+  - 상점: `s_merchant = round(M * s_combat)`, `Visuals.position.y = round(y_rug - s_merchant * dy_foot)`
+  - 휴식: `s_rest = (2 * H_rest) / (y_feet - y_top)`, `ControlRoot/Visuals.position.y = round(2 * y_seat - s_rest * dy_foot)`
 
 레아르타의 전투·휴식·상점·선택 4개 씬 연결과 필수 노드 구조는 [애니메이션 API](/docs/characters/realta/animation-api.md)와 [애니메이션 소스](/docs/characters/realta/animation-sources.md)를 참고한다.
 

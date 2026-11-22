@@ -64,7 +64,7 @@ These values are project starting points. Check actual paths, dimensions, scales
 | Relic icons (`relics`) | `256 × 256` large; `94 × 94` small/outline | Top bar `48–64px`; popup `256px` | 2–3 | `12px` at 256px | Background, ground shadow, fine engraving, individual hairs/feathers |
 | Portrait/marker (`character_icon`, `map_marker`) | `128 × 128` | Top bar/map `48–85px` | 2–3 | `8px` at 128px | Hands/weapons, hair strands, tiny armor rivets, complex eye reflections |
 | Selection tile (`char_select`) | `132 × 195` | `132 × 195` | 3 | `6px` at 132px | Full/lower body, complex background objects, rough breastplate blotches |
-| Combat/rest/merchant standing art (`combat`) | `384 × 576`; master `base.png` | Combat/merchant `240 × 360`; rest `326 × 490` | 3 | `6px` at 384px | Fragmented armor facets, dense wood cracks, repeated thin straw lines |
+| Combat/rest/merchant standing art (`combat`) | `640 × 960`; master `base.png` | Combat `~245–275px` body height; merchant `1.62×–1.84×` combat; rest `225–235px` screen height | 3 | `10px` at 640px | Fragmented armor facets, dense wood cracks, repeated thin straw lines |
 | Standard card portraits | `1000 × 760` (`25:19`) | Standard `250 × 190`; enlarged `500 × 380` | 3; background 2 | `16px` at 1000px / `4px` at 250px | Obscuring mist/particles, high-contrast background ornament, painted text/frame |
 | Ancient cards | `606 × 852` full art | Standard `250 × 350`; enlarged `500 × 700` | 3; low contrast in lower 38% | `12px` at 606px | Essential faces/hands under lower text (`y:62–100%`) or top title (`y:0–14%`) |
 
@@ -100,7 +100,7 @@ Official URLs can serve replacement files. At investigation time, `steam_screens
 
 Read the silhouette, tool direction, and gaps between limbs first. Build clean volumes that turn at structural joints, ridges, and overlaps, with broad, well-defined armor and cloth planes between them.
 
-Follow character canon and raw character references for body ratio, apparent age, facial beauty/sharpness, eye shape, hair flow, and expression. Preserve the character's sleek, balanced canonical proportions (typically 7–7.5 heads for full-body knight/adventurer characters such as Althea unless the character specification states otherwise); do not forcibly compress characters into squat, chunky, or thick-limbed 6-head proportions, which make elegant character designs look clumsy and coarse. Keep hands, boots, and armor rims well-proportioned to the character's frame while maintaining clear silhouette gaps so the figure reads cleanly at `240 × 360`. Simplify micro-noise (stray hair threads, tiny rivets, noisy scratches) without coarsening facial features or importing another character's mask, skeleton, or heavy build. Use the shared chibi scope and character-specific treatment within it. Non-SD does not mean adult.
+Follow character canon and raw character references for body ratio, apparent age, facial beauty/sharpness, eye shape, hair flow, and expression. Preserve the character's sleek, balanced canonical proportions (typically 7–7.5 heads for full-body knight/adventurer characters such as Althea unless the character specification states otherwise); do not forcibly compress characters into squat, chunky, or thick-limbed 6-head proportions, which make elegant character designs look clumsy and coarse. Keep hands, boots, and armor rims well-proportioned to the character's frame while maintaining clear silhouette gaps so the figure reads cleanly at combat display scale (`~245–275 px` body height). Simplify micro-noise (stray hair threads, tiny rivets, noisy scratches) without coarsening facial features or importing another character's mask, skeleton, or heavy build. Use the shared chibi scope and character-specific treatment within it. Non-SD does not mean adult.
 
 ### 2.5 Light, Edges, and Texture
 
@@ -143,7 +143,7 @@ Branch B first inspects the approved base's actual pose. Use the complete `base.
 
 Include the entire character and tool, planning roughly 3–5% transparent margins at the extremities. Distinguish combat-forward from camera-facing. Preserve facial anatomy, apparent age, and identifying features while deriving rotation from original-game references for the requested use case. Facial identity does not require a frontal head or two fully visible eyes. Orientation prompt fields are defined in [Recipe 1](.agents/skills/character-asset-pipeline/references.md#source-labels-and-character-orientation). Character-specific face, pose, and direction belong in the target specification.
 
-The character asset guide owns display size, ground line, sprite scale/position, dialogue/hit/health anchors. Do not fix those placements here.
+The character asset guide owns display size, ground line, sprite scale/position, dialogue/hit/health anchors. Do not fix those placements here. For shared runtime room-scale baselines and BaseLib `NMerchantCharacterFactory` child-scaling constraints, see [the runtime scene contract](/docs/research/sts2-cutout-runtime-contract.md#room-scale-and-ground-line-contract).
 
 ### 5.2 Character UI
 

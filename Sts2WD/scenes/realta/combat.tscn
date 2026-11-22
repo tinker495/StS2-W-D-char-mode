@@ -6,8 +6,8 @@
 
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -155)
-scale = Vector2(0.625, 0.625)
+position = Vector2(0, -171)
+scale = Vector2(0.685, 0.685)
 
 [node name="Rig" parent="Visuals" instance=ExtResource("1_rig")]
 position = Vector2(-192, -288)
@@ -15,7 +15,7 @@ position = Vector2(-192, -288)
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true
 offset_left = -120.0
-offset_top = -360.0
+offset_top = -310.0
 offset_right = 120.0
 mouse_filter = 2
 

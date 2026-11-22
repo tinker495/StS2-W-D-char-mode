@@ -6,8 +6,8 @@
 
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -152)
-scale = Vector2(0.625, 0.625)
+position = Vector2(0, -164)
+scale = Vector2(0.384, 0.384)
 texture = ExtResource("1_sprite")
 
 [node name="Bounds" type="Control" parent="."]
@@ -15,7 +15,6 @@ unique_name_in_owner = true
 offset_left = -120.0
 offset_top = -320.0
 offset_right = 120.0
-offset_bottom = 8.0
 mouse_filter = 2
 
 [node name="CenterPos" type="Marker2D" parent="."]
@@ -24,7 +23,7 @@ position = Vector2(25, -155)
 
 [node name="IntentPos" type="Marker2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(20, -330)
+position = Vector2(20, -355)
 
 [node name="OrbPos" type="Marker2D" parent="."]
 unique_name_in_owner = true

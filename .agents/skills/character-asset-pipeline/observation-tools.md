@@ -12,8 +12,10 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .agents/skills/character-ass
 Pass array arguments to the comparison command with `&` inside a PowerShell session:
 
 ```powershell
-& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 compare -Paths @('docs/characters/<char>/drafts/<selected>.png', 'docs/characters/<char>/drafts/<edited>.png') -Labels @('선택본', '수정안') -DisplayWidth 240 -DisplayHeight 360 -OutPath 'docs/characters/<char>/drafts/<asset>-comparison.png'
+& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 compare -Paths @('docs/characters/<char>/drafts/<selected>.png', 'docs/characters/<char>/drafts/<edited>.png') -Labels @('선택본', '수정안') -DisplayWidth 220 -DisplayHeight 300 -OutPath 'docs/characters/<char>/drafts/<asset>-comparison.png'
 ```
+
+*(For Merchant standing previews, use `-DisplayWidth 360 -DisplayHeight 500` to match the larger Merchant display budget in [ARTS.md](/ARTS.md#22-color-line-and-detail-budgets-by-display-size).)*
 
 `compare` places two or more inputs in order, showing each label, original dimensions, scale, and dark/light backgrounds. Labels default to filenames. Originals remain unchanged; output is written separately.
 
@@ -30,7 +32,7 @@ Official standing comparison inputs come from the installed game. `official-pose
 ```powershell
 $poseOutput = Join-Path ([IO.Path]::GetTempPath()) ('sts2-official-poses-' + [guid]::NewGuid().ToString('N'))
 & .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 official-poses -OutPath $poseOutput
-& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 compare -Paths @('docs/characters/<char>/drafts/<candidate>.png', (Join-Path $poseOutput 'ironclad-combat-idle_loop-00.png'), (Join-Path $poseOutput 'silent-combat-idle_loop-00.png')) -Labels @('Candidate', 'Ironclad', 'Silent') -CompareMode SubjectFit -DisplayWidth 240 -DisplayHeight 360 -OutPath 'docs/characters/<char>/drafts/<asset>-style-comparison.png'
+& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 compare -Paths @('docs/characters/<char>/drafts/<candidate>.png', (Join-Path $poseOutput 'ironclad-combat-idle_loop-00.png'), (Join-Path $poseOutput 'silent-combat-idle_loop-00.png')) -Labels @('Candidate', 'Ironclad', 'Silent') -CompareMode SubjectFit -DisplayWidth 220 -DisplayHeight 300 -OutPath 'docs/characters/<char>/drafts/<asset>-style-comparison.png'
 ```
 
 Returned scale and display dimensions are observations, not quality scores.
