@@ -41,6 +41,13 @@ if ($Command -in @('official-cards', 'observe-texture')) {
         -ResourcePath $ResourcePath -Source $Source -OutPath $OutPath -GodotPath $GodotPath -GamePath $GamePath
     return
 }
+if ($Command -eq 'check-cards') {
+    # Human requester: KyuSeok Jung (wjdrb), 2026-11-22: delegate check-cards
+    # to the Python validator before loading Windows System.Drawing.
+    & python -X utf8 (Join-Path $PSScriptRoot '../../../../scripts/check_card_portraits.py')
+    if ($LASTEXITCODE -ne 0) { throw 'Card portrait check failed.' }
+    return
+}
 
 Add-Type -AssemblyName System.Drawing
 $cardRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../../Sts2WD/images/card_portraits'))
@@ -473,21 +480,6 @@ switch ($Command) {
         } finally {
             $srcBmp.Dispose()
         }
-    }
-
-    'check-cards' {
-        $count = 0
-        foreach ($file in Get-ChildItem -LiteralPath $cardRoot -Filter '*.png' -File -Recurse | Sort-Object FullName) {
-            $relative = $file.FullName.Substring($cardRoot.Length + 1).Replace('\', '/')
-            $bmp = [System.Drawing.Bitmap]::new($file.FullName)
-            try {
-                $expected = $cardSizes[(Get-RuntimeCardType $file.FullName)]
-                if ($bmp.RawFormat.Guid -ne [System.Drawing.Imaging.ImageFormat]::Png.Guid) { throw "${relative}: expected PNG encoding." }
-                Assert-CardBitmap $bmp $expected.Width $expected.Height $relative
-                $count++
-            } finally { $bmp.Dispose() }
-        }
-        Write-Host "Card portrait check passed ($count PNGs; exact dimensions and fully opaque pixels)."
     }
 
     'outline' {

@@ -1,10 +1,20 @@
 # 개발 검사와 조사 명령
 
+## 정적 검증 명령
+
+프리커밋, CI 및 기계적 자동 검증 스크립트는 이식성을 위해 기본적으로 Python(표준 라이브러리 우선, 픽셀 디코딩이 필요한 경우 기존 Pillow·NumPy·OpenCV 사용)으로 작성합니다. `dev.ps1 verify`, `build`, `check`, `publish`, `deploy`와 GitHub Actions(`ubuntu-latest`, Python 3.12)는 아래 Python 정적 검증 5종을 순서대로 실행합니다(게임 DLL·.NET SDK 불필요).
+
+1. `python -X utf8 scripts/check_tracked_references.py` — Git 추적 마크다운·코드·리소스 파일의 링크, `res://`, `.import` 짝 파일, `..` 상위 경로 금지, 로컬·무시 경로 참조 검사(표준 라이브러리 전용).
+2. `python -X utf8 scripts/check_docs_artifacts.py` — `docs/`↔`Sts2WD/` 바이트 동일본, `docs/` 내부 중복 이미지, `docs/characters/` 후보·오버뷰 산출물, 인게임 적용이 끝난 `refs/<topic>/` 러프 및 고아 마크다운 검사(표준 라이브러리 전용).
+3. `python -X utf8 scripts/check_install_package.py` — `Sts2WD/` 3단 `.import` 압축 티어(Tier 1 BPTC / Tier 2 Lossy WebP `0.85` / Tier 3 Lossless WebP), 소스 PNG 해상도 상한, 비PNG 래스터 금지, 비런타임 `.gdignore`·[export_presets.cfg](/export_presets.cfg)·[project.godot](/project.godot) 경계, `Sts2WD/` 미참조 PNG 정적 검사(표준 라이브러리 전용). 새 PNG 추가 또는 티어 전환 시 `.\dev.ps1 import` → `python -X utf8 scripts/check_install_package.py --sync-params` → `.\dev.ps1 import` 순으로 갱신한다.
+4. `python -X utf8 scripts/check_card_portraits.py` — `Sts2WD/images/card_portraits/` 아래 모든 카드 PNG의 [card-portrait-layouts.json](/scripts/card-portrait-layouts.json) 기준 규격·PNG 인코딩·전 픽셀 불투명도 검사(기존 `.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 check-cards`도 이 스크립트로 위임).
+5. `python -X utf8 scripts/check_png_alpha.py` — 아래 PNG 투명도 검사.
+
 ## PNG 투명도 검사
 
 Git이 추적하는 모든 PNG에서 8비트 알파가 0~8인 픽셀은 RGBA 네 채널을 모두 0으로 저장한다. 알파 9~255의 픽셀은 색과 투명도를 보존한다. 16비트 PNG에는 같은 비율인 0~2056을 적용한다.
 
-`dev.ps1 verify`, `build`, `check`, 커밋 훅과 GitHub CI에서 같은 기준을 검사한다. 새 PNG는 Git에 추가하기 전에도 `python scripts/check_png_alpha.py <파일>`로 확인할 수 있다. 파일 인수를 생략하면 저장소 전체를 검사한다. Python에 Pillow와 NumPy가 필요하며, 투명도를 가진 16비트 PNG에는 OpenCV도 필요하다.
+`dev.ps1 verify`, `build`, `check`, `publish`, `deploy`, 커밋 훅과 GitHub CI에서 같은 기준을 검사한다. 새 PNG는 Git에 추가하기 전에도 `python scripts/check_png_alpha.py <파일>`로 확인할 수 있다. 파일 인수를 생략하면 저장소 전체를 검사한다. Python에 Pillow와 NumPy가 필요하며, 투명도를 가진 16비트 PNG에는 OpenCV도 필요하다.
 
 정리할 파일과 픽셀 수는 `python scripts/normalize_png_alpha.py`로 미리 본다. 파일 경로를 지정하면 해당 PNG만 대상으로 삼는다. C2PA 매니페스트가 있는 변경 대상은 따로 표시한다. 픽셀을 바꾸면 기존 서명의 대상 데이터도 달라진다.
 
@@ -12,7 +22,9 @@ Git이 추적하는 모든 PNG에서 8비트 알파가 0~8인 픽셀은 RGBA 네
 
 ## 패키징 출력과 로그
 
-`dev.ps1 publish`와 `deploy`는 각 명령의 종료 결과와 전체 로그 경로를 표시한다. 표준 출력·오류 전체와 단계별 JSON 기록은 실행마다 생성하는 `artifacts/runtime/packaging-...` 폴더에 보존한다. 화면에는 진단 메시지를 최대 5줄, 실패 시 마지막 로그를 최대 8줄 표시하며 한 줄은 최대 400자로 줄인다. 종료 코드가 0이어도 인증서 저장소 접근 오류 같은 엔진 진단은 표시한다. 이는 출력 요약이며 기존 성공·실패 판정은 유지한다.
+`dev.ps1 publish`와 `deploy`는 기본적으로 `-Configuration Release`(3파일: DLL·PCK·JSON manifest, PDB 제외 및 잔존 PDB 제거)로 실행되며, 로컬 스택트레이스 심볼이 필요할 때만 `-Configuration Debug`(4파일: PDB 포함)를 명시한다. 익스포트 직후 [scripts/check_pck_package.py](/scripts/check_pck_package.py)(`-Step pck-check`)가 PCK 경로·확장자·`.godot/imported/<file>` 1:1 출처 및 번들 파일 계약을 검증하고, 카테고리·텍스처 포맷별 용량 요약을 콘솔과 `artifacts/runtime/packaging-.../pck-report.json`에 기록한다. 전체 정책은 [설치 패키지 최소화 컨벤션](/docs/conventions/packaging/install-package.md)을 따른다.
+
+각 명령의 종료 결과와 전체 로그 경로를 표시하며, 표준 출력·오류 전체와 단계별 JSON 기록은 실행마다 생성하는 `artifacts/runtime/packaging-...` 폴더에 보존한다. 화면에는 진단 메시지를 최대 5줄, 실패 시 마지막 로그를 최대 8줄 표시하며 한 줄은 최대 400자로 줄인다. 종료 코드가 0이어도 인증서 저장소 접근 오류 같은 엔진 진단은 표시한다. 이는 출력 요약이며 기존 성공·실패 판정은 유지한다.
 
 실패를 조사할 때는 `run.json`과 해당 단계의 JSON부터 읽고, 그 단계의 로그에서 필요한 부분만 조회한다. SDK·MegaDot 버전도 각각의 로그에 남는다. 설치와 재시도 절차는 [빌드·설치 스킬](/.agents/skills/build-install/SKILL.md)을 따른다.
 

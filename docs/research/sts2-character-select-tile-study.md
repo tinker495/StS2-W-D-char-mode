@@ -10,7 +10,7 @@
 
 **Image observation:** all five `res://images/packed/character_select/char_select_<character>.png` files are **132×195**, as are the separate `_locked.png` files. These show artwork composition and locked imagery, not all runtime frames, masks, or selection effects.
 
-**Image observation:** in the [tile crop](sts2-style-refs/future-assets/ui-select-tiles-crop.png) from the [official screen](sts2-style-refs/character-select/official-necrobinder-screen.png), selected Necrobinder is bright with a gold frame. Other tiles remain internally illustrated despite being dark: they are **deselected**. The inspected locked PNGs instead use black silhouettes. [Distributed screen](https://www.megacrit.com/images/steam_screenshot3_new.png)
+**Image observation:** in the [tile crop](sts2-style-refs/future-assets/ui-select-tiles-crop.png) from the [official screen](sts2-style-refs/official-select.png), selected Necrobinder is bright with a gold frame. Other tiles remain internally illustrated despite being dark: they are **deselected**. The inspected locked PNGs instead use black silhouettes. [Distributed screen](https://www.megacrit.com/images/steam_screenshot3_new.png)
 
 **Project judgment:** document normal art, UI deselection treatment, and locked art separately. A screenshot alone did not identify locked state; the separate local originals establish its appearance.
 

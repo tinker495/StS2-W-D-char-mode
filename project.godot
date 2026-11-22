@@ -29,4 +29,5 @@ project/assembly_name="Sts2WD"
 [rendering]
 
 renderer/rendering_method="mobile"
+textures/vram_compression/import_s3tc_bptc=true
 environment/defaults/default_clear_color=Color(0.0923724, 0.122398, 0.116929, 1)

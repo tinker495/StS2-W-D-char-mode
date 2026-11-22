@@ -31,7 +31,7 @@ Git history, PR descriptions, and GitHub issues own change chronology. Tracked s
 
 - **Consecutive work logs:** chronological narratives (`first we tried X, then fixed Y, then revised Z`), dated session/review diaries, PR integration logs, completed implementation plans, and before/after tweak histories.
 - **What-restatements:** prose that mirrors implementation details already readable in source code, manifests, or scenes, or duplicates facts owned by another document instead of linking to it.
-- **Unapplied work artifacts:** links, embeds, or records of specific drafts, candidate assets, comparison renders, one-off runs, local cache outputs, or superseded plans never applied to the game; keep this evidence in the task report or PR when needed.
+- **Unapplied, redundant, and post-application artifacts:** links, embeds, or records of specific drafts, comparison renders, one-off runs, local cache outputs, or superseded plans never applied to the game (keep this evidence in the task report or PR when needed); tracked files under `docs/` that are byte-identical to tracked runtime files in `Sts2WD/`; duplicate tracked image files within `docs/`; tracked delivery candidates or overview sheets under `docs/characters/` (`*-candidates/`, `*-candidate.*`, or image files whose stem contains `overview` as a delimited token); and asset-specific `docs/characters/<char>/refs/<topic>/` roughs once their corresponding runtime assets are applied in `Sts2WD/`.
 
 ### Repository Links
 

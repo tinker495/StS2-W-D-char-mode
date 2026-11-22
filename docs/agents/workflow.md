@@ -17,9 +17,9 @@ Apply this procedure to implementation, asset delivery, and requests to create o
 
    | Affected work | Existing entry points |
    |---|---|
-   | Tracked documentation, links, resource references and PNGs | `dev.ps1 verify` checks tracked references, transparent-black pixels in the low-alpha range, and runtime card PNG dimensions/opacity. |
-   | C# implementation | `dev.ps1 build` includes those checks and the C# build. `dev.ps1 check` is the existing locked-restore build route. |
-   | Runtime images, scenes or localization | Use the reference/PNG checks above and `dev.ps1 publish` for Godot import and packaging, then the applicable loading observations. Follow the existing deployment procedure when installation is requested. |
+   | Tracked documentation, links, resource references, packaging policy and PNGs | `dev.ps1 verify` runs the five Python static gates: tracked references (`scripts/check_tracked_references.py`), `docs/` artifact and duplicate checks (`scripts/check_docs_artifacts.py`), install-package `.import` tiers/resolution ceilings/boundaries/reachability (`scripts/check_install_package.py`), runtime card PNG dimensions/opacity (`scripts/check_card_portraits.py`), and low-alpha transparent-black PNG pixels (`scripts/check_png_alpha.py`). |
+   | C# implementation | `dev.ps1 build` includes those five checks and the `Debug` C# build. `dev.ps1 check` is the existing locked-restore build route. |
+   | Runtime images, scenes or localization | For new or re-tiered PNGs, run `dev.ps1 import` → `python -X utf8 scripts/check_install_package.py --sync-params` → `dev.ps1 import` → `git add`. Then run the checks above and `dev.ps1 publish` (defaults to `Release` 3-file bundle + Stage 2 `scripts/check_pck_package.py` allowlist/provenance gate and size report), followed by the applicable loading observations. Follow [install-package.md](/docs/conventions/packaging/install-package.md) and the existing deployment procedure when installation is requested. |
    | Card previews, API lookup or animation | Use the applicable existing commands and specifications linked from [development tools](/docs/development-tools.md) and the affected topic. |
 
 5. For conditions beyond mechanical validation, perform the comparison in the current task. Check request completeness against the final diff, conventions against the affected code, and artwork mappings against the resource selection. Record the relevant type/member, path or specification and the observation supporting the result. Correct omissions within the authorized scope. An agent's inspection and image review have the authority defined by the original request and existing approval rules.
@@ -42,9 +42,10 @@ Apply this procedure to implementation, asset delivery, and requests to create o
 - Give each agent a non-overlapping question and require source locations plus the relevant observations. Work on separate questions while it runs.
 - Reuse returned evidence; reopen its sources only to resolve a concrete gap or contradiction. A running investigation is a prerequisite only for decisions that depend on its findings.
 
-## Local Shell
+## Local Shell and Automation Language
 
-Run repository scripts through `dev.ps1` or `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass` (Windows PowerShell 5.1), and search with `git ls-files` or PowerShell `Select-String`; neither `pwsh` nor `rg` is installed on this PC. Including `-NonInteractive` fails fast on missing mandatory parameters instead of hanging on an interactive prompt. CI runs the tracked-reference check under PowerShell 7, so keep shared scripts compatible with both.
+- **Python-first for mechanical automation:** Write pre-commit, CI, and mechanical automated verification scripts in Python (standard library preferred; reuse Pillow, NumPy, and OpenCV when pixel decoding is required). Invoke Python checks with `-X utf8` on Windows consoles. Reserve PowerShell for local Windows/MSBuild/MegaDot entry wrappers and retained interactive host utilities (`dev.ps1`, `scripts/dev-workflow.ps1`, `scripts/rebase.ps1`, `scripts/observe.ps1`, `scripts/inspect-game-api.ps1`, `scripts/test-card-previews.ps1`, and interactive `asset-pipeline.ps1` subcommands).
+- Run local PowerShell entry points through `dev.ps1` or `powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass` (Windows PowerShell 5.1), and search with `git ls-files` or PowerShell `Select-String`; neither `pwsh` nor `rg` is installed on this PC. Including `-NonInteractive` fails fast on missing mandatory parameters instead of hanging on an interactive prompt.
 
 - Pipe multiline or quote-heavy Python through a single-quoted PowerShell here-string (`@' ... '@ | python -B -`, with the closing `'@` at column 1) instead of `python -c` to avoid PowerShell 5.1 quoting hazards.
 - Serialize edits to the same file on Windows; parallel writes to one path trigger `user-mapped section open` file-lock errors.

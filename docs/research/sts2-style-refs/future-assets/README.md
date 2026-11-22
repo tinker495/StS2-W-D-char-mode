@@ -21,7 +21,7 @@
 | [ui-topbar.jpg](ui-topbar.jpg) | [JPG](https://www.megacrit.com/images/topbar_qol.jpg) | [2024-11 article](https://www.megacrit.com/news/2024-11-07-neowsletter-issue-4/) | Top bar with one public relic and three deliberately obscured relics, 1280×117 |
 | [ui-end-turn.png](ui-end-turn.png) | [PNG](https://www.megacrit.com/images/2025_08_endturn.png) | [2025-08 article](https://www.megacrit.com/news/2025-8-14-neowsletter-issue-13/) | End Turn UI including turn display, 258×126 |
 | [ancient-tezcatara-original.gif](ancient-tezcatara-original.gif) | [GIF](https://www.megacrit.com/images/tezcatara_v2.gif) | [2025-11 article](https://www.megacrit.com/news/2025-11-13-neowsletter-issue-16/) | **Ancient event screen**, not an Ancient card;800×422, 275 frames |
-| [ui-select-screenshot.png](ui-select-screenshot.png) | [PNG](https://www.megacrit.com/images/steam_screenshot3_new.png) | [launch article](https://megacrit.com/news/2026-03-05-early-access-launch/) | Full Necrobinder selection screen, 2560×1440; same snapshot as parent `official-select.png` |
+| [official-select.png](/docs/research/sts2-style-refs/official-select.png) | [PNG](https://www.megacrit.com/images/steam_screenshot3_new.png) | [launch article](https://megacrit.com/news/2026-03-05-early-access-launch/) | Full Necrobinder selection screen, 2560×1440 (SHA-256 recorded in [sts2-style-refs/README.md](/docs/research/sts2-style-refs/README.md)) |
 | [ui-merchant-screenshot.png](ui-merchant-screenshot.png) | [PNG](https://www.megacrit.com/images/steam_screenshot4_new.png) | [official press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | This download is a **Silent merchant screen**; do not apply the older map description for this URL;2560×1440 |
 | [ui-map-qol.jpg](ui-map-qol.jpg) | [JPG](https://www.megacrit.com/images/map_qol.jpg) | [2024-11 article](https://www.megacrit.com/news/2024-11-07-neowsletter-issue-4/) | Actual room-symbol/map-line reference, 700×389; player-character marker not identified |
 
@@ -37,10 +37,10 @@ Crop coordinates are `(x, y, width, height)` in original pixels. Crops are for o
 | [ui-energy-in-combat-crop.png](ui-energy-in-combat-crop.png) | Parent `official-combat.png`, `(120,1100,240,200)` | Defect blue energy UI **includes numbers**; not a number-free source texture |
 | [relics-in-combat-crop.png](relics-in-combat-crop.png) | Parent `official-combat.png`, `(0,105,300,140)` | Two top-bar relics and background; composited small-scale readability reference |
 | [ui-character-portrait-crop.png](ui-character-portrait-crop.png) | `ui-topbar.jpg`, `(5,0,60,58)` | Silent top-bar portrait; not evidence of a project chibi standard |
-| [ui-select-tiles-crop.png](ui-select-tiles-crop.png) | `ui-select-screenshot.png`, `(845,1160,890,230)` | Five selected/deselected character tiles; locked state is not established here |
+| [ui-select-tiles-crop.png](ui-select-tiles-crop.png) | Parent `official-select.png`, `(845,1160,890,230)` | Five selected/deselected character tiles; locked state is not established here |
 | [ui-select-tile-active-crop.png](ui-select-tile-active-crop.png) | `ui-select-tiles-crop.png`, `(510,0,160,220)` | Selected Necrobinder: bright portrait and gold frame |
 | [ui-select-tile-inactive-crop.png](ui-select-tile-inactive-crop.png) | `ui-select-tiles-crop.png`, `(215,0,160,220)` | Deselected Silent: dark portrait retaining internal forms; **not a locked original** |
-| [ui-select-info-safe-area-crop.png](ui-select-info-safe-area-crop.png) | `ui-select-screenshot.png`, `(0,420,1210,680)` | Left name/ability/relic descriptions and translucent panel over the illustration |
+| [ui-select-info-safe-area-crop.png](ui-select-info-safe-area-crop.png) | Parent `official-select.png`, `(0,420,1210,680)` | Left name/ability/relic descriptions and translucent panel over the illustration |
 
 Official crop source: [steam_screenshot1_new.png](https://www.megacrit.com/images/steam_screenshot1_new.png), context: [official press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/). The parent snapshot is a 2560×1440 **Defect vs. blue-creature** combat frame.
 
@@ -53,7 +53,6 @@ SHA-256 for the 2026-10-18 download snapshots:
 | `card-attack-thrumming-hatchet.png` | `9C522B1453F12418A07748A3E2D1122C6DF7277BDB72C0C9A95525F1A5FC1747` |
 | `relics-potions-original.gif` | `4AA1B9CECE89D528ACA9776815C7B8492FFAF398133950F47332FEEE8AF228C0` |
 | `ancient-tezcatara-original.gif` | `89496B115FE0E8549E373AB3FE8A5C99D7D374FC5C7E3C7FD406E5066AD19E95` |
-| `ui-select-screenshot.png` | `BD2588AF2489E6F6C45F0D310EF28A51A2E29679B05AC39F72501C399A95D5DE` |
 
 ## Unavailable Evidence
 

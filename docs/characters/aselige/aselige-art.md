@@ -8,4 +8,4 @@ Open only the requested topic. [ARTS.md](/ARTS.md) owns shared rendering and com
 | Dialogue/history/map miniature | [Dialogue head](ui-art.md) |
 | One of the fourteen relic objects | [Approved relic subjects](relics-art.md) |
 
-[base.png](base.png) is the canonical refined forest painting. [Artwork history](aselige-history.md) records the choices behind the applied event, dialogue, and relic artwork.
+[aselige.png](/Sts2WD/images/ancients/aselige.png) is the canonical refined forest painting. [Artwork history](aselige-history.md) records the choices behind the applied event, dialogue, and relic artwork.

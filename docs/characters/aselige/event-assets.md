@@ -6,8 +6,7 @@ The [approved refined forest painting](event-art.md) is connected to the impleme
 
 | Role | Path | Dimensions / wiring |
 |---|---|---|
-| Approved visual anchor | docs/characters/aselige/base.png | 1875 x 839, opaque PNG |
-| Event texture | Sts2WD/images/ancients/aselige.png | Byte-identical to base |
+| Canonical visual anchor & event texture | Sts2WD/images/ancients/aselige.png | 1875 x 839, opaque PNG |
 | Event scene | Sts2WD/scenes/ancients/aselige.tscn | Script-free full-rect Control; whole-painting Keep Aspect Centered; dark forest ColorRect; mouse input ignored |
 
-Main/base SHA-256: `5C65B906DB8552E604C34EF774D6CA9B0C8BA8B16111194C47C619D2B122F5E8`. See [runtime integration](event-api.md) for model/scene ownership and [deployment status](/docs/deployment-status.md) for observation scope.
+Event texture SHA-256: `5C65B906DB8552E604C34EF774D6CA9B0C8BA8B16111194C47C619D2B122F5E8`. See [runtime integration](event-api.md) for model/scene ownership and [deployment status](/docs/deployment-status.md) for observation scope.

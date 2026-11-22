@@ -12,8 +12,9 @@ All Realta card portraits are resolved dynamically by `Sts2WDCard` through namin
 
 Delivered textures are validated via:
 ```powershell
-& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 check-cards
+python -X utf8 scripts/check_card_portraits.py
 ```
+(`.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 check-cards` delegates to this validator.)
 Individual card classes require no manual `CustomPortraitPath` or `PortraitPath` overrides, except `RealtaDefend` (native Defend art) and the eleven alias cards in [additional card sources](cards-inventory-additional.md).
 
 Use the [card export and review procedure](/.agents/skills/character-asset-pipeline/scripts/conversion-tools.md#card-export-and-review) when replacing a tracked portrait. For Mountain Splitter, preserve the [applied painting](/Sts2WD/images/card_portraits/realta/realta_mountain_splitter.png)'s rear robe, back-covering broom, and hourglass cut. [Deployment status](/docs/deployment-status.md) records local installation scope.

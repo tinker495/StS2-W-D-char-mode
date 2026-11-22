@@ -33,13 +33,13 @@ For an authorized installation:
 powershell -NoProfile -ExecutionPolicy Bypass -File ./dev.ps1 deploy -ExecutionContextLabel sandbox
 ```
 
-Use `-Configuration` only when requested. Set `-ExecutionContextLabel` to the actual invocation context: `sandbox`, `escalated`, or `local`. This label records the caller's knowledge; it does not grant or detect permissions. Omit it if unknown.
+Use `-Configuration` only when requested. `publish` and `deploy` default to `Release` (3-file bundle: DLL, PCK, JSON manifest; PDB excluded and stale PDB purged from staging and destination); pass `-Configuration Debug` explicitly when a 4-file Debug bundle with PDB is requested for local stack traces. Set `-ExecutionContextLabel` to the actual invocation context: `sandbox`, `escalated`, or `local`. This label records the caller's knowledge; it does not grant or detect permissions. Omit it if unknown.
 
-`publish` and `deploy` perform the C# build, MegaDot resource import, and PCK export. Animation rig checks run only through `dev.ps1 anim`; [check scope](/tests/rig-checks.md) documents them.
+`publish` and `deploy` perform the five Python static gates, C# build, MegaDot resource import, PCK export, and Stage 2 PCK validation (`scripts/check_pck_package.py`, hard-failing on path/extension/orphan leaks or unexpected PDB in `Release` and writing `artifacts/runtime/packaging-.../pck-report.json`). Note that `dev.ps1 build` (including `.githooks/pre-commit`) and default `dev.ps1 card-tests` overwrite the shared `artifacts/mods/Sts2WD/` staging directory with Debug outputs; `deploy` always republishes fresh outputs before installing. Animation rig checks run only through `dev.ps1 anim`; [check scope](/tests/rig-checks.md) documents them.
 
-`deploy` packages first, checks the four package files and game process, backs up existing files, installs only the package, and compares SHA256 hashes. Apply required sandbox permission to the command. An installation request authorizes replacing the mod files; do not ask for the same confirmation again. Avoid separate copy commands or a redundant build/publish before deploy.
+`deploy` packages first, validates the PCK and expected bundle files (3 files on `Release`, 4 files on `-Configuration Debug`) and game process, backs up all existing installed files (including any prior PDB), purges stale PDB when installing `Release`, copies only the expected bundle files, and compares SHA256 hashes. Apply required sandbox permission to the command. An installation request authorizes replacing the mod files; do not ask for the same confirmation again. Avoid separate copy commands or a redundant build/publish before deploy.
 
-Completion requires exit code 0 and all four reported hash matches. Preserve the printed backup path. A resource-export completion line or old output files do not establish success. After a partial installation failure, report the backup path and inspect installed state before recovery.
+Completion requires exit code 0, Stage 2 PCK check pass, and SHA256 hash matches for every expected bundle file (3 on `Release`, 4 on `Debug`). Preserve the printed backup path and `pck-report.json` path. A resource-export completion line or old output files do not establish success. After a partial installation failure, report the backup path and inspect installed state before recovery.
 
 ## Diagnose Failures Without Installing Failed Output
 
@@ -57,6 +57,6 @@ Check `git status --short` afterward. Remove generated `.cs.uid` files only if t
 
 ## Completion Report
 
-Report branch/commit, destination, build/package result, four-file hash comparison, backup and diagnostics paths. Distinguish operational recovery from a verified root-cause fix: successful reruns alone do not establish cause or permanent remediation.
+Report branch/commit, destination, configuration, build/package result, Stage 2 PCK check and `pck-report.json` summary, expected bundle-file hash comparison (3 files on `Release` plus any purged stale PDB; 4 files on `-Configuration Debug`), backup and diagnostics paths. Distinguish operational recovery from a verified root-cause fix: successful reruns alone do not establish cause or permanent remediation.
 
 State tests actually run and verification not performed. Building and matching hashes are not in-game verification. Launch the game or change mod settings only when requested. If activation was not checked, tell the user that BaseLib and Sts2WD must be enabled.

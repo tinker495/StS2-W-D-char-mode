@@ -10,5 +10,6 @@ These conventions apply to every mod character and shared implementation. Open o
 | Character documentation or artwork records | [Topic-based character guides](docs/conventions/documentation/character-guides.md) |
 | Code comments and Markdown documentation | [Comments and Markdown documentation](docs/conventions/documentation/comments-and-docs.md) |
 | Architectural review | [Architecture review criteria](docs/conventions/review/architecture.md) |
+| Install package, PCK contents, `.import` texture compression tiers, or Release/Debug bundle | [Install package and PCK minimization](docs/conventions/packaging/install-package.md) |
 
 Existing automated checks own mechanical validation. These documents do not authorize changes to tests or acceptance criteria; [test ownership](docs/agents/test-ownership.md) governs execution authority. Spec reviews also follow [domain guidance](docs/agents/domain.md#spec-review).

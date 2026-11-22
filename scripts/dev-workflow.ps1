@@ -125,16 +125,29 @@ function Install-ModPackage {
     param(
         [string]$Source,
         [string]$Destination,
-        [string]$BackupRoot
+        [string]$BackupRoot,
+        [ValidateSet('Debug', 'Release')]
+        [string]$Configuration = 'Release'
     )
 
     $ErrorActionPreference = 'Stop'
-    $files = @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')
+    $installFiles = if ($Configuration -eq 'Release') {
+        @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json')
+    } else {
+        @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')
+    }
+    $backupCandidates = @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')
     $hashes = @{}
-    foreach ($name in $files) {
+    foreach ($name in $installFiles) {
         $path = Join-Path $Source $name
         if (-not (Test-Path -LiteralPath $path -PathType Leaf)) { throw "Missing publish artifact: $path" }
         $hashes[$name] = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash
+    }
+    if ($Configuration -eq 'Release') {
+        $unexpectedSourcePdb = Join-Path $Source 'Sts2WD.pdb'
+        if (Test-Path -LiteralPath $unexpectedSourcePdb -PathType Leaf) {
+            throw "Unexpected debug symbols in Release source directory: $unexpectedSourcePdb"
+        }
     }
     if (Get-Process -Name SlayTheSpire2 -ErrorAction SilentlyContinue) {
         throw 'Close SlayTheSpire2 before installing. No installed files were replaced.'
@@ -143,8 +156,9 @@ function Install-ModPackage {
     $backup = Join-Path $BackupRoot ('local-install-backup-' + [DateTime]::UtcNow.ToString('yyyyMMddTHHmmssfffZ') + '-' + [Guid]::NewGuid().ToString('N'))
     New-Item -ItemType Directory -Path $backup | Out-Null
     Write-Host "Backup: $backup"
+    $removedFiles = @()
     try {
-        foreach ($name in $files) {
+        foreach ($name in $backupCandidates) {
             $installed = Join-Path $Destination $name
             if (Test-Path -LiteralPath $installed) {
                 $saved = Join-Path $backup $name
@@ -159,10 +173,21 @@ function Install-ModPackage {
             throw 'SlayTheSpire2 started during backup. No installed files were replaced.'
         }
         New-Item -ItemType Directory -Path $Destination -Force | Out-Null
-        foreach ($name in $files) {
+        if ($Configuration -eq 'Release') {
+            $destPdb = Join-Path $Destination 'Sts2WD.pdb'
+            if (Test-Path -LiteralPath $destPdb -PathType Leaf) {
+                Remove-Item -LiteralPath $destPdb -Force
+                if (Test-Path -LiteralPath $destPdb -PathType Leaf) {
+                    throw "Failed to remove stale debug symbols from destination: $destPdb"
+                }
+                $removedFiles += 'Sts2WD.pdb'
+                Write-Host 'REMOVED STALE: Sts2WD.pdb'
+            }
+        }
+        foreach ($name in $installFiles) {
             Copy-Item -LiteralPath (Join-Path $Source $name) -Destination (Join-Path $Destination $name) -Force
         }
-        foreach ($name in $files) {
+        foreach ($name in $installFiles) {
             if ((Get-FileHash -LiteralPath (Join-Path $Destination $name) -Algorithm SHA256).Hash -ne $hashes[$name]) {
                 throw "Installed hash mismatch: $name"
             }
@@ -172,5 +197,11 @@ function Install-ModPackage {
         throw "Installation failed. Backup: $backup. $($_.Exception.Message)"
     }
     Write-Host "Installed: $Destination"
-    return [ordered]@{ destination = $Destination; backup = $backup; sha256 = $hashes }
+    return [ordered]@{
+        configuration = $Configuration
+        destination = $Destination
+        backup = $backup
+        sha256 = $hashes
+        removedFiles = $removedFiles
+    }
 }

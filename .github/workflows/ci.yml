@@ -8,32 +8,35 @@ permissions:
   contents: read
 
 jobs:
-  tracked-references:
-    name: Tracked references
+  verify:
+    name: Static verification
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
-      # Human requester: wjdrb, 2026-10-24: enforce the same full-repository
-      # tracked-reference validation in pre-commit and CI, without game DLLs.
-      - name: Check tracked references
-        run: pwsh -NoProfile -File ./scripts/check-tracked-references.ps1
-      # Requested by wjdrb, 2026-11-19: run the repository PNG gate on pushes and PRs.
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      # Human requester: wjdrb, 2026-10-24 (original tracked-reference gate);
+      # migrated to stdlib Python and consolidated with docs/card/PNG checks on
+      # ubuntu-latest Python 3.12 by KyuSeok Jung (wjdrb), 2026-11-22.
+      - name: Check tracked references
+        run: python -X utf8 scripts/check_tracked_references.py
+      # Human requester: KyuSeok Jung (wjdrb), 2026-11-22: reject applied
+      # runtime duplicates, intra-docs duplicates, candidate/overview files,
+      # and post-application topic roughs under docs/.
+      - name: Check docs artifacts
+        run: python -X utf8 scripts/check_docs_artifacts.py
+      # Human requester: KyuSeok Jung (wjdrb), 2026-11-22: enforce install-package
+      # and PCK minimization policy (3-tier .import compression, source resolution
+      # ceilings, non-runtime .gdignore/export_presets.cfg/project.godot boundaries,
+      # non-PNG raster ban, and Sts2WD texture reachability).
+      - name: Check install package policy
+        run: python -X utf8 scripts/check_install_package.py
+      # Requested by wjdrb, 2026-10-29 (card portraits) and 2026-11-19 (PNG alpha):
+      # install shared Python image dependencies for pixel-level checks.
       - name: Install PNG checker dependencies
         run: python -m pip install numpy Pillow opencv-python-headless
-      - name: Check tracked PNG alpha
-        run: python scripts/check_png_alpha.py
-
-  card-portraits:
-    name: Card portrait dimensions and alpha
-    # Human requester: wjdrb, 2026-10-29, retrospective items 1 and 2:
-    # check the delivered card canvases and every pixel's opacity in CI.
-    # Reuse the Windows System.Drawing converter; no game/SDK setup is needed.
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v7
       - name: Check card portraits
-        shell: powershell
-        run: ./.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 check-cards
+        run: python -X utf8 scripts/check_card_portraits.py
+      - name: Check tracked PNG alpha
+        run: python -X utf8 scripts/check_png_alpha.py

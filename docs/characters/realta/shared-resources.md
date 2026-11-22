@@ -8,16 +8,15 @@
   - `MainFile.ModId = "Sts2WD"`
   - `MainFile.ResPath = "res://Sts2WD"`
   - All mod assets live under `Sts2WD/` on disk and correspond to runtime Godot paths under `res://Sts2WD/...`.
-- **Godot import and PCK generation (`dev.ps1:62-68`, `Sts2WD.csproj:120-125`, `export_presets.cfg:9-11`):**
-  - After adding a `.png` under `Sts2WD/images/`, running `.\dev.ps1 -Task publish` or `.\dev.ps1 -Task deploy` invokes MegaDot's headless import (`--headless --editor --path $projectRoot --import`). This creates an adjacent `<filename>.png.import` and `.godot/imported/<filename>-<hash>.ctex`.
-  - `Godot.ResourceLoader.Exists(path)` and `ResourceLoader.Load<Texture2D>(path)` require the imported `CompressedTexture2D` in the PCK (`.ctex` plus `.import` remapping). **A standalone `dotnet build` does not package new images. Run Godot import and PCK export through publish or deploy.**
-- **Default `.import` parameters (`Sts2WD/images/**/*.png.import`):**
-  - Existing `.png.import` files use the same lossless 2D texture settings:
-    - `importer="texture"`, `type="CompressedTexture2D"`
-    - `compress/mode=0` (Lossless)
-    - `mipmaps/generate=false`
-    - `process/fix_alpha_border=true`, `process/premult_alpha=false`
-    - `detect_3d/compress_to=1`
+- **Godot import and PCK generation (`dev.ps1`, `Sts2WD.csproj`, `export_presets.cfg`):**
+  - After adding a `.png` under `Sts2WD/`, run `.\dev.ps1 import` (invokes MegaDot `--headless --editor --path $projectRoot --import --quit` without Stage 1 upfront) to create `<filename>.png.import`, sync tier parameters via `python -X utf8 scripts/check_install_package.py --sync-params`, and run `.\dev.ps1 import` again so `.godot/imported/<filename>-<hash>.ctex` and `[remap]` are refreshed before staging and running `.\dev.ps1 publish` or `.\dev.ps1 deploy`.
+  - `Godot.ResourceLoader.Exists(path)` and `ResourceLoader.Load<Texture2D>(path)` require the imported `CompressedTexture2D` in the PCK (`.ctex` plus `.import` remapping). **A standalone `dotnet build` does not package new images. Run Godot import and PCK export through `import` and `publish`/`deploy`.**
+- **`.import` compression tiers (`Sts2WD/**/*.png.import`):**
+  - Texture import settings follow the repository-wide three-tier policy in [Install Package and PCK Minimization](/docs/conventions/packaging/install-package.md):
+    - `importer="texture"`, `type="CompressedTexture2D"`, `mipmaps/generate=false`, `process/size_limit=0`
+    - Tier 1 (`>=2048px` combat atlases): `compress/mode=2`, `compress/high_quality=true` (VRAM BPTC/BC7)
+    - Tier 2 (large painterly card portraits, selection backgrounds, ancient scenes, rest masters, standing stills): `compress/mode=1`, `compress/lossy_quality=0.85` (Lossy WebP)
+    - Tier 3 (`<=256px` icons, outlines, blink patches, card frames, shader materials, `mod_image.png`): `compress/mode=0` (Lossless WebP)
 
 ## Path Helpers
 

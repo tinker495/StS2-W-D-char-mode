@@ -76,7 +76,7 @@
 
 ## 6. Selection Illustration Base and UI Space
 
-**Image observation:** the [full screen](sts2-style-refs/future-assets/ui-select-screenshot.png) places Necrobinder's face/body right and huge Osty left/center. Pink, bone, and violet values connect the complete scene; it is distinct from small tile framing. [Official original](https://www.megacrit.com/images/steam_screenshot3_new.png)
+**Image observation:** the [full screen](sts2-style-refs/official-select.png) places Necrobinder's face/body right and huge Osty left/center. Pink, bone, and violet values connect the complete scene; it is distinct from small tile framing. [Official original](https://www.megacrit.com/images/steam_screenshot3_new.png)
 
 **Image observation:** the [information crop](sts2-style-refs/future-assets/ui-select-info-safe-area-crop.png) contains title, health/gold, character description, and starting relic over translucent dark UI. In this 2560×1440 source, text overlaps approximately `x=350~1430,y=450~960`; lower tiles approximately `x=870~1700,y=1180~1360`. These describe **one screen**, not universal runtime coordinates across resolution, localization, or UI scale. The reference index records actual extraction rectangles separately.
 

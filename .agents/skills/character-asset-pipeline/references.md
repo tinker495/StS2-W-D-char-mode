@@ -2,7 +2,7 @@
 
 Read the source-label section when adopting or changing character features. Read the rough section whenever a supplied sketch, layout guide, object photo or motif determines the result. Open every actual input; never replace an available visual reference with text alone.
 
-Store supplied roughs, motifs and object photos under `docs/characters/<char>/refs/` (optionally `refs/cards/`, `refs/relics/`, `refs/powers/`) and record adopted/excluded traits in the topic specification reached through `<char>-art.md`. Optional agent-staged layouts belong in ignored `drafts/`. Shared documents must explain current constraints without those local drafts.
+Store character-level identity references directly under `docs/characters/<char>/refs/` (`refs/ref*`) and pending topic roughs, motifs, or object photos under `docs/characters/<char>/refs/<topic>/` (`refs/cards/`, `refs/relics/`, `refs/powers/`). Record adopted/excluded traits in `<topic>-art.md` reached through `<char>-art.md`. Topic subdirectories hold pending roughs only: remove each rough once its runtime texture ships in `Sts2WD/` (recording required motif constraints in `<topic>-art.md`) and remove the `<topic>/` directory once zero pending non-Markdown roughs remain. Optional agent-staged layouts, candidates, and overview sheets belong strictly in Git-ignored `drafts/`. Shared documents must explain current constraints without those local drafts.
 
 ## Source Labels and Character Orientation
 For character orientation, write body direction, head angle, and gaze as separate prompt fields. Describe head angle through the visible facial planes and the extent of the near/far eyes, using the target specification and references. A screen direction alone does not determine head rotation.

@@ -19,4 +19,4 @@
 
 전투와 상점에 등록된 두 장면은 `realta_body.tscn`의 본과 2048×2048 `realta_skeleton.png`를 함께 쓴다. 스켈레톤 시트에는 몸과 장비, 여섯 표정의 눈·눈썹과 입, 세 겹의 시전 마법진 파츠(55개)만 들어 있다. 표정별 눈과 입은 원화 1픽셀당 3텍셀로 보관한다. 전투와 상점의 `revive`는 별도 전신 이미지 없이 실제 골격 전체를 `Visuals:group_alpha`의 Godot `CanvasGroup` 합성 페이드로 전환해 각각 선 자세와 쪼그려 앉은 자세를 복원한다. [공통 골격](/Sts2WD/animations/realta/combat/realta_body.tscn) · [스켈레톤 시트](/Sts2WD/animations/realta/combat/realta_skeleton.png) · [전투 리그](/Sts2WD/animations/realta/combat/realta_combat_rig.tscn) · [상점 리그](/Sts2WD/animations/realta/combat/realta_merchant_rig.tscn)
 
-정지 전신 스틸은 [combat.png](/Sts2WD/images/charui/realta/combat.png)에 보관한다. 초상화·에너지 카운터·선택 화면 리소스는 [UI 목록](ui-assets.md#canonical-base-and-runtime-images)에서, 로컬 설치와 게임 확인 범위는 [공통 배포 기록](/docs/deployment-status.md)에서 확인할 수 있다.
+초상화·에너지 카운터·선택 화면 리소스는 [UI 목록](ui-assets.md#canonical-base-and-runtime-images)에서, 로컬 설치와 게임 확인 범위는 [공통 배포 기록](/docs/deployment-status.md)에서 확인할 수 있다.

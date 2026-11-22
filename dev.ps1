@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Position=0)]
-    [ValidateSet('hooks', 'doctor', 'restore', 'verify', 'build', 'check', 'rebase', 'anim', 'card-tests', 'api', 'api-tests', 'observe', 'publish', 'deploy', 'editor')]
+    [ValidateSet('hooks', 'doctor', 'restore', 'import', 'verify', 'build', 'check', 'rebase', 'anim', 'card-tests', 'api', 'api-tests', 'observe', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [Parameter(Position=1)]
     [ValidateSet('all', 'idle', 'idle_loop', 'attack', 'hurt', 'cast', 'powerup', 'die', 'relaxed', 'relaxed_loop', 'revive')]
@@ -32,6 +32,9 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+if (-not $PSBoundParameters.ContainsKey('Configuration') -and $Task -in @('publish', 'deploy')) {
+    $Configuration = 'Release'
+}
 $projectRoot = $PSScriptRoot
 . (Join-Path $projectRoot 'scripts/dev-workflow.ps1')
 $diagnosticRoot = $null
@@ -80,14 +83,24 @@ if ($Task -eq 'rebase') {
 
 # Human requester: wjdrb, 2026-10-24: run the full tracked-reference validator
 # in pre-commit (through build), check, and the SDK/game-independent verify task.
-# Human requester: wjdrb, 2026-11-22, retrospective item 2: run verify gates before publish and deploy as well.
+# Human requester: wjdrb, 2026-10-29, retrospective item 1: connect final
+# card dimensions/alpha checks to the existing local validation route.
+# Human requester: wjdrb, 2026-11-19: run the repository PNG alpha gate.
+# Human requester: KyuSeok Jung (wjdrb), 2026-11-22: run all five Python static
+# gates (tracked references, docs artifacts, install-package policy, card
+# portraits, PNG alpha) via `python -X utf8` across verify, build, check,
+# publish, and deploy.
 if ($Task -in @('verify', 'build', 'check', 'publish', 'deploy')) {
-    & (Join-Path $projectRoot 'scripts/check-tracked-references.ps1')
-    # Human requester: wjdrb, 2026-10-29, retrospective item 1: connect final
-    # card dimensions/alpha checks to the existing local validation route.
-    & (Join-Path $projectRoot '.agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1') check-cards
-    & python (Join-Path $projectRoot 'scripts/check_png_alpha.py')
-    if ($LASTEXITCODE -ne 0) { throw 'PNG alpha check failed.' }
+    foreach ($check in @(
+        @('scripts/check_tracked_references.py', 'Tracked-reference check failed.'),
+        @('scripts/check_docs_artifacts.py', 'Docs artifact check failed.'),
+        @('scripts/check_install_package.py', 'Install-package policy check failed.'),
+        @('scripts/check_card_portraits.py', 'Card portrait check failed.'),
+        @('scripts/check_png_alpha.py', 'PNG alpha check failed.')
+    )) {
+        & python -X utf8 (Join-Path $projectRoot $check[0])
+        if ($LASTEXITCODE -ne 0) { throw $check[1] }
+    }
     if ($Task -eq 'verify') { return }
 }
 
@@ -100,6 +113,17 @@ function Invoke-DotNet([string[]]$Arguments) {
     }
     & $dotnet @Arguments
     if ($LASTEXITCODE -ne 0) { throw "dotnet failed (exit $LASTEXITCODE): $Arguments" }
+}
+
+function Invoke-DotNetBuild([string]$BuildConfiguration) {
+    if ($BuildConfiguration -eq 'Release') {
+        # Godot.NET.Sdk adds GodotSharpEditor only under Debug; restore with the
+        # locked Debug graph first so Release compiles without NU1004 lock drift.
+        Invoke-DotNet @('restore', 'Sts2WD.csproj', '--locked-mode')
+        Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', 'Release', '--no-restore')
+        return
+    }
+    Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $BuildConfiguration, '-p:RestoreLockedMode=true')
 }
 
 function New-ObservationDirectory([string]$Prefix) {
@@ -261,7 +285,7 @@ try {
         return
     }
     if ($Task -eq 'build') {
-        Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
+        Invoke-DotNetBuild $Configuration
         return
     }
 
@@ -280,6 +304,19 @@ try {
     }
 
     if (-not (Test-Path -LiteralPath $paths.GodotPath)) { throw 'Set GodotPath in local.props.' }
+    if ($Task -eq 'import') {
+        $importDir = New-ObservationDirectory 'import'
+        $engineLog = Join-Path $importDir 'import.engine.log'
+        Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--log-file', $engineLog,
+            '--headless', '--editor', '--path', $projectRoot, '--import', '--quit') -LogDirectory $importDir -Step 'import' -Summary
+        $importLog = Get-Content -LiteralPath (Join-Path $importDir 'import.log') -Encoding UTF8 -Raw
+        if ($importLog -match 'SCRIPT ERROR:|Parse Error:|Failed (?:to load script|loading resource)') {
+            Write-RecordedLogExcerpt -LogPath (Join-Path $importDir 'import.log') -IncludeTail
+            throw "Resource import failed; read $importDir/import.log"
+        }
+        Write-Host "Imported resources; logs: $importDir"
+        return
+    }
     if ($Task -eq 'editor') {
         $editorLog = Join-Path (New-ObservationDirectory 'editor') 'engine.log'
         Start-Process -FilePath $paths.GodotPath -ArgumentList '--editor', '--path', ('"' + $projectRoot + '"'), '--log-file', ('"' + $editorLog + '"') -WorkingDirectory $projectRoot
@@ -357,7 +394,7 @@ try {
     New-Item -ItemType File -Path (Join-Path $projectRoot 'artifacts/.gdignore') -Force | Out-Null
     if ($Task -eq 'check') {
         # Human requester: wjdrb, 2026-10-23: animation import and rig checks run only through `anim`.
-        Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
+        Invoke-DotNetBuild $Configuration
         Write-Host 'Build check passed.'
         return
     }
@@ -378,12 +415,13 @@ try {
         finishedUtc = $null
         exitCode = $null
         failure = $null
+        pckReport = $null
         installation = $null
     }
     try {
         Invoke-RecordedCommand -Executable $dotnet -Arguments @('--version') -LogDirectory $diagnosticRoot -Step 'dotnet-version' -Summary
         Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--headless', '--version') -LogDirectory $diagnosticRoot -Step 'megadot-version' -Summary
-        Invoke-DotNet @('build', 'Sts2WD.csproj', '-c', $Configuration, '-p:RestoreLockedMode=true')
+        Invoke-DotNetBuild $Configuration
         # Import textures before exporting a PCK on a fresh checkout.
         Invoke-RecordedCommand -Executable $paths.GodotPath -Arguments @('--log-file', (Join-Path $diagnosticRoot 'import.engine.log'),
             '--headless', '--editor', '--path', $projectRoot, '--import', '--quit') -LogDirectory $diagnosticRoot -Step 'import' -Summary
@@ -407,13 +445,35 @@ try {
         }
 
         $output = Join-Path $paths.ModsPath 'Sts2WD'
-        foreach ($name in @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')) {
+        $expectedArtifacts = if ($Configuration -eq 'Release') {
+            @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json')
+        } else {
+            @('Sts2WD.dll', 'Sts2WD.pck', 'Sts2WD.json', 'Sts2WD.pdb')
+        }
+        foreach ($name in $expectedArtifacts) {
             if (-not (Test-Path -LiteralPath (Join-Path $output $name) -PathType Leaf)) { throw "Missing publish artifact: $name" }
         }
+        if ($Configuration -eq 'Release' -and (Test-Path -LiteralPath (Join-Path $output 'Sts2WD.pdb') -PathType Leaf)) {
+            throw "Unexpected debug symbols in Release publish output: $(Join-Path $output 'Sts2WD.pdb')"
+        }
+
+        # Human requester: KyuSeok Jung (wjdrb), 2026-11-22: run Stage 2 post-export
+        # PCK allowlist/provenance/bundle gate and record size/format breakdown.
+        $python = (Get-Command python -ErrorAction Stop).Source
+        $pckReportPath = Join-Path $diagnosticRoot 'pck-report.json'
+        $run.pckReport = $pckReportPath
+        Invoke-RecordedCommand -Executable $python -Arguments @(
+            '-X', 'utf8',
+            (Join-Path $projectRoot 'scripts/check_pck_package.py'),
+            (Join-Path $output 'Sts2WD.pck'),
+            '--configuration', $Configuration,
+            '--json-out', $pckReportPath
+        ) -LogDirectory $diagnosticRoot -Step 'pck-check'
+
         if ($Task -eq 'deploy') {
-            $run.installation = Install-ModPackage -Source $output -Destination (Join-Path $paths.Sts2Path 'mods/Sts2WD') -BackupRoot (Join-Path $projectRoot 'artifacts/runtime')
+            $run.installation = Install-ModPackage -Source $output -Destination (Join-Path $paths.Sts2Path 'mods/Sts2WD') -BackupRoot (Join-Path $projectRoot 'artifacts/runtime') -Configuration $Configuration
         } else {
-            Write-Host "Published: $output"
+            Write-Host "Published ($Configuration): $output"
         }
         $run.exitCode = 0
     } catch {

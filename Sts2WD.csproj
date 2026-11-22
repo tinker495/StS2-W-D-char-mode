@@ -101,11 +101,16 @@
                  Importance="high" />
     </Target>
 
-    <Target Name="CopyToModsFolderOnBuild" AfterTargets="PostBuildEvent">
-        <Message Text="Copying .dll .pdb and .json to mods folder." Importance="high" />
+    <Target Name="CopyToModsFolderOnBuild" AfterTargets="PostBuildEvent" Condition="'$(IsInnerGodotExport)' != 'true'">
+        <Message Condition="'$(Configuration)' == 'Release'" Text="Copying .dll and .json to mods folder." Importance="high" />
+        <Message Condition="'$(Configuration)' != 'Release'" Text="Copying .dll, .pdb, and .json to mods folder." Importance="high" />
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
         <Copy SourceFiles="$(AssemblyName).json" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
-        <Copy SourceFiles="$(TargetDir)$(TargetName).pdb" DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
+        <Copy Condition="'$(Configuration)' != 'Release' And Exists('$(TargetDir)$(TargetName).pdb')"
+              SourceFiles="$(TargetDir)$(TargetName).pdb"
+              DestinationFolder="$(ModsPath)$(MSBuildProjectName)/" />
+        <Delete Condition="'$(Configuration)' == 'Release' And Exists('$(ModsPath)$(MSBuildProjectName)/$(TargetName).pdb')"
+                Files="$(ModsPath)$(MSBuildProjectName)/$(TargetName).pdb" />
     </Target>
 
     <Target Name="CopyQuickPck" AfterTargets="PackPck" Condition="Exists('$(PckPackerOutputPath)') And '$(PckPackerSkipped)' != 'true'">

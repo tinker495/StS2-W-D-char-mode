@@ -31,12 +31,12 @@ $info = & $pipeline inspect -Path $candidate
 # Open the complete candidate and preview. After visual review, and within
 # existing user authorization, promote the exact reviewed file:
 Copy-Item -LiteralPath $candidate -Destination $runtimePath
-& $pipeline check-cards
+python -X utf8 scripts/check_card_portraits.py
 ```
 
 Use `250 × 350` for an Ancient preview. The whole candidate and preview must show continuous painted scene at every edge, correct subject staging, and readable action before promotion. These visual judgments are separate from mechanical size/alpha checks. Regenerate or outpaint an incompatible master; generic `export` is not a card padding fallback. Existing generic exports targeting the runtime card directory receive the same card checks.
 
-`check-cards` checks every PNG under `Sts2WD/images/card_portraits/`: exact expected delivery dimensions, PNG encoding, and full opacity. Unlisted paths are Standard. Before delivering an Ancient portrait, register its relative PNG path as `Ancient` in [card-portrait-layouts.json](/scripts/card-portrait-layouts.json); both export and validation use that mapping, never the image's actual dimensions, to select the expected layout. The existing root `card.png` fallback is explicitly `Thumbnail` (`250 × 190`). The local `dev.ps1 verify`, `build`, and `check` routes run the validator; the pre-commit hook uses `build`, and CI runs the same command on Windows. It needs neither the game nor the .NET SDK. Mechanical checks do not establish composition or painted coverage.
+`scripts/check_card_portraits.py` (with `& $pipeline check-cards` delegating to it) checks every PNG under `Sts2WD/images/card_portraits/`: exact expected delivery dimensions, static PNG encoding, and full opacity. Unlisted paths are Standard. Before delivering an Ancient portrait, register its relative PNG path as `Ancient` in [card-portrait-layouts.json](/scripts/card-portrait-layouts.json); both export and validation use that mapping, never the image's actual dimensions, to select the expected layout. The existing root `card.png` fallback is explicitly `Thumbnail` (`250 × 190`). The local `dev.ps1 verify`, `build`, `check`, `publish`, and `deploy` routes run the validator; the pre-commit hook uses `build`, and CI runs the same Python script on `ubuntu-latest` (Python 3.12). It needs neither the game nor the .NET SDK. Mechanical checks do not establish composition or painted coverage.
 
 ## Opaque Fit export for other asset types
 

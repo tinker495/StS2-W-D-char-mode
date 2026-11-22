@@ -31,14 +31,15 @@ PowerShell에서 이 프로젝트 폴더를 열고 실행합니다. `dev.ps1`은
 ```powershell
 .\dev.ps1 hooks              # 이 checkout의 커밋 전 참조·빌드 검사 활성화
 .\dev.ps1 doctor             # SDK, 게임 DLL, MegaDot 경로 확인
-.\dev.ps1 verify             # Git 추적 파일의 로컬 참조 검사 (SDK·게임 DLL 불필요)
-.\dev.ps1 build              # 로컬 참조 검사 후 C# 빌드
-.\dev.ps1 check              # 로컬 참조 검사 후 잠긴 패키지 복원으로 C# 빌드
-.\dev.ps1 card-tests         # 참조 카드 55개 상태 + 화면 배치 36개 조건 검사
+.\dev.ps1 import             # MegaDot 헤드리스 리소스 임포트 (.import·캐시 갱신)
+.\dev.ps1 verify             # Python 정적 검증 5종(참조·docs 아티팩트·패키징 정책·카드 규격·PNG 투명도; SDK·게임 DLL 불필요)
+.\dev.ps1 build              # Python 정적 검증 5종 후 C# 빌드 (기본 Debug)
+.\dev.ps1 check              # Python 정적 검증 5종 후 잠긴 패키지 복원으로 C# 빌드 (기본 Debug)
+.\dev.ps1 card-tests         # 참조 카드 55개 상태 + 화면 배치 36개 조건 검사 (기본 Debug)
 .\dev.ps1 rebase             # origin/main 위로 리베이스한 뒤 기존 프리커밋 검사
 .\dev.ps1 anim attack        # rig-c 소스 컴파일 → 게임 리그 반영 → import·검사·렌더
-.\dev.ps1 publish            # DLL + PCK + manifest + PDB 생성
-.\dev.ps1 deploy             # 패키징 후 백업·설치·SHA256 확인
+.\dev.ps1 publish            # 기본 Release 3파일(DLL + PCK + manifest) 생성 및 PCK 검사
+.\dev.ps1 deploy             # Release 패키징·PCK 검사 후 백업·설치·잔존 PDB 정리·SHA256 확인
 .\dev.ps1 editor             # MegaDot 편집기 열기
 ```
 
@@ -50,17 +51,17 @@ PowerShell의 스크립트 실행 정책 때문에 실행되지 않는다면 해
 powershell -ExecutionPolicy Bypass -File .\dev.ps1 build
 ```
 
-`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 일반 `git commit`을 실행할 때 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, 로컬 참조 검사나 C# 컴파일·기존 ModAnalyzers가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드는 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
+`hooks`는 이 checkout의 Git `core.hooksPath`를 `.githooks`로 설정합니다. 이후 일반 `git commit`을 실행할 때 현재 작업 트리에 대해 `dev.ps1 build`를 실행하며, Python 정적 검증 5종이나 C# 컴파일·기존 ModAnalyzers가 실패하면 커밋을 중단합니다. 게임 DLL이 필요한 빌드는 로컬 Git hook에서 실행합니다. 새로 clone한 checkout에서도 한 번 실행하세요.
 
 리베이스는 작업 트리를 정리하고 `git fetch origin`으로 원격 정보를 갱신한 뒤 `.\dev.ps1 rebase`(다른 기준은 `-Upstream <대상>`)로 시작합니다. 리베이스 끝에 기존 `pre-commit` 검사가 자동 실행되며 자동 fetch·stash·push는 수행하지 않습니다. 일반 `git rebase`로 진행한 경우에는 완료 후 `git -c core.hooksPath=.githooks hook run pre-commit`으로 직접 검사하세요.
 
 게임 설치 상태와 확인한 범위는 [배포 상태](docs/deployment-status.md)에 기록합니다. 각 캐릭터 에셋 문서에는 게임에서 사용하는 리소스와 연결 경로를 기록합니다.
 
-`verify`는 [검사 스크립트](scripts/check-tracked-references.ps1)로 Git 추적 파일의 링크·이미지·`res://` 리소스와 미추적 참조를 검사합니다. 문서 링크에는 `..` 대신 저장소 루트 기준 경로(`/docs/...`)나 같은 폴더·하위 경로를 사용하며, 세부 기준은 [문서 작성 규칙](AGENTS.md#shared-documentation)을 따릅니다. 새 파일은 `git add` 후 검사하고, GitHub Actions도 push와 pull request마다 같은 검사를 실행합니다.
+`verify`는 Python 정적 검증 5종([참조 검사](scripts/check_tracked_references.py), [docs 아티팩트 검사](scripts/check_docs_artifacts.py), [설치 패키지·PCK 정책 검사](scripts/check_install_package.py), [카드 포트레이트 검사](scripts/check_card_portraits.py), [PNG 투명도 검사](scripts/check_png_alpha.py))을 순서대로 실행합니다. 문서 링크에는 `..` 대신 저장소 루트 기준 경로(`/docs/...`)나 같은 폴더·하위 경로를 사용하며, 세부 기준은 [문서 작성 규칙](AGENTS.md#shared-documentation)과 [설치 패키지 최소화 정책](docs/conventions/packaging/install-package.md)을 따릅니다. 새 PNG를 추가하거나 압축 티어를 바꿀 때는 `.\dev.ps1 import` → `python -X utf8 scripts/check_install_package.py --sync-params` → `.\dev.ps1 import` → `git add` 순서로 갱신한 뒤 검사합니다. GitHub Actions(`ubuntu-latest`, Python 3.12)도 push와 pull request마다 같은 5종 검사를 실행합니다.
 
 레아르타의 반복 작업은 [애니메이션 작업 절차](docs/characters/realta/animation/reproduction.md)를 따릅니다. `anim`은 bake 후 [리그 기계 검사](tests/rig-checks.md)와 [인스턴스 간 상태 독립성 테스트](tests/README.md)를 실행하며, 실패하면 이후 렌더를 중단합니다. `check`, `publish`, `deploy`는 이 애니메이션 검사를 실행하지 않습니다. `anim`의 패키지 모드는 이미 생성한 PCK를 독립적으로 렌더합니다.
 
-코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요하며 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. 게임에 반영하려면 게임이 종료된 상태에서 `deploy`를 실행하세요. `deploy`는 패키징 성공과 네 파일(DLL·PCK·manifest·PDB)을 확인한 뒤 기존 설치본을 `artifacts/runtime/local-install-backup-<UTC 시각>-<고유 ID>/`에 백업하고 `mods/Sts2WD`에 복사해 SHA256을 비교합니다(자동 롤백 없음). 실행 환경을 구분해 남길 때는 `-ExecutionContextLabel local|sandbox|escalated`를 지정할 수 있습니다.
+코드만 바꿨으면 `build`, 텍스트·이미지 등을 바꿨으면 `publish`가 필요하며 결과는 `artifacts/mods/Sts2WD/`에 저장됩니다. `publish`와 `deploy`는 기본적으로 `Release` 3파일(DLL·PCK·manifest, PDB 제외)을 생성·검증하고 [PCK 누수·용량 리포트](scripts/check_pck_package.py)를 출력합니다(로컬 크래시 줄번호 확인용 PDB가 필요할 때만 `-Configuration Debug` 4파일을 지정). 게임에 반영하려면 게임이 종료된 상태에서 `deploy`를 실행하세요. `deploy`는 패키징·PCK 검사 통과를 확인한 뒤 기존 설치본(기존 PDB 포함)을 `artifacts/runtime/local-install-backup-<UTC 시각>-<고유 ID>/`에 백업하고, `Release` 설치 시 잔존 PDB를 제거한 다음 `mods/Sts2WD`에 복사해 SHA256을 비교합니다(자동 롤백 없음). 실행 환경을 구분해 남길 때는 `-ExecutionContextLabel local|sandbox|escalated`를 지정할 수 있습니다.
 
 패키징·설치 로그 구성과 진단 절차는 [패키징 출력과 로그](docs/development-tools.md#패키징-출력과-로그)와 [빌드 진단 절차](docs/agents/build-troubleshooting.md)를 참고하세요. 패키징에 실패한 산출물은 설치하지 않으며, 설치 후 게임에서 BaseLib와 Sts2WD를 활성화해야 합니다. 파일 해시 일치는 게임 내 동작 확인을 대신하지 않습니다.
 

@@ -8,9 +8,7 @@
 
 | File | Source and contents |
 | --- | --- |
-| [official-necrobinder-screen.png](official-necrobinder-screen.png) | [Mega Crit PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [launch article](https://megacrit.com/news/2026-03-05-early-access-launch/). Actual 2560×1440 Necrobinder selection screen with UI; same 2026-10-18 snapshot as parent `official-select.png`. |
-
-`official-necrobinder-screen.png` SHA-256: `BD2588AF2489E6F6C45F0D310EF28A51A2E29679B05AC39F72501C399A95D5DE`.
+| [official-select.png](/docs/research/sts2-style-refs/official-select.png) | [Mega Crit PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [launch article](https://megacrit.com/news/2026-03-05-early-access-launch/). Actual 2560×1440 Necrobinder selection screen with UI (2026-10-18 snapshot; SHA-256 recorded in [sts2-style-refs/README.md](/docs/research/sts2-style-refs/README.md)). |
 
 Official URLs may be replaced. Use saved snapshots whose filename, character, and UI presence were checked directly.
 

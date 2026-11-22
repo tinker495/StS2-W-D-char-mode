@@ -47,4 +47,4 @@ Editing the face or colors of an old background repeated its composition. At the
 
 ## 7. Shared Standing Source and Animated Scenes
 
-Deriving both the fallback standing still and the combat/merchant rig from [base.png](base.png) keeps silhouette, proportions, and equipment consistent across static and animated scenes (see [scene connections](animation-assets.md#current-scene-and-property-connections)).
+Deriving the combat and merchant cutout rigs from [base.png](base.png) keeps silhouette, proportions, and equipment consistent across animated scenes (the earlier static fallback still was retired once both scenes used the shared rig; see [scene connections](animation-assets.md#current-scene-and-property-connections)).

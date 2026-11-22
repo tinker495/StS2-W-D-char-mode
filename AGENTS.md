@@ -21,7 +21,7 @@ Before adding a test, touching `tests/` or CI validation, handling a failing or 
 
 ## Shared Documentation
 
-Use repository-root-relative links (`/docs/...`) for cross-directory targets and local paths for same-folder or descendant links (no `..` segments); resolve leading `/` against the Git repository root. Keep tracked Markdown self-contained, Why-only, and backed only by applied production code, runtime paths, or verified deployments (keep work logs and unapplied artifacts in task reports or PRs) — full rules in [comments and Markdown documentation](docs/conventions/documentation/comments-and-docs.md).
+Use repository-root-relative links (`/docs/...`) for cross-directory targets and local paths for same-folder or descendant links (no `..` segments); resolve leading `/` against the Git repository root. Keep tracked Markdown self-contained, Why-only, and backed only by applied production code, runtime paths, or verified deployments (keep work logs, candidates, and duplicate or post-application artifacts out of tracked `docs/`) — full rules in [comments and Markdown documentation](docs/conventions/documentation/comments-and-docs.md).
 
 ## Task Routing
 
@@ -38,6 +38,7 @@ Read the matching single source of truth before acting. Formatting, linting, and
 | Character types, paths, anatomical `_l`/`_r` rig names, or renames | [Character naming and layout](docs/conventions/characters/naming.md) |
 | Character or visual-owner guides | [Topic-based character guides](docs/conventions/documentation/character-guides.md) |
 | Art direction, artwork, image prompts, or packaged card texture inspection | [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) (open only the requested route), [ARTS.md](ARTS.md), and [character guides](docs/conventions/documentation/character-guides.md) |
+| Install package, PCK contents, `.import` texture compression tiers, or Release/Debug bundle | [Install package and PCK minimization](docs/conventions/packaging/install-package.md) |
 | GitHub issues, PRs, or CI queries (`gh` is off PATH) | [Issue tracker](docs/agents/issue-tracker.md) before the first `gh` call |
 | Issue classification or label changes | [Triage labels](docs/agents/triage-labels.md) |
 | Local rig-c authoring, rendering, or verification | [Local Rig-C Toolchain](docs/agents/rig-c-local.md) |

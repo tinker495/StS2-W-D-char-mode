@@ -11,7 +11,7 @@
 
 | Material | Source | Treatment in this study |
 |---|---|---|
-| Necrobinder selection screen | [PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [launch article](https://megacrit.com/news/2026-03-05-early-access-launch/) | Actual complete screen; character/UI/tile overlaps directly observed. [Saved file](sts2-style-refs/future-assets/ui-select-screenshot.png) |
+| Necrobinder selection screen | [PNG](https://www.megacrit.com/images/steam_screenshot3_new.png), [launch article](https://megacrit.com/news/2026-03-05-early-access-launch/) | Actual complete screen; character/UI/tile overlaps directly observed. [Saved file](sts2-style-refs/official-select.png) |
 | Early Access Trailer | [Video](https://www.youtube.com/watch?v=PW22jwFNxU8), [press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | Link confirmed; do not infer unviewed frame contents |
 | Gameplay Trailer | [Video](https://www.youtube.com/watch?v=ttVtllHkb4E), [press kit](https://www.megacrit.com/press-kits/slay-the-spire-2/) | Distinguish combat footage from selection illustrations |
 | Regent reveal | [December 2025 article](https://www.megacrit.com/news/2025-12-11-neowsletter-issue-17/) | Official character/power context; combat-sprite reveals are not selection screens |
@@ -48,7 +48,7 @@ Separate layers were also viewed: [Silent's background](sts2-style-refs/characte
 
 ## 2. UI Overlap and Left-Panel Safe Space (Necrobinder Screen)
 
-**Image observations** of the complete [official-screen snapshot](sts2-style-refs/future-assets/ui-select-screenshot.png):
+**Image observations** of the complete [official-screen snapshot](sts2-style-refs/official-select.png):
 
 - Necrobinder's skull and upper body anchor the right side while giant Osty extends behind the left information panel, matching their shared companion presentation ([October 2025 article](https://www.megacrit.com/news/2025-10-16-neowsletter-issue-15/)).
 - Broad bone planes and dark gaps continue behind the left text panel. Safe space works by avoiding **high-frequency detail and strong focal points competing with text**, rather than leaving an empty rectangle.
