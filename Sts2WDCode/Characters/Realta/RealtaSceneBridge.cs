@@ -1,5 +1,6 @@
 using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Nodes.RestSite;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
@@ -25,9 +26,15 @@ internal static class RealtaSceneBridge
         private static void Postfix(NRestSiteCharacter __instance)
         {
             var visuals = RestVisuals(__instance);
-            var act = __instance.Player.RunState.CurrentActIndex;
-            if (visuals != null && act >= 0 && act < ActLoops.Length)
-                visuals.Call("play_variant", ActLoops[act]);
+            if (visuals == null) return;
+            var runState = __instance.Player.RunState;
+            var clip = runState.Act is Underdocks
+                ? "underdocks_loop"
+                : runState.CurrentActIndex >= 0 && runState.CurrentActIndex < ActLoops.Length
+                    ? ActLoops[runState.CurrentActIndex]
+                    : null;
+            if (clip != null)
+                visuals.Call("play_variant", clip);
         }
     }
 

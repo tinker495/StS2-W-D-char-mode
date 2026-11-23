@@ -11,7 +11,7 @@ Choose one route before reading production details. Route files are ordinary ref
 |---|---|
 | A: establish or replace a canonical standing base | [Base](base.md) |
 | Ancient/event painting, including its canonical base, or dialogue/history/map miniature | [Event art and miniatures](event.md); select the owner's native role before a standing or player-UI recipe |
-| B: portrait, map marker, energy, standing/combat, selection tile or scene | [UI, standing and selection](ui.md); only the requested output's subsection |
+| B: portrait, map marker, energy, standing/combat, rest-site seated art, selection tile or scene | [UI, standing and selection](ui.md); only the requested output's subsection |
 | C-1: relic object or paired upgrade | [Relics](relics.md) |
 | C-2: power/status symbol | [Powers](powers.md) |
 | C-3: standard or Ancient card illustration | [Cards](cards.md); only the matching card recipe |

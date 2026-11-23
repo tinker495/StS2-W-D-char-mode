@@ -19,4 +19,6 @@
 
 전투와 상점에 등록된 두 장면은 `realta_body.tscn`의 본과 2048×2048 `realta_skeleton.png`를 함께 쓴다. 스켈레톤 시트에는 몸과 장비, 여섯 표정의 눈·눈썹과 입, 세 겹의 시전 마법진 파츠(55개)만 들어 있다. 표정별 눈과 입은 원화 1픽셀당 3텍셀로 보관한다. 전투와 상점의 `revive`는 별도 전신 이미지 없이 실제 골격 전체를 `Visuals:group_alpha`의 Godot `CanvasGroup` 합성 페이드로 전환해 각각 선 자세와 쪼그려 앉은 자세를 복원한다. [공통 골격](/Sts2WD/animations/realta/combat/realta_body.tscn) · [스켈레톤 시트](/Sts2WD/animations/realta/combat/realta_skeleton.png) · [전투 리그](/Sts2WD/animations/realta/combat/realta_combat_rig.tscn) · [상점 리그](/Sts2WD/animations/realta/combat/realta_merchant_rig.tscn)
 
+휴식 장면은 [기준 원화](base.png)의 색과 명암으로 그린 500×846 마스터를 원작 통나무 좌석에 배치한다. 84×46 눈 깜박임 패치는 마스터의 `(238, 207)`에 겹친다. 후면 그림자와 모닥불 쪽 가장자리 빛은 인물 윤곽에 맞춘 500×846 마스크를 쓴다. 네 그림을 같은 24×36 메시로 움직여 숨을 쉴 때도 눈꺼풀과 빛이 제자리에 붙어 있고, 엉덩이와 부츠, 통나무를 짚은 손은 접점을 지킨다. 네 막은 각각 환경 색과 불빛을 입히며, 불이 꺼지면 가장자리 빛이 사라지고 후면 그림자가 남는다. [휴식 마스터](/Sts2WD/animations/realta/rest/rest_master.png) · [눈 깜박임 패치](/Sts2WD/animations/realta/rest/rest_blink_patch.png) · [그림자 마스크](/Sts2WD/animations/realta/rest/rest_cast_shadow.png) · [림 마스크](/Sts2WD/animations/realta/rest/rest_rim_highlight.png) · [휴식 스크립트](/Sts2WD/animations/realta/rest/realta_rest.gd)
+
 초상화·에너지 카운터·선택 화면 리소스는 [UI 목록](ui-assets.md#canonical-base-and-runtime-images)에서, 로컬 설치와 게임 확인 범위는 [공통 배포 기록](/docs/deployment-status.md)에서 확인할 수 있다.
