@@ -73,9 +73,18 @@ public sealed class AseligeHarmoniousBlessing : AseligeRelic
 public sealed class AseligeLifeSource : AseligeRelic
 {
     public override bool HasUponPickupEffect => true;
-    public override async Task AfterObtained() => await RunManager.Instance.GenerateMap();
+    protected override bool IsAllowedInternal(IRunState runState) => runState.GameMode != GameMode.Blitz;
+    public override async Task AfterObtained()
+    {
+        if (!IsAllowed(Owner.RunState)) return;
+        await RunManager.Instance.GenerateMap();
+    }
+    // AseligeLifeMap constructs a new ActMap subclass, erasing specialized map types such as
+    // BlitzActMap required by RunManager.TryAdvanceToNextBlitzNode(); wrap only normal-run maps.
     public override ActMap ModifyGeneratedMapLate(IRunState runState, ActMap map, int actIndex) =>
-        map is SavedActMap or AseligeLifeMap ? map : new AseligeLifeMap(map);
+        IsAllowed(runState) && map is StandardActMap or SpoilsActMap or GoldenPathActMap
+            ? new AseligeLifeMap(map)
+            : map;
 }
 
 public sealed class AseligeEmbracingFlute : AseligeRelic
