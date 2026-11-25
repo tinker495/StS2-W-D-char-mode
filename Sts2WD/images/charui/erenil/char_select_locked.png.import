@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c6fn3lold62er"
-path="res://.godot/imported/map_marker.png-109d28a33a09791e10c70e235496aa4f.ctex"
+uid="uid://dwexuwkdakuiv"
+path="res://.godot/imported/char_select_locked.png-46294cea615a6fdfb7ba450d63b9b2c3.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sts2WD/images/charui/character_four/map_marker.png"
-dest_files=["res://.godot/imported/map_marker.png-109d28a33a09791e10c70e235496aa4f.ctex"]
+source_file="res://Sts2WD/images/charui/erenil/char_select_locked.png"
+dest_files=["res://.godot/imported/char_select_locked.png-46294cea615a6fdfb7ba450d63b9b2c3.ctex"]
 
 [params]
 

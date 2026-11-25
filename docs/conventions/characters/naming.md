@@ -1,6 +1,6 @@
 # Character Naming and Layout
 
-Use the character's decided English name for owned paths and identifiers. `<Char>` denotes that type prefix and `<char>` its lowercase storage name; Realta/realta and Althea/althea are examples, not a closed list. The third character's approved name is Mercurius/mercurius. For undecided names, retain the existing `CharacterN` / `character_n` identifiers until a name is approved. Resolve the actual model type and resource paths before choosing a documentation directory; a display label, filename or legacy `CharacterId` constant alone does not authorize a rename.
+Use the character's decided English name for owned paths and identifiers. `<Char>` denotes that type prefix and `<char>` its lowercase storage name; Realta/realta, Althea/althea, Mercurius/mercurius, and Erenil/erenil are approved examples, not a closed list. For undecided names, retain the existing `CharacterN` / `character_n` identifiers until a name is approved. Resolve the actual model type and resource paths before choosing a documentation directory; a display label, filename or legacy `CharacterId` constant alone does not authorize a rename.
 
 | Area | Playable-character layout |
 |---|---|

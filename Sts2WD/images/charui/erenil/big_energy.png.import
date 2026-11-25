@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://6bgk7lgninh0"
-path="res://.godot/imported/character_icon.png-80581adfb66cd36b867992b461d4e875.ctex"
+uid="uid://ifwc13x8w03b"
+path="res://.godot/imported/big_energy.png-611c34b9d54804f6e0a1874044f5997b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sts2WD/images/charui/character_four/character_icon.png"
-dest_files=["res://.godot/imported/character_icon.png-80581adfb66cd36b867992b461d4e875.ctex"]
+source_file="res://Sts2WD/images/charui/erenil/big_energy.png"
+dest_files=["res://.godot/imported/big_energy.png-611c34b9d54804f6e0a1874044f5997b.ctex"]
 
 [params]
 

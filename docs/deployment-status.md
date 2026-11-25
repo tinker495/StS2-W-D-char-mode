@@ -10,4 +10,4 @@
 - **환경:** .NET SDK 9.0.318, MegaDot 4.5.1.m.14 (`4.5.1.m.14.mono.custom_build`), BaseLib 3.4.7
 - **확인 범위:** `dev.ps1 verify`(Python 정적 검증 5종), `dev.ps1 build`(Debug 경고 0·오류 0), `dev.ps1 deploy`(Release 경고 0·오류 0, MegaDot `--import`·PCK export, Stage 2 PCK 검사 통과·3파일 SHA-256 일치), MegaDot `--headless` `aselige.tscn` 4:3·16:10·16:9·21:9 전체화면 커버리지·±64 px 오버스캔 검증까지. 실제 게임 내 블리츠·모디파이어·일반 런 실행, 창 리사이즈, 화면 흔들림 육안 확인 및 BaseLib·Sts2WD 활성화 여부는 별도 수행 필요.
 
-현재 캐릭터별 리소스는 각 가이드에서 확인할 수 있다. [레아르타](characters/realta/realta-assets.md), [알테아](characters/althea/althea-assets.md), [메르쿠리우스](characters/mercurius/mercurius-assets.md), [아셀리게](characters/aselige/aselige-assets.md)
+현재 캐릭터별 리소스는 각 가이드에서 확인할 수 있다. [레아르타](characters/realta/realta-assets.md), [알테아](characters/althea/althea-assets.md), [메르쿠리우스](characters/mercurius/mercurius-assets.md), [에레닐](characters/erenil/erenil-assets.md), [아셀리게](characters/aselige/aselige-assets.md)

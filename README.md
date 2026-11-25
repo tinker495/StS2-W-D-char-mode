@@ -5,12 +5,12 @@ Slay the Spire 2에 캐릭터 4명을 추가하기 위한 개발 프로젝트입
 
 ## 현재 상태
 
-- `Realta`, `Althea`, `Mercurius`, `CharacterFour` 캐릭터 모델
+- `Realta`, `Althea`, `Mercurius`, `Erenil` 캐릭터 모델
 - 캐릭터별 카드·유물·포션 풀과 추상 기본 클래스
 - 캐릭터별 UI 이미지 경로, 영어·한국어 캐릭터 텍스트 및 고대인 대사
 - .NET 9 / MegaDot 4.5.1 / BaseLib 기반 빌드·패키징
 
-`CharacterFour`의 이름, 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다.
+에레닐(`Erenil`)의 능력, 아트와 전용 카드는 아직 정하지 않았습니다. 템플릿의 아이언클래드 시각 자료, 타격 5장·수비 5장, 불타는 혈액, 체력 70을 사용하며 전용 보상 풀은 비어 있습니다. 기본 식별자와 현황은 [`docs/characters/erenil/erenil.md`](docs/characters/erenil/erenil.md)와 [에셋 상태](docs/characters/erenil/erenil-assets.md)에서 확인합니다.
 
 레아르타(`Realta`)의 카드·유물 설계와 리소스 적용 상태는 [설계 합의](docs/characters/realta/realta.md)와 [에셋 가이드](docs/characters/realta/realta-assets.md)를 따르며, 공통 용어는 [`GLOSSARY.md`](GLOSSARY.md), 설계 결정은 [`docs/adr/`](docs/adr/)에 있습니다.
 
@@ -86,7 +86,7 @@ Sts2WDCode/
     Realta/                # 캐릭터 모델, 풀, Cards/Relics/Potions 기본 클래스
     Althea/
     Mercurius/
-    CharacterFour/
+    Erenil/
   Cards/                   # 공통 카드 이미지 경로 처리
   Relics/
   Potions/
@@ -95,7 +95,7 @@ Sts2WD/
   images/charui/realta/           # 캐릭터별 선택 아이콘, 지도 아이콘, 에너지
   images/charui/althea/
   images/charui/mercurius/
-  images/charui/character_four/
+  images/charui/erenil/
   images/card_portraits/        # 공통 카드 이미지, big/은 큰 이미지
   localization/eng/
   localization/kor/

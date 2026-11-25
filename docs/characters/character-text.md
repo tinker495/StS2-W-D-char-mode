@@ -11,7 +11,7 @@
 | 레아르타 | [realta.json](/Sts2WD/character_text/realta.json) | `STS2WD-REALTA` |
 | 알테아 | [althea.json](/Sts2WD/character_text/althea.json) | `STS2WD-ALTHEA` |
 | 메르쿠리우스 | [mercurius.json](/Sts2WD/character_text/mercurius.json) | `STS2WD-MERCURIUS` |
-| 캐릭터 4 | [character_four.json](/Sts2WD/character_text/character_four.json) | `STS2WD-CHARACTER_FOUR` |
+| 에레닐 | [erenil.json](/Sts2WD/character_text/erenil.json) | `STS2WD-ERENIL` |
 | 새 캐릭터용 복사본 | [_template.json](/Sts2WD/character_text/_template.json) | 복사 후 실제 모델 ID로 변경 |
 
 각 파일에는 캐릭터 문구 15종, 고대 존재 9종 각각의 첫 만남·재방문·반복 대화, 유물 이야기와 `SEA_GLASS`의 이름을 넣을 자리가 있다. 대화 칸은 필요에 따라 늘리거나 줄일 수 있다. 레아르타에는 현재 전용 유물 5종의 빈칸도 준비되어 있다.
@@ -140,7 +140,7 @@
 
 `relicFlavor`에는 전용 유물의 **전체 모델 ID**와 문장을 적는다. 게임의 유물 상세 화면에 표시되는 `.flavor`로 연결된다. 레아르타의 청동의 번견·쿠우·마녀 고깔모자·용의 망토·엘디르 그라므르에는 이미 빈칸이 있다.
 
-알테아·메르쿠리우스·캐릭터 4의 목록은 비어 있다. 전용 유물 모델을 만든 뒤 항목을 추가한다. 임시로 공유하는 원작 유물의 플레이버를 바꾸면 다른 캐릭터에도 영향을 주므로 이 프리셋에서는 `STS2WD-` 모델만 받는다.
+알테아·메르쿠리우스·에레닐의 목록은 비어 있다. 전용 유물 모델을 만든 뒤 항목을 추가한다. 임시로 공유하는 원작 유물의 플레이버를 바꾸면 다른 캐릭터에도 영향을 주므로 이 프리셋에서는 `STS2WD-` 모델만 받는다.
 
 `seaGlassTitle`은 원작 `SeaGlass` 유물의 캐릭터별 이름(`SEA_GLASS.<캐릭터 ID>.title`)이다. 대사가 아니라 캐릭터를 드러내는 이름 자리다.
 
@@ -149,7 +149,7 @@
 ## 6. 새 캐릭터에 적용하기
 
 1. `_template.json`을 같은 폴더에 새 이름으로 복사한다. `_`로 시작하는 파일은 게임이 읽지 않는다.
-2. `characterId`를 등록된 모델 ID로 바꾼다. 표시 이름이나 `CharacterId`라는 C# 상수 대신 실제 모델 ID를 사용한다. 예를 들어 현재 캐릭터 4의 모델 ID는 `STS2WD-CHARACTER_FOUR`다.
+2. `characterId`를 등록된 모델 ID로 바꾼다. 표시 이름이나 `CharacterId`라는 C# 상수 대신 실제 모델 ID를 사용한다. 예를 들어 에레닐의 모델 ID는 `STS2WD-ERENIL`이다.
 3. 새 캐릭터의 기본 현지화·모델 등록은 기존 캐릭터 추가 절차대로 준비한다. 빈 프리셋 자체가 모델·해금 조건·필수 기초 문구를 생성하지는 않는다.
 4. 소개문·상황 대사·고대 존재 대화를 채운다. 새 캐릭터의 아키텍트 대화에는 항상 사용할 수 있는 반복 대화도 완성한다.
 5. 전용 유물이 있다면 `relicFlavor`에 모델 ID를 추가한다. 별도의 C# 캐릭터 목록에 프리셋을 등록할 필요는 없다.

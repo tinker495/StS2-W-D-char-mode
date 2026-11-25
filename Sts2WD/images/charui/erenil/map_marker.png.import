@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cqm0wlvt6ugxt"
-path="res://.godot/imported/big_energy.png-5f953f1f4e4bcd7cc5cca808f475d763.ctex"
+uid="uid://dwwdpvm4uiwtn"
+path="res://.godot/imported/map_marker.png-071118d869ad617de3d10ef46a2cacc4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sts2WD/images/charui/character_four/big_energy.png"
-dest_files=["res://.godot/imported/big_energy.png-5f953f1f4e4bcd7cc5cca808f475d763.ctex"]
+source_file="res://Sts2WD/images/charui/erenil/map_marker.png"
+dest_files=["res://.godot/imported/map_marker.png-071118d869ad617de3d10ef46a2cacc4.ctex"]
 
 [params]
 

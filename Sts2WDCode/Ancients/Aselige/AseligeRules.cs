@@ -1,7 +1,7 @@
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Models.Characters;
-using Sts2WD.Sts2WDCode.Characters.CharacterFour;
+using Sts2WD.Sts2WDCode.Characters.Erenil;
 using Sts2WD.Sts2WDCode.Characters.Mercurius;
 using Sts2WD.Sts2WDCode.Characters.Althea;
 using Sts2WD.Sts2WDCode.Characters.Realta;
@@ -14,7 +14,7 @@ internal static class AseligeRules
         actIndex == 0 && party.Any(IsModCharacter);
 
     private static bool IsModCharacter(CharacterModel character) =>
-        character is Realta or Sts2WD.Sts2WDCode.Characters.Althea.Althea or Mercurius or CharacterFour;
+        character is Realta or Sts2WD.Sts2WDCode.Characters.Althea.Althea or Mercurius or Erenil;
 
     // The recipient's own eligibility—not another party member's character—controls Dragon Flute.
     internal static IReadOnlyList<IReadOnlyList<AseligeGiftOption>> GiftPools(

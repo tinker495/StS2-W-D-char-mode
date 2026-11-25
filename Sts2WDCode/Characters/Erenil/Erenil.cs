@@ -7,9 +7,9 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Relics;
 
-namespace Sts2WD.Sts2WDCode.Characters.CharacterFour;
+namespace Sts2WD.Sts2WDCode.Characters.Erenil;
 
-public class CharacterFour : PlaceholderCharacterModel
+public class Erenil : PlaceholderCharacterModel
 {
     public const string CharacterId = "Erenil";
 
@@ -37,9 +37,9 @@ public class CharacterFour : PlaceholderCharacterModel
         ModelDb.Relic<BurningBlood>()
     ];
 
-    public override CardPoolModel CardPool => ModelDb.CardPool<CharacterFourCardPool>();
-    public override RelicPoolModel RelicPool => ModelDb.RelicPool<CharacterFourRelicPool>();
-    public override PotionPoolModel PotionPool => ModelDb.PotionPool<CharacterFourPotionPool>();
+    public override CardPoolModel CardPool => ModelDb.CardPool<ErenilCardPool>();
+    public override RelicPoolModel RelicPool => ModelDb.RelicPool<ErenilRelicPool>();
+    public override PotionPoolModel PotionPool => ModelDb.PotionPool<ErenilPotionPool>();
 
     public override Control CustomIcon
     {
@@ -50,8 +50,8 @@ public class CharacterFour : PlaceholderCharacterModel
             return icon;
         }
     }
-    public override string CustomIconTexturePath => "character_four/character_icon.png".CharacterUiPath();
-    public override string CustomCharacterSelectIconPath => "character_four/char_select.png".CharacterUiPath();
-    public override string CustomCharacterSelectLockedIconPath => "character_four/char_select_locked.png".CharacterUiPath();
-    public override string CustomMapMarkerPath => "character_four/map_marker.png".CharacterUiPath();
+    public override string CustomIconTexturePath => "erenil/character_icon.png".CharacterUiPath();
+    public override string CustomCharacterSelectIconPath => "erenil/char_select.png".CharacterUiPath();
+    public override string CustomCharacterSelectLockedIconPath => "erenil/char_select_locked.png".CharacterUiPath();
+    public override string CustomMapMarkerPath => "erenil/map_marker.png".CharacterUiPath();
 }
