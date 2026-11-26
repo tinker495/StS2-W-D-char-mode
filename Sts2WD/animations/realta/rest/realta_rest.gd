@@ -1,36 +1,16 @@
 extends Node2D
 ## The game only dispatches act clips and light_off to direct SpineSprite children, so
-## Sts2WDCode/Characters/Realta/RealtaSceneBridge.cs calls play_variant()/set_light_off().
+## Sts2WDCode/Characters/RestSiteLightingBridge.cs calls play_variant()/set_light_off().
 ## Matches vanilla StS2 four-layer rest-site lighting: neutral base + contact shadow,
 ## Act ambient tint, persistent back-side cast shadow, and fire-toggled Act rim highlight.
 
+const SeatedIllustration = preload("res://Sts2WD/scenes/rest_site/seated_illustration.gd")
 const DURATION := 8.0
 const GRID_X := 24
 const GRID_Y := 36
 const HEAD_PIVOT := Vector2(262.0, 290.0)
 const HAT_PIVOT := Vector2(210.0, 125.0)
-const CAST_SHADOW_ALPHA := 0.50
-const LIGHT_OFF_DIM := 0.88
 const BLINKS := [[2.6, 2.71], [6.2, 6.30]]
-
-const ACT_LIGHTING := {
-	"overgrowth_loop": {
-		"tint": Color(0.89, 1.00, 0.84),
-		"rim": Color(0.92, 1.00, 0.32, 0.42),
-	},
-	"underdocks_loop": {
-		"tint": Color(0.80, 0.90, 1.00),
-		"rim": Color(0.24, 0.91, 0.88, 0.40),
-	},
-	"hive_loop": {
-		"tint": Color(1.00, 0.96, 0.79),
-		"rim": Color(1.00, 0.84, 0.17, 0.44),
-	},
-	"glory_loop": {
-		"tint": Color(0.82, 0.91, 1.00),
-		"rim": Color(0.00, 0.87, 0.96, 0.42),
-	},
-}
 
 @export var master: Texture2D
 @export var blink_patch: Texture2D
@@ -47,8 +27,8 @@ const ACT_LIGHTING := {
 @export var blinking := false
 
 var fire_light := true
-var act_tint: Color = ACT_LIGHTING.overgrowth_loop.tint
-var act_rim: Color = ACT_LIGHTING.overgrowth_loop.rim
+var act_tint: Color = SeatedIllustration.ACT_LIGHTING.overgrowth_loop.tint
+var act_rim: Color = SeatedIllustration.ACT_LIGHTING.overgrowth_loop.rim
 var setup := PackedVector2Array()
 var mesh_art: Polygon2D
 var eyes: Polygon2D
@@ -84,7 +64,7 @@ func _ready() -> void:
 	player.name = "AnimationPlayer"
 	add_child(player)
 	var library := AnimationLibrary.new()
-	for clip in ACT_LIGHTING:
+	for clip in SeatedIllustration.ACT_LIGHTING:
 		library.add_animation(clip, _loop())
 	player.add_animation_library("", library)
 	play_variant("overgrowth_loop")
@@ -132,9 +112,9 @@ func _loop() -> Animation:
 
 ## Act clip from the rest-site bridge; starts at a random phase like the official rest sprites.
 func play_variant(clip: String) -> void:
-	if not ACT_LIGHTING.has(clip):
+	if not SeatedIllustration.ACT_LIGHTING.has(clip):
 		return
-	var lighting: Dictionary = ACT_LIGHTING[clip]
+	var lighting: Dictionary = SeatedIllustration.ACT_LIGHTING[clip]
 	act_tint = lighting.tint
 	act_rim = lighting.rim
 	player.play(clip)
@@ -174,9 +154,9 @@ func apply_pose() -> void:
 		vertices[i] = q
 
 	var base_color := act_tint if fire_light else Color(
-		act_tint.r * LIGHT_OFF_DIM,
-		act_tint.g * LIGHT_OFF_DIM,
-		act_tint.b * LIGHT_OFF_DIM,
+		act_tint.r * SeatedIllustration.LIGHT_OFF_DIM,
+		act_tint.g * SeatedIllustration.LIGHT_OFF_DIM,
+		act_tint.b * SeatedIllustration.LIGHT_OFF_DIM,
 		1.0
 	)
 	mesh_art.polygon = vertices
@@ -186,7 +166,7 @@ func apply_pose() -> void:
 	eyes.visible = blinking
 	if cast_layer != null:
 		cast_layer.polygon = vertices
-		cast_layer.color = Color(1.0, 1.0, 1.0, CAST_SHADOW_ALPHA)
+		cast_layer.color = Color(1.0, 1.0, 1.0, SeatedIllustration.CAST_SHADOW_ALPHA)
 	if rim_layer != null:
 		rim_layer.polygon = vertices
 		rim_layer.color = act_rim

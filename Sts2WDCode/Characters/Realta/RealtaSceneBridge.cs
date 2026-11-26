@@ -1,49 +1,13 @@
 using Godot;
 using HarmonyLib;
-using MegaCrit.Sts2.Core.Models.Acts;
 using MegaCrit.Sts2.Core.Nodes.Combat;
-using MegaCrit.Sts2.Core.Nodes.RestSite;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.Nodes.Screens.GameOverScreen;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
-/// <summary>
-/// Forwards the game's Spine-only scene events to Realta's Godot-native animation scenes.
-/// BaseLib already routes combat triggers, revive and the merchant clips; these three paths only
-/// address direct SpineSprite children (rest act/light_off) or call SpineAnimation directly (game over).
-/// </summary>
 internal static class RealtaSceneBridge
 {
-    private static readonly string[] ActLoops = ["overgrowth_loop", "hive_loop", "glory_loop"];
-
-    private static Node? RestVisuals(NRestSiteCharacter character) =>
-        character.Player?.Character is Realta ? character.GetNodeOrNull("ControlRoot/Visuals") : null;
-
-    [HarmonyPatch(typeof(NRestSiteCharacter), nameof(NRestSiteCharacter._Ready))]
-    private static class RestActLoop
-    {
-        private static void Postfix(NRestSiteCharacter __instance)
-        {
-            var visuals = RestVisuals(__instance);
-            if (visuals == null) return;
-            var runState = __instance.Player.RunState;
-            var clip = runState.Act is Underdocks
-                ? "underdocks_loop"
-                : runState.CurrentActIndex >= 0 && runState.CurrentActIndex < ActLoops.Length
-                    ? ActLoops[runState.CurrentActIndex]
-                    : null;
-            if (clip != null)
-                visuals.Call("play_variant", clip);
-        }
-    }
-
-    [HarmonyPatch(typeof(NRestSiteCharacter), nameof(NRestSiteCharacter.HideFlameGlow))]
-    private static class RestLightOff
-    {
-        private static void Postfix(NRestSiteCharacter __instance) => RestVisuals(__instance)?.Call("set_light_off", true);
-    }
-
     /// <summary>
     /// Outside combat and the merchant (rest site, events, map) the game over screen spawns fresh combat
     /// visuals and starts "die" through SpineAnimation only. Combat visuals already played their death and

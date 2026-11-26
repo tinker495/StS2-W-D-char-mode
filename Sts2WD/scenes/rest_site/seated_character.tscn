@@ -1,0 +1,45 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://Sts2WD/scenes/rest_site/seated_illustration.gd" id="1_lighting"]
+
+[node name="SeatedCharacter" type="Node2D"]
+
+[node name="ControlRoot" type="Control" parent="."]
+mouse_filter = 2
+
+[node name="Visuals" type="Node2D" parent="ControlRoot" groups=["sts2wd_rest_lighting"]]
+position = Vector2(-165.182857, -331.571429)
+scale = Vector2(0.602857, 0.602857)
+script = ExtResource("1_lighting")
+
+[node name="Painting" type="Sprite2D" parent="ControlRoot/Visuals"]
+centered = false
+
+[node name="CastShadow" type="Sprite2D" parent="ControlRoot/Visuals"]
+centered = false
+
+[node name="RimHighlight" type="Sprite2D" parent="ControlRoot/Visuals"]
+centered = false
+
+[node name="Hitbox" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = -142.0
+offset_top = -268.0
+offset_right = 170.0
+offset_bottom = 175.0
+
+[node name="ThoughtBubbleLeft" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = -110.0
+offset_top = -237.0
+offset_right = -110.0
+offset_bottom = -237.0
+mouse_filter = 2
+
+[node name="ThoughtBubbleRight" type="Control" parent="ControlRoot"]
+unique_name_in_owner = true
+offset_left = 128.0
+offset_top = -237.0
+offset_right = 128.0
+offset_bottom = -237.0
+mouse_filter = 2

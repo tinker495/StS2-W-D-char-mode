@@ -5,7 +5,7 @@ This index maps the adopted base, applied files, and native integration. [Art di
 | Work | Read first | Read when needed |
 |---|---|---|
 | Base selection, preservation or unresolved design scope | [Base asset status](base-assets.md) | [Appearance](base-appearance.md) |
-| Combat, merchant or rest standing | [Standing delivery and scene connections](animation-standing.md#delivery-and-integration) | [Standing art](animation-standing.md#appearance) |
+| Standing and seated rest art | [Standing delivery and scene connections](animation-standing.md#delivery-and-integration) | [Standing art](animation-standing.md#appearance) |
 | Portrait, outline, map marker or file dimensions | [UI runtime inventory](ui-assets.md) | [UI art](ui-art.md) |
 | Selection tile or background | [Selection delivery](selection-assets.md), [UI runtime inventory](ui-assets.md) | [Selection art](selection-art.md) |
 | Card-cost and inline energy textures | [Energy delivery](ui-energy.md#delivery-and-integration) | [Energy art](ui-energy.md#appearance) |

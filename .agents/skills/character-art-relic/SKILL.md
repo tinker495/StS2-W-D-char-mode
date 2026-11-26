@@ -1,6 +1,13 @@
+---
+name: character-art-relic
+description: Paint a StS2 relic icon or a visually paired relic upgrade for the in-game relic bar.
+---
+
+Follow the [shared inputs, engine selection and delivery](/.agents/skills/character-asset-pipeline/SKILL.md#shared-production-contract) for the requested scope.
+
 # Branch C-1: `base + refs → Relics` (Focused Relic Route)
 
-Read the requested relic's effect/object brief, mapping and current status, ARTS.md 5.3, [the shared workflow](workflow.md), and the active [engine section](engines.md). Read character identity only if canonical costume/equipment appears. A supplied rough/photo or designated motif uses [reference roles and landmarks](references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). Use the recipe below and [observation tools](observation-tools.md); other production routes are not required.
+Read the requested relic's effect/object brief, mapping and current status, ARTS.md 5.3, [the shared workflow](/.agents/skills/character-asset-pipeline/workflow.md), and the active [engine section](/.agents/skills/character-asset-pipeline/engines.md). Read character identity only if canonical costume/equipment appears. A supplied rough/photo or designated motif uses [reference roles and landmarks](/.agents/skills/character-asset-pipeline/references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). Use the recipe below and [observation tools](/.agents/skills/character-asset-pipeline/observation-tools.md); other production routes are not required.
 
 1. **Establish scope, family masters, and references:** read the relic list, rarities, and object briefs in `<char>.md`, `<char>-art.md`, and `<char>-assets.md`. Open the official StS2 relic anchors ([relics-potions-frame0.png](/docs/research/sts2-style-refs/future-assets/relics-potions-frame0.png) and [relics-in-combat-crop.png](/docs/research/sts2-style-refs/future-assets/relics-in-combat-crop.png); [study §2](/docs/research/sts2-future-asset-reference-study.md#2-relic-and-status-information-density)). For each relic, assemble:
    - Any user-supplied rough sketch, silhouette, or object photo in `refs/` (pending topic roughs in `refs/relics/` are removed per asset once applied to `Sts2WD/`, with required constraints recorded in `relics-art.md`; or an existing approved symbol explicitly designated by the user, such as an energy emblem for a matching crest relic).
@@ -12,7 +19,7 @@ Read the requested relic's effect/object brief, mapping and current status, ARTS
 
 ## Recipe 5: `base + refs → Relic Icon` (Branch C-1)
 
-Follow [Branch C-1](relics.md#branch-c-1-base--refs--relics-focused-relic-route) and the [Branch B/C input rule](workflow.md#starting-inputs). Open and pass the official StS2 relic anchors ([relics-potions-frame0.png](/docs/research/sts2-style-refs/future-assets/relics-potions-frame0.png) and [relics-in-combat-crop.png](/docs/research/sts2-style-refs/future-assets/relics-in-combat-crop.png)). Pass `<ROUGH_OR_REF_INPUT>` (object photo, rough sketch, or designated symbol) when supplied, `base.png` only when the relic depicts canonical character costume/weaponry, and the newly generated current-run starter/base relic master when producing an upgraded/paired relic variant.
+Follow [Branch C-1](SKILL.md#branch-c-1-base--refs--relics-focused-relic-route) and the [Branch B/C input rule](/.agents/skills/character-asset-pipeline/workflow.md#starting-inputs). Open and pass the official StS2 relic anchors ([relics-potions-frame0.png](/docs/research/sts2-style-refs/future-assets/relics-potions-frame0.png) and [relics-in-combat-crop.png](/docs/research/sts2-style-refs/future-assets/relics-in-combat-crop.png)). Pass `<ROUGH_OR_REF_INPUT>` (object photo, rough sketch, or designated symbol) when supplied, `base.png` only when the relic depicts canonical character costume/weaponry, and the newly generated current-run starter/base relic master when producing an upgraded/paired relic variant.
 
 ```text
 Use case: stylized-concept / reference-guided-generation.

@@ -25,6 +25,17 @@ Pass array arguments to the comparison command with `&` inside a PowerShell sess
 
 For native card textures or a packaged portrait, use [card observations](scripts/card-observations.md): `official-cards` extracts original portraits, and `observe-texture` exports a resource with dimensions, alpha and optional pixel-comparison observations. Keep reference extracts in ignored working storage. These observations do not introduce acceptance gates.
 
+## Official Rest-Site Seats
+
+From the repository root, run the installed-game observation before generating a seated illustration:
+
+```powershell
+$restOutput = Join-Path ([IO.Path]::GetTempPath()) ('sts2-rest-' + [guid]::NewGuid().ToString('N'))
+& .agents/skills/character-asset-pipeline/scripts/asset-pipeline.ps1 official-rest -OutPath $restOutput
+```
+
+Open `room.png` for the native 1920 × 1080 Overgrowth framing and `seats.png` at 100% for the empty, Ironclad and Silent seats from left to right. The three `*-seat.png` crops share one camera and retain screen pixels so the figure and log can be compared directly with a candidate at its intended display size. These reference renders show room art and seated Spine poses; the standalone host omits the game's managed VFX and UI. Use the separate warm-fire stage in Recipe 1-E for generation. Path discovery and overrides match `official-poses` below.
+
 ## Official Standing Poses
 
 Official standing comparison inputs come from the installed game. `official-poses` renders time 0 of `idle_loop` (combat) and `relaxed_loop` (merchant) for Ironclad, Silent, Defect, Necrobinder and Regent through the game's own Spine extension, framed to their alpha with 5% margins. It resolves `GodotPath` and `Sts2Path` through the same MSBuild settings as `dev.ps1`, including `local.props` overrides and Steam discovery. Override either value with `-GodotPath` or `-GamePath`; passing both avoids SDK discovery. Engine, stdout and stderr logs are written beside the renders. Keep these game assets out of version control. The example creates a fresh temporary output directory and compares files produced by that invocation:

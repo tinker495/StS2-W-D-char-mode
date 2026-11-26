@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3]
+
+[ext_resource type="PackedScene" path="res://Sts2WD/scenes/rest_site/seated_character.tscn" id="1_seated"]
+[ext_resource type="Texture2D" path="res://Sts2WD/animations/erenil/rest/rest_master.png" id="2_rest"]
+[ext_resource type="Texture2D" path="res://Sts2WD/animations/erenil/rest/rest_cast_shadow.png" id="3_cast"]
+[ext_resource type="Texture2D" path="res://Sts2WD/animations/erenil/rest/rest_rim_highlight.png" id="4_rim"]
+
+[node name="ErenilRestSite" instance=ExtResource("1_seated")]
+
+[node name="Visuals" parent="ControlRoot" index="0"]
+position = Vector2(-160.485714, -322.142857)
+scale = Vector2(0.585714, 0.585714)
+
+[node name="Painting" parent="ControlRoot/Visuals" index="0"]
+texture = ExtResource("2_rest")
+
+[node name="CastShadow" parent="ControlRoot/Visuals" index="1"]
+texture = ExtResource("3_cast")
+
+[node name="RimHighlight" parent="ControlRoot/Visuals" index="2"]
+texture = ExtResource("4_rim")

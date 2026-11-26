@@ -8,7 +8,7 @@ Labels *user-confirmed*, *reference-observed* and *provisional* follow [the sour
 |---|---|
 | Base, visible character parts or canonical equipment | [Appearance and draft-base constraints](base-appearance.md) |
 | Character palette, surfaces or proportions | [Rendering and palette](base-rendering.md) |
-| Shared combat, merchant or rest standing | [Standing art](animation-standing.md#appearance) |
+| Standing and seated rest art | [Standing art](animation-standing.md#appearance) |
 | Portrait, outline, map marker or shared UI colors | [UI art](ui-art.md) |
 | Selection face tile or background action | [Selection art](selection-art.md) |
 | Crimson card-cost or inline energy symbol | [Energy art](ui-energy.md#appearance) |

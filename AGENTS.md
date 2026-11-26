@@ -37,7 +37,7 @@ Read the matching single source of truth before acting. Formatting, linting, and
 | Gameplay, model, UI, localization, or resource behavior | [Native StS2 integration](docs/conventions/native/features.md) (reuse native APIs first) |
 | Character types, paths, anatomical `_l`/`_r` rig names, or renames | [Character naming and layout](docs/conventions/characters/naming.md) |
 | Character or visual-owner guides | [Topic-based character guides](docs/conventions/documentation/character-guides.md) |
-| Art direction, artwork, image prompts, or packaged card texture inspection | [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) (open only the requested route), [ARTS.md](ARTS.md), and [character guides](docs/conventions/documentation/character-guides.md) |
+| Character artwork requests, including creating or applying rest-site illustrations (휴식 일러스트, 휴식처, 모닥불), art direction, image prompts, or packaged card texture inspection | [character-asset-pipeline](.agents/skills/character-asset-pipeline/SKILL.md) (open only the requested route), [ARTS.md](ARTS.md), and [character guides](docs/conventions/documentation/character-guides.md) |
 | Install package, PCK contents, `.import` texture compression tiers, or Release/Debug bundle | [Install package and PCK minimization](docs/conventions/packaging/install-package.md) |
 | GitHub issues, PRs, or CI queries (`gh` is off PATH) | [Issue tracker](docs/agents/issue-tracker.md) before the first `gh` call |
 | Issue classification or label changes | [Triage labels](docs/agents/triage-labels.md) |

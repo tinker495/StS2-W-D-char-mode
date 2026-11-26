@@ -15,7 +15,7 @@ PNG 경로는 `Sts2WD/images/charui/mercurius/`다.
 | `text_energy.png` | 24 × 24 RGBA | 위 풀의 `TextEnergyIconPath`; 같은 원본에서 축소 |
 | `char_select.png` | 132 × 195 불투명 | `CustomCharacterSelectIconPath`; 목도리 아래 상체 포함 |
 | `char_select_locked.png` | 132 × 195 불투명 | `CustomCharacterSelectLockedIconPath`; 일반 타일과 같은 알파 |
-| `combat.png` | 640 × 960 RGBA | 전투·휴식·상점 공용 전신 |
+| `combat.png` | 640 × 960 RGBA | 전투·상점 공용 전신 |
 | `char_select_bg.png` | 1920 × 1080 불투명 | `CustomCharacterSelectBg` |
 
 선택·잠금 타일은 전체 마스터를 `tile-pair`로 Fit하고 각각 `#254A53`·`#777777`에 합성한다. 전신은 [base.png](base.png) 전체의 비례 축소본이다. 에너지 이미지는 카드 비용·본문용이며, 전투의 큰 에너지 카운터는 네이티브 표시를 사용한다.
@@ -30,6 +30,8 @@ PNG 경로는 `Sts2WD/images/charui/mercurius/`다.
 | `CustomRestSiteAnimPath` | `rest_site.tscn` |
 | `CustomMerchantAnimPath` | `merchant.tscn` |
 | `CustomCharacterSelectBg` | `char_select_bg_mercurius.tscn` |
+
+휴식처에서는 [휴식 원화](/Sts2WD/animations/mercurius/rest/rest_master.png)에 막별 그림자와 불빛을 겹친다. 플루트를 허벅지에 비스듬히 걸치고 한 손은 무릎 위에 얹었다. 장화를 모아 뒤쪽 좌석을 비웠다.
 
 방별 스케일·접지선 오프셋·히트박스와 각 기준점은 해당 장면([combat.tscn](/Sts2WD/scenes/mercurius/combat.tscn)·[merchant.tscn](/Sts2WD/scenes/mercurius/merchant.tscn)·[rest_site.tscn](/Sts2WD/scenes/mercurius/rest_site.tscn))이 직접 정의하며, [방별 스케일 및 접지선 계약](/docs/research/sts2-cutout-runtime-contract.md#room-scale-and-ground-line-contract)의 표준 체형 기준을 따른다.
 

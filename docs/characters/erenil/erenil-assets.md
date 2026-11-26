@@ -5,7 +5,7 @@ This index records the current tracked runtime assets and model bindings for **E
 ## Model and Scene Status
 
 - The [standing master](base-art.md#delivery-and-integration) is available as a source for future in-game art.
-- [Erenil.cs](/Sts2WDCode/Characters/Erenil/Erenil.cs) subclasses `PlaceholderCharacterModel` with no custom scene overrides (`CustomVisualPath`, `CustomRestSiteAnimPath`, `CustomMerchantAnimPath`, `CustomCharacterSelectBg`) and no `CustomIconOutlineTexturePath` override yet.
+- [Erenil.cs](/Sts2WDCode/Characters/Erenil/Erenil.cs) subclasses `PlaceholderCharacterModel` and binds `CustomRestSiteAnimPath` to the [seated scene](/Sts2WD/scenes/erenil/rest_site.tscn). Its [seated painting](/Sts2WD/animations/erenil/rest/rest_master.png) shares a canvas with the cast-shadow and fire-rim masks. The other scenes and outline use the template bindings.
 - `ErenilCardPool`, `ErenilRelicPool`, and `ErenilPotionPool` currently contain no exclusive cards, relics, potions, or powers, and no custom card frame or portrait textures exist yet.
 
 ## Placeholder UI Textures

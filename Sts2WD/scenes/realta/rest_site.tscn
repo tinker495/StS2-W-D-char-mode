@@ -11,7 +11,7 @@
 [node name="ControlRoot" type="Control" parent="."]
 mouse_filter = 2
 
-[node name="Visuals" type="Node2D" parent="ControlRoot"]
+[node name="Visuals" type="Node2D" parent="ControlRoot" groups=["sts2wd_rest_lighting"]]
 position = Vector2(-85.21, -311.36)
 scale = Vector2(0.6038, 0.6038)
 script = ExtResource("1_rest")

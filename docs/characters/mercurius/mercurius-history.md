@@ -4,7 +4,7 @@
 
 [base.png](base.png) adopts warm ivory, cool navy, ochre-gold, and muted teal color harmony with natural non-chibi bard proportions. Outer transparent-margin trimming before proportional conversion to `1024 × 1536` was explicitly authorized for `base.png` alone so the standing figure fills the vertical canvas cleanly without altering painted pixels; later assets do not inherit this crop exception.
 
-Because `base.png` already stages planted boots, rightward attention, and connected transverse-flute hands on a transparent canvas, the complete painting is reused proportionally across combat, merchant, and rest scenes rather than generating separate standing paintings.
+Because `base.png` already stages planted boots, rightward attention, and connected transverse-flute hands on a transparent canvas, the complete painting is reused proportionally across combat and merchant scenes rather than generating separate standing paintings.
 
 ## Selection Tile and Illustration
 

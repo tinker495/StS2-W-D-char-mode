@@ -1,7 +1,7 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [Parameter(Mandatory = $true, Position = 0)]
-    [ValidateSet('inspect', 'preview', 'compare', 'export', 'export-card', 'check-cards', 'outline', 'official-poses', 'official-cards', 'observe-texture', 'tile-pair', 'ui-preview')]
+    [ValidateSet('inspect', 'preview', 'compare', 'export', 'export-card', 'check-cards', 'outline', 'official-rest', 'official-poses', 'official-cards', 'observe-texture', 'tile-pair', 'ui-preview')]
     [string]$Command,
 
     [string]$Path,
@@ -11,7 +11,7 @@ param(
     [string]$LockedTarget,
     [string]$BackgroundColor,
     [string]$LockedBackgroundColor,
-    [string]$LayoutPath = (Join-Path $PSScriptRoot 'character-select-layout.json'),
+    [string]$LayoutPath,
     # Retained as a compatibility no-op; inspect always returns a PSCustomObject.
     [switch]$AsObject,
     [int]$Width = 0,
@@ -36,6 +36,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+if (-not $PSBoundParameters.ContainsKey('LayoutPath')) { $LayoutPath = Join-Path $PSScriptRoot 'character-select-layout.json' }
 if ($Command -in @('official-cards', 'observe-texture')) {
     & (Join-Path $PSScriptRoot 'observe-textures.ps1') -Command $Command -CardIds $CardIds -PackPath $PackPath `
         -ResourcePath $ResourcePath -Source $Source -OutPath $OutPath -GodotPath $GodotPath -GamePath $GamePath
@@ -573,7 +574,8 @@ switch ($Command) {
         }
     }
 
-    'official-poses' {
+    { $_ -in @('official-poses', 'official-rest') } {
+        $renderer = if ($Command -eq 'official-rest') { 'render-official-rest.gd' } else { 'render-official-poses.gd' }
         if (-not $OutPath) { throw 'Specify -OutPath <directory> [-GodotPath <MegaDot console exe>] [-GamePath <Slay the Spire 2 folder>].' }
         if (-not $GodotPath -or -not $GamePath) {
             $projectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '../../../..'))
@@ -592,7 +594,7 @@ switch ($Command) {
             if (-not (Test-Path -LiteralPath $required)) { throw "Missing installed game file: $required" }
         }
         $resolvedOut = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($OutPath)
-        $hostProject = Join-Path $resolvedOut '_host'
+        $hostProject = Join-Path $resolvedOut ('_host-' + [guid]::NewGuid().ToString('N'))
         New-Item -ItemType Directory -Path $hostProject -Force | Out-Null
         $logs = @{ Engine = Join-Path $resolvedOut 'render.engine.log'; Out = Join-Path $resolvedOut 'render.stdout.log'; Err = Join-Path $resolvedOut 'render.stderr.log' }
         try {
@@ -601,10 +603,10 @@ switch ($Command) {
             [System.IO.File]::WriteAllText((Join-Path $hostProject 'project.godot'), "config_version=5`n")
             [System.IO.File]::WriteAllText((Join-Path $hostProject 'local_spine.gdextension'),
                 "[configuration]`nentry_symbol=`"spine_godot_library_init`"`ncompatibility_minimum=`"4.1`"`n[libraries]`nwindows.x86_64=`"$spinePath`"`n")
-            Copy-Item -LiteralPath (Join-Path $PSScriptRoot 'render-official-poses.gd') -Destination $hostProject -Force
+            Copy-Item -LiteralPath (Join-Path $PSScriptRoot $renderer) -Destination $hostProject -Force
             # Like dev.ps1, pass a fresh --log-file and redirect streams so engine stderr cannot abort PowerShell.
             $arguments = @('--log-file', "`"$($logs.Engine)`"", '--path', "`"$hostProject`"", '--rendering-method', 'gl_compatibility',
-                '--resolution', '64x64', '--position', '-10000,-10000', '--script', 'render-official-poses.gd', '--', "`"$pck`"", "`"$resolvedOut`"")
+                '--resolution', '64x64', '--position', '-10000,-10000', '--script', $renderer, '--', "`"$pck`"", "`"$resolvedOut`"")
             $process = Start-Process -FilePath $resolvedGodot -ArgumentList $arguments -WorkingDirectory $hostProject -WindowStyle Hidden -Wait -PassThru `
                 -RedirectStandardOutput $logs.Out -RedirectStandardError $logs.Err
             $output = @(Get-Content -LiteralPath $logs.Out -Encoding UTF8)
@@ -615,7 +617,10 @@ switch ($Command) {
                 throw "Official pose rendering failed (exit $($process.ExitCode)); see $($logs.Out), $($logs.Err) and $($logs.Engine)."
             }
         } finally {
-            Remove-Item -LiteralPath $hostProject -Recurse -Force -ErrorAction SilentlyContinue
+            $resolvedHost = (Resolve-Path -LiteralPath $hostProject).Path
+            if ([IO.Path]::GetDirectoryName($resolvedHost) -eq (Resolve-Path -LiteralPath $resolvedOut).Path) {
+                Remove-Item -LiteralPath $resolvedHost -Recurse -Force -ErrorAction SilentlyContinue
+            }
         }
     }
 }

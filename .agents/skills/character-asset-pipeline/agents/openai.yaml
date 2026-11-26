@@ -1,5 +1,5 @@
 interface:
   display_name: "Character Asset Pipeline"
-  short_description: "Build character base and game assets from refs"
+  short_description: "Route character artwork to specialist production skills"
 policy:
   allow_implicit_invocation: true

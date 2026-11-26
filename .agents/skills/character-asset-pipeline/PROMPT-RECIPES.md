@@ -4,13 +4,13 @@ Start with [SKILL.md](SKILL.md) and the selected route. Recipes live beside thei
 
 | Needed prompt | Authoritative recipe |
 |---|---|
-| New canonical standing base (1-A) | [Base route](base.md#1-a-refs--base-new-standing-master) |
-| Ancient/event painting or dialogue miniature | [Event route](event.md); build the prompt from the owner's event/UI contract |
+| New canonical standing base (1-A) | [Base route](/.agents/skills/character-art-base/SKILL.md#1-a-refs--base-new-standing-master) |
+| Ancient/event painting or dialogue miniature | [Event route](/.agents/skills/character-art-event/SKILL.md); build the prompt from the owner's event/UI contract |
 | Combat pose (1-C), chibi/UI/selection (3–4) | [UI route](ui.md) |
-| Relic (5) | [Relic route](relics.md#recipe-5-base--refs--relic-icon-branch-c-1) |
-| Power (6) | [Power route](powers.md#recipe-6-base--refs--power-emblem-branch-c-2) |
-| Standard/Ancient card (7–8) | [Card route](cards.md) |
-| Selected-image edit (1-B) or cleanup (2-A) | [Review route](review.md) |
+| Relic (5) | [Relic route](/.agents/skills/character-art-relic/SKILL.md#recipe-5-base--refs--relic-icon-branch-c-1) |
+| Power (6) | [Power route](/.agents/skills/character-art-power/SKILL.md#recipe-6-base--refs--power-emblem-branch-c-2) |
+| Standard/Ancient card (7–8) | [Card route](/.agents/skills/character-art-card/SKILL.md) |
+| Selected-image edit (1-B) or cleanup (2-A) | [Review route](/.agents/skills/character-art-review/SKILL.md) |
 | Rough/reference translation (1-D), source labels | [References](references.md) |
 ## Shared Input Slots
 

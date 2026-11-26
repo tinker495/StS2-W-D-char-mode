@@ -4,10 +4,8 @@
 
 ## 현재 로컬 설치
 
-- **소스:** `main` 브랜치(`d6daba6`, 아셀리게 블리츠·모디파이어 니오우 동등화 및 일러스트 전체화면 레이아웃 수정 반영본)
-- **적용 범위:** 아셀리게(`STS2WD-ASELIGE`) 블리츠 모드 단일 선택지(`정록의 인도` / `Verdant Guidance`) 및 `BlitzRunModel.GiveNeowRewards`·모디파이어 순차 실행(`SetEventFinished` 직접 종료로 `AncientChoices` 중복 방지), `AseligeLifeSource` 블리츠 제외 및 일반 런 생성 지도(`StandardActMap`·`SpoilsActMap`·`GoldenPathActMap`) 양성 허용 목록, `aselige.tscn` `KeepAspectCovered` + `±64 px` 오버스캔 및 `Aselige.ConfigureBackgroundScene` 정적 역변환 전체화면 보정, 한/영 블리츠 로컬라이제이션 3키 추가 및 기존 캐릭터 씬 스케일 표준화·3단 텍스처 압축·PCK 최소화 정책(`Release` 3파일 번들 `11.65 MB`, PCK `11.14 MB`, 491 entries, 누수·고아 0건) 포함
-- **설치 대상 및 검증:** `dev.ps1 deploy -ExecutionContextLabel local`로 Steam 설치 폴더의 `mods/Sts2WD/`에 `Release` 3파일(DLL·PCK·JSON manifest)을 설치했으며, 세 파일의 SHA-256이 배포 패키지와 일치함을 확인
-- **환경:** .NET SDK 9.0.318, MegaDot 4.5.1.m.14 (`4.5.1.m.14.mono.custom_build`), BaseLib 3.4.7
-- **확인 범위:** `dev.ps1 verify`(Python 정적 검증 5종), `dev.ps1 build`(Debug 경고 0·오류 0), `dev.ps1 deploy`(Release 경고 0·오류 0, MegaDot `--import`·PCK export, Stage 2 PCK 검사 통과·3파일 SHA-256 일치), MegaDot `--headless` `aselige.tscn` 4:3·16:10·16:9·21:9 전체화면 커버리지·±64 px 오버스캔 검증까지. 실제 게임 내 블리츠·모디파이어·일반 런 실행, 창 리사이즈, 화면 흔들림 육안 확인 및 BaseLib·Sts2WD 활성화 여부는 별도 수행 필요.
+- **소스**는 `main`의 `12cbcc0`에 알테아·메르쿠리우스·에레닐·레아르타의 휴식 장면 변경을 더한 작업본이다.
+- **설치 범위**는 네 캐릭터의 재생성 휴식 원화와 막별 조명 마스크, 레아르타의 새 눈꺼풀 패치, 휴식 장면 연결을 포함한 Release 모드다. 기존 모드를 백업한 뒤 Steam 게임 폴더의 `mods/Sts2WD`에 설치했다.
+- **확인 범위**는 정적 검사 5종, Release 빌드, MegaDot 리소스 가져오기와 PCK 내보내기, Stage 2 패키지 검사, 설치된 DLL·PCK·JSON의 SHA-256 일치까지다. 설치된 PCK에서 세 캐릭터의 네 지역·협동 배치와 레아르타의 눈 열림·감김·다시 열림을 렌더했다. 실제 플레이 세션에서의 확인은 별도다.
 
 현재 캐릭터별 리소스는 각 가이드에서 확인할 수 있다. [레아르타](characters/realta/realta-assets.md), [알테아](characters/althea/althea-assets.md), [메르쿠리우스](characters/mercurius/mercurius-assets.md), [에레닐](characters/erenil/erenil-assets.md), [아셀리게](characters/aselige/aselige-assets.md)

@@ -1,12 +1,19 @@
+---
+name: character-art-review
+description: Edit a selected character asset, clean its surfaces, compare variants or convert an approved painting for delivery.
+---
+
+Follow the [shared inputs, engine selection and delivery](/.agents/skills/character-asset-pipeline/SKILL.md#shared-production-contract) for the requested scope.
+
 # Branch D: Review, Cleanup, and Conversion
 
-Read the selected source and requested change, ARTS.md 1.3, 2.2 and 7.1, then [the shared review loop](workflow.md#default-generatereviewcorrect-loop). Read the active [engine section](engines.md) only when regenerating. Read character/asset sections only for visible features or the affected output contract; a local edit does not require a new production inventory. Comparison-only or conversion-only requests use [observation tools](observation-tools.md) and [conversion commands](scripts/conversion-tools.md) without image generation. Cards retain ARTS.md 5.5's exact geometry and full painted coverage.
+Read the selected source and requested change, ARTS.md 1.3, 2.2 and 7.1, then [the shared review loop](/.agents/skills/character-asset-pipeline/workflow.md#default-generatereviewcorrect-loop). Read the active [engine section](/.agents/skills/character-asset-pipeline/engines.md) only when regenerating. Read character/asset sections only for visible features or the affected output contract; a local edit does not require a new production inventory. Comparison-only or conversion-only requests use [observation tools](/.agents/skills/character-asset-pipeline/observation-tools.md) and [conversion commands](/.agents/skills/character-asset-pipeline/scripts/conversion-tools.md) without image generation. Cards retain ARTS.md 5.5's exact geometry and full painted coverage.
 
 For style/density review, open a same-use-case official image and compare equivalent displayed areas. For a local edit, preserve the selected source and add only references needed for its changed part.
 
-For a packaged texture, [`observe-texture`](scripts/card-observations.md) exports the complete image and reports dimensions, opacity and optional source-pixel equality. For fresh native card references, use `official-cards` in that guide. The reports are observations; review the pixels and the requested scope before delivery.
+For a packaged texture, [`observe-texture`](/.agents/skills/character-asset-pipeline/scripts/card-observations.md) exports the complete image and reports dimensions, opacity and optional source-pixel equality. For fresh native card references, use `official-cards` in that guide. The reports are observations; review the pixels and the requested scope before delivery.
 
-Use `inspect` and `preview` to examine the master and actual display size first. Use Recipe 1-B for selected-image edits, Recipe 1-D when applying a user-supplied rough/reference correction, Recipe 2-A for surface cleanup, and export/outline for delivery. For comparison-only requests, choose the `compare` mode in [observation tools](observation-tools.md) for the question being investigated.
+Use `inspect` and `preview` to examine the master and actual display size first. Use Recipe 1-B for selected-image edits, Recipe 1-D when applying a user-supplied rough/reference correction, Recipe 2-A for surface cleanup, and export/outline for delivery. For comparison-only requests, choose the `compare` mode in [observation tools](/.agents/skills/character-asset-pipeline/observation-tools.md) for the question being investigated.
 
 ### 1-B. Local Edits to a Selected Image
 
@@ -31,7 +38,7 @@ Preserve: <neighboring dimensions and identity/pose/scale/framing/materials that
 Output: the complete edited image in the same canvas and framing, preserving existing transparency.
 ```
 
-After generation, use the [default review loop](workflow.md#default-generatereviewcorrect-loop). Compare the selected source and result, checking the requested difference, depth/continuity, and preserved features. Correct clear defects within the bounded loop before the final recommendation; after unrelated drift, branch again from the selected source. Promotion follows the skill's existing approval scope.
+After generation, use the [default review loop](/.agents/skills/character-asset-pipeline/workflow.md#default-generatereviewcorrect-loop). Compare the selected source and result, checking the requested difference, depth/continuity, and preserved features. Correct clear defects within the bounded loop before the final recommendation; after unrelated drift, branch again from the selected source. Promotion follows the skill's existing approval scope.
 
 ## Recipe 2: Surface Passes
 

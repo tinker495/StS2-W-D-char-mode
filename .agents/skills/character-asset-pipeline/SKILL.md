@@ -1,24 +1,30 @@
 ---
 name: character-asset-pipeline
-description: Create, edit, review, or apply character artwork through focused base, UI/standing/selection, relic, power, and card routes with official StS2 image references.
+description: Orchestrate StS2 character artwork from references to in-game delivery. Use for asset sets, unclear or mixed art requests, and character illustrations such as 휴식 일러스트.
 ---
 
-# Character Asset Pipeline
+# Character art orchestration
 
-Choose one route before reading production details. Route files are ordinary reference documents beside this file and the shared workflow; open the selected file directly. Use the [bounded reading procedure](/docs/agents/workflow.md#read-within-an-output-budget), reusing material already read in the session.
+Select the specialist by the requested in-game use. For a set, identify its outputs first, establish any missing canonical identity once, then run only the matching specialists. Pass each the owner, approved reference, target scene and requested delivery scope. A complete player UI set spans standing, UI and selection. A campfire request starts with the rest specialist even when the current scene reuses standing art. Follow the rest specialist’s first-character comparison before producing a batch.
 
-| Request | Read next |
+| Requested output | Production skill |
 |---|---|
-| A: establish or replace a canonical standing base | [Base](base.md) |
-| Ancient/event painting, including its canonical base, or dialogue/history/map miniature | [Event art and miniatures](event.md); select the owner's native role before a standing or player-UI recipe |
-| B: portrait, map marker, energy, standing/combat, rest-site seated art, selection tile or scene | [UI, standing and selection](ui.md); only the requested output's subsection |
-| C-1: relic object or paired upgrade | [Relics](relics.md) |
-| C-2: power/status symbol | [Powers](powers.md) |
-| C-3: standard or Ancient card illustration | [Cards](cards.md); only the matching card recipe |
-| D: selected-image edit, cleanup, comparison or delivery conversion | [Review and conversion](review.md) |
-| Extract native card references or inspect a packaged texture | [Card observations](scripts/card-observations.md) |
+| Build or replace the canonical standing master of a playable StS2 character from identity references | [character-art-base](/.agents/skills/character-art-base/SKILL.md) |
+| Paint Ancient or event scenes and derive their dialogue, history and map miniatures | [character-art-event](/.agents/skills/character-art-event/SKILL.md) |
+| Produce standing, combat and merchant character sprites from an approved character base | [character-art-standing](/.agents/skills/character-art-standing/SKILL.md) |
+| Create, review or apply seated StS2 rest-site artwork (휴식 일러스트, 휴식처, 모닥불) | [character-art-rest](/.agents/skills/character-art-rest/SKILL.md) |
+| Produce character portraits, outlines, map markers and energy icons for the StS2 interface | [character-art-ui](/.agents/skills/character-art-ui/SKILL.md) |
+| Create normal and locked character-select tiles and full-screen selection illustrations | [character-art-selection](/.agents/skills/character-art-selection/SKILL.md) |
+| Paint a StS2 relic icon or a visually paired relic upgrade for the in-game relic bar | [character-art-relic](/.agents/skills/character-art-relic/SKILL.md) |
+| Paint a StS2 power or status icon that reads at buff-bar and tooltip sizes | [character-art-power](/.agents/skills/character-art-power/SKILL.md) |
+| Create a standard card portrait or an Ancient full-art card illustration for StS2 | [character-art-card](/.agents/skills/character-art-card/SKILL.md) |
+| Edit a selected character asset, clean its surfaces, compare variants or convert an approved painting for delivery | [character-art-review](/.agents/skills/character-art-review/SKILL.md) |
 
-Read the selected route and the applicable sections of [the shared workflow](workflow.md). During generation, read the active harness's section in [engines.md](engines.md); a supplied rough or motif also requires [reference roles and landmarks](references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). Read delivery records only when applying or finishing an asset. Do not load unrelated routes, all prompt recipes, or every character subsection.
+For extraction or packaged-texture inspection alone, use [card observations](scripts/card-observations.md). For requested installation, complete the delivery records and hand the applied assets to [build-install](/.agents/skills/build-install/SKILL.md).
+
+## Shared production contract
+
+Read the applicable sections of [the shared workflow](workflow.md). During generation, read the active harness's section in [engines.md](engines.md); a supplied rough or motif also requires [reference roles and landmarks](references.md#1-d-rough-sketch-or-reference-image--finished-asset-refs-or-draftsguidepng). Read delivery records only when applying or finishing an asset. Do not load unrelated routes, all prompt recipes, or every character subsection.
 
 ## Find the target facts
 

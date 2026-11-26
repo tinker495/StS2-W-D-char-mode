@@ -50,6 +50,7 @@ public class Erenil : PlaceholderCharacterModel
             return icon;
         }
     }
+    public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/erenil/rest_site.tscn";
     public override string CustomIconTexturePath => "erenil/character_icon.png".CharacterUiPath();
     public override string CustomCharacterSelectIconPath => "erenil/char_select.png".CharacterUiPath();
     public override string CustomCharacterSelectLockedIconPath => "erenil/char_select_locked.png".CharacterUiPath();

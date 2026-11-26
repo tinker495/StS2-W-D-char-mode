@@ -4,7 +4,7 @@
 
 [base.png](base.png) was chosen for its clean 2D rendering, natural young-adult proportions, and bright silver-and-ivory palette rather than darker, stockier native builds. The direct bust reference establishes facial identity and costume, while native combat references guide camera angle, grounding, and rendering density.
 
-Because `base.png` already holds an active right-facing three-quarter combat stance with the sword drawn and the far eye visible toward the enemy, it is reused directly across combat, merchant, and rest scenes via whole-image Fit instead of generating separate standing paintings. See [art direction](althea-art.md) and [standing delivery](animation-standing.md#delivery-and-integration).
+Because `base.png` already holds an active right-facing three-quarter combat stance with the sword drawn and the far eye visible toward the enemy, it is reused directly across combat and merchant scenes via whole-image Fit instead of generating separate standing paintings. See [art direction](althea-art.md) and [standing delivery](animation-standing.md#delivery-and-integration).
 
 ## Selection and UI
 

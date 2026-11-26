@@ -10,7 +10,8 @@ The approved [base](base.png) owns identity, palette and equipment. The user sel
 | Energy | Ochre-gold circular rim, deep teal inset and small leaf-like outer notch; quiet number area. Both sizes share one master. |
 | Selection tile | Non-chibi close view, slightly low camera, left-facing three-quarter, raised chin, small smile and calm eyes. Navy shoulders and restrained ivory chest connect beneath the mustard scarf to the bottom edge. |
 | Locked tile | Same resized alpha as the normal tile; black figure on gray, no independent generation. |
-| Standing | Whole approved base resized proportionally for shared combat/rest/merchant use. |
+| Standing | Whole approved base resized proportionally for combat and merchant use. |
+| Rest | The flute rests diagonally across the thighs. One hand holds the tube while the other rests loosely on a knee. The boots stay together to leave the rear seat clear. |
 
 Keep slightly lowered upper lids and relaxed eyebrows, without a sleepy or sad expression. The tile's hat/feather frame exits are intentional; preserve the face and camera when editing clothing. Normal background is `#254A53`, locked background `#777777`.
 
