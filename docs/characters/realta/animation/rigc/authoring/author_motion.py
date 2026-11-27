@@ -56,7 +56,12 @@ class Performance:
         self.lead_sole_depth = max(self.lead_sole[:, 1])
         self.rig = canvas.build(images)
         self.slots = [item["name"] for item in self.rig["slots"]]
-        self.rig["events"] = {"attack_hit": {}, "cast_release": {}, "weapon_release": {}}
+        self.rig["events"] = {
+            "attack_hit": {},
+            "guard_brace": {},
+            "cast_release": {},
+            "weapon_release": {},
+        }
 
     def planted(self, pose, right=0.0, left=0.0):
         for side, shift in (("r", right), ("l", left)):
@@ -350,6 +355,52 @@ class Performance:
         self.planted(p)
         self.grip(p,k["gx"],k["gy"],k["hand"],k["shaft"])
         self.follow(p, self.hurt_phrase, t, k, "lean", "shaft")
+        return p
+
+    guard_phrase = Phrasing(
+        [0, .055, .12, .18, .24, .34, .48, .61, .72],
+        dx=   [0,   -6, -15, -18, -22, -16,  -8,  -1,   0],
+        down= [0,    8,  21,  28,  30,  24,  11,   2,   0],
+        lean= [0, -2.5,-6.8,-9.5,-8.2,-6.5,-2.8,-0.4,   0],
+        head= [0,  1.8, 4.5, 6.2, 5.6, 4.2, 1.8, 0.2,   0],
+        gx=   [0,   28,  78, 106, 100,  92,  44,   6,   0],
+        gy=   [0,  -16, -38, -48, -45, -40, -18,  -2,   0],
+        shaft=[0,  -10, -26, -35, -33, -30, -14,  -1,   0],
+        hand= [0,   -7, -18, -24, -22, -20,  -9,  -1,   0],
+        fx=   [0,  -18, -52, -74, -70, -62, -26,  -3,   0],
+        fy=   [0,  -52,-148,-212,-206,-186, -78,  -8,   0],
+        palm= [0,   16,  44,  62,  58,  52,  22,   2,   0],
+    )
+
+    guard_ward_phrase = Phrasing(
+        [0, .07, .14, .18, .24, .34, .48, .72],
+        sx=       [.18, .22, .38, .44, .46, .45, .48, .48],
+        sy=       [.36, .44, .74, .86, .88, .86, .92, .92],
+        inner_rot=[0,     0, -28, -52, -74,-108,-148,-148],
+        core_s=   [.45, .52, .92, 1.12,1.02, .84, .48, .48],
+        core_rot= [0,     0,  10,  20,  28,  40,  52,  52],
+    )
+
+    def guard(self, t):
+        k = self.guard_phrase.at(t)
+        w = self.guard_ward_phrase.at(t)
+        p = Pose(self.canvas)
+        p.moves["pelvis"] = (k["dx"], k["down"])
+        p.angles.update(pelvis=.22 * k["lean"], chest=.78 * k["lean"], head=k["head"])
+        brace = smooth(t / .15) * (1 - smooth((t - .42) / .26))
+        self.planted(p, right=-8.0 * brace, left=18.0 * brace)
+        self.grip(p, k["gx"], k["gy"], k["hand"], k["shaft"])
+        self.free_hand(p, k["fx"], k["fy"], k["palm"])
+        self.follow(p, self.guard_phrase, t, k, "lean", "shaft")
+        seat_cuffs(p, 0.55 * brace)
+        ward_anchor = p.transform("chest", (835, 760))
+        p.place("sigil_root", ward_anchor)
+        p.angles["sigil_root"] = -4.0
+        p.scales["sigil_root"] = (w["sx"], w["sy"])
+        p.angles["sigil_inner"] = w["inner_rot"]
+        p.scales["sigil_inner"] = (1.0, 1.0)
+        p.angles["sigil_core"] = w["core_rot"]
+        p.scales["sigil_core"] = (w["core_s"], w["core_s"])
         return p
 
     cast_phrase = Phrasing(
@@ -791,7 +842,7 @@ class Performance:
         def solved(name, duration, maker, beats, extra_tracks, *, loop=False, draw=None, cues=None):
             # Both feet and palms have fixed contacts through a fast waist turn.
             # Resolve that counter-rotation before simplifying the linear keys.
-            rate = {"attack":192, "cast":96, "die":96, "revive":96}.get(name,60)
+            rate = {"attack": 192, "guard": 96, "cast": 96, "die": 96}.get(name, 60)
             times = sample_times(duration, rate, beats)
             piece = {"duration":duration,"loop":loop,
                      "tracks": bake(times,[self.articulate_pauldrons(support_garment(maker(t))) for t in times],beats) + extra_tracks}
@@ -800,7 +851,16 @@ class Performance:
             if cues:
                 piece["events"] = [{"t":t,"name":n} for t,n in cues]
             clips[name] = piece
-        solved("idle_loop",2.6,self.idle,[1.3],face([(0,"neutral"),(1.84,"closed"),(1.975,"neutral")],[(0,"neutral")]),loop=True)
+        # Track 0 idle_loop owns upright breathing; Track 1 blink_loop owns asynchronous blinking.
+        solved("idle_loop", 2.6, self.idle, [1.3], face([(0, "neutral")], [(0, "neutral")]), loop=True)
+        clips["blink_loop"] = {
+            "duration": 3.6,
+            "loop": True,
+            "tracks": [
+                channel("eye_r", "attachment", [(0, "neutral"), (1.84, "closed"), (1.975, "neutral"), (3.6, "neutral")], slot=True),
+                channel("eye_l", "attachment", [(0, "neutral"), (1.84, "closed"), (1.975, "neutral"), (3.6, "neutral")], slot=True),
+            ],
+        }
         thrust_tracks = [
             channel("thrust_streak", "attachment", [(0, None), (.468, "thrust_streak"), (.654, None)], slot=True),
             channel("thrust_streak", "alpha", [(0, [0]), (.468, [0]), (.492, [.78]), (.518, [.96]), (.548, [.94]), (.588, [.52]), (.650, [0]), (1.05, [0])], slot=True),
@@ -817,6 +877,21 @@ class Performance:
                      {"t":self.attack_catch,"offsets":caught_offsets},
                      {"t":self.attack_release,"offsets":grasp_offsets},{"t":.895,"offsets":ready_offsets}],
                cues=[(self.attack_hit,"attack_hit")])
+        guard_ward_tracks = [
+            channel("sigil_inner", "attachment", [(0, None), (.07, "sigil_inner"), (.50, None)], slot=True),
+            channel("sigil_inner", "alpha", [(0, [0]), (.07, [0]), (.14, [.52]), (.18, [.72]), (.34, [.55]), (.48, [0]), (.72, [0])], slot=True),
+            channel("sigil_core", "attachment", [(0, None), (.09, "sigil_core"), (.46, None)], slot=True),
+            channel("sigil_core", "alpha", [(0, [0]), (.09, [0]), (.15, [.58]), (.18, [.78]), (.32, [.48]), (.45, [0]), (.72, [0])], slot=True),
+        ]
+        solved("guard", .72, self.guard, [*self.guard_phrase.times, *self.guard_ward_phrase.times, .50],
+               face([(0, "neutral"), (.06, "attack"), (.54, "neutral")], [(0, "neutral"), (.06, "closed"), (.54, "neutral")])
+               + guard_ward_tracks + [
+                   channel("forearm_r", "attachment", [(0, "grasp")], slot=True),
+                   channel("forearm_l", "attachment", [(0, "grasp")], slot=True),
+                   channel("hand_l", "attachment", [(0, "hand_l"), (.09, "casting"), (.54, "hand_l")], slot=True),
+               ],
+               draw=[{"t": 0, "offsets": ready_offsets}, {"t": .06, "offsets": grasp_offsets}, {"t": .58, "offsets": ready_offsets}],
+               cues=[(.18, "guard_brace")])
         solved("hurt",.8,self.hurt,self.hurt_phrase.times,face([(0,"neutral"),(.035,"hurt"),(.48,"neutral")]))
         sigil_tracks = [
             channel("sigil_outer", "attachment", [(0, None), (.09, "sigil_outer"), (.92, None)], slot=True),
@@ -842,23 +917,6 @@ class Performance:
                            *((time, name) for time, name, _, _ in GLOVE_ROLL), (1.34, "ground")], slot=True)], draw=[
                    {"t":0,"offsets":held_offsets}, {"t":.12,"offsets":fallen_offsets}],
                cues=[(.12,"weapon_release")])
-        fallen = self.die(2.2)
-        def revive(t):
-            # The posture changes inside the fully transparent interval.
-            return fallen if t < .2 else self.idle(0)
-        # Every setup-visible body slot carries the same fade envelope in Spine;
-        # Godot collapses that uniform body fade onto a single CanvasGroup alpha track
-        # so armor, coat, and limbs never bleed through each other while translucent.
-        body_fade = [(0, [1]), (.17, [0]), (.225, [0]), (.4, [1])]
-        fading = [
-            *face([(0, "fallen"), (.2, "neutral")]),
-            channel("hand_r", "attachment", [(0, "ground"), (.2, "hand_r")], slot=True),
-        ]
-        for slot in self.rig["slots"]:
-            if slot["attachment"] is not None:
-                fading.append(channel(slot["name"], "alpha", body_fade, slot=True))
-        solved("revive",.4,revive,[.17,.185,.199,.2,.225],fading,
-               draw=[{"t":0,"offsets":fallen_offsets},{"t":.2}])
         return clips
 
 

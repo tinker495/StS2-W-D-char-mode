@@ -4,7 +4,7 @@ param(
     [ValidateSet('hooks', 'doctor', 'restore', 'import', 'verify', 'build', 'check', 'rebase', 'anim', 'card-tests', 'api', 'api-tests', 'observe', 'publish', 'deploy', 'editor')]
     [string]$Task = 'build',
     [Parameter(Position=1)]
-    [ValidateSet('all', 'idle', 'idle_loop', 'attack', 'hurt', 'cast', 'powerup', 'die', 'relaxed', 'relaxed_loop', 'revive')]
+    [ValidateSet('all', 'idle', 'idle_loop', 'blink_loop', 'attack', 'guard', 'hurt', 'cast', 'powerup', 'die', 'relaxed', 'relaxed_loop')]
     [string]$Clip = 'attack',
     [ValidateSet('Debug', 'Release')]
     [string]$Configuration = 'Debug',
@@ -174,7 +174,7 @@ function Invoke-RigChecks([string]$GodotExecutable, [string]$LogDirectory) {
 # Human requester: wjdrb, 2026-11-22, retrospective item 1: gate the `anim`
 # source-build workflow with `rigc render --folds` at 24 fps so mesh folds
 # fail on the compiled rig-c output before baking into runtime assets.
-function Invoke-RigFoldCheck([string]$CompiledDirectory, [string]$LogDirectory, [string]$RequestedClip, [string]$RequestedVariant) {
+function Invoke-RigFoldCheck([string]$CompiledDirectory, [string]$LogDirectory, [string]$RequestedClip, [string]$RequestedVariant, [string]$FoldLabelPrefix = 'folds-') {
     $buildDir = Join-Path $CompiledDirectory 'build'
     $modelPath = Join-Path $buildDir 'skeleton.model.json'
     if (-not (Test-Path -LiteralPath $modelPath -PathType Leaf)) {
@@ -226,8 +226,8 @@ function Invoke-RigFoldCheck([string]$CompiledDirectory, [string]$LogDirectory, 
     $rigWrapper = Join-Path $projectRoot '.tools/rig-c/setup/run.ps1'
 
     foreach ($targetClip in $targetClips) {
-        $foldOut = Join-Path $LogDirectory ('folds-' + $targetClip)
-        $logPrefix = Join-Path $LogDirectory ('folds-' + $targetClip)
+        $foldOut = Join-Path $LogDirectory ($FoldLabelPrefix + $targetClip)
+        $logPrefix = Join-Path $LogDirectory ($FoldLabelPrefix + $targetClip)
         $rigArgs = @(
             'rigc', 'render',
             '--candidate', $buildDir,
@@ -237,7 +237,7 @@ function Invoke-RigFoldCheck([string]$CompiledDirectory, [string]$LogDirectory, 
             '--folds',
             '--out', $foldOut
         )
-        if ($hasPhysics -and $targetClip.EndsWith('_loop', [StringComparison]::Ordinal)) {
+        if ($hasPhysics -and ($targetClip.EndsWith('_loop', [StringComparison]::Ordinal) -or $targetClip -ceq 'animation')) {
             $rigArgs += @('--preroll', '1')
         }
         # Invoke through -Command with single-quoted literals because powershell.exe -File
@@ -274,7 +274,14 @@ function Invoke-RigFoldCheck([string]$CompiledDirectory, [string]$LogDirectory, 
         if ($foldedDetails.Count -gt 0) {
             throw "Mesh fold detected in clip '$targetClip': $($foldedDetails -join '; '). Inspect $foldsPath and $logPrefix.*.log"
         }
-        Write-Host "PASS: Realta mesh folds ($($targetClip): 0/$($meshes.Count) meshes folded at 24 fps)"
+        Write-Host "PASS: Realta mesh folds ($($FoldLabelPrefix.TrimEnd('-'))/$($targetClip): 0/$($meshes.Count) meshes folded at 24 fps)"
+    }
+
+    if ($RequestedClip -eq 'all' -and $FoldLabelPrefix -eq 'folds-') {
+        $selectCompiled = Join-Path $CompiledDirectory 'select'
+        if (Test-Path -LiteralPath (Join-Path $selectCompiled 'build/skeleton.model.json') -PathType Leaf) {
+            Invoke-RigFoldCheck $selectCompiled $LogDirectory 'all' $RequestedVariant 'folds-select-'
+        }
     }
 }
 
@@ -351,12 +358,13 @@ try {
         }
         New-Item -ItemType File -Path (Join-Path $animationOutput '.gdignore') -Force | Out-Null
         Write-Host "Animation output: $animationOutput"
+        $spineRuntime = Get-SpineRuntimeExecutable $paths.Sts2Path
         $renderProject = $projectRoot
         $renderScript = Join-Path $animationTools 'render_clip.gd'
         if ($PackagePath) {
             $renderProject = Join-Path $animationOutput 'package-host'
             New-Item -ItemType Directory -Path $renderProject | Out-Null
-            [System.IO.File]::WriteAllText((Join-Path $renderProject 'project.godot'), "config_version=5`n")
+            [System.IO.File]::WriteAllText((Join-Path $renderProject 'project.godot'), "config_version=5`n`n[rendering]`n`ntextures/vram_compression/import_s3tc_bptc=true`n")
             Copy-Item -LiteralPath $renderScript -Destination (Join-Path $renderProject 'render_clip.gd')
             $renderScript = Join-Path $renderProject 'render_clip.gd'
         } else {
@@ -372,16 +380,20 @@ try {
                 $compiled, (Join-Path $projectRoot 'Sts2WD/animations/realta/combat')) (Join-Path $animationOutput 'bake')
             Invoke-AnimationProcess $paths.GodotPath @('--headless', '--editor', '--path', $projectRoot, '--import', '--quit') `
                 (Join-Path $animationOutput 'import') -Engine
-            Invoke-RigChecks $paths.GodotPath $animationOutput
+            Invoke-WithLocalSpineExtension -TargetProjectDir $projectRoot -Sts2Path $paths.Sts2Path -Action {
+                Invoke-RigChecks $spineRuntime $animationOutput
+            }
         }
         $frames = Join-Path $animationOutput 'frames'
         $variants = if ($Variant -eq 'both') { @('combat', 'merchant') } else { @($Variant) }
-        foreach ($renderVariant in $variants) {
-            $renderArguments = @('--path', $renderProject, '--rendering-method', 'gl_compatibility',
-                '--resolution', '640x420', '--position', '-10000,-10000', '--script', $renderScript,
-                '--', $renderVariant, $Clip, $frames)
-            if ($PackagePath) { $renderArguments += $PackagePath }
-            Invoke-AnimationProcess $paths.GodotPath $renderArguments (Join-Path $animationOutput ('render-' + $renderVariant)) 'CAPTURE_COMPLETE' -Engine
+        Invoke-WithLocalSpineExtension -TargetProjectDir $renderProject -Sts2Path $paths.Sts2Path -Action {
+            foreach ($renderVariant in $variants) {
+                $renderArguments = @('--path', $renderProject, '--rendering-method', 'gl_compatibility',
+                    '--resolution', '640x420', '--position', '-10000,-10000', '--script', $renderScript,
+                    '--', $renderVariant, $Clip, $frames)
+                if ($PackagePath) { $renderArguments += $PackagePath }
+                Invoke-AnimationProcess $spineRuntime $renderArguments (Join-Path $animationOutput ('render-' + $renderVariant)) 'CAPTURE_COMPLETE' -Engine
+            }
         }
         $reviewArguments = @('-X', 'utf8', '-B', (Join-Path $animationTools 'review_frames.py'), $frames, (Join-Path $animationOutput 'review'))
         if ($Baseline) { $reviewArguments += @('--baseline', $Baseline) }

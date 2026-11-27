@@ -62,6 +62,11 @@ Create PR-only screenshots, comparison renders, evidence notes, and one-off rend
 
 Before staging, confirm that each PR-only output is ignored with `git check-ignore -- <path>` and that `git ls-files -- <path>` returns no entries. Stage explicit product and documentation paths. For human-facing procedures, see [development tools](/docs/development-tools.md#pr-자료-보관).
 
+## Toolchain and Pipeline Updates
+
+- **Mandatory artifact refresh:** Whenever an authoring, compilation, or verification tool (such as the local `rig-c` packages or conversion scripts) is updated, sync bundled agent skills where applicable (`rigc skills install --copy`) and rebuild all existing tracked outputs produced by that tool (`dev.ps1 anim`, `--sync-params`, `dev.ps1 import`) in the same change before running verification.
+- **No permanent legacy islands:** When the repository adopts a new standard asset or runtime pipeline (such as [ADR-0008](/docs/adr/0008-native-spine-rigs-and-artifact-refresh.md)'s native `SpineSprite` target), migrate existing characters alongside or ahead of new character rollouts through explicit dependency-ordered issues rather than leaving earlier characters permanently on a superseded pipeline.
+
 ## Rebase and Verify
 
 For a rebase request, inspect the branch and working tree, then fetch the requested remote target. Start with `dev.ps1 rebase -Upstream <target>` from the repository root; the default target is `origin/main`. Git requires a clean working tree. Preserve user changes and follow the session's existing authority for committing or stashing them.

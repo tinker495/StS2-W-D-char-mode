@@ -153,12 +153,8 @@ func apply_pose() -> void:
 		q.x += coat_hem * hem_x * hem_y
 		vertices[i] = q
 
-	var base_color := act_tint if fire_light else Color(
-		act_tint.r * SeatedIllustration.LIGHT_OFF_DIM,
-		act_tint.g * SeatedIllustration.LIGHT_OFF_DIM,
-		act_tint.b * SeatedIllustration.LIGHT_OFF_DIM,
-		1.0
-	)
+	var wave := SeatedIllustration.sample_fire_wave() if fire_light else 0.0
+	var base_color := SeatedIllustration.resolve_base_tint(act_tint, fire_light, wave)
 	mesh_art.polygon = vertices
 	mesh_art.color = base_color
 	eyes.polygon = vertices
@@ -169,5 +165,5 @@ func apply_pose() -> void:
 		cast_layer.color = Color(1.0, 1.0, 1.0, SeatedIllustration.CAST_SHADOW_ALPHA)
 	if rim_layer != null:
 		rim_layer.polygon = vertices
-		rim_layer.color = act_rim
+		rim_layer.color = SeatedIllustration.resolve_rim_color(act_rim, wave)
 		rim_layer.visible = fire_light

@@ -24,9 +24,11 @@ Use the first form for a single foreground review and the second for a direct ba
 - Use `Out-File -Encoding utf8` for UTF-8 logs. Windows PowerShell 5.1 writes UTF-16LE with `>`.
 - Prefer `rigc guide <RULE_CODE>`. For a section lookup in a PowerShell 5.1 script, form the argument with `([string][char]0x00A7 + '4.4')` so the section sign survives script decoding.
 
-## Source Preflight
+## Source Preflight and `@rig-c/parts` Parting
 
 Before parting a flat PNG, run `python scripts/inspect_rigc_source.py <source.png> --opaque-alpha <cutoff>` with the same 8-bit-scale cutoff the planned source comparison uses. The tool reports the alpha distribution and the comparison pixel count, then exits nonzero if that count is zero. Use the actual distribution to choose the cutoff for that painting. Pillow and NumPy are required. For 16-bit PNGs also install OpenCV.
+
+Preserve visible source pixels through deterministic layer decomposition and `@rig-c/parts` (`& $rig rig-parts ...`) rather than redrawing whole parts from scratch with an image generator; use image generation only to inpaint occluded joint ends, backings, and alternate hand/expression states. Per [ADR-0008](/docs/adr/0008-native-spine-rigs-and-artifact-refresh.md), `rig-c` (`4.3` assertions and 24 fps `--folds` verification) serves as the authoring gate for native `SpineSprite` (`4.2` `.spjson` + `.spatlas` + `SpineSkeletonDataResource`) targets across `combat`, `merchant`, and `char_select_bg`, and any update to the local `rig-c` packages requires syncing `.agents/skills/` via `rigc skills install --copy` and rebuilding tracked rig outputs in the repository.
 
 ## Loose Parts and First Motion
 

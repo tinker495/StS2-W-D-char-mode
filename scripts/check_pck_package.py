@@ -4,6 +4,9 @@
 # PCK leak gate (prefix allowlist, Sts2WD extension/subpath rules, 1:1 imported
 # provenance, Release/Debug sibling bundle checks) and non-blocking size/format
 # reporting to dev.ps1 publish and deploy.
+# Human requester: KyuSeok Jung (wjdrb), 2026-11-27 (GitHub Issue #46 / Q6=A):
+# authorize native Spine 4.2 runtime skeleton/atlas extensions (.spjson, .spatlas)
+# under Sts2WD/ in exported PCK packages.
 
 import argparse
 import json
@@ -31,7 +34,18 @@ PACK_REL_FILEBASE = 1 << 1
 PACK_SPARSE_BUNDLE = 1 << 2
 PACK_FILE_ENCRYPTED = 1 << 0
 
-ALLOWED_STS2WD_EXTS = {".import", ".remap", ".gdc", ".gd", ".gdshader", ".tscn", ".tres", ".uid"}
+ALLOWED_STS2WD_EXTS = {
+    ".import",
+    ".remap",
+    ".gdc",
+    ".gd",
+    ".gdshader",
+    ".tscn",
+    ".tres",
+    ".uid",
+    ".spjson",
+    ".spatlas",
+}
 ALLOWED_STS2WD_EXACT = {"Sts2WD/mod_image.png"}
 ALLOWED_JSON_PREFIXES = ("Sts2WD/localization/", "Sts2WD/character_text/")
 

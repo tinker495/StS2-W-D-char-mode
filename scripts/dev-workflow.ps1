@@ -33,6 +33,38 @@ function Get-DevelopmentIlSpy([string]$ProjectRoot) {
     throw 'Install ilspycmd on PATH or supply -IlSpyPath. See docs/development-tools.md.'
 }
 
+function Get-SpineRuntimeExecutable([string]$Sts2Path) {
+    if (-not $Sts2Path) { throw 'Sts2Path is required to resolve SlayTheSpire2.exe for SpineSprite runtime execution.' }
+    $exe = Join-Path $Sts2Path 'SlayTheSpire2.exe'
+    if (-not (Test-Path -LiteralPath $exe -PathType Leaf)) {
+        throw "Missing SlayTheSpire2.exe for SpineSprite runtime execution: $exe"
+    }
+    return $exe
+}
+
+function Invoke-WithLocalSpineExtension {
+    param(
+        [Parameter(Mandatory)][string]$TargetProjectDir,
+        [Parameter(Mandatory)][string]$Sts2Path,
+        [Parameter(Mandatory)][scriptblock]$Action
+    )
+    $dll = (Join-Path $Sts2Path 'libspine_godot.windows.template_release.x86_64.dll') -replace '\\', '/'
+    if (-not (Test-Path -LiteralPath $dll -PathType Leaf)) {
+        throw "Missing libspine_godot runtime DLL: $dll"
+    }
+    $extPath = Join-Path $TargetProjectDir 'local_spine.gdextension'
+    $created = -not (Test-Path -LiteralPath $extPath -PathType Leaf)
+    $content = "[configuration]`nentry_symbol = `"spine_godot_library_init`"`ncompatibility_minimum = `"4.1`"`n`n[libraries]`nwindows.debug.x86_64 = `"$dll`"`nwindows.release.x86_64 = `"$dll`"`n"
+    [System.IO.File]::WriteAllText($extPath, $content, [System.Text.UTF8Encoding]::new($false))
+    try {
+        & $Action
+    } finally {
+        if ($created -and (Test-Path -LiteralPath $extPath -PathType Leaf)) {
+            Remove-Item -LiteralPath $extPath -Force
+        }
+    }
+}
+
 function Write-RecordedLogExcerpt {
     param([string]$LogPath, [switch]$IncludeTail)
 

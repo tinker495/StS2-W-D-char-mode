@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "@rig-c/core": "3.8.1",
-    "@rig-c/create": "1.23.3",
-    "@rig-c/parts": "2.54.0",
+    "@rig-c/core": "3.11.0",
+    "@rig-c/create": "1.26.0",
+    "@rig-c/parts": "2.63.0",
     "@rig-c/phaser": "0.2.0",
     "@rig-c/pixi": "0.2.0",
-    "@rig-c/play": "1.24.0",
+    "@rig-c/play": "1.27.0",
     "@rig-c/pose": "1.7.0",
-    "@rig-c/review": "4.18.3",
+    "@rig-c/review": "4.24.0",
     "@rig-c/three": "0.2.0",
     "bun": "1.4.5"
   },

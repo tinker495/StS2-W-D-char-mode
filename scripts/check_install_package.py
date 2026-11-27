@@ -5,8 +5,12 @@
 # source resolution ceilings, non-runtime .gdignore/export_presets.cfg/project.godot
 # boundary checks, non-PNG raster ban, and Sts2WD texture reachability) in local
 # verify/build/check/publish/deploy and GitHub Actions CI.
+# Human requester: KyuSeok Jung (wjdrb), 2026-11-27 (GitHub Issue #46 / Q6=A):
+# enforce native Spine 4.2 include/exclude export filters, .spjson/.spatlas
+# reachability, and .spatlas page PNG reachability under Sts2WD/.
 
 import argparse
+import json
 from pathlib import Path
 import re
 import struct
@@ -26,6 +30,11 @@ PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
 NON_PNG_RASTER_EXTS = {".jpg", ".jpeg", ".webp", ".svg", ".bmp", ".tga"}
 LOSSY_QUALITY_TARGET = 0.85
 LOSSY_QUALITY_EPS = 1e-4
+
+REQUIRED_INCLUDE_TOKENS = {
+    "Sts2WD/animations/**/*.spjson",
+    "Sts2WD/animations/**/*.spatlas",
+}
 
 REQUIRED_EXCLUDE_TOKENS = {
     "Sts2WDCode/*",
@@ -57,6 +66,7 @@ REQUIRED_EXCLUDE_TOKENS = {
     "*.sh",
     "*.md",
     "*.txt",
+    "*.gdextension",
 }
 
 METADATA_VRAM_RE = re.compile(r'"vram_texture"\s*:\s*(true|false)')
@@ -539,6 +549,13 @@ def check_boundary_and_project_config(root, tracked_set):
                 violations.append(
                     f"export_presets.cfg: preset.0 export_filter must be 'all_resources' (got {p0.get('export_filter')!r})."
                 )
+            incl_raw = unquote_godot_string(p0.get("include_filter", ""))
+            incl_tokens = {tok.strip() for tok in incl_raw.split(",") if tok.strip()}
+            missing_incl = sorted(REQUIRED_INCLUDE_TOKENS - incl_tokens)
+            if missing_incl:
+                violations.append(
+                    f"export_presets.cfg: include_filter missing required token(s): {', '.join(missing_incl)}"
+                )
             excl_raw = unquote_godot_string(p0.get("exclude_filter", ""))
             excl_tokens = {tok.strip() for tok in excl_raw.split(",") if tok.strip()}
             missing_tokens = sorted(REQUIRED_EXCLUDE_TOKENS - excl_tokens)
@@ -888,6 +905,36 @@ def check_texture_reachability(root, tracked_set, tracked_pngs):
             if "Characters." in ns:
                 char_seg = ns.split("Characters.", 1)[1].split(".", 1)[0].lower()
                 refs.add(f"sts2wd/images/card_portraits/{char_seg}/{slug}.png")
+
+    # Validate Spine 4.2 .spjson/.spatlas reachability and resolve .spatlas page PNGs.
+    spine_files = [
+        rel
+        for rel in sorted(tracked_set)
+        if rel.startswith("Sts2WD/") and Path(rel).suffix.lower() in {".spatlas", ".spjson"}
+    ]
+    for rel in spine_files:
+        if rel.lower() not in refs:
+            violations.append(f"{rel}: unreferenced Spine runtime asset (no C#, scene, or resource reference).")
+            continue
+        if rel.lower().endswith(".spatlas"):
+            try:
+                spatlas_obj = json.loads((root / rel).read_text(encoding="utf-8-sig"))
+                atlas_data = str(spatlas_obj.get("atlas_data", ""))
+            except (OSError, ValueError, TypeError) as exc:
+                violations.append(f"{rel}: invalid .spatlas JSON: {exc}")
+                continue
+            lines = [ln.strip() for ln in atlas_data.replace("\r\n", "\n").replace("\r", "\n").split("\n")]
+            for idx, line in enumerate(lines):
+                if not line or ":" in line:
+                    continue
+                next_non_empty = ""
+                for nxt in lines[idx + 1 :]:
+                    if nxt:
+                        next_non_empty = nxt
+                        break
+                if next_non_empty.lower().startswith("size:"):
+                    page_rel = (Path(rel).parent / line).as_posix()
+                    refs.add(page_rel.lower())
 
     for png in tracked_pngs:
         if png.lower() not in refs:

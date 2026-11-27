@@ -1,13 +1,25 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://Sts2WD/animations/realta/combat/realta_merchant_rig.tscn" id="1_rig"]
+[ext_resource type="Script" path="res://Sts2WD/scenes/shared/spine_rig_mount.gd" id="1_mount"]
+[ext_resource type="PackedScene" path="res://Sts2WD/scenes/shared/ground_shadow.tscn" id="2_shadow"]
 
 [node name="RealtaMerchant" type="Node2D"]
+script = ExtResource("1_mount")
 
-[node name="Visuals" type="Sprite2D" parent="."]
+[node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -258)
-scale = Vector2(1.15, 1.15)
+texture_filter = 2
+position = Vector2(0, 72.05)
+scale = Vector2(0.38333333, 0.38333333)
+script = ExtResource("1_mount")
+spatlas_path = "res://Sts2WD/animations/realta/combat/realta_skeleton.spatlas"
+spjson_path = "res://Sts2WD/animations/realta/combat/realta_skeleton.spjson"
+default_mix = 0.15
+initial_animation = "relaxed_loop"
+initial_loop = true
+mount_mode = "replace_self"
 
-[node name="Rig" parent="Visuals" instance=ExtResource("1_rig")]
-position = Vector2(-192, -288)
+[node name="GroundShadow" parent="Visuals" instance=ExtResource("2_shadow")]
+show_behind_parent = true
+position = Vector2(0, -147)
+scale = Vector2(3.45, 3.75)

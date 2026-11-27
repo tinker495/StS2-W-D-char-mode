@@ -1,16 +1,30 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
-[ext_resource type="PackedScene" path="res://Sts2WD/animations/realta/combat/realta_combat_rig.tscn" id="1_rig"]
+[ext_resource type="Script" path="res://Sts2WD/scenes/shared/spine_rig_mount.gd" id="1_mount"]
+[ext_resource type="PackedScene" path="res://Sts2WD/scenes/shared/ground_shadow.tscn" id="2_shadow"]
 
 [node name="RealtaCombat" type="Node2D"]
+script = ExtResource("1_mount")
 
-[node name="Visuals" type="Sprite2D" parent="."]
+[node name="Visuals" type="Node2D" parent="."]
 unique_name_in_owner = true
-position = Vector2(0, -171)
-scale = Vector2(0.685, 0.685)
+texture_filter = 2
+position = Vector2(0, 25.595)
+scale = Vector2(0.22833333, 0.22833333)
+script = ExtResource("1_mount")
+spatlas_path = "res://Sts2WD/animations/realta/combat/realta_skeleton.spatlas"
+spjson_path = "res://Sts2WD/animations/realta/combat/realta_skeleton.spjson"
+default_mix = 0.1
+initial_animation = "idle_loop"
+initial_loop = true
+blink_animation = "blink_loop"
+blink_base_animation = "idle_loop"
+mount_mode = "replace_self"
 
-[node name="Rig" parent="Visuals" instance=ExtResource("1_rig")]
-position = Vector2(-192, -288)
+[node name="GroundShadow" parent="Visuals" instance=ExtResource("2_shadow")]
+show_behind_parent = true
+position = Vector2(0, -147)
+scale = Vector2(4.35, 4.35)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true

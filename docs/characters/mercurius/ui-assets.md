@@ -31,7 +31,7 @@ PNG 경로는 `Sts2WD/images/charui/mercurius/`다.
 | `CustomMerchantAnimPath` | `merchant.tscn` |
 | `CustomCharacterSelectBg` | `char_select_bg_mercurius.tscn` |
 
-휴식처에서는 [휴식 원화](/Sts2WD/animations/mercurius/rest/rest_master.png)에 막별 그림자와 불빛을 겹친다. 플루트를 허벅지에 비스듬히 걸치고 한 손은 무릎 위에 얹었다. 장화를 모아 뒤쪽 좌석을 비웠다.
+휴식처에서는 [휴식 원화](/Sts2WD/animations/mercurius/rest/rest_master.png)에 막별 그림자와 실시간으로 일렁이는 모닥불 불빛([seated_illustration.gd](/Sts2WD/scenes/rest_site/seated_illustration.gd))을 겹친다. 플루트를 허벅지에 비스듬히 걸치고 한 손은 무릎 위에 얹었다. 장화를 모아 뒤쪽 좌석을 비웠다. 전투·상점 장면의 `Visuals`는 발밑에 공용 접지 그림자([ground_shadow.tscn](/Sts2WD/scenes/shared/ground_shadow.tscn))를 배치한다.
 
 방별 스케일·접지선 오프셋·히트박스와 각 기준점은 해당 장면([combat.tscn](/Sts2WD/scenes/mercurius/combat.tscn)·[merchant.tscn](/Sts2WD/scenes/mercurius/merchant.tscn)·[rest_site.tscn](/Sts2WD/scenes/mercurius/rest_site.tscn))이 직접 정의하며, [방별 스케일 및 접지선 계약](/docs/research/sts2-cutout-runtime-contract.md#room-scale-and-ground-line-contract)의 표준 체형 기준을 따른다.
 

@@ -23,6 +23,10 @@ Before adding a test, touching `tests/` or CI validation, handling a failing or 
 
 Use repository-root-relative links (`/docs/...`) for cross-directory targets and local paths for same-folder or descendant links (no `..` segments); resolve leading `/` against the Git repository root. Keep tracked Markdown self-contained, Why-only, and backed only by applied production code, runtime paths, or verified deployments (keep work logs, candidates, and duplicate or post-application artifacts out of tracked `docs/`) — full rules in [comments and Markdown documentation](docs/conventions/documentation/comments-and-docs.md).
 
+## Toolchain and Pipeline Updates
+
+Updating any repository authoring, build, or verification tool (such as the local `rig-c` toolchain) or adopting a new standard pipeline requires refreshing or migrating existing tracked outputs so no character remains on stale build artifacts or a superseded pipeline — follow [Toolchain and Pipeline Updates](docs/agents/workflow.md#toolchain-and-pipeline-updates) and [ADR-0008](docs/adr/0008-native-spine-rigs-and-artifact-refresh.md).
+
 ## Task Routing
 
 Read the matching single source of truth before acting. Formatting, linting, and other mechanical checks belong to CI; review suggestions never authorize test edits.

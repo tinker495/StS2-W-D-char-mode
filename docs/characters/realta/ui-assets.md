@@ -18,7 +18,7 @@ The canonical base is `docs/characters/realta/base.png`. Runtime PNGs share the 
 | `text_energy.png` | Same flame-heart master, whole-image Fit | 24×24 RGBA | Small inline-text output applied |
 | `char_select_bg.png` | Separately generated blade-inspection scene | 1920×1080, opaque | Fit the whole master; no post-generation crop |
 
-The base, portrait, marker, and energy icons have transparent backgrounds (combat and merchant visuals use the shared cutout rig in [animation-assets.md](animation-assets.md#current-scene-and-property-connections)). Selection tiles, the locked variant, and the selection background are opaque. Chibi scope follows the shared rule in [ARTS.md](/ARTS.md). Use [realta-art.md](realta-art.md) when carrying the latest approved appearance into new assets.
+The base, portrait, marker, and energy icons have transparent backgrounds (combat and merchant visuals use the shared native Spine rig in [animation-assets.md](animation-assets.md#current-scene-and-property-connections)). Selection tiles, the locked variant, and the selection background are opaque (`char_select_bg_realta.tscn` layers the `realta_select_atlas` Spine overlay above `char_select_bg.png`). Chibi scope follows the shared rule in [ARTS.md](/ARTS.md). Use [realta-art.md](realta-art.md) when carrying the latest approved appearance into new assets.
 
 ## Lower-Left Combat Energy Counter
 

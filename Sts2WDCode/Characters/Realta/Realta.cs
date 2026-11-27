@@ -1,9 +1,12 @@
 using BaseLib.Abstracts;
 using BaseLib.Utils.NodeFactories;
-using Sts2WD.Sts2WDCode.Extensions;
 using Godot;
+using MegaCrit.Sts2.Core.Animation;
+using MegaCrit.Sts2.Core.Bindings.MegaSpine;
 using MegaCrit.Sts2.Core.Entities.Characters;
+using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Models;
+using Sts2WD.Sts2WDCode.Extensions;
 
 namespace Sts2WD.Sts2WDCode.Characters.Realta;
 
@@ -40,17 +43,42 @@ public class Realta : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<RealtaRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<RealtaPotionPool>();
 
-    // The glaive lands on the attack_hit cue.
+    // The glaive lands on the attack_hit Spine event.
     public override float AttackAnimDelay => 0.54f;
 
-    // The body reaches its fallen pose by 1.66 s. Hair and clothing settle through 2.2 s.
+    // The body reaches its fallen pose by 1.66 s; hair and clothing settle through 2.20 s.
     public override float DeathAnimTime => 1.66f;
 
-    // Godot-native animation scenes (not Spine); RealtaSceneBridge forwards Spine-only game events to them.
     public override string CustomVisualPath => "res://Sts2WD/scenes/realta/combat.tscn";
     public override string CustomRestSiteAnimPath => "res://Sts2WD/scenes/realta/rest_site.tscn";
     public override string CustomMerchantAnimPath => "res://Sts2WD/scenes/realta/merchant.tscn";
     public override string CustomCharacterSelectBg => "res://Sts2WD/scenes/realta/char_select_bg_realta.tscn";
+
+    public override CreatureAnimator GenerateAnimator(MegaSprite controller, Creature creature)
+    {
+        var idle = new AnimState("idle_loop", isLooping: true);
+        var die = new AnimState("die");
+        var relaxed = new AnimState("relaxed_loop", isLooping: true);
+        var animator = new CreatureAnimator(idle, controller);
+        animator.AddAnyState("Idle", idle);
+        animator.AddAnyState("Relaxed", relaxed);
+        animator.AddAnyState("Dead", die);
+
+        foreach (var (state, trigger) in new (AnimState State, string Trigger)[]
+        {
+            (new AnimState("attack"), "Attack"),
+            (new AnimState("guard"), "Guard"),
+            (new AnimState("hurt"), "Hit"),
+            (new AnimState("cast"), "Cast"),
+            (new AnimState("cast"), "PowerUp"),
+        })
+        {
+            state.AddNextState(idle);
+            animator.AddAnyState(trigger, state);
+        }
+
+        return animator;
+    }
 
     public override Control CustomIcon
     {

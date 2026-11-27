@@ -27,4 +27,5 @@ local.ps1
 *.pck
 *.zip
 *.nupkg
+local_spine.gdextension
 **/drafts/

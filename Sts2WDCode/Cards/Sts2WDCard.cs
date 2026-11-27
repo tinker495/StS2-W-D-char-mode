@@ -18,6 +18,12 @@ public abstract class Sts2WDCard(int cost, CardType type, CardRarity rarity, Tar
     public override string PortraitPath => CustomPortraitPath;
     public override string BetaPortraitPath => CustomPortraitPath;
 
+    /// <summary>
+    /// Optional per-card creature animation trigger override (e.g. "Guard", "Cast", "Attack", or "" to suppress).
+    /// When null, default routing triggers "Guard" on defensive Skill cards while keeping Attack priority on Attack cards.
+    /// </summary>
+    public virtual string? CustomPlayAnimTrigger => null;
+
     internal virtual void ApplyPortraitAppearance(NCard card) { }
 
     protected virtual string FallbackPortraitPath =>

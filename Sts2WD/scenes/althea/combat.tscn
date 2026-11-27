@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=3 format=3]
 
 [ext_resource type="Texture2D" path="res://Sts2WD/images/charui/althea/standing.png" id="1_sprite"]
+[ext_resource type="PackedScene" path="res://Sts2WD/scenes/shared/ground_shadow.tscn" id="2_shadow"]
 
 [node name="AltheaCombat" type="Node2D"]
 
@@ -9,6 +10,10 @@ unique_name_in_owner = true
 position = Vector2(0, -150)
 scale = Vector2(0.348, 0.348)
 texture = ExtResource("1_sprite")
+
+[node name="GroundShadow" parent="Visuals" instance=ExtResource("2_shadow")]
+position = Vector2(0, 405)
+scale = Vector2(2.7, 2.7)
 
 [node name="Bounds" type="Control" parent="."]
 unique_name_in_owner = true

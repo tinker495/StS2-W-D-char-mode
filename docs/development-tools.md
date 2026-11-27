@@ -101,6 +101,21 @@ Invoke-RecordedCommand -Executable $Context.DotNet -Arguments @('--version') `
 
 - **MegaDot 경로 조회**: MegaDot 실행 파일 경로는 로컬 설정 파일([local.props.example](/local.props.example) 참고)이나 고정 경로를 직접 가정하지 않고, [dev-workflow.ps1](/scripts/dev-workflow.ps1)의 `Initialize-DevelopmentDotNet` + `Get-DevelopmentPaths`(`$paths.GodotPath`, MSBuild 프로퍼티 조회) 또는 `.\dev.ps1 doctor`로 확인한다.
 - **오프스크린 프레임 캡처**: `SubViewport`와 `RenderingServer.frame_post_draw`를 사용하는 일회성 프레임 캡처 스크립트는 `--headless`로 실행하면 더미 렌더러에서 `frame_post_draw`가 발생하지 않아 무한 대기한다. `dev.ps1 anim`과 동일하게 `--rendering-method gl_compatibility --position -10000,-10000 --log-file <워크스페이스 로그>`로 실행한다(`--log-file`로 워크스페이스 로그를 지정해야 권한 제한 환경에서 기본 AppData 로그 순환 중 발생하는 시작 크래시를 피할 수 있다).
+- **좁은 화면비(`16:10` / `3:2`)·Z-order 및 초기 로드 히치 관찰**: 커스텀 전투 UI·오버레이·대형 리그/VFX 씬을 추가하거나 변경할 때는 `dev.ps1 observe` 캡처 스크립트에서 기본 `1920x1080`(`16:9`) 외에 `1920x1200`(`16:10`) 및 `1440x960`(`3:2`) `SubViewport` 해상도를 함께 렌더해 좌·우측 적 체력바, 손패, 상점 매대와의 겹침(Z-order) 여부를 확인한다. 같은 스크립트에서 `Time.get_ticks_usec()`로 첫 `PackedScene.instantiate()` + 첫 프레임 드로우 소요 시간(ms)과 이후 평균 프레임 처리 시간을 분리 기록해 셰이더/텍스처 재로드 히치가 없는지 점검한다.
+
+## 인게임 개발자 콘솔 QA 도우미 (`wd`)
+
+모드가 로드된 상태에서 백틱(`` ` ``) 키로 여는 기본 개발자 콘솔(`DevConsole`)은 [WdConsoleCmd.cs](/Sts2WDCode/DevConsole/WdConsoleCmd.cs)(`AbstractConsoleCmd` 파생)를 자동 등록한다. 일반 런이나 게임플레이 수치에는 개입하지 않으며 탭 자동완성을 지원한다.
+
+```text
+wd cards [char] [all|attack|skill|power|rare|ancient|missing-art] [upgraded]
+wd relics [char]
+wd status [char]
+```
+
+- `wd cards`: 지정 캐릭터(생략 시 현재 플레이 중인 모드 캐릭터)의 조건에 맞는 카드를 손패 여유분만큼 `Hand`에, 나머지는 `Draw`(비전투 중에는 `Deck`)에 일괄 생성한다. `missing-art` 필터는 공용 폴백 이미지를 사용 중인 미적용 카드만 선별하며, `upgraded`를 붙이면 강화 상태로 생성한다.
+- `wd relics`: 지정 캐릭터 전용 유물 중 미보유 유물을 일괄 획득해 상단 유물 바와 툴팁·외곽선을 즉시 검수한다.
+- `wd status`: 지정 캐릭터(또는 전체 모드 캐릭터)의 카드 전용 원화 적용 수, 유물·포션 수, 4대 씬 리소스 존재 여부를 콘솔에 요약 출력한다.
 
 ## PR 자료 보관
 

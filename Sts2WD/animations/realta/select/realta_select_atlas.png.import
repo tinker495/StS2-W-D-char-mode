@@ -2,22 +2,22 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b3e5vp7nij8gc"
-path="res://.godot/imported/select_blink_patch.png-79f793e49b14f8d90f9c5a16f3591648.ctex"
+uid="uid://cm05o6d0a8uxx"
+path="res://.godot/imported/realta_select_atlas.png-cc4f708b0917b94854e3b6abb7f89c4b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Sts2WD/animations/realta/select/select_blink_patch.png"
-dest_files=["res://.godot/imported/select_blink_patch.png-79f793e49b14f8d90f9c5a16f3591648.ctex"]
+source_file="res://Sts2WD/animations/realta/select/realta_select_atlas.png"
+dest_files=["res://.godot/imported/realta_select_atlas.png-cc4f708b0917b94854e3b6abb7f89c4b.ctex"]
 
 [params]
 
-compress/mode=0
+compress/mode=1
 compress/high_quality=false
-compress/lossy_quality=0.7
+compress/lossy_quality=0.85
 compress/uastc_level=0
 compress/rdo_quality_loss=0.0
 compress/hdr_compression=1

@@ -1,0 +1,20 @@
+skeleton.png
+size: 512, 512
+filter: Linear, Linear
+pma: false
+blade_glow
+bounds: 286, 2, 116, 288
+offsets: 0, 0, 116, 288
+rotate: 0
+blink_patch
+bounds: 2, 358, 175, 120
+offsets: 0, 0, 175, 120
+rotate: 0
+mote
+bounds: 2, 482, 24, 24
+offsets: 0, 0, 24, 24
+rotate: 0
+ribbon_patch
+bounds: 2, 2, 280, 352
+offsets: 0, 0, 280, 352
+rotate: 0

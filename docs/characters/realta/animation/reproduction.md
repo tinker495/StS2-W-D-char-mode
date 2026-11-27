@@ -1,41 +1,41 @@
-# Rebuild and inspect the Realta combat and merchant rigs
+# Rebuild and inspect the Realta Spine rigs
 
-Begin at the repository root with the [development environment](/README.md#새-pc에서-준비하기) and the [local rig-c toolchain](/docs/agents/rig-c-local.md). The source build uses PowerShell, the repository's locked rig-c and Bun profile, Python with NumPy, OpenCV and Pillow, and the configured MegaDot executable. These inputs drive both runtime variants. [Authoring files](/docs/characters/realta/animation-sources.md#inputs-and-ownership)
+Begin at the repository root with the [development environment](/README.md#새-pc에서-준비하기) and the [local rig-c toolchain](/docs/agents/rig-c-local.md). The source build uses PowerShell, the repository's locked `rig-c` and Bun profile, Python with NumPy, OpenCV and Pillow, the configured MegaDot executable (for resource import), and `<Sts2Path>/SlayTheSpire2.exe` (for `template_release` `libspine_godot` `SpineSprite` checks and frame capture). [Authoring files](/docs/characters/realta/animation-sources.md#inputs-and-ownership)
 
-## Author and apply the rig
+## Author and apply the rigs
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-before
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\dev.ps1 anim all -Variant both
 ```
 
-Source mode performs these steps in order.
+Source mode performs these steps in order:
 
-1. [build.ps1](rigc/build.ps1) unpacks the atlas parts (applying any explicit `-SeedParts <ignored-dir>` PNG overrides), compiles all seven motions into `realta_skeleton.png`, and bakes the Godot skeleton and animation library (see [inputs and ownership](/docs/characters/realta/animation-sources.md#inputs-and-ownership)). `dev.ps1 anim` immediately gates the compiled rig-c output with `rigc render --folds` at 24 fps for the requested clip(s) (adding `--preroll 1` on looping clips when physics constraints exist), stopping on any mesh fold before tracked runtime assets change.
-2. [The game importer](/scripts/realta/import_game_rig.py) binds the combat and merchant variants to the shared skeleton and syncs [atlas.txt](rigc/atlas.txt), then Godot imports the updated tracked resources before checks run.
-3. `anim` runs the existing [rig checks](/tests/rig-checks.md) and [instance isolation check](/tests/README.md). A failure in either the pre-import `rigc render --folds` mesh-fold gate or these post-import Godot checks stops source-mode capture. Read the failed condition alongside the current [clip and part contract](/docs/characters/realta/animation-sources.md). Report a specification conflict with the exact result through the [test-ownership procedure](/docs/agents/test-ownership.md).
-4. The renderer captures the requested clip, followed by native-frame sheets and a playback GIF for each selected variant.
+1. [build.ps1](rigc/build.ps1) unpacks the combat/merchant parts from [atlas.txt](rigc/atlas.txt) + [realta_skeleton.png](/Sts2WD/animations/realta/combat/realta_skeleton.png) (applying any explicit `-SeedParts <ignored-dir>` PNG overrides) and compiles the eight combat/merchant motions, then unpacks [select_atlas.txt](rigc/select_atlas.txt) + [realta_select_atlas.png](/Sts2WD/animations/realta/select/realta_select_atlas.png) and compiles the character-select overlay rig.
+2. `dev.ps1 anim` gates the compiled `rig-c` output with `rigc render --folds` at 24 fps for every requested clip (including `select` when `-Clip all` is used, adding `--preroll 1` on looping clips when physics constraints exist), stopping before tracked runtime assets change if any triangle folds.
+3. [import_game_rig.py](/scripts/realta/import_game_rig.py) invokes [export_spine42.py](/scripts/export_spine42.py) to emit Spine `4.2.43` `.spjson`, `.spatlas`, and 4px-aligned `.png` files into `Sts2WD/animations/realta/combat/` and `Sts2WD/animations/realta/select/`, syncing [atlas.txt](rigc/atlas.txt) and [select_atlas.txt](rigc/select_atlas.txt). MegaDot then imports the updated resources.
+4. `anim` runs [check_rig.gd](/tests/rig-checks.md) and [realta_instance_isolation.gd](/tests/README.md) on `<Sts2Path>/SlayTheSpire2.exe` via `Invoke-WithLocalSpineExtension` (which writes a temporary git-ignored `<project>/local_spine.gdextension` pointing to `<Sts2Path>/libspine_godot.windows.template_release.x86_64.dll` and removes it on exit). Report any specification conflict with exact evidence under [test ownership](/docs/agents/test-ownership.md).
+5. [render_clip.gd](tools/render_clip.gd) steps `SpineSprite` deterministically (`UpdateMode_Manual`) at 24 fps across the `640×420` viewport, followed by [review_frames.py](tools/review_frames.py) dark/light contact sheets and playback GIFs.
 
-Edit the owning authoring file listed in [inputs and ownership](/docs/characters/realta/animation-sources.md#inputs-and-ownership). To seed new or replaced part PNGs into `realta_skeleton.png` while keeping the tracked `rigc/` tree free of loose PNGs, pass `-SeedParts <ignored-dir>` to `dev.ps1 anim` or [build.ps1](rigc/build.ps1); [build.ps1](rigc/build.ps1) fails fast if a stray `parts` folder containing PNGs exists under `rigc/`. For a compile that writes only to a separate directory, call [build.ps1](rigc/build.ps1) from the repository root with `-Output` pointing to a fresh output directory (and optional `-SeedParts <ignored-dir>`).
+To seed new or replaced part PNGs into `realta_skeleton.png` while keeping tracked `rigc/` free of loose PNGs, pass `-SeedParts <ignored-dir>` to `dev.ps1 anim` or [build.ps1](rigc/build.ps1). When adding a brand-new atlas PNG for the first time, run `.\dev.ps1 import` → `python -X utf8 scripts/check_install_package.py --sync-params` → `.\dev.ps1 import` so its `.import` sidecar acquires Tier 1 BPTC (`path.bptc`) metadata.
 
 ## Compare native playback
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-after -Baseline artifacts/attack-before/frames
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-before
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\dev.ps1 anim attack -Variant both -OutputDirectory artifacts/attack-after -Baseline artifacts/attack-before/frames
 ```
 
-`-Clip` accepts the seven names in the [motion table](/docs/characters/realta/animation-sources.md#clips-and-dispatch), the three BaseLib aliases and `all`. `-Variant` accepts `combat`, `merchant` or `both`. An explicit output directory must be fresh. The optional baseline must use the same variant, clip, frame rate, camera and renderer for a meaningful comparison.
-
-Read each run's `capture.json` for the actual viewport, positions, display scale and frame count. The GL compatibility renderer samples at 24 fps and retains the entire frame. The [review tool](tools/review_frames.py) produces dark and light sheets and optional registered before/after pairs. To check an exact event between display samples, compare the neighboring frames and inspect the native player at the cue time. [Motion review matrix](/docs/agents/cutout-motion-review.md)
+`-Clip` accepts `idle_loop`, `blink_loop`, `attack`, `guard`, `hurt`, `cast`, `die`, `relaxed_loop`, the aliases `idle`, `relaxed`, `powerup`, and `all`. `-Variant` accepts `combat`, `merchant`, or `both`. Read each run's `capture.json` for viewport, origin, scale, duration, and frame count. [Motion review matrix](/docs/agents/cutout-motion-review.md)
 
 ## Publish and render the PCK
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 publish
-powershell -NoProfile -ExecutionPolicy Bypass -File .\dev.ps1 anim all -Variant both -PackagePath artifacts/mods/Sts2WD/Sts2WD.pck
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\dev.ps1 publish
+powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -File .\dev.ps1 anim all -Variant both -PackagePath artifacts/mods/Sts2WD/Sts2WD.pck
 ```
 
-Package mode copies the tracked renderer into a fresh Godot host and mounts the specified PCK before resolving either rig. This directly exercises textures, animation resources and variant names present in the package. Source-mode rig checks, mounting the PCK, running BaseLib scene conversion, and observing a game encounter each provide different evidence. For a local installation use the [deployment procedure](/README.md) and record the verified scope in the [shared deployment history](/docs/deployment-status.md).
+Package mode mounts `artifacts/mods/Sts2WD/Sts2WD.pck` inside a clean host directory (`import_s3tc_bptc=true` + temporary `<host>/local_spine.gdextension`) and renders `combat.tscn` and `merchant.tscn` directly from the packed `.spjson`, `.spatlas`, and `.bptc.ctex` entries.
 
 ## Live transitions
 
-Play clips through the `AnimationPlayer` under each game wrapper and let them advance past the endpoint. For combat, check returns to the standing loop. For the merchant, check the crouching loop through autoplay, `idle`, `relaxed` and return from action. Check attack contact at 0.54 s, cast release at 0.25 s and right-hand release at 0.12 s of `die`. Advance the full death animation, then trigger `revive` and observe both sides of its hidden pose change at 0.20 s. Test interruption by invoking the next game alias while the preceding action is still active. Use the native callbacks exercised by the [BaseLib integration](/docs/characters/realta/animation-api.md).
+Verify Track 0 action-to-idle mix transitions (`attack`, `guard`, `hurt`, `cast` → `idle_loop`), Track 1 `blink_loop` suspension during actions and automatic restoration on `idle_loop`, Spine events (`attack_hit` at `0.54 s`, `guard_brace` at `0.18 s`, `cast_release` at `0.25 s`, `weapon_release` at `0.12 s`), settled `die` hold (`1.66`–`2.20 s`), and `FlipX` mirroring against the [Spine dispatch contract](/docs/characters/realta/animation-api.md).
