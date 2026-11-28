@@ -29,6 +29,8 @@ Updating any repository authoring, build, or verification tool (such as the loca
 
 ## Task Routing
 
+Before writing code, search the local XERJ index for the affected symbol or behavior in `wd` and in the closest upstream corpus. Use `baselib` for the pinned framework and `template` for the original character template. With the workspace installation of XERJ, run `xerj search --url http://127.0.0.1:19220 --prefix template 'StartingDeck'`, substituting the prefix and query. Open the returned source and check its API against the project's pinned version before adapting the pattern. If the index is unavailable or stale, search the current source checkouts directly.
+
 Read the matching single source of truth before acting. Formatting, linting, and other mechanical checks belong to CI; review suggestions never authorize test edits.
 
 | When your task involves | Read |
